@@ -2,9 +2,6 @@
 
 # on: push
 
-# env:
-#   NPM_TOKEN: ${{ secrets.PAT_GITHUB }}
-
 # jobs:
 #   deployment:
 #     runs-on: ubuntu-latest
@@ -54,8 +51,8 @@
 
 #     - name: Docker build and push
 #       run: |
-#         docker build -t cphcachet/carp-webservice-dashboard:${{ env.TAG }} .
-#         docker push cphcachet/carp-webservice-dashboard:${{ env.TAG }}
+#         docker build -t cphcachet/carp-portal:${{ env.TAG }} .
+#         docker push cphcachet/carp-portal:${{ env.TAG }}
       
 #     - name: Microsoft Teams Deploy Card
 #       if: always()
