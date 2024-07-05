@@ -1,67 +1,67 @@
-# name: Deployment pipeline
+name: Deployment pipeline
 
-# on: push
+on: push
 
-# jobs:
-#   deployment:
-#     runs-on: ubuntu-latest
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-#     - name: Set env
-#       run: |
-#         if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
-#           echo "${{ vars.PROD_ENV }}" > .env
-#         elif [[ ${{ github.ref }} == 'refs/heads/stage' ]]; then
-#           echo "${{ vars.STAGE_ENV }}" > .env
-#         elif [[ ${{ github.ref }} == 'refs/heads/test' ]]; then
-#           echo "${{ vars.TEST_ENV }}" > .env
-#         elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
-#           echo "${{ vars.DEV_ENV }}" > .env
-#         else
-#           echo "${{ vars.PLAYGROUND_ENV }}" > .env
-#         fi
-#         echo "VITE_GIT_COMMIT=${GITHUB_REF##*/}${{ github.sha }}" >> .env
+    - name: Set env
+      run: |
+        if [[ ${{ github.ref }} == 'refs/heads/master' ]]; then
+          echo "${{ vars.PROD_ENV }}" > .env
+        elif [[ ${{ github.ref }} == 'refs/heads/stage' ]]; then
+          echo "${{ vars.STAGE_ENV }}" > .env
+        elif [[ ${{ github.ref }} == 'refs/heads/test' ]]; then
+          echo "${{ vars.TEST_ENV }}" > .env
+        elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
+          echo "${{ vars.DEV_ENV }}" > .env
+        else
+          echo "${{ vars.PLAYGROUND_ENV }}" > .env
+        fi
+        echo "VITE_GIT_COMMIT=${GITHUB_REF##*/}${{ github.sha }}" >> .env
 
-#     - name: Load .env file
-#       uses: xom9ikk/dotenv@v2
+    - name: Load .env file
+      uses: xom9ikk/dotenv@v2
  
-#     - uses: oven-sh/setup-bun@v1
-#     - name: Install
-#       run: bun install
+    - uses: oven-sh/setup-bun@v1
+    - name: Install
+      run: bun install
 
-#     - name: Login to DockerHub
-#       uses: docker/login-action@v3
-#       with:
-#         username: ${{ secrets.DOCKERHUB_USERNAME }}
-#         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#     - name: Set up app for hosting
-#       run: |
-#         base_name=${{ env.VITE_BASE_NAME }}
-#         port=${{ env.VITE_PORT }}
-#         sed -i.bak "s|\"homepage\": \".*\"|\"homepage\": \"$base_name\"|" package.json
-#         sed -i.bak "s|<base href=\"\\/\" \\/>|<base href=\"$base_name\" \\/>|" src/index.html
-#         sed -i.bak "s/8080/$port/" Dockerfile
+    - name: Set up app for hosting
+      run: |
+        base_name=${{ env.VITE_BASE_NAME }}
+        port=${{ env.VITE_PORT }}
+        sed -i.bak "s|\"homepage\": \".*\"|\"homepage\": \"$base_name\"|" package.json
+        sed -i.bak "s|<base href=\"\\/\" \\/>|<base href=\"$base_name\" \\/>|" src/index.html
+        sed -i.bak "s/8080/$port/" Dockerfile
 
-#     - name: Build
-#       run: bun run build
+    - name: Build
+      run: bun run build
 
-#     - name: Docker build and push
-#       run: |
-#         docker build -t cphcachet/carp-portal:${{ env.TAG }} .
-#         docker push cphcachet/carp-portal:${{ env.TAG }}
+    - name: Docker build and push
+      run: |
+        docker build -t cphcachet/carp-portal:${{ env.TAG }} .
+        docker push cphcachet/carp-portal:${{ env.TAG }}
       
-#     - name: Microsoft Teams Deploy Card
-#       if: always()
-#       uses: toko-bifrost/ms-teams-deploy-card@master
-#       with:
-#         github-token: ${{ github.token }}
-#         webhook-uri: ${{ secrets.TEAMS_WEBHOOK_URL }}
-#         show-on-start: false
-#         show-on-exit: true
-#         envirnment: ${{ github.ref }}
-#         card-layout-exit: cozy
-#         timezone: Europe/Copenhagen
+    - name: Microsoft Teams Deploy Card
+      if: always()
+      uses: toko-bifrost/ms-teams-deploy-card@master
+      with:
+        github-token: ${{ github.token }}
+        webhook-uri: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        show-on-start: false
+        show-on-exit: true
+        envirnment: ${{ github.ref }}
+        card-layout-exit: cozy
+        timezone: Europe/Copenhagen
