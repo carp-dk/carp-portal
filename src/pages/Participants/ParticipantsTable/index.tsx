@@ -71,14 +71,14 @@ const ParticipantsTable = ({
                     (
                       participant.accountIdentity as EmailAccountIdentity
                     ).emailAddress.address.toLowerCase() ===
-                    cell.row.original.email.toLowerCase()
+                    cell.row.original.email?.toLowerCase()
                   );
                 case UsernameAccountIdentity:
                   return (
                     (
                       participant.accountIdentity as UsernameAccountIdentity
                     ).username.name.toLowerCase() ===
-                    cell.row.original.username.toLowerCase()
+                    cell.row.original.username?.toLowerCase()
                   );
                 // TODO: Add case for other account identities
                 default:
