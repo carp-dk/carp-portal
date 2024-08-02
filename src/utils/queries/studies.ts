@@ -306,14 +306,19 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
 export const useDeleteStudy = () => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
+  let id = '';
 
   return useMutation({
     mutationFn: async (studyId: string) => {
+      id = studyId;
       return carpApi.deleteStudy_CORE(studyId, getConfig());
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["studies"] });
-      setSnackbarSuccess("Study deleted!");
+      queryClient.setQueryData(['studies'], (old: StudyOverview[]) =>
+        old.filter((study) => study.studyId !== id)
+      );
+      queryClient.invalidateQueries({ queryKey: ['studies'] });
+      setSnackbarSuccess('Study deleted!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.httpResponseMessage);
