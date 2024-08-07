@@ -1,27 +1,22 @@
 import carpApi from "@Utils/api/api";
 import { useCurrentUser } from "@Utils/queries/auth";
 import { useSnackbar } from "@Utils/snackbar";
-import carpProtocols from "@cachet/carp-protocols-core";
-import { getConfig } from "@carp-dk/authentication-react";
 import {
   CarpServiceError,
+  StudyProtocol,
+  StudyProtocolSnapshot,
   LatestProtocol,
-  ProtocolJSONObject,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-
-type StudyProtocolSnapshot =
-  carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot;
 
 export const useProtocols = () => {
   const { data: currentUser } = useCurrentUser();
   return useQuery<StudyProtocolSnapshot[], CarpServiceError>({
     queryFn: async () =>
-      carpApi.getAllProtocolsForOwner_CORE(
-        currentUser.accountId.stringRepresentation,
-        getConfig(),
-      ),
+      carpApi.protocols.getAll({
+        ownerId: currentUser.accountId.stringRepresentation,
+      }),
     queryKey: ["protocols"],
     enabled: !!currentUser,
   });
@@ -29,14 +24,14 @@ export const useProtocols = () => {
 
 export const useProtocolDetails = (protocolId: string) => {
   return useQuery<StudyProtocolSnapshot, CarpServiceError>({
-    queryFn: () => carpApi.getProtocolBy_CORE(protocolId, getConfig()),
+    queryFn: () => carpApi.protocols.getBy({ protocolId }),
     queryKey: ["protocol", protocolId],
   });
 };
 
 export const useLatestProtocol = (protocolId: string) => {
   return useQuery<LatestProtocol, CarpServiceError>({
-    queryFn: () => carpApi.getLatestProtocol(protocolId, getConfig()),
+    queryFn: () => carpApi.protocols.getLatest({ protocolId }),
     queryKey: ["latestProtocol", protocolId],
   });
 };
@@ -49,7 +44,7 @@ export const useCreateProtocol = () => {
   return useMutation({
     mutationFn: async (data: {
       name: string;
-      protocol: ProtocolJSONObject;
+      protocol: StudyProtocol;
       description: string;
       version: string;
     }) => {
@@ -60,7 +55,7 @@ export const useCreateProtocol = () => {
       protocol.name = data.name;
       protocol.description = data.description;
 
-      return carpApi.addProtocol_CORE(protocol, data.version, getConfig());
+      return carpApi.protocols.create({ protocol, versionTag: data.version });
     },
     onSuccess: () => {
       setSnackbarSuccess("Protocol created successfuly");
@@ -69,7 +64,7 @@ export const useCreateProtocol = () => {
       queryClient.invalidateQueries({ queryKey: ["protocols"] });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -82,7 +77,7 @@ export const useUpdateProtocol = (originalProtocolId: string) => {
   return useMutation({
     mutationFn: async (data: {
       name: string;
-      protocol: ProtocolJSONObject;
+      protocol: StudyProtocol;
       description: string;
       versionTag: string;
     }) => {
@@ -92,11 +87,10 @@ export const useUpdateProtocol = (originalProtocolId: string) => {
       protocol.ownerId = currentUser.accountId.stringRepresentation;
       protocol.name = data.name;
       protocol.description = data.description;
-      return carpApi.updateProtocol_CORE(
+      return carpApi.protocols.update({
         protocol,
-        data.versionTag,
-        getConfig(),
-      );
+        versionTag: data.versionTag,
+      });
     },
     onSuccess: () => {
       setSnackbarSuccess("Protocol created successfuly");

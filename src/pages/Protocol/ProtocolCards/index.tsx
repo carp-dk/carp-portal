@@ -88,8 +88,8 @@ const ProtocolCards = () => {
           {protocol.snapshot.description}
         </ProtocolDescription>
       </StyledNameCard>
-      {protocol.snapshot.primaryDevices.size() > 0 &&
-        protocol.snapshot.connections.size() > 0 && (
+      {protocol.snapshot.primaryDevices.toArray().length > 0 &&
+        protocol.snapshot.connections.toArray().length > 0 && (
           <StyledCard elevation={2}>
             <CardTitle variant="h2">Devices</CardTitle>
             {protocol.snapshot.primaryDevices.toArray().map((device) => {
@@ -108,7 +108,7 @@ const ProtocolCards = () => {
             })}
           </StyledCard>
         )}
-      {protocol.snapshot.expectedParticipantData.size() > 0 && (
+      {protocol.snapshot.expectedParticipantData.toArray().length > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant data</CardTitle>
           <ul>
@@ -124,7 +124,7 @@ const ProtocolCards = () => {
           </ul>
         </StyledCard>
       )}
-      {protocol.snapshot.participantRoles.size() > 0 && (
+      {protocol.snapshot.primaryDevices.toArray().length > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant roles</CardTitle>
           <ul>

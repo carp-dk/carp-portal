@@ -10,11 +10,11 @@ type ButtonCellProps = {
 
 const DownloadButton = ({ cell }: ButtonCellProps) => {
   const downloadSummary = useDownloadSummary();
-  const summaryId = cell.row.original.id;
+  const exportId = cell.row.original.id;
   const studyId = cell.row.original.study_id;
   const { status } = cell.row.original;
   const handleDownload = () => {
-    downloadSummary.mutate({ studyId, summaryId });
+    downloadSummary.mutate({ studyId, exportId });
   };
 
   return (

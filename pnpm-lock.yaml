@@ -18,8 +18,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(axios@1.7.2)(oidc-client-ts@3.0.1)(react-oidc-context@3.1.0(oidc-client-ts@3.0.1)(react@18.3.1))(react@18.3.1)
       '@carp-dk/client':
-        specifier: 1.1.0
-        version: 1.1.0
+        specifier: link:../carp-client-ts/dist
+        version: link:../carp-client-ts/dist
       '@emotion/react':
         specifier: ^11.11.4
         version: 11.11.4(@types/react@18.3.3)(react@18.3.1)
@@ -65,6 +65,9 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
+      dist:
+        specifier: link:../carp-client-ts/dist
+        version: link:../carp-client-ts/dist
       express:
         specifier: ^4.19.2
         version: 4.19.2
@@ -300,9 +303,6 @@ packages:
       oidc-client-ts: ^2.4.0
       react: '>=16.8.0'
       react-oidc-context: ^2.3.1
-
-  '@carp-dk/client@1.1.0':
-    resolution: {integrity: sha512-m1FO/2dMO4fhfSN7fzGOynBTfRahgBy8uk2NeO/v5qyMFzp2+v3HXVOssdheMGAK5Bl9656BOQwbKBsYV2w5ZQ==}
 
   '@carp-dk/eslint-config@1.1.0':
     resolution: {integrity: sha512-vIz9PJZBaSadbe3rO9nTJQoa01c8h9judJv1uVDYjlApienWU8W22Yi8aBJLHil3wI9dFXTPcDvx1yqMpkOo+w==}
@@ -3334,8 +3334,6 @@ snapshots:
       oidc-client-ts: 3.0.1
       react: 18.3.1
       react-oidc-context: 3.1.0(oidc-client-ts@3.0.1)(react@18.3.1)
-
-  '@carp-dk/client@1.1.0': {}
 
   ? '@carp-dk/eslint-config@1.1.0(@typescript-eslint/eslint-plugin@7.14.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2))(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint-config-airbnb-typescript@18.0.0(@typescript-eslint/eslint-plugin@7.14.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2))(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0))(eslint@8.57.0))(eslint-config-airbnb@19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.34.3(eslint@8.57.0))(eslint@8.57.0))(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0))(eslint-plugin-prefer-arrow@1.2.3(eslint@8.57.0))(eslint-plugin-prettier@5.0.0-alpha.2(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.3.2))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react-refresh@0.4.7(eslint@8.57.0))(eslint-plugin-react@7.34.3(eslint@8.57.0))(eslint-plugin-unused-imports@4.0.0(@typescript-eslint/eslint-plugin@7.14.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0))(eslint@8.57.0)(prettier-plugin-organize-imports@3.2.4(prettier@3.3.2)(typescript@5.5.2))(prettier@3.3.2)'
   : dependencies:

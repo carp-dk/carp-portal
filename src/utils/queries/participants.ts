@@ -1,31 +1,24 @@
 import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
-import { kotlin } from "@cachet/carp-kotlin";
-import { getConfig } from "@carp-dk/authentication-react";
-
-import carpStudiesCore from "@cachet/carp-studies-core";
 import {
   CarpServiceError,
-  ConsentResponse,
+  Data,
+  InformedConsentResponse,
+  Nullable,
   ParticipantAccount,
   ParticipantGroups,
-  ParticipantInfo,
   ParticipantWithRoles,
+  Statistics,
+  NamespacedId,
+  Participant,
+  HashMap,
+  ParticipantGroupStatus,
 } from "@carp-dk/client";
-import { Statistics } from "@carp-dk/client/models/Statistics";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import HashMap = kotlin.collections.Map;
-import dk = carpStudiesCore.dk;
-import NamespacedId = dk.cachet.carp.common.application.NamespacedId;
-
-import Participant = dk.cachet.carp.studies.application.users.Participant;
-
-type ParticipantGroupStatus =
-  dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
 
 export const useParticipants = (studyId: string) => {
   return useQuery<Participant[], CarpServiceError, Participant[], any>({
-    queryFn: () => carpApi.getParticipants_CORE(studyId, getConfig()),
+    queryFn: () => carpApi.study.recruitment.getParticipants({ studyId }),
     queryKey: ["participantsData", studyId],
   });
 };
@@ -35,8 +28,11 @@ export const useStopParticipantGroup = (studyId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (deploymentId: string) =>
-      carpApi.stopParticipantGroup_CORE(studyId, deploymentId, getConfig()),
+    mutationFn: (studyDeploymentId: string) =>
+      carpApi.study.recruitment.stopParticipantGroup({
+        studyId,
+        studyDeploymentId,
+      }),
     onSuccess: () => {
       setSnackbarSuccess("Deployment stopped successfuly");
     },
@@ -55,7 +51,7 @@ export const useStopParticipantGroup = (studyId: string) => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -66,11 +62,10 @@ export const useInviteParticipants = (studyId: string) => {
 
   return useMutation({
     mutationFn: async (participantsWithRoles: ParticipantWithRoles[]) => {
-      return carpApi.inviteNewParticipantGroup_CORE(
+      return carpApi.study.recruitment.inviteNewParticipantGroup({
         studyId,
         participantsWithRoles,
-        getConfig(),
-      );
+      });
     },
     onSuccess: () => {
       setSnackbarSuccess("Participants deployed successfuly");
@@ -87,7 +82,7 @@ export const useInviteParticipants = (studyId: string) => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -98,7 +93,7 @@ export const useAddParticipantByEmail = (studyId: string) => {
 
   return useMutation({
     mutationFn: (email: string) =>
-      carpApi.addParticipantByEmailAddress_CORE(studyId, email, getConfig()),
+      carpApi.study.recruitment.addOneByEmail({ studyId, email }),
     onSuccess: () => {
       setSnackbarSuccess("Participant added successfuly");
     },
@@ -117,7 +112,7 @@ export const useAddParticipantByEmail = (studyId: string) => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -140,13 +135,12 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
       expirationSeconds,
       participantRoleName,
     }: GenerateAnonymousAccountsParams) => {
-      return carpApi.generateAnonymousAccounts({
+      return carpApi.study.recruitment.generateAnonymousAccounts({
         studyId,
         redirectUri,
         amountOfAccounts,
         expirationSeconds,
         participantRoleName,
-        config: getConfig(),
       });
     },
     onSuccess: () => {
@@ -172,7 +166,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -183,7 +177,7 @@ export const useAddParticipants = (studyId: string) => {
 
   return useMutation({
     mutationFn: (emails: string[]) =>
-      carpApi.addParticipants(studyId, emails, getConfig()),
+      carpApi.study.recruitment.addMultipleByEmail({ studyId, emails }),
     onSuccess: () => {
       setSnackbarSuccess("Participant added successfuly");
     },
@@ -207,32 +201,18 @@ export const useAddParticipants = (studyId: string) => {
   });
 };
 
-export const useParticipantsInfo = (studyId: string) => {
-  return useQuery<ParticipantInfo[], CarpServiceError>({
-    queryFn: () => carpApi.getParticipantInfo(studyId, getConfig()),
-    queryKey: ["participantsInfo", studyId],
-  });
-};
-
 export const useParticipantsAccounts = (studyId: string) => {
   return useQuery<ParticipantAccount[], CarpServiceError>({
-    queryFn: () => carpApi.getParticipantsAccounts(studyId, getConfig()),
+    queryFn: () =>
+      carpApi.study.recruitment.getParticipantAccounts({ studyId }),
     queryKey: ["participantsAccounts", studyId],
-  });
-};
-
-export const useParticipantsStatus = (studyId: string) => {
-  return useQuery<ParticipantGroupStatus[], CarpServiceError>({
-    queryFn: async () =>
-      carpApi.getParticipantGroupStatusList_CORE(studyId, getConfig()),
-    queryKey: ["participantsStatus", studyId],
   });
 };
 
 export const useParticipantGroupsStatus = (studyId: string) => {
   return useQuery<ParticipantGroupStatus[], CarpServiceError>({
     queryFn: async () =>
-      carpApi.getParticipantGroupStatusList_CORE(studyId, getConfig()),
+      carpApi.study.recruitment.getParticipantGroupStatusList({ studyId }),
     queryKey: ["participantsStatus", studyId],
   });
 };
@@ -240,14 +220,16 @@ export const useParticipantGroupsStatus = (studyId: string) => {
 export const useParticipantGroupsAccountsAndStatus = (studyId: string) => {
   return useQuery<ParticipantGroups, CarpServiceError>({
     queryFn: async () =>
-      carpApi.getParticipantGroupsAccountsAndStatus(studyId, getConfig()),
+      carpApi.study.recruitment.getParticipantGroupAccountsAndStatus({
+        studyId,
+      }),
     queryKey: ["deployments", studyId],
   });
 };
 
 export const useStatistics = (studyId: string) => {
   const { data: participantsStatus, isLoading: participantsStatusLoading } =
-    useParticipantsStatus(studyId);
+    useParticipantGroupsStatus(studyId);
 
   const deploymentIds: string[] = [];
   if (participantsStatus) {
@@ -262,7 +244,9 @@ export const useStatistics = (studyId: string) => {
       if (deploymentIds.length === 0) {
         return [];
       }
-      return carpApi.getDeploymentStatistics(deploymentIds, getConfig());
+      return carpApi.study.deployments.getDeploymentStatistics({
+        deploymentIds,
+      });
     },
     enabled: !participantsStatusLoading && !!participantsStatus,
   });
@@ -274,15 +258,14 @@ export const useSetParticipantData = (deploymentId: string) => {
 
   return useMutation({
     mutationFn: async (data: {
-      participantData: HashMap<NamespacedId, any | null>;
-      role: string;
+      participantData: HashMap<NamespacedId, Nullable<Data>>;
+      inputType: string;
     }) => {
-      return carpApi.setParticipantData_CORE(
-        deploymentId,
-        data.participantData,
-        data.role,
-        getConfig(),
-      );
+      return carpApi.participation.setParticipantData({
+        studyDeploymentId: deploymentId,
+        data: data.participantData,
+        inputType: data.inputType,
+      });
     },
     onSuccess: () => {
       setSnackbarSuccess("Participant data updated successfuly");
@@ -298,11 +281,22 @@ export const useSetParticipantData = (deploymentId: string) => {
   });
 };
 
-export const useParticipantConsent = (deploymentId: string) => {
-  return useQuery<ConsentResponse[], CarpServiceError, ConsentResponse[], any>({
+export const useParticipantConsent = (
+  studyDeploymentId: string,
+  informedConsentId: number,
+) => {
+  return useQuery<
+    InformedConsentResponse,
+    CarpServiceError,
+    InformedConsentResponse,
+    any
+  >({
     queryFn: () => {
-      return carpApi.getAllInformedConsent(deploymentId, getConfig());
+      return carpApi.study.informedConsent.get({
+        studyDeploymentId,
+        informedConsentId,
+      });
     },
-    queryKey: ["deploymentConsent", deploymentId],
+    queryKey: ["participantConsent", { studyDeploymentId, informedConsentId }],
   });
 };

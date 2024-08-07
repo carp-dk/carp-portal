@@ -5,8 +5,12 @@ import {
 } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { formatDate } from "@Utils/utility";
-import carpStudies from "@cachet/carp-studies-core";
-import { ParticipantAccount } from "@carp-dk/client";
+import {
+  EmailAccountIdentity,
+  ParticipantAccount,
+  ParticipantGroupStatus,
+  UsernameAccountIdentity,
+} from "@carp-dk/client";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
@@ -25,9 +29,6 @@ import {
   StyledContainer,
   TopToolbarButton,
 } from "./styles";
-import ParticipantGroupStatus = carpStudies.dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
-import EmailAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.EmailAccountIdentity;
-import UsernameAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.UsernameAccountIdentity;
 
 interface Props {
   openNewDeploymentModal: () => void;

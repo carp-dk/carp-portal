@@ -1,7 +1,8 @@
+import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
 import { CarpServiceError } from "@carp-dk/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router";
 
@@ -11,6 +12,12 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
   const navigate = useNavigate();
   const { setSnackbarError } = useSnackbar();
+
+  useEffect(() => {
+    if (auth.user?.access_token) {
+      carpApi.setAuthToken(auth.user?.access_token);
+    }
+  }, [auth.user?.access_token]);
 
   const queryClient = useMemo(() => {
     return new QueryClient({
@@ -26,11 +33,10 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
               failureCount === 0 &&
-              (error as unknown as CarpServiceError).httpResponseCode === 403 &&
+              (error as unknown as CarpServiceError).code === 403 &&
               !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;
-
               auth
                 .signinSilent()
                 .then(() => {
@@ -51,7 +57,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                 });
             } else if (
               failureCount === 1 &&
-              (error as unknown as CarpServiceError).httpResponseCode === 403
+              (error as unknown as CarpServiceError).code === 403
             ) {
               // we already tried refreshing the token. the user really shouldn't be able to access this
               // throw them back to the homepage
