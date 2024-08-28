@@ -25,7 +25,7 @@ const StudyAnnouncements = () => {
     navigate(`/studies/${studyId}/announcements/new`);
   };
 
-  if (error && error.httpResponseCode !== 404) {
+  if (error && error.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader

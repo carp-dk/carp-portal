@@ -83,7 +83,7 @@ const Translations = () => {
     actionButtonLabel: "Delete",
   };
 
-  if (translationsError && translationsError.httpResponseCode !== 404) {
+  if (translationsError && translationsError.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader

@@ -70,7 +70,7 @@ const Resources = () => {
     actionButtonLabel: "Delete",
   };
 
-  if (resourcesError && resourcesError.httpResponseCode !== 404) {
+  if (resourcesError && resourcesError.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader

@@ -1,8 +1,6 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useProtocolDetails } from "@Utils/queries/protocols";
 import { getRandomNumber } from "@Utils/utility";
-import carpCommon from "@cachet/carp-common";
-import carpProtocols from "@cachet/carp-protocols-core";
 import { Skeleton, Typography } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import DeviceDropdown from "../DeviceDropdown";
@@ -14,11 +12,8 @@ import {
   StyledContainer,
   StyledNameCard,
 } from "./styles";
-import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot.DeviceConnection;
 
-type ParticipantRole =
-  carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
-
+import {StudyProtocolSnapshot, Set, Collection} from "@carp-dk/client/shared";
 const ProtocolNameCardSkeleton: React.FC = () => {
   return (
     <StyledNameCard elevation={2}>
@@ -92,8 +87,9 @@ const ProtocolCards = ({ protocolId }: Props) => {
           {protocol.description}
         </ProtocolDescription>
       </StyledNameCard>
-      {protocol.primaryDevices.size() > 0 &&
-        protocol.connectedDevices.size() > 0 && (
+      {protocol.primaryDevices.toArray && protocol.connectedDevices.toArray &&
+      protocol.primaryDevices.toArray().length > 0 &&
+        protocol.connectedDevices.toArray().length > 0 && (
           <StyledCard elevation={2}>
             <CardTitle variant="h2">Devices</CardTitle>
             {protocol.primaryDevices.toArray().map((device) => {
@@ -102,7 +98,7 @@ const ProtocolCards = ({ protocolId }: Props) => {
                   connectedDevices={protocol.connectedDevices.toArray()}
                   connections={protocol.connections
                     .toArray()
-                    .filter((connection: DeviceConnection) => {
+                    .filter((connection) => {
                       return connection.connectedToRoleName === device.roleName;
                     })}
                   key={uuidv4()}
@@ -112,7 +108,7 @@ const ProtocolCards = ({ protocolId }: Props) => {
             })}
           </StyledCard>
         )}
-      {protocol.expectedParticipantData.size() > 0 && (
+      {protocol.expectedParticipantData.toArray && protocol.expectedParticipantData.toArray().length > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant data</CardTitle>
           <ul>
@@ -128,13 +124,13 @@ const ProtocolCards = ({ protocolId }: Props) => {
           </ul>
         </StyledCard>
       )}
-      {protocol.participantRoles.size() > 0 && (
+      {protocol.participantRoles.toArray && protocol.participantRoles.toArray().length > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant roles</CardTitle>
           <ul>
             {protocol.participantRoles
               .toArray()
-              .map((role: ParticipantRole) => {
+              .map((role) => {
                 return (
                   <li key={uuidv4()}>
                     <Typography variant="h4">{role.role}</Typography>

@@ -1,5 +1,5 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useParticipantsStatus } from "@Utils/queries/participants";
+import { useParticipantGroupsStatus } from "@Utils/queries/participants";
 import carpDeployments from "@cachet/carp-deployments-core";
 import carpStudies from "@cachet/carp-studies-core";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -15,7 +15,6 @@ import {
   StyledTitle,
   Top,
 } from "./styles";
-
 import ParticipantGroupStatus = carpStudies.dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
 
 const { DeviceDeploymentStatus } =
@@ -31,7 +30,7 @@ const Participants = () => {
     data: participantsStatus,
     isLoading: participantsStatusLoading,
     error: participantsStatusError,
-  } = useParticipantsStatus(studyId);
+  } = useParticipantGroupsStatus(studyId);
 
   const numberOfRegisteredDevices = useMemo(() => {
     if (!participantsStatus) return 0;
