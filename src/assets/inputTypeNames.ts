@@ -1,12 +1,14 @@
-import enUS from "@Assets/localization/enUS";
-import enDK  from "@Assets/localization/enDK";
+const enUS: { [key: string]: string } = {
 
-const languages: { [locale: string]: { [key: string]: string } } = {
-    'en-US': enUS,
-    'en-DK': enDK
+    sex: "Biological Sex",
+    informed_consent: "Informed Consent",
+    phone_number: "Phone Number",
+    ssn: "Social Security Number",
+    full_name: "Full Name",
+    address: "Address",
+    diagnosis: "Diagnosis",
 };
 
-export const getInputDataName = (key: string, location?: string): string => {
-    const localeData = languages[location || 'en-US'];
-    return localeData[key] || key;
+export const getInputDataName = (key: string): string => {
+    return enUS[key] || key;
 }
