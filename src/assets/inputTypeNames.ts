@@ -7,6 +7,6 @@ const languages: { [locale: string]: { [key: string]: string } } = {
 };
 
 export const getInputDataName = (key: string, location?: string): string => {
-    const localeData = languages[location || 'en-DK'];
+    const localeData = languages[location || 'en-US'];
     return localeData[key] || key;
 }
