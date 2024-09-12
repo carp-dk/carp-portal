@@ -64,7 +64,7 @@ const Deployment = () => {
 
   const lastDataUpload = (lastData: Date
   ) => {
-    if (lastData === null || lastData === undefined) {
+    if (!lastData) {
       return "";
     }
     if (
@@ -126,11 +126,9 @@ const Deployment = () => {
   const getParticipantInitials = (participant: ParticipantData) => {
     if (
       participant.firstName === "" ||
-      participant.firstName === null ||
-      participant.firstName === undefined ||
       participant.lastName === "" ||
-      participant.lastName === null ||
-      participant.lastName === undefined
+      !participant.firstName || 
+      !participant.lastName
     ) {
       return participant.role ? participant.role[0] : "?";
     }

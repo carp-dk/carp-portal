@@ -58,7 +58,7 @@ const ParticipantRecord = ({
 
   const lastDataUpload = useMemo(() => {
     const lastData = participantData.dateOfLastDataUpload;
-    if (lastData === null || lastData === undefined) {
+    if (!lastData) {
       return "";
     }
     const elapsedDays = calculateDaysPassedFromDate(
