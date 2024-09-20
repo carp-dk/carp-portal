@@ -34,7 +34,7 @@ const StudyCard = ({ onClick, study, status, description }: Props) => {
             <Bottom>
               <CreationText variant="h5">
                 {formatDateTime(
-                  study.createdOn.value$kotlinx_datetime.toString(),
+                  study.createdOn.toString(),
                 )}
               </CreationText>
               {/* TODO: Add real owner name after backend supports it */}
