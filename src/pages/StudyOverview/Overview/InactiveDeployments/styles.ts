@@ -5,7 +5,7 @@ export const StyledCard = styled(Card)({
   display: "flex",
   flexDirection: "column",
   padding: 24,
-  height: 288,
+  height: 580,
   borderRadius: 16,
 });
 
