@@ -1,25 +1,25 @@
-import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import PieCenterLabel from '@Components/PieCenterLabel';
-import { useParticipantsStatus } from '@Utils/queries/participants';
-import { getDeploymentStatusColor } from '@Utils/utility';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { Typography } from '@mui/material';
-import { Stack } from '@mui/system';
-import { PieValueType } from '@mui/x-charts';
-import { PieChart } from '@mui/x-charts/PieChart';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import LoadingSkeleton from '../LoadingSkeleton';
-import DeploymentStatusLegend from './DeploymentStatusLegend';
-import TooltipContent from './TooltipContent';
+import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
+import PieCenterLabel from "@Components/PieCenterLabel";
+import { useParticipantsStatus } from "@Utils/queries/participants";
+import { getDeploymentStatusColor } from "@Utils/utility";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { Typography } from "@mui/material";
+import { Stack } from "@mui/system";
+import { PieValueType } from "@mui/x-charts";
+import { PieChart } from "@mui/x-charts/PieChart";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import LoadingSkeleton from "../LoadingSkeleton";
+import DeploymentStatusLegend from "./DeploymentStatusLegend";
+import TooltipContent from "./TooltipContent";
 import {
   StyledButton,
   StyledCard,
   StyledTitle,
   StyledTooltip,
   Top,
-} from './styles';
+} from "./styles";
 
 const DeploymentStatus = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const DeploymentStatus = () => {
     const data = participantStatus.reduce(
       (acc, curr) => {
         acc[
-          curr.constructor.name.toLocaleLowerCase().replace('_0', '')
+          curr.constructor.name.toLocaleLowerCase().replace("_0", "")
         ].value += 1;
         return acc;
       },
@@ -45,28 +45,28 @@ const DeploymentStatus = () => {
         invited: {
           id: 0,
           value: 0,
-          label: 'Invited',
-          color: getDeploymentStatusColor('Invited'),
+          label: "Invited",
+          color: getDeploymentStatusColor("Invited"),
         },
         inDeployment: {
           id: 1,
           value: 0,
-          label: 'Deploying',
-          color: getDeploymentStatusColor('Deploying'),
+          label: "Deploying",
+          color: getDeploymentStatusColor("Deploying"),
         },
         running: {
           id: 2,
           value: 0,
-          label: 'Running',
-          color: getDeploymentStatusColor('Running'),
+          label: "Running",
+          color: getDeploymentStatusColor("Running"),
         },
         stopped: {
           id: 3,
           value: 0,
-          label: 'Stopped',
-          color: getDeploymentStatusColor('Stopped'),
+          label: "Stopped",
+          color: getDeploymentStatusColor("Stopped"),
         },
-      }
+      },
     );
     setStatuses(Object.values(data));
   }, [participantStatus]);
@@ -84,16 +84,16 @@ const DeploymentStatus = () => {
     <StyledCard>
       <Top>
         <StyledTitle variant="h2">
-          Deployment Status{' '}
+          Deployment Status{" "}
           <StyledTooltip
             title={TooltipContent()}
             placement="right-start"
             componentsProps={{
               tooltip: {
                 sx: {
-                  color: 'text.primary',
-                  backgroundColor: '#FFF',
-                  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+                  color: "text.primary",
+                  backgroundColor: "#FFF",
+                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
                 },
               },
             }}
@@ -110,7 +110,7 @@ const DeploymentStatus = () => {
         </StyledButton>
       </Top>
       <Stack direction="row" alignItems="center">
-        <div style={{ width: '200px', height: '200px', display: 'flex' }}>
+        <div style={{ width: "200px", height: "200px", display: "flex" }}>
           <PieChart
             height={200}
             width={200}
@@ -131,7 +131,7 @@ const DeploymentStatus = () => {
                 hidden: true,
               },
             }}
-            tooltip={{ trigger: 'none' }}
+            tooltip={{ trigger: "none" }}
           >
             <PieCenterLabel>{participantStatus.length}</PieCenterLabel>
           </PieChart>

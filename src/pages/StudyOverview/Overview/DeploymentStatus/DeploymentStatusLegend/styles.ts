@@ -1,12 +1,12 @@
-import { styled } from '@Utils/theme';
+import { styled } from "@Utils/theme";
 
-const ParticipantsRow = styled('div')({
+const ParticipantsRow = styled("div")({
   paddingBottom: 10,
   marginBottom: 0,
-  display: 'grid',
-  gridTemplateColumns: '80px 1fr',
+  display: "grid",
+  gridTemplateColumns: "80px 1fr",
   gap: 8,
-  alignItems: 'end',
+  alignItems: "end",
 });
 
 export default ParticipantsRow;

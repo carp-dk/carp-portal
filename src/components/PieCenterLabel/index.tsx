@@ -1,5 +1,5 @@
-import { useDrawingArea } from '@mui/x-charts';
-import { StyledNumberTSpan, StyledTSpan } from './styles';
+import { useDrawingArea } from "@mui/x-charts";
+import { StyledNumberTSpan, StyledTSpan } from "./styles";
 
 const PieCenterLabel = ({ children }: { children: React.ReactNode }) => {
   const { width, height, left, top } = useDrawingArea();
