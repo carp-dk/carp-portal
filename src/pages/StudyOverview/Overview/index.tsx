@@ -1,6 +1,6 @@
+import DeploymentStatus from "./DeploymentStatus";
 import DeviceDeploymentStatus from "./DeviceDeploymentStatus";
 import InactiveParticipants from "./InactiveParticipants";
-import Participants from "./Participants";
 import Status from "./Status";
 import StyledContainer from "./styles";
 
@@ -8,7 +8,7 @@ const Overview = () => {
   return (
     <StyledContainer>
       <Status />
-      <Participants />
+      <DeploymentStatus />
       {/* <StudyDataTypes /> */}
       <InactiveParticipants />
       <DeviceDeploymentStatus />
