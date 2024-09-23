@@ -1,4 +1,4 @@
-import { Card, TableCell, TableRow, Typography } from "@mui/material";
+import { Card, Select, TableCell, TableRow, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 
 export const StyledCard = styled(Card)({
@@ -23,7 +23,6 @@ export const HeaderTableCell = styled(TableCell)(({ theme }) => ({
   backgroundColor: theme.palette.common.white,
   borderBottomWidth: 1,
   zIndex: 0,
-  width: "30%",
   paddingLeft: 0,
   paddingBottom: 0,
 }));
@@ -50,4 +49,16 @@ export const StyledTableCell = styled(TableCell)({
   paddingBottom: "8px",
   paddingTop: "8px",
   border: "none",
+});
+
+export const StyledSelect = styled(Select)({
+  height: "32px",
+  width: "116px",
+  borderRadius: "16px",
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderRadius: "16px",
+  },
+  "& .MuiSelect-select": {
+    borderRadius: "16px",
+  },
 });
