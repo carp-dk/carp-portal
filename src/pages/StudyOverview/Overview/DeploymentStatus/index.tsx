@@ -102,7 +102,9 @@ const DeploymentStatus = () => {
           </StyledTooltip>
         </StyledTitle>
         <StyledButton
-          onClick={() => navigate(`/studies/${studyId}/participants/groups`)}
+          onClick={() =>
+            navigate(`/studies/${studyId}/participants/deployments`)
+          }
           variant="outlined"
         >
           <ManageAccountsIcon fontSize="small" color="primary" />
