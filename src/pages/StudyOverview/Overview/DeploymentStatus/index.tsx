@@ -84,7 +84,7 @@ const DeploymentStatus = () => {
     <StyledCard>
       <Top>
         <StyledTitle variant="h2">
-          Deployment Status{" "}
+          Deployment Status
           <StyledTooltip
             title={TooltipContent()}
             placement="right-start"
