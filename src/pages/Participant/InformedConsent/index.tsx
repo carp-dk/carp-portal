@@ -1,10 +1,10 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useParticipantConsent } from "@Utils/queries/participants";
 import { formatDateTime } from "@Utils/utility";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useGetParticipantData } from "@Utils/queries/participants";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
   DownloadButton,
@@ -22,13 +22,13 @@ interface FileInfo {
 }
 
 const InformedConsent = () => {
-  const { deploymentId } = useParams(); // need to somehow get the role
+  const { deploymentId } = useParams();
 
   const {
-    data: consents,
+    data: participantData,
     isLoading,
     error,
-  } = useParticipantConsent(deploymentId);
+  } = useGetParticipantData(deploymentId);
   const [consent, setConsent] = useState(null);
 
   const downloadFile = ({ data, fileName, fileType }: FileInfo) => {
@@ -56,14 +56,21 @@ const InformedConsent = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      // TODO: Get the consent for the current user
-      setConsent(consents[consents.length - 1]);
+      if (participantData.common.keys) {
+        const consentData = participantData.common.values.toArray().find(
+          (v) =>
+            // eslint-disable-next-line no-underscore-dangle
+            (v as unknown as any)?.__type ===
+            "dk.carp.webservices.input.informed_consent",
+        );
+        setConsent(consentData);
+      }
     }
-  }, [consents]);
+  }, [participantData]);
 
   const dateOfLastUpdate = useMemo(() => {
     if (consent) {
-      return `Last Updated: ${formatDateTime(consent.updated_at, {
+      return `Last Updated: ${formatDateTime(consent.signedTimestamp, {
         year: "numeric",
         month: "numeric",
         day: "numeric",
