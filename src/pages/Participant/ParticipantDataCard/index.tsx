@@ -93,6 +93,15 @@ const ParticipantDataCard = () => {
     );
   }
 
+  if (
+    study?.protocolSnapshot.expectedParticipantData.toArray().length === 0 ||
+    (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1 &&
+      study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
+        .name === "informed_consent")
+  ) {
+    return null;
+  }
+
   return (
     <StyledCard elevation={2}>
       <Top>
