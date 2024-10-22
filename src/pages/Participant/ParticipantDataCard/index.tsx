@@ -41,9 +41,6 @@ import getParticipantDataFormik from "./InputElements/utils";
 const ParticipantDataCard = () => {
   const [editing, setEditing] = useState(false);
   const { participantId, id: studyId, deploymentId } = useParams();
-  // TODO: Fetch participant data
-  // const { data: participantData, isLoading: participantDataLoading } =
-  //   useParticipantData(groupId);
   const {
     data: study,
     isLoading: studyLoading,
@@ -78,6 +75,7 @@ const ParticipantDataCard = () => {
     participantData?.common.values.toArray().filter((v) => v),
     setParticipantData,
     participant?.role,
+    setEditing,
   );
 
   if (studyLoading || participantDataLoading || participantGroupStatusLoading) {
@@ -144,6 +142,7 @@ const ParticipantDataCard = () => {
                           {getInputDataName(data.inputDataType.name)}
                         </InputLabel>
                         <Select
+                          disabled={!editing}
                           required
                           name={`${data.inputDataType.name}.value`}
                           value={participantDataFromik.values.sex.value}
@@ -176,11 +175,13 @@ const ParticipantDataCard = () => {
                     getInputElement(
                       data.inputDataType.name,
                       participantDataFromik,
+                      editing,
                     )}
                 </Stack>
               );
             })}
           <Button
+            sx={{ display: editing ? "block" : "none" }}
             type="submit"
             variant="contained"
             onClick={participantDataFromik.submitForm}

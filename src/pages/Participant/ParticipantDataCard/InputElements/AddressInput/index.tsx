@@ -13,13 +13,15 @@ import * as flags from "react-flags-select";
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
+  editing: boolean;
 };
 
-const AddressInput = ({ formik }: Props) => {
+const AddressInput = ({ formik, editing }: Props) => {
   const DanishFlag = flags.Dk;
   return (
     <Stack direction="column" gap={2}>
       <TextField
+        disabled={!editing}
         type="text"
         name="address.address1"
         label="Address 1"
@@ -32,6 +34,7 @@ const AddressInput = ({ formik }: Props) => {
         }
       />
       <TextField
+        disabled={!editing}
         type="text"
         name="address.address2"
         label="Address 2"
@@ -44,6 +47,7 @@ const AddressInput = ({ formik }: Props) => {
         }
       />
       <TextField
+        disabled={!editing}
         type="text"
         name="address.street"
         label="Street"
@@ -55,6 +59,7 @@ const AddressInput = ({ formik }: Props) => {
       />
       <Stack direction="row" gap={2}>
         <TextField
+          disabled={!editing}
           type="text"
           name="address.city"
           label="City"
@@ -66,6 +71,7 @@ const AddressInput = ({ formik }: Props) => {
           helperText={formik.touched.city && (formik.errors.city as string)}
         />
         <TextField
+          disabled={!editing}
           type="text"
           name="address.postalCode"
           label="Postal Code"
@@ -80,8 +86,11 @@ const AddressInput = ({ formik }: Props) => {
         />
       </Stack>
       <FormControl fullWidth>
-        <InputLabel id="countryCodeLabel">Country</InputLabel>
+        <InputLabel id="countryCodeLabel" disabled={!editing}>
+          Country
+        </InputLabel>
         <Select
+          disabled={!editing}
           name="address.country"
           error={
             getIn(formik.touched, "address.country") &&

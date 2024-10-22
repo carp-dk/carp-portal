@@ -15,19 +15,21 @@ import * as flags from "react-flags-select";
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
+  editing: boolean;
 };
 
-const PhoneNumberInput = ({ formik }: Props) => {
+const PhoneNumberInput = ({ formik, editing }: Props) => {
   const DanishFlag = flags.Dk;
 
   return (
     <FormControl fullWidth>
       <Stack direction="row" gap={2}>
         <div>
-          <InputLabel id="countryCodeLabel" required>
+          <InputLabel id="countryCodeLabel" required disabled={!editing}>
             Country
           </InputLabel>
           <Select
+            disabled={!editing}
             required
             name="phone_number.icoCode"
             error={
@@ -118,6 +120,7 @@ const PhoneNumberInput = ({ formik }: Props) => {
           </FormHelperText>
         </div>
         <TextField
+          disabled={!editing}
           required
           type="text"
           name="phone_number.number"

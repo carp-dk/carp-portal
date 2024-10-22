@@ -14,19 +14,21 @@ import * as flags from "react-flags-select";
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
+  editing: boolean;
 };
 
-const SSNInput = ({ formik }: Props) => {
+const SSNInput = ({ formik, editing }: Props) => {
   const DanishFlag = flags.Dk;
 
   return (
     <FormControl fullWidth>
       <Stack direction="row" gap={2}>
         <div>
-          <InputLabel id="countryCodeLabel" required>
+          <InputLabel id="countryCodeLabel" required disabled={!editing}>
             Country
           </InputLabel>
           <Select
+            disabled={!editing}
             required
             name="ssn.country"
             error={
@@ -115,6 +117,7 @@ const SSNInput = ({ formik }: Props) => {
           </FormHelperText>
         </div>
         <TextField
+          disabled={!editing}
           type="text"
           name="ssn.socialSecurityNumber"
           label="Social Security Number"

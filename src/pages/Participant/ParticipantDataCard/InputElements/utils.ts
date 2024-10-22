@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import * as yup from "yup";
 import carpStudies from "@cachet/carp-studies-core";
 import carpDeployments from "@cachet/carp-deployments-core";
 import { useFormik } from "formik";
+import { UseMutationResult } from "@tanstack/react-query";
 import ddk = carpDeployments.dk;
 import sdk = carpStudies.dk;
 import ExpectedParticipantData = sdk.cachet.carp.common.application.users.ExpectedParticipantData;
@@ -124,8 +126,9 @@ const diagnosisValidationSchema = yup
 const getParticipantDataFormik = (
   participantData: ExpectedParticipantData[],
   startingData: Data[],
-  setParticipantData: { mutate: (any) => void },
+  setParticipantData: UseMutationResult<any, unknown, any, unknown>,
   role: string,
+  setEditing: (boolean) => void,
 ) => {
   let validationSchema = yup.object({});
 
@@ -171,7 +174,6 @@ const getParticipantDataFormik = (
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
       if (data.attribute.inputDataType.name === "informed_consent") return;
-      // eslint-disable-next-line no-underscore-dangle
       initialValues[data.attribute.inputDataType.name].__type = `${
         data.attribute.inputDataType.namespace
       }.${data.attribute.inputDataType.name}`;
@@ -203,7 +205,6 @@ const getParticipantDataFormik = (
   }
 
   startingData?.forEach((data) => {
-    // eslint-disable-next-line no-underscore-dangle
     initialValues[((data as any).__type as string).split(".").pop()] = {
       ...data,
     };
@@ -213,19 +214,20 @@ const getParticipantDataFormik = (
     enableReinitialize: true,
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const newParticipantData = {};
       Object.values(values).forEach((value) => {
         if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
-          newParticipantData[value.__type] = null;
+          newParticipantData[(value as any).__type] = null;
         } else {
-          newParticipantData[value.__type] = value;
+          newParticipantData[(value as any).__type] = value;
         }
       });
-      setParticipantData.mutate({
+      await setParticipantData.mutateAsync({
         participantData: newParticipantData,
         role,
       });
+      setEditing(false);
     },
   });
   return formik;

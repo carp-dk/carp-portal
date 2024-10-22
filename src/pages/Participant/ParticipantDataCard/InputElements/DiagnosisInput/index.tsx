@@ -6,14 +6,16 @@ import { enGB } from "date-fns/locale/en-GB";
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
+  editing: boolean;
 };
 
-const DiagnosisInput = ({ formik }: Props) => {
+const DiagnosisInput = ({ formik, editing }: Props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
       <Stack direction="column" gap={2}>
         <Stack direction="row" gap={2}>
           <TextField
+            disabled={!editing}
             type="text"
             name="diagnosis.icd11Code"
             label="ICD-11 Code"
@@ -32,6 +34,7 @@ const DiagnosisInput = ({ formik }: Props) => {
             }
           />
           <DatePicker
+            disabled={!editing}
             label="Effective date"
             name="diagnosis.effectiveDate"
             value={
@@ -61,6 +64,7 @@ const DiagnosisInput = ({ formik }: Props) => {
           />
         </Stack>
         <TextField
+          disabled={!editing}
           type="text"
           name="diagnosis.diagnosis"
           label="Diagnosis"
@@ -77,6 +81,7 @@ const DiagnosisInput = ({ formik }: Props) => {
           }
         />
         <TextField
+          disabled={!editing}
           type="text"
           name="diagnosis.conclusion"
           label="Conclusion"

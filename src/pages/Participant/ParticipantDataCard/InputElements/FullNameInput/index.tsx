@@ -3,12 +3,14 @@ import { useFormik } from "formik";
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
+  editing: boolean;
 };
 
-const FullNameInput = ({ formik }: Props) => {
+const FullNameInput = ({ formik, editing }: Props) => {
   return (
     <Stack direction="row" gap={2}>
       <TextField
+        disabled={!editing}
         type="text"
         name="full_name.firstName"
         label="First Name"
@@ -18,6 +20,7 @@ const FullNameInput = ({ formik }: Props) => {
         onBlur={formik.handleBlur}
       />
       <TextField
+        disabled={!editing}
         type="text"
         name="full_name.middleName"
         label="Middle Name"
@@ -27,6 +30,7 @@ const FullNameInput = ({ formik }: Props) => {
         onBlur={formik.handleBlur}
       />
       <TextField
+        disabled={!editing}
         type="text"
         name="full_name.lastName"
         label="Last Name"
