@@ -1,167 +1,138 @@
 import {
   Divider,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
-import {
-  InputDataType,
-  PhoneNumber,
-} from "@carp-dk/client/models/InputDataTypes";
-import * as yup from "yup";
-import { useFormik } from "formik";
+import { useFormik, getIn } from "formik";
 import { countryInfos } from "@Assets/languageMap";
 import * as flags from "react-flags-select";
 
 type Props = {
-  defaultValues: PhoneNumber;
-  setValues: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: InputDataType;
-    }>
-  >;
+  formik: ReturnType<typeof useFormik>;
 };
 
-const validationSchema = yup
-  .object({
-    countryCode: yup.string(),
-    icoCode: yup.string().notRequired(),
-    number: yup.string(),
-  })
-  .test("either-or", "Either countryCode or number is required", (value) => {
-    const { countryCode, number } = value;
-
-    // Check if both are empty
-    const isEmpty = !countryCode && !number;
-
-    // Check if one is filled and the other is not
-    const isBothFilled = !!countryCode && !!number;
-
-    // If both are empty or both are filled, return false (validation fails)
-    return !isEmpty && !isBothFilled;
-  })
-  .test(
-    "conditional-required",
-    "Country code is required when number is set",
-    (value, schema) => {
-      const { countryCode, number } = value;
-
-      // If number is set, countryCode must also be set
-      if (number && !countryCode) {
-        return schema.createError({
-          path: "countryCode",
-          message: "Country code is required when number is set",
-        });
-      }
-
-      // If countryCode is set, number must also be set
-      if (countryCode && !number) {
-        return schema.createError({
-          path: "number",
-          message: "Number is required when country code is set",
-        });
-      }
-
-      return true; // No errors
-    },
-  );
-
-const PhoneNumberInput = ({ defaultValues, setValues }: Props) => {
-  const participantDataFormik = useFormik({
-    initialValues: {
-      countryCode: defaultValues?.countryCode ?? "",
-      isoCode: defaultValues?.isoCode ?? "",
-      number: defaultValues?.number ?? "",
-    },
-    validationSchema,
-    onSubmit: async (inputValues) => {
-      if (participantDataFormik.isValid) {
-        setValues((oldValues) => ({
-          ...oldValues,
-          "dk.carp.webservices.input.phone_number": {
-            __type: "dk.carp.webservices.input.phone_number",
-            countryCode: inputValues.countryCode,
-            isoCode: countryInfos.find(
-              (ci) => ci.dialCode === inputValues.countryCode,
-            )?.isoCode,
-            number: inputValues.number,
-          },
-        }));
-      }
-    },
-  });
-
-  const handleBlur = (e) => {
-    const { relatedTarget } = e;
-
-    // Check if the next focused element is an input field
-    const isNextInputField =
-      relatedTarget && relatedTarget.tagName.toLowerCase() === "input";
-
-    if (!isNextInputField) {
-      participantDataFormik.handleBlur(e);
-      participantDataFormik.handleSubmit();
-    }
-  };
-
+const PhoneNumberInput = ({ formik }: Props) => {
   const DanishFlag = flags.Dk;
 
   return (
-    <FormControl fullWidth onBlur={handleBlur}>
+    <FormControl fullWidth>
       <Stack direction="row" gap={2}>
-        <InputLabel id="countryCodeLabel">Country</InputLabel>
-        <Select
-          name="countryCode"
-          error={!!participantDataFormik.errors.countryCode}
-          value={participantDataFormik.values.countryCode}
-          onChange={participantDataFormik.handleChange}
-          label="Country"
-          labelId="countryCodeLabel"
-          sx={{ minWidth: "110px", height: "56px" }}
-        >
-          <MenuItem id="Dk" key="Dk" value="+45">
-            <Stack gap={1} direction="row" alignItems="center">
-              <DanishFlag onSelect={undefined} /> +45
-            </Stack>
-          </MenuItem>
-          <Divider />
-          {countryInfos.map((country) => {
-            const countryCode =
-              country.isoCode[0].toUpperCase() +
-              country.isoCode[1].toLowerCase();
-            let CountryFlag;
-            if (countryCode in flags) {
-              CountryFlag = flags[countryCode];
-            } else {
-              CountryFlag = flags.Gb;
+        <div>
+          <InputLabel id="countryCodeLabel" required>
+            Country
+          </InputLabel>
+          <Select
+            required
+            name="phone_number.icoCode"
+            error={
+              getIn(formik.touched, "phone_number.countryCode") &&
+              !!getIn(formik.errors, "phone_number.countryCode")
             }
-            return (
-              <MenuItem
-                id={country.isoCode}
-                key={country.isoCode}
-                value={country.dialCode}
+            value={formik.values.phone_number.icoCode}
+            onChange={(e) => {
+              formik.setFieldValue(
+                "phone_number.countryCode",
+                countryInfos.find((ci) => ci.isoCode === e.target.value)
+                  ?.dialCode ?? "",
+              );
+              formik.handleChange(e);
+            }}
+            onBlur={formik.handleBlur}
+            label="Country"
+            labelId="countryCodeLabel"
+            sx={{
+              width: "300px",
+              height: "56px",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            <MenuItem id="None" key="None" value="">
+              Clear
+            </MenuItem>
+            <MenuItem id="Dk" key="Dk" value="Dk">
+              <Stack
+                gap={1}
+                direction="row"
+                alignItems="center"
+                sx={{
+                  display: "grid",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+                gridTemplateColumns="30px 50px auto"
               >
-                <Stack gap={1} direction="row" alignItems="center">
-                  <CountryFlag selected="" onSelect={undefined} />
-                  {country.dialCode}
-                </Stack>
-              </MenuItem>
-            );
-          })}
-        </Select>
+                <DanishFlag onSelect={undefined} width={30} />{" "}
+                <Typography>+45</Typography>
+                <Typography>Denmark</Typography>
+              </Stack>
+            </MenuItem>
+            <Divider />
+            {countryInfos.map((country) => {
+              const countryCode =
+                country.isoCode[0].toUpperCase() +
+                country.isoCode[1].toLowerCase();
+              let CountryFlag;
+              if (countryCode in flags) {
+                CountryFlag = flags[countryCode];
+              } else {
+                CountryFlag = "div";
+              }
+              return (
+                <MenuItem
+                  id={country.isoCode}
+                  key={country.isoCode}
+                  value={country.isoCode}
+                >
+                  <Stack
+                    gap={1}
+                    direction="row"
+                    alignItems="center"
+                    sx={{
+                      display: "grid",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                    }}
+                    gridTemplateColumns="30px 50px auto"
+                  >
+                    <CountryFlag selected="" onSelect={undefined} width={30} />
+                    <Typography>{country.dialCode}</Typography>
+                    <Typography>{country.name}</Typography>
+                  </Stack>
+                </MenuItem>
+              );
+            })}
+          </Select>
+          <FormHelperText error sx={{ width: "110px" }}>
+            {getIn(formik.touched, "phone_number.countryCode") &&
+              getIn(formik.errors, "phone_number.countryCode")}
+          </FormHelperText>
+        </div>
         <TextField
+          required
           type="text"
-          name="number"
+          name="phone_number.number"
           label="Phone Number"
-          error={!!participantDataFormik.errors.number}
-          value={participantDataFormik.values.number}
-          onChange={participantDataFormik.handleChange}
+          fullWidth
+          error={
+            getIn(formik.touched, "phone_number.number") &&
+            !!getIn(formik.errors, "phone_number.number")
+          }
+          value={formik.values.phone_number.number}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           helperText={
-            participantDataFormik.touched.number &&
-            participantDataFormik.errors.number
+            getIn(formik.touched, "phone_number.number") &&
+            getIn(formik.errors, "phone_number.number")
           }
         />
       </Stack>

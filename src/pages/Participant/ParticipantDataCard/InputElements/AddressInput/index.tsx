@@ -1,140 +1,169 @@
-import { Stack, TextField } from "@mui/material";
-import { Address, InputDataType } from "@carp-dk/client/models/InputDataTypes";
-import * as yup from "yup";
-import { useFormik } from "formik";
+import { countryInfos } from "@Assets/languageMap";
+import {
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { getIn, useFormik } from "formik";
+import * as flags from "react-flags-select";
 
 type Props = {
-  defaultValues: Address;
-  setValues: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: InputDataType;
-    }>
-  >;
+  formik: ReturnType<typeof useFormik>;
 };
 
-const validationSchema = yup.object({
-  address1: yup.string().notRequired(),
-  address2: yup.string().notRequired(),
-  street: yup.string().notRequired(),
-  city: yup.string().notRequired(),
-  postalCode: yup.string().notRequired(),
-  country: yup.string().notRequired(),
-});
-
-const AddressInput = ({ defaultValues, setValues }: Props) => {
-  const participantDataFormik = useFormik({
-    initialValues: {
-      address1: defaultValues?.address1,
-      address2: defaultValues?.address2,
-      street: defaultValues?.street,
-      city: defaultValues?.city,
-      postalCode: defaultValues?.postalCode,
-      country: defaultValues?.country,
-    },
-    validationSchema,
-    onSubmit: async (inputValues) => {
-      setValues((oldValues) => ({
-        ...oldValues,
-        "dk.carp.webservices.input.address": {
-          __type: "dk.carp.webservices.input.address",
-          address1: inputValues.address1,
-          address2: inputValues.address2,
-          street: inputValues.street,
-          city: inputValues.city,
-          postalCode: inputValues.postalCode,
-          country: inputValues.country,
-        },
-      }));
-    },
-  });
-
-  const handleBlur = (e) => {
-    const { relatedTarget } = e;
-
-    // Check if the next focused element is an input field
-    const isNextInputField =
-      relatedTarget && relatedTarget.tagName.toLowerCase() === "input";
-
-    if (!isNextInputField) {
-      participantDataFormik.handleBlur(e);
-      participantDataFormik.handleSubmit();
-    }
-  };
-
+const AddressInput = ({ formik }: Props) => {
+  const DanishFlag = flags.Dk;
   return (
-    <Stack direction="row" gap={2} onBlur={handleBlur}>
+    <Stack direction="column" gap={2}>
       <TextField
         type="text"
-        name="address1"
+        name="address.address1"
         label="Address 1"
-        error={!!participantDataFormik.errors.address1}
-        value={participantDataFormik.values.address1}
-        onChange={participantDataFormik.handleChange}
+        error={!!formik.errors.address1}
+        value={formik.values.address.address1}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
         helperText={
-          participantDataFormik.touched.address1 &&
-          participantDataFormik.errors.address1
+          formik.touched.address1 && (formik.errors.address1 as string)
         }
       />
       <TextField
         type="text"
-        name="address2"
+        name="address.address2"
         label="Address 2"
-        error={!!participantDataFormik.errors.address2}
-        value={participantDataFormik.values.address2}
-        onChange={participantDataFormik.handleChange}
+        error={!!formik.errors.address2}
+        value={formik.values.address.address2}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
         helperText={
-          participantDataFormik.touched.address2 &&
-          participantDataFormik.errors.address2
+          formik.touched.address2 && (formik.errors.address2 as string)
         }
       />
       <TextField
         type="text"
-        name="street"
+        name="address.street"
         label="Street"
-        error={!!participantDataFormik.errors.street}
-        value={participantDataFormik.values.street}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.street &&
-          participantDataFormik.errors.street
-        }
+        error={!!formik.errors.street}
+        value={formik.values.address.street}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        helperText={formik.touched.street && (formik.errors.street as string)}
       />
-      <TextField
-        type="text"
-        name="city"
-        label="City"
-        error={!!participantDataFormik.errors.city}
-        value={participantDataFormik.values.city}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.city &&
-          participantDataFormik.errors.city
-        }
-      />
-      <TextField
-        type="text"
-        name="postalCode"
-        label="Postal Codde"
-        error={!!participantDataFormik.errors.postalCode}
-        value={participantDataFormik.values.postalCode}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.postalCode &&
-          participantDataFormik.errors.postalCode
-        }
-      />
-      <TextField
-        type="text"
-        name="country"
-        label="Country"
-        error={!!participantDataFormik.errors.country}
-        value={participantDataFormik.values.country}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.country &&
-          participantDataFormik.errors.country
-        }
-      />
+      <Stack direction="row" gap={2}>
+        <TextField
+          type="text"
+          name="address.city"
+          label="City"
+          fullWidth
+          error={!!formik.errors.city}
+          value={formik.values.address.city}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          helperText={formik.touched.city && (formik.errors.city as string)}
+        />
+        <TextField
+          type="text"
+          name="address.postalCode"
+          label="Postal Code"
+          fullWidth
+          error={!!formik.errors.postalCode}
+          value={formik.values.address.postalCode}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          helperText={
+            formik.touched.postalCode && (formik.errors.postalCode as string)
+          }
+        />
+      </Stack>
+      <FormControl fullWidth>
+        <InputLabel id="countryCodeLabel">Country</InputLabel>
+        <Select
+          name="address.country"
+          error={
+            getIn(formik.touched, "address.country") &&
+            !!getIn(formik.errors, "address.country")
+          }
+          value={formik.values.address.country}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          label="Country"
+          labelId="countryCodeLabel"
+          fullWidth
+          sx={{
+            height: "56px",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
+        >
+          <MenuItem id="None" key="None" value="">
+            Clear
+          </MenuItem>
+          <MenuItem id="Denmark" key="Denmark" value="Denmark">
+            <Stack
+              gap={1}
+              direction="row"
+              alignItems="center"
+              justifyContent="start"
+              sx={{
+                display: "grid",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+              gridTemplateColumns="30px auto"
+            >
+              <DanishFlag name="Denmark" onSelect={undefined} width={30} />{" "}
+              Denmark
+            </Stack>
+          </MenuItem>
+          <Divider />
+          {countryInfos.map((country) => {
+            const countryCode =
+              country.isoCode[0].toUpperCase() +
+              country.isoCode[1].toLowerCase();
+            let CountryFlag;
+            if (countryCode in flags) {
+              CountryFlag = flags[countryCode];
+            } else {
+              CountryFlag = "div";
+            }
+            return (
+              <MenuItem
+                id={country.isoCode}
+                key={country.isoCode}
+                value={country.name}
+              >
+                <Stack
+                  gap={1}
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="start"
+                  sx={{
+                    display: "grid",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                  }}
+                  gridTemplateColumns="30px auto"
+                >
+                  <CountryFlag
+                    name={country.isoCode}
+                    selected=""
+                    onSelect={undefined}
+                    width={30}
+                  />
+                  {country.name}
+                </Stack>
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
     </Stack>
   );
 };

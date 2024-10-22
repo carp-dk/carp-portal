@@ -1,5 +1,4 @@
-import { Stack, Typography } from "@mui/material";
-import { InputDataType } from "@carp-dk/client/models/InputDataTypes";
+import { useFormik } from "formik";
 import FullNameInput from "./FullNameInput";
 import AddressInput from "./AddressInput";
 import SSNInput from "./SSNInput";
@@ -8,48 +7,19 @@ import DiagnosisInput from "./DiagnosisInput";
 
 const getInputElement = (
   name: string,
-  defaultValues: any,
-  setValues: (values: { [key: string]: InputDataType }) => void,
+  formik: ReturnType<typeof useFormik>,
 ) => {
   switch (name) {
     case "full_name":
-      return (
-        <Stack direction="row" key={name} gap={1} alignItems="center">
-          <Typography variant="h4">Full name</Typography>
-          <FullNameInput defaultValues={defaultValues} setValues={setValues} />
-        </Stack>
-      );
+      return <FullNameInput formik={formik} />;
     case "phone_number":
-      return (
-        <Stack direction="row" key={name} gap={1} alignItems="center">
-          <Typography variant="h4">Phone number</Typography>
-          <PhoneNumberInput
-            defaultValues={defaultValues}
-            setValues={setValues}
-          />
-        </Stack>
-      );
+      return <PhoneNumberInput formik={formik} />;
     case "ssn":
-      return (
-        <Stack direction="row" key={name} gap={1} alignItems="center">
-          <Typography variant="h4">Social Security Number</Typography>
-          <SSNInput defaultValues={defaultValues} setValues={setValues} />
-        </Stack>
-      );
+      return <SSNInput formik={formik} />;
     case "address":
-      return (
-        <Stack direction="row" key={name} gap={1} alignItems="center">
-          <Typography variant="h4">Address</Typography>
-          <AddressInput defaultValues={defaultValues} setValues={setValues} />
-        </Stack>
-      );
+      return <AddressInput formik={formik} />;
     case "diagnosis":
-      return (
-        <Stack direction="row" key={name} gap={1} alignItems="center">
-          <Typography variant="h4">Diagnosis</Typography>
-          <DiagnosisInput defaultValues={defaultValues} setValues={setValues} />
-        </Stack>
-      );
+      return <DiagnosisInput formik={formik} />;
     default:
       console.error(`No input element found for ${name}`);
       return null;

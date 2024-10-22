@@ -1,94 +1,39 @@
 import { Stack, TextField } from "@mui/material";
-import { FullName, InputDataType } from "@carp-dk/client/models/InputDataTypes";
-import * as yup from "yup";
 import { useFormik } from "formik";
 
 type Props = {
-  defaultValues: FullName;
-  setValues: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: InputDataType;
-    }>
-  >;
+  formik: ReturnType<typeof useFormik>;
 };
 
-const validationSchema = yup.object({
-  firstName: yup.string().notRequired(),
-  middleName: yup.string().notRequired(),
-  lastName: yup.string().notRequired(),
-});
-
-const FullNameInput = ({ defaultValues, setValues }: Props) => {
-  const participantDataFormik = useFormik({
-    initialValues: {
-      firstName: defaultValues?.firstName,
-      middleName: defaultValues?.middleName,
-      lastName: defaultValues?.lastName,
-    },
-    validationSchema,
-    onSubmit: async (inputValues) => {
-      setValues((oldValues) => ({
-        ...oldValues,
-        "dk.carp.webservices.input.full_name": {
-          __type: "dk.carp.webservices.input.full_name",
-          firstName: inputValues.firstName,
-          middleName: inputValues.middleName,
-          lastName: inputValues.lastName,
-        },
-      }));
-    },
-  });
-
-  const handleBlur = (e) => {
-    const { relatedTarget } = e;
-
-    // Check if the next focused element is an input field
-    const isNextInputField =
-      relatedTarget && relatedTarget.tagName.toLowerCase() === "input";
-
-    if (!isNextInputField) {
-      participantDataFormik.handleBlur(e);
-      participantDataFormik.handleSubmit();
-    }
-  };
-
+const FullNameInput = ({ formik }: Props) => {
   return (
-    <Stack direction="row" gap={2} onBlur={handleBlur}>
+    <Stack direction="row" gap={2}>
       <TextField
         type="text"
-        name="firstName"
+        name="full_name.firstName"
         label="First Name"
-        error={!!participantDataFormik.errors.firstName}
-        value={participantDataFormik.values.firstName}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.firstName &&
-          participantDataFormik.errors.firstName
-        }
+        fullWidth
+        value={formik.values.full_name.firstName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
       <TextField
         type="text"
-        name="middleName"
+        name="full_name.middleName"
         label="Middle Name"
-        error={!!participantDataFormik.errors.middleName}
-        value={participantDataFormik.values.middleName}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.middleName &&
-          participantDataFormik.errors.middleName
-        }
+        fullWidth
+        value={formik.values.full_name.middleName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
       <TextField
         type="text"
-        name="lastName"
+        name="full_name.lastName"
         label="Last Name"
-        error={!!participantDataFormik.errors.lastName}
-        value={participantDataFormik.values.lastName}
-        onChange={participantDataFormik.handleChange}
-        helperText={
-          participantDataFormik.touched.lastName &&
-          participantDataFormik.errors.lastName
-        }
+        fullWidth
+        value={formik.values.full_name.lastName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
       />
     </Stack>
   );

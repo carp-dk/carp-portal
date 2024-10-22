@@ -4,13 +4,23 @@ import {
   useSetParticipantData,
 } from "@Utils/queries/participants";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, MenuItem, Select, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import carpCommon from "@cachet/carp-common";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { InputDataType, ParticipantData } from "@carp-dk/client/models";
+import { ParticipantData } from "@carp-dk/client/models";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
+import getInputDataName from "@Assets/inputTypeNames";
 import {
   EditButton,
   Left,
@@ -22,11 +32,11 @@ import {
   Top,
 } from "./styles";
 import getInputElement from "./InputElements/selector";
-
 import dk = carpCommon.dk;
 import CarpInputDataTypes = dk.cachet.carp.common.application.data.input.CarpInputDataTypes;
 import SelectOne = dk.cachet.carp.common.application.data.input.elements.SelectOne;
 import LoadingSkeleton from "../LoadingSkeleton";
+import getParticipantDataFormik from "./InputElements/utils";
 
 const ParticipantDataCard = () => {
   const [editing, setEditing] = useState(false);
@@ -63,18 +73,12 @@ const ParticipantDataCard = () => {
     }
   }, [participantGroupStatus]);
 
-  const [newParticipantData, setNewParticipantData] = useState<{
-    [key: string]: InputDataType;
-  }>({});
-
-  const submit = (e) => {
-    e.preventDefault();
-    console.log(newParticipantData);
-    setParticipantData.mutate({
-      participantData: newParticipantData,
-      role: participant.role,
-    });
-  };
+  const participantDataFromik = getParticipantDataFormik(
+    study?.protocolSnapshot.expectedParticipantData.toArray(),
+    participantData?.common.values.toArray().filter((v) => v),
+    setParticipantData,
+    participant?.role,
+  );
 
   if (studyLoading || participantDataLoading || participantGroupStatusLoading) {
     return <LoadingSkeleton />;
@@ -91,14 +95,13 @@ const ParticipantDataCard = () => {
     );
   }
 
-  // TODO: Add loading skeleton
   return (
     <StyledCard elevation={2}>
       <Top>
         <Left>
           <Title variant="h3">Participant Data</Title>
           <StyledDescription variant="h5">
-            After editing data, all the changes will be autosaved.
+            Required fields are only applied if the section has any field set.
           </StyledDescription>
         </Left>
         <Right>
@@ -109,80 +112,83 @@ const ParticipantDataCard = () => {
           </EditButton>
         </Right>
       </Top>
-      {/* <StyledFormControl onBlur={handleBlur}> */}
-      <Stack gap={2}>
-        {study?.protocolSnapshot.expectedParticipantData
-          .toArray()
-          .map((data) => {
-            const inputData = participantData.common.values
-              .toArray()
-              .filter((v) => v)
-              .find(
-                // eslint-disable-next-line no-underscore-dangle
-                (v) => v.__type.toString() === data.inputDataType.toString(),
-              );
-            if (CarpInputDataTypes.inputElements.get(data.inputDataType)) {
-              const element = CarpInputDataTypes.inputElements.get(
-                data.inputDataType,
-              );
-              if (element instanceof SelectOne) {
-                return (
-                  <Stack
-                    direction="row"
-                    gap={1}
-                    alignItems="center"
-                    key={data.inputDataType.name}
-                  >
-                    <Typography
-                      variant="h4"
-                      style={{ textTransform: "capitalize" }}
-                    >
-                      {data.attribute.inputDataType.name}
-                    </Typography>
-                    <Select
-                      name={data.inputDataType.name}
-                      defaultValue={inputData?.value}
-                      onChange={(e) => {
-                        setNewParticipantData((oldParticipantData) => ({
-                          ...oldParticipantData,
-                          [`${data.inputDataType.namespace}.${
-                            data.inputDataType.name
-                          }`]: {
-                            __type: `${data.inputDataType.namespace}.${
-                              data.inputDataType.name
-                            }`,
-                            value: e.target.value,
-                          },
-                        }));
-                      }}
-                    >
-                      {element.options.toArray().map((option) => {
-                        return (
-                          <MenuItem id={option} value={option} key={option}>
-                            {option}
+      <FormControl>
+        <Stack gap={2}>
+          {study?.protocolSnapshot.expectedParticipantData
+            .toArray()
+            .map((data) => {
+              if (data.inputDataType.name === "informed_consent") return null;
+              return (
+                <Stack
+                  direction="column"
+                  gap={1}
+                  alignItems="left"
+                  key={data.inputDataType.name}
+                  border="1px solid"
+                  borderColor="#ABABAB"
+                  borderRadius={2}
+                  padding={2}
+                >
+                  <Title variant="h4" paddingBottom={2}>
+                    {getInputDataName(data.inputDataType.name)}
+                  </Title>
+                  {CarpInputDataTypes.inputElements.get(data.inputDataType) &&
+                    CarpInputDataTypes.inputElements.get(
+                      data.inputDataType,
+                    ) instanceof SelectOne && (
+                      <FormControl>
+                        <InputLabel
+                          id={`${data.inputDataType.name}Label`}
+                          required
+                        >
+                          {getInputDataName(data.inputDataType.name)}
+                        </InputLabel>
+                        <Select
+                          required
+                          name={`${data.inputDataType.name}.value`}
+                          value={participantDataFromik.values.sex.value}
+                          onChange={participantDataFromik.handleChange}
+                          onBlur={participantDataFromik.handleBlur}
+                          label={getInputDataName(data.inputDataType.name)}
+                          labelId={`${data.inputDataType.name}Label`}
+                        >
+                          <MenuItem id="None" key="None" value={null}>
+                            Clear
                           </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </Stack>
-                );
-              }
-            } else if (data.inputDataType.name) {
-              if (data.inputDataType.name !== "informed_consent") {
-                return getInputElement(
-                  data.inputDataType.name,
-                  inputData,
-                  setNewParticipantData,
-                );
-              }
-            }
-            return null;
-          })}
-      </Stack>
-      <Button type="submit" variant="contained" onClick={submit}>
-        Submit
-      </Button>
-      {/* </StyledFormControl> */}
+                          <Divider />
+                          {(
+                            CarpInputDataTypes.inputElements.get(
+                              data.inputDataType,
+                            ) as SelectOne
+                          ).options
+                            .toArray()
+                            .map((option) => (
+                              <MenuItem id={option} value={option} key={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                  {!CarpInputDataTypes.inputElements.get(data.inputDataType) &&
+                    data.inputDataType.name &&
+                    data.inputDataType.name !== "informed_consent" &&
+                    getInputElement(
+                      data.inputDataType.name,
+                      participantDataFromik,
+                    )}
+                </Stack>
+              );
+            })}
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={participantDataFromik.submitForm}
+          >
+            Submit
+          </Button>
+        </Stack>
+      </FormControl>
     </StyledCard>
   );
 };

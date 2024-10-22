@@ -1,130 +1,97 @@
 import { Stack, TextField } from "@mui/material";
-import {
-  Diagnosis,
-  InputDataType,
-} from "@carp-dk/client/models/InputDataTypes";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { Instant } from "@js-joda/core";
+import { getIn, useFormik } from "formik";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { enGB } from "date-fns/locale/en-GB";
 
 type Props = {
-  defaultValues: Diagnosis;
-  setValues: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: InputDataType;
-    }>
-  >;
+  formik: ReturnType<typeof useFormik>;
 };
 
-const validationSchema = yup.object({
-  effectiveDate: yup.date().notRequired(),
-  diagnosis: yup.string().notRequired(),
-  icd11Code: yup.string().when({
-    is: (diagnosis, effectiveDate, conclusion) =>
-      diagnosis || effectiveDate || conclusion,
-    then: (schema) => schema.required(),
-  }),
-  conclusion: yup.string().notRequired(),
-});
-
-const DiagnosisInput = ({ defaultValues, setValues }: Props) => {
-  const participantDataFormik = useFormik({
-    initialValues: {
-      effectiveDate: defaultValues?.effectiveDate
-        ? new Date(defaultValues.effectiveDate.toEpochMilli())
-        : undefined,
-      diagnosis: defaultValues?.diagnosis,
-      icd11Code: defaultValues?.icd11Code,
-      conclusion: defaultValues?.conclusion,
-    },
-    validationSchema,
-    onSubmit: async (inputValues) => {
-      setValues((oldValues) => ({
-        ...oldValues,
-        "dk.carp.webservices.input.diagnosis": {
-          __type: "dk.carp.webservices.input.diagnosis",
-          effectiveDate: inputValues.effectiveDate
-            ? Instant.ofEpochMilli(inputValues.effectiveDate.getTime())
-            : undefined,
-          diagnosis: inputValues.diagnosis,
-          icd11Code: inputValues.icd11Code,
-          conclusion: inputValues.conclusion,
-        },
-      }));
-    },
-  });
-
-  const handleBlur = (e) => {
-    const { relatedTarget } = e;
-
-    // Check if the next focused element is an input field
-    const isNextInputField =
-      relatedTarget && relatedTarget.tagName.toLowerCase() === "input";
-
-    if (!isNextInputField) {
-      participantDataFormik.handleBlur(e);
-      participantDataFormik.handleSubmit();
-    }
-  };
-
+const DiagnosisInput = ({ formik }: Props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
-      <Stack direction="row" gap={2} onBlur={handleBlur}>
+      <Stack direction="column" gap={2}>
+        <Stack direction="row" gap={2}>
+          <TextField
+            type="text"
+            name="diagnosis.icd11Code"
+            label="ICD-11 Code"
+            fullWidth
+            required
+            error={
+              getIn(formik.touched, "diagnosis.icd11Code") &&
+              !!getIn(formik.errors, "diagnosis.icd11Code")
+            }
+            value={formik.values.diagnosis.icd11Code}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            helperText={
+              getIn(formik.touched, "diagnosis.icd11Code") &&
+              getIn(formik.errors, "diagnosis.icd11Code")
+            }
+          />
+          <DatePicker
+            label="Effective date"
+            name="diagnosis.effectiveDate"
+            value={
+              formik.values.diagnosis.effectiveDate
+                ? new Date(formik.values.diagnosis.effectiveDate)
+                : null
+            }
+            onChange={(value) =>
+              formik.setFieldValue("diagnosis.effectiveDate", value)
+            }
+            slotProps={{
+              actionBar: {
+                actions: ["clear"],
+              },
+              textField: {
+                name: "effectiveDateText",
+                error:
+                  getIn(formik.touched, "diagnosis.effectiveDate") &&
+                  !!getIn(formik.errors, "diagnosis.effectiveDate"),
+                helperText:
+                  getIn(formik.touched, "diagnosis.effectiveDate") &&
+                  getIn(formik.errors, "diagnosis.effectiveDate"),
+                onBlur: formik.handleBlur,
+                fullWidth: true,
+              },
+            }}
+          />
+        </Stack>
         <TextField
           type="text"
-          name="icd11Code"
-          label="ICD-11 Code"
-          error={!!participantDataFormik.errors.icd11Code}
-          value={participantDataFormik.values.icd11Code}
-          onChange={participantDataFormik.handleChange}
-          helperText={
-            participantDataFormik.touched.icd11Code &&
-            participantDataFormik.errors.icd11Code
-          }
-        />
-        <TextField
-          type="text"
-          name="diagnosis"
+          name="diagnosis.diagnosis"
           label="Diagnosis"
-          error={!!participantDataFormik.errors.diagnosis}
-          value={participantDataFormik.values.diagnosis}
-          onChange={participantDataFormik.handleChange}
+          error={
+            getIn(formik.touched, "diagnosis.diagnosis") &&
+            !!getIn(formik.errors, "diagnosis.diagnosis")
+          }
+          value={formik.values.diagnosis.diagnosis}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           helperText={
-            participantDataFormik.touched.diagnosis &&
-            participantDataFormik.errors.diagnosis
+            getIn(formik.touched, "diagnosis.diagnosis") &&
+            getIn(formik.errors, "diagnosis.diagnosis")
           }
-        />
-        <DatePicker
-          defaultValue={participantDataFormik.values.effectiveDate}
-          label="Effective date"
-          name="effectiveDate"
-          value={participantDataFormik.values.effectiveDate}
-          onChange={(value) =>
-            participantDataFormik.setFieldValue("effectiveDate", value)
-          }
-          slotProps={{
-            textField: {
-              name: "effectiveDateText",
-              error: !!participantDataFormik.errors.effectiveDate,
-              helperText: participantDataFormik.errors.effectiveDate as string,
-              onBlur: participantDataFormik.handleBlur,
-              fullWidth: true,
-            },
-          }}
         />
         <TextField
           type="text"
-          name="conclusion"
+          name="diagnosis.conclusion"
           label="Conclusion"
-          error={!!participantDataFormik.errors.conclusion}
-          value={participantDataFormik.values.conclusion}
-          onChange={participantDataFormik.handleChange}
+          multiline
+          rows={6}
+          error={
+            getIn(formik.touched, "diagnosis.conclusion") &&
+            !!getIn(formik.errors, "diagnosis.conclusion")
+          }
+          value={formik.values.diagnosis.conclusion}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           helperText={
-            participantDataFormik.touched.conclusion &&
-            participantDataFormik.errors.conclusion
+            getIn(formik.touched, "diagnosis.conclusion") &&
+            getIn(formik.errors, "diagnosis.conclusion")
           }
         />
       </Stack>
