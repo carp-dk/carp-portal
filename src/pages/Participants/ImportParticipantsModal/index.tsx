@@ -136,16 +136,13 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
     validationSchema.fields.file
       .validate(theFile)
       .then(async () => {
-        console.log("started callback");
         await importEmailsFormik.setFieldTouched("file", true);
         await importEmailsFormik.setFieldValue("file", theFile);
         setFileName(theFile.name);
         theFile.text().then(async (text: string) => {
-          console.log("inner callback");
           await importEmailsFormik.setFieldTouched("emails", true);
           importEmailsFormik.setFieldValue("emails", text);
           const newEmails: string[] = [];
-          console.log("started callback 2");
           Papa.parse(text, {
             header: false,
             complete: (results) => {

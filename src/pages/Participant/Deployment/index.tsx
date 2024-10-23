@@ -62,16 +62,11 @@ const Deployment = () => {
     createSummary.mutateAsync({ studyId, deploymentIds: [deploymentId] });
   };
 
-  const lastDataUpload = (lastData: Date
-  ) => {
+  const lastDataUpload = (lastData: Date) => {
     if (!lastData) {
       return "";
     }
-    if (
-      calculateDaysPassedFromDate(
-        lastData.toString(),
-      ) === 0
-    ) {
+    if (calculateDaysPassedFromDate(lastData.toString()) === 0) {
       return "Last data: Today";
     }
     return `Last data: ${calculateDaysPassedFromDate(lastData.toString())} days ago`;
@@ -127,7 +122,7 @@ const Deployment = () => {
     if (
       participant.firstName === "" ||
       participant.lastName === "" ||
-      !participant.firstName || 
+      !participant.firstName ||
       !participant.lastName
     ) {
       return participant.role ? participant.role[0] : "?";
