@@ -6,8 +6,8 @@ import carpCommon from "@cachet/carp-common";
 import { Skeleton, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import getInputDataName from "@Assets/inputTypeNames";
 import DeviceDropdown from "../DeviceDropdown";
-import { getInputDataName } from "@Assets/inputTypeNames";
 import {
   CardTitle,
   ProtocolDescription,

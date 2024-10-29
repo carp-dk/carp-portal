@@ -1,4 +1,9 @@
 import * as flags from "react-flags-select";
+import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import isoCountries from "i18n-iso-countries";
+import en from "i18n-iso-countries/langs/en.json";
+
+isoCountries.registerLocale(en);
 
 type Flags = typeof flags;
 type FlagKey = keyof Flags;
@@ -92,3 +97,24 @@ export const getCountry = (key: string): string => {
   }
   return "Unknown Language";
 };
+
+export interface CountryInfo {
+  name: string;
+  isoCode: string;
+  dialCode: string;
+}
+
+export const countryInfos = ((): CountryInfo[] => {
+  const countries = getCountries();
+
+  return countries.map((isoCode) => {
+    const dialCode = getCountryCallingCode(isoCode);
+    const name = isoCountries.getName(isoCode, "en") || "Unknown";
+
+    return {
+      name,
+      isoCode,
+      dialCode: `+${dialCode}`,
+    };
+  });
+})();

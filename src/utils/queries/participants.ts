@@ -1,8 +1,7 @@
 import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
-import { kotlin } from "@cachet/carp-kotlin";
 import { getConfig } from "@carp-dk/authentication-react";
-
+import carpDepolymentsCore from "@cachet/carp-deployments-core";
 import carpStudiesCore from "@cachet/carp-studies-core";
 import {
   CarpServiceError,
@@ -12,15 +11,18 @@ import {
   ParticipantInfo,
   ParticipantWithRoles,
   InactiveDeployment,
-} from "@carp-dk/client";
+} from "@carp-dk/client/models";
 import { Statistics } from "@carp-dk/client/models/Statistics";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import HashMap = kotlin.collections.Map;
+import { InputDataType } from "@carp-dk/client/models/InputDataTypes";
 import dk = carpStudiesCore.dk;
-import NamespacedId = dk.cachet.carp.common.application.NamespacedId;
+
+import ddk = carpDepolymentsCore.dk;
 
 import Participant = dk.cachet.carp.studies.application.users.Participant;
 import {GenericEmailRequest} from "@carp-dk/client/models/Email";
+
+import ParticipantData = ddk.cachet.carp.deployments.application.users.ParticipantData;
 
 type ParticipantGroupStatus =
   dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
@@ -297,13 +299,22 @@ export const useStatistics = (studyId: string) => {
   });
 };
 
+export const useGetParticipantData = (studyDepoymentId: string) => {
+  return useQuery<ParticipantData, CarpServiceError>({
+    queryKey: ["participantData", studyDepoymentId],
+    queryFn: async () => {
+      return carpApi.getParticipantData_CORE(studyDepoymentId, getConfig());
+    },
+  });
+};
+
 export const useSetParticipantData = (deploymentId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: {
-      participantData: HashMap<NamespacedId, any | null>;
+      participantData: { [key: string]: InputDataType };
       role: string;
     }) => {
       return carpApi.setParticipantData_CORE(

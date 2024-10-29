@@ -75,12 +75,7 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
         ) : (
           studies &&
           studies
-            .sort((a, b) =>
-              a.createdOn <
-              b.createdOn
-                ? 1
-                : -1,
-            )
+            .sort((a, b) => (a.createdOn < b.createdOn ? 1 : -1))
             .map((study: StudyOverview) => {
               return (
                 <StudyCard
