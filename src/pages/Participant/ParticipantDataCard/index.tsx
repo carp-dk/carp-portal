@@ -71,8 +71,8 @@ const ParticipantDataCard = () => {
   }, [participantGroupStatus]);
 
   const participantDataFromik = getParticipantDataFormik(
-    study?.protocolSnapshot.expectedParticipantData.toArray(),
-    participantData?.common.values.toArray().filter((v) => v),
+    study?.protocolSnapshot.expectedParticipantData ? study?.protocolSnapshot.expectedParticipantData.toArray() : [],
+    participantData?.common.values ? participantData?.common.values.toArray().filter((v) => v) : [],
     setParticipantData,
     participant?.role,
     setEditing,

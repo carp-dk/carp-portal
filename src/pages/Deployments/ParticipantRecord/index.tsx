@@ -72,7 +72,7 @@ const ParticipantRecord = ({
     >
       <AccountIcon>
         <Initials variant="h4">
-          {participantData.firstName
+          {!participantData.firstName || !participantData.lastName
             ? participantRole[0]
             : `${participantData.firstName[0]}${participantData.lastName[0]}`}
         </Initials>
@@ -81,7 +81,7 @@ const ParticipantRecord = ({
         {participantData.email ?? <GeneratedAccountLabel />}
       </Typography>
       <NameContainer>
-        {participantData.firstName && (
+        {participantData.firstName && participantData.lastName && (
           <>
             <PersonIcon fontSize="small" />
             <Typography variant="h6">
