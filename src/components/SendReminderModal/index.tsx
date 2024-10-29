@@ -12,12 +12,17 @@ import {
     VerticalInputContainer,
 } from "./styles";
 import * as yup from "yup";
+import {GenericEmailRequest} from "../../../../carp-client-ts/src/models/Email";
+import {usePostEmailSendGeneric} from "@Utils/queries/participants";
 
 type Props = {
     open: boolean,
     onClose: () => void,
     to: string,
     initials: string
+    researcherEmail: string,
+    researcherName: string,
+    studyName: string
 };
 
 const ccLabelStyling = {
@@ -33,8 +38,8 @@ const ccHorizontalInputContainerStyling = {
 
 const subjectHorizontalInputContainerStyling = ccHorizontalInputContainerStyling;
 
-const SendReminderModal = ({open, onClose, to, initials}: Props) => {
-    // const sendEmail = useSendEmail();
+const SendReminderModal = ({open, onClose, to, initials, researcherEmail, researcherName, studyName}: Props) => {
+    const postEmailSendGeneric = usePostEmailSendGeneric();
 
     const validationSchema = yup.object({
         message: yup.string().required("Message (email content) is required"),
@@ -50,34 +55,58 @@ const SendReminderModal = ({open, onClose, to, initials}: Props) => {
 
     const reminderFormik = useFormik({
         initialValues: {
-            cc: "",
-            message: `Dear Jakob Bardram,
+            cc: researcherEmail,
+            message: `Dear ${initials},
+
+You have recently been invited to participate in the "${studyName}" study.
+
+However, it appears that you have not yet joined the study on your phone. Your participation in this study is important to us and we would really appreciate your contribution.
+
+If you haven't yet registered as a user or want to reset the password, please do it on this link - https://carp.computerome.dk/
+
+If you have any questions, don't hesitate to contact me at this email address.
+
+Kind regards,
+
+${researcherName}
 
 
-      I am writing to remind you about the importance of uploading data to the Clinical Study, which is investigating the efficacy and safety in patients with cardiovascular disease. Your participation in this study contributes to our efforts in understanding and improving the treatment of cardiovascular disease.
 
-      Kindly click on the link below to be redirected to the study:
-      [Digital Tech Summit]
-      
-      If you have any questions or encounter any difficulties while uploading the data, please do not hesitate to reach out to us for assistance.
-      
-      [Researcher's Name][Researcher's Title/Position][Research Institution/Organization]
-      ___________________________________________________
-      Study invitation
+Kære ${initials},
 
-      You are cordially invited to participate in the Clinical Study, investigating the efficacy and safety in patients with cardiovascular disease. Your participation in this study is important and will help us to better understand the potential benefits in treating cardiovascular disease.
-      `,
-            subject: "Reminder to participate in the XXX Study",
+Du er fornylig blevet inviteret til at deltage i "${studyName}" studiet.
+
+Vi kan dog se, at du ikke har startet studiet på din telefon og vi vil meget gerne have at du kommer i gang. Studiet er vigtigt for os og det er vigtigt at du også deltager.
+
+Hvis du endnu ikke er oprettet som bruger, eller hvis du har glemt din password, kan du gøre det her - https://carp.computerome.dk/
+
+Hvis du har spørgsmål, så er du velkommen til at skrive til mig på denne mail adresse.
+
+Med venlig hilsen
+
+${researcherName}`,
+            subject: studyName,
         },
         onSubmit: (values) => {
-            console.log("test")
-            // TODO: Send email
-            // eslint-disable-next-line no-console
-            // TODO: Delete this after implementing the send email functionality
-            // onClose();
+            let genericEmailRequest: GenericEmailRequest = {
+                recipient: to,
+                subject: values.subject,
+                message: convertTextareaInputToHtml(values.message),
+                cc: values.cc.split(/[\s,]+/).filter(Boolean),
+            }
+            postEmailSendGeneric.mutate(genericEmailRequest)
         },
         validationSchema
     });
+
+    function convertTextareaInputToHtml(str: string): string {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urlsWrappedIntoAnchorTags = str.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
+        let withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, "<br>");
+        let wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;
+
+        return wrappedInPre;
+    }
 
     useEffect(() => {
         return () => {
@@ -90,7 +119,7 @@ const SendReminderModal = ({open, onClose, to, initials}: Props) => {
             onClose();
         },
         [
-            /* sendEmail.isSuccess */
+            postEmailSendGeneric.isSuccess
         ],
     );
 
@@ -148,7 +177,7 @@ const SendReminderModal = ({open, onClose, to, initials}: Props) => {
                             name="message"
                             fullWidth
                             multiline
-                            rows={5}
+                            rows={9}
                             helperText={reminderFormik.errors.message}
                             error={!!reminderFormik.errors.message}
                             value={reminderFormik.values.message}
@@ -161,6 +190,7 @@ const SendReminderModal = ({open, onClose, to, initials}: Props) => {
                         Cancel
                     </CancelButton>
                     <DoneButton
+                        disabled={postEmailSendGeneric.isPending}
                         variant="contained"
                         sx={{elevation: 0}}
                         onClick={() => {

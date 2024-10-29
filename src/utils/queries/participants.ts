@@ -20,6 +20,7 @@ import dk = carpStudiesCore.dk;
 import NamespacedId = dk.cachet.carp.common.application.NamespacedId;
 
 import Participant = dk.cachet.carp.studies.application.users.Participant;
+import {GenericEmailRequest} from "@carp-dk/client/models/Email";
 
 type ParticipantGroupStatus =
   dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
@@ -100,6 +101,25 @@ export const useInviteParticipants = (studyId: string) => {
     },
   });
 };
+
+export const usePostEmailSendGeneric = () => {
+  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+
+  return useMutation({
+    mutationFn: async (genericEmailRequest: GenericEmailRequest) => {
+      return carpApi.postEmailSendGeneric(
+          genericEmailRequest,
+          getConfig(),
+      );
+    },
+    onSuccess: () => {
+      setSnackbarSuccess("Email has been sent!");
+    },
+    onError: (error: CarpServiceError) => {
+      setSnackbarError(error.httpResponseMessage);
+    },
+  })
+}
 
 export const useAddParticipantByEmail = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();

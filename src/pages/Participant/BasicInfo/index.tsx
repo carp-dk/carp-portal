@@ -20,6 +20,8 @@ import {
   StyledCard,
   StyledDivider,
 } from "./styles";
+import {getUser} from "@carp-dk/authentication-react";
+import {useStudyDetails} from "@Utils/queries/studies";
 
 const BasicInfo = () => {
   const [open, setOpen] = useState(false);
@@ -30,7 +32,15 @@ const BasicInfo = () => {
     isLoading: participantDataLoading,
     error: participantError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
+
+  const {
+    data: studyDetailsData,
+    isLoading: studyDetailsLoading,
+    error: studyDetailsError,
+  } = useStudyDetails(studyId);
+
   const [participant, setParticipant] = useState<ParticipantData | null>(null);
+  const [studyDetails, setStudyDetails] = useState<any>(null);
 
   useEffect(() => {
     if (!participantDataLoading && participantData && participantData.groups) {
@@ -41,6 +51,12 @@ const BasicInfo = () => {
       );
     }
   }, [participantData, participantDataLoading, participantId, deploymentId]);
+
+  useEffect(() => {
+    if (!studyDetailsLoading && studyDetailsData) {
+      setStudyDetails(studyDetailsData);
+    }
+  }, [studyDetailsData, studyDetailsLoading, studyId]);
 
   const initials = useMemo(() => {
     if (participant && (participant.firstName || participant.lastName)) {
@@ -63,13 +79,21 @@ const BasicInfo = () => {
     );
   }, [participant]);
 
-  if (participantDataLoading || !participant) return <LoadingSkeleton />;
+  if (participantDataLoading || !participant || studyDetailsLoading || !studyDetails) return <LoadingSkeleton />;
 
   if (participantError)
     return (
       <CarpErrorCardComponent
         message="An error occurred while loading participant data"
         error={participantError}
+      />
+    );
+
+  if (studyDetailsError)
+    return (
+      <CarpErrorCardComponent
+        message="An error occurred while loading study details"
+        error={studyDetailsError}
       />
     );
 
@@ -96,6 +120,9 @@ const BasicInfo = () => {
         open={open}
         to={participant.email}
         initials={initials}
+        researcherEmail={getUser()?.profile?.email || ''}
+        researcherName={getUser()?.profile?.name || ''}
+        studyName={studyDetails?.name || ''}
       />
     </StyledCard>
   );
