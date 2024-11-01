@@ -59,7 +59,8 @@ const ParticipantDataCard = () => {
   } = useGetParticipantData(deploymentId);
 
   const [participant, setParticipant] = useState<ParticipantData | null>(null);
-
+  const expectedParticipantData = study?.protocolSnapshot.expectedParticipantData ? study?.protocolSnapshot.expectedParticipantData.toArray() : [];
+  const initalValues = participantData?.common.values ? participantData?.common.values.toArray().filter((v) => v) : [];
   useEffect(() => {
     if (participantGroupStatus) {
       setParticipant(
