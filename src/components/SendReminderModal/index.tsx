@@ -2,17 +2,17 @@ import {Modal, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import {useEffect} from "react";
 import {
-    CancelButton,
+    CancelButton, TypographyVariant,
     Content,
     DoneButton,
-    HorizontalInputContainer,
+    HorizontalInputContainer, HorizontalInputContainerWithAutoHeight,
     ModalActions,
     ModalBox,
     Title,
     VerticalInputContainer,
 } from "./styles";
 import * as yup from "yup";
-import {GenericEmailRequest} from "../../../../carp-client-ts/src/models/Email";
+import {GenericEmailRequest} from "@carp-dk/client/models/Email";
 import {usePostEmailSendGeneric} from "@Utils/queries/participants";
 
 type Props = {
@@ -24,19 +24,6 @@ type Props = {
     researcherName: string,
     studyName: string
 };
-
-const ccLabelStyling = {
-    marginTop: "10px",
-    marginBottom: "auto"
-}
-
-const subjectLabelStyling = ccLabelStyling;
-
-const ccHorizontalInputContainerStyling = {
-    height: "auto",
-}
-
-const subjectHorizontalInputContainerStyling = ccHorizontalInputContainerStyling;
 
 const SendReminderModal = ({open, onClose, to, initials, researcherEmail, researcherName, studyName}: Props) => {
     const postEmailSendGeneric = usePostEmailSendGeneric();
@@ -139,10 +126,10 @@ ${researcherName}`,
                         </Typography>
                         <Typography variant="h5">{to}</Typography>
                     </HorizontalInputContainer>
-                    <HorizontalInputContainer sx={ccHorizontalInputContainerStyling}>
-                        <Typography variant="h5" width="56px" sx={ccLabelStyling}>
+                    <HorizontalInputContainerWithAutoHeight>
+                        <TypographyVariant variant="h5">
                             CC:
-                        </Typography>
+                        </TypographyVariant>
                         <TextField
                             type="text"
                             fullWidth
@@ -154,11 +141,11 @@ ${researcherName}`,
                             value={reminderFormik.values.cc}
                             onChange={reminderFormik.handleChange}
                         />
-                    </HorizontalInputContainer>
-                    <HorizontalInputContainer sx={subjectHorizontalInputContainerStyling}>
-                        <Typography variant="h5" width="56px" sx={subjectLabelStyling}>
+                    </HorizontalInputContainerWithAutoHeight>
+                    <HorizontalInputContainerWithAutoHeight>
+                        <TypographyVariant variant="h5">
                             Subject:
-                        </Typography>
+                        </TypographyVariant>
                         <TextField
                             type="text"
                             fullWidth
@@ -169,7 +156,7 @@ ${researcherName}`,
                             value={reminderFormik.values.subject}
                             onChange={reminderFormik.handleChange}
                         />
-                    </HorizontalInputContainer>
+                    </HorizontalInputContainerWithAutoHeight>
                     <VerticalInputContainer>
                         <Typography variant="h5">Message:</Typography>
                         <TextField

@@ -40,7 +40,6 @@ const BasicInfo = () => {
   } = useStudyDetails(studyId);
 
   const [participant, setParticipant] = useState<ParticipantData | null>(null);
-  const [studyDetails, setStudyDetails] = useState<any>(null);
 
   useEffect(() => {
     if (!participantDataLoading && participantData && participantData.groups) {
@@ -51,12 +50,6 @@ const BasicInfo = () => {
       );
     }
   }, [participantData, participantDataLoading, participantId, deploymentId]);
-
-  useEffect(() => {
-    if (!studyDetailsLoading && studyDetailsData) {
-      setStudyDetails(studyDetailsData);
-    }
-  }, [studyDetailsData, studyDetailsLoading, studyId]);
 
   const initials = useMemo(() => {
     if (participant && (participant.firstName || participant.lastName)) {
@@ -79,7 +72,7 @@ const BasicInfo = () => {
     );
   }, [participant]);
 
-  if (participantDataLoading || !participant || studyDetailsLoading || !studyDetails) return <LoadingSkeleton />;
+  if (participantDataLoading || !participant || studyDetailsLoading || !studyDetailsData) return <LoadingSkeleton />;
 
   if (participantError)
     return (
@@ -122,7 +115,7 @@ const BasicInfo = () => {
         initials={initials}
         researcherEmail={getUser()?.profile?.email || ''}
         researcherName={getUser()?.profile?.name || ''}
-        studyName={studyDetails?.name || ''}
+        studyName={studyDetailsData?.name || ''}
       />
     </StyledCard>
   );
