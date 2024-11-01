@@ -95,9 +95,9 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
           <img src={announcement.image} alt="announcement preview" />
         )}
         <AnnouncementTitle variant="h2">{announcement.title}</AnnouncementTitle>
-        {announcement.subTitle ?? (
+        {announcement.sub_title ?? (
           <AnnouncementSubtitle variant="subtitle1">
-            {announcement.subTitle}
+            {announcement.sub_title}
           </AnnouncementSubtitle>
         )}
         {announcement.message.length > 200 ? (

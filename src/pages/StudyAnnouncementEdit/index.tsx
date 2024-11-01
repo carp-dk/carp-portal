@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
 import { StyledButton, StyledCard, StyledContainer } from "./styles";
+import { MessageData } from "@carp-dk/client";
 
 const fileTypes = [
   "image/png",
@@ -92,13 +93,13 @@ const StudyAnnouncementEdit = () => {
         announcement: {
           id: studyAnnouncementId,
           title: values.title.trim(),
-          subTitle: values.subTitle.trim(),
+          sub_title: values.subTitle.trim(),
           message: values.message.trim(),
           type: values.type as "announcement" | "article" | "news",
           timestamp: new Date().toISOString(),
           image: values.image,
           url: values.url,
-        },
+        } as MessageData,
         newImage,
       });
     },
@@ -108,7 +109,7 @@ const StudyAnnouncementEdit = () => {
     if (announcement) {
       formik.setValues({
         title: announcement.title,
-        subTitle: announcement.subTitle,
+        subTitle: announcement.sub_title,
         message: announcement.message,
         type: announcement.type,
         image: announcement.image,
