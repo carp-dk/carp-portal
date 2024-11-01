@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import {
   useDeviceDeployed,
@@ -8,7 +9,11 @@ import { Checkbox, Modal, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CarpAccordion from "@Components/CarpAccordion";
-import LoadingSkeleton from "../LoadingSkeleton";
+import { t } from "i18next";
+import { useStudyDetails } from "@Utils/queries/studies";
+import { getDeviceIcon } from "@Utils/utility";
+import { CarpServiceError } from "@carp-dk/client";
+import { v4 } from "uuid";
 import {
   ActionButton,
   Bottom,
@@ -23,11 +28,7 @@ import {
   SubDeviceRow,
   Title,
 } from "./styles";
-import { t } from "i18next";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { getDeviceIcon } from "@Utils/utility";
-import { CarpServiceError } from "@carp-dk/client";
-import { v4 } from "uuid";
+import LoadingSkeleton from "../LoadingSkeleton";
 
 const Devices = () => {
   const { id: studyId, deploymentId } = useParams();
@@ -62,7 +63,6 @@ const Devices = () => {
   const [allowDeploy, setAllowDeploy] = useState(false);
 
   const onConfirm = async () => {
-    console.log(modalState.roleName);
     await registerDevice
       .mutateAsync({
         studyDeploymentId: deploymentId,
@@ -77,7 +77,6 @@ const Devices = () => {
           throw err;
         }
       });
-    console.log("deploying");
     await deviceDeployed.mutateAsync({
       studyDeploymentId: deploymentId,
       roleName: modalState.roleName,
@@ -137,7 +136,7 @@ const Devices = () => {
       />
     );
   }
-  console.log(devices);
+
   return (
     <CarpAccordion
       title={t("deployment:devices_card.title")}
@@ -149,22 +148,21 @@ const Devices = () => {
         aria-describedby="modal-modal-description"
       >
         <ModalBox sx={{ boxShadow: 24 }}>
-          <Title variant="h2">{"Deployment of a Master Device"}</Title>
+          <Title variant="h2">Deployment of a Master Device</Title>
           <DescriptionContainer>
             <Description variant="h4">
-              {
-                "The device will be permanently deployed. You can not undo this action."
-              }
+              The device will be permanently deployed. You can not undo this
+              action.
             </Description>
           </DescriptionContainer>
           <Bottom>
-            <Stack direction={"row"} alignItems={"center"} gap={"8px"}>
+            <Stack direction="row" alignItems="center" gap="8px">
               <Checkbox onClick={() => setAllowDeploy(!allowDeploy)} />
               <Typography variant="h5">
-                {"I'm sure I want to deploy it"}
+                I&apos;m sure I want to deploy it
               </Typography>
             </Stack>
-            <Stack direction={"row"} gap={"8px"}>
+            <Stack direction="row" gap="8px">
               <CancelButton
                 onClick={() => {
                   setModalState({ open: false, roleName: "", deviceId: "" });
@@ -179,19 +177,19 @@ const Devices = () => {
                 onClick={() => onConfirm()}
                 disabled={!allowDeploy}
               >
-                {"Deploy"}
+                Deploy
               </ActionButton>
             </Stack>
           </Bottom>
         </ModalBox>
       </Modal>
 
-      <Stack spacing={"16px"} direction={"row"}>
+      <Stack spacing="16px" direction="row">
         {devices &&
           devices.map(({ primaryDevice, connections }) => (
             <DeviceCard key={primaryDevice.name}>
               <DeviceRow
-                direction={"row"}
+                direction="row"
                 onClick={() =>
                   setModalState({
                     open: true,
@@ -206,9 +204,9 @@ const Devices = () => {
                     cursor: "pointer",
                   },
                 }}
-                justifyContent={"center"}
+                justifyContent="center"
               >
-                <DeviceName direction={"row"}>
+                <DeviceName direction="row">
                   {getDeviceIcon(primaryDevice.type)}
                   <Typography variant="h4" noWrap>
                     {primaryDevice.name}
@@ -216,11 +214,11 @@ const Devices = () => {
                 </DeviceName>
                 <StyledStatusDot status={primaryDevice.status} />
               </DeviceRow>
-              <Stack gap={"4px"}>
+              <Stack gap="4px">
                 {connections.map((connection) => {
                   return (
-                    <SubDeviceRow key={connection.name} direction={"row"}>
-                      <DeviceName direction={"row"}>
+                    <SubDeviceRow key={connection.name} direction="row">
+                      <DeviceName direction="row">
                         {getDeviceIcon(connection.type)}
                         <Typography variant="h5" noWrap>
                           {connection.name}

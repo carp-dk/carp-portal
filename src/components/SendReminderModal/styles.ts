@@ -27,8 +27,10 @@ export const HorizontalInputContainer = styled("div")({
   alignItems: "center",
 });
 
-export const HorizontalInputContainerWithAutoHeight = styled(HorizontalInputContainer)({
-    height: "auto",
+export const HorizontalInputContainerWithAutoHeight = styled(
+  HorizontalInputContainer,
+)({
+  height: "auto",
 });
 
 export const VerticalInputContainer = styled("div")({

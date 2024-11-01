@@ -12,7 +12,9 @@ import { Box, Stack, Typography } from "@mui/material";
 import { formatDateTime } from "@Utils/utility";
 import { Stop } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import LoadingSkeleton from "../LoadingSkeleton";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { useCreateSummary } from "@Utils/queries/studies";
+import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
 import {
   ExportButton,
   Left,
@@ -24,9 +26,7 @@ import {
   StyledStatusDot,
   StyledStatusText,
 } from "./styles";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { useCreateSummary } from "@Utils/queries/studies";
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
+import LoadingSkeleton from "../LoadingSkeleton";
 
 const BasicInfo = () => {
   const { deploymentId, id: studyId } = useParams();
@@ -94,7 +94,7 @@ const BasicInfo = () => {
         onClose={confirmationModalProps.onClose}
         onConfirm={confirmationModalProps.onConfirm}
       />
-      <Box display="flex" justifyContent="flex-end" marginBottom={"16px"}>
+      <Box display="flex" justifyContent="flex-end" marginBottom="16px">
         <ExportButton
           onClick={() =>
             generateExport.mutate({ studyId, deploymentIds: [deploymentId] })

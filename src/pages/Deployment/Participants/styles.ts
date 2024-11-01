@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 
 export const AccountIcon = styled("div")(({ theme }) => ({
@@ -28,4 +28,15 @@ export const RoleContainer = styled("div")({
   alignItems: "center",
   display: "flex",
   gap: 6,
+});
+
+export const ParticipantRow = styled(Stack)({
+  gap: 16,
+  display: "grid",
+  gridTemplateColumns: "25% 20% 20%",
+  cursor: "pointer",
+  borderRadius: 16,
+  ":hover": {
+    backgroundColor: "#EDEDED",
+  },
 });

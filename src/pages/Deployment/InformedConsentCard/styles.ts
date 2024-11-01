@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Divider,
   Typography,
   Accordion,
@@ -30,8 +29,8 @@ export const SyledAccordionSummary = styled(AccordionSummary)({
 export const StyledStack = styled(Stack)({
   display: "flex",
   justifyContent: "space-between",
-  alignItems:"center",
-  padding: "0px 24px"
+  alignItems: "center",
+  padding: "0px 24px",
 });
 
 export const Title = styled(Typography)(({ theme }) => ({

@@ -1,15 +1,19 @@
+/* eslint-disable no-underscore-dangle */
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useParams } from "react-router-dom";
 import CarpAccordion from "@Components/CarpAccordion";
 import { Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useTranslation } from "react-i18next";
-import { ParticipantData, ParticipantGroup } from "@carp-dk/client";
+import { ParticipantData } from "@carp-dk/client";
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from "@Utils/queries/participants";
-import LoadingSkeleton from "../LoadingSkeleton";
+import { useEffect, useState } from "react";
+import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { formatDateTime } from "@Utils/utility";
 import {
   DownloadButton,
   LastUploadText,
@@ -18,10 +22,8 @@ import {
   Right,
   StyledStack,
 } from "./styles";
-import { useEffect, useState } from "react";
-import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { formatDateTime } from "@Utils/utility";
+import LoadingSkeleton from "../LoadingSkeleton";
+
 interface FileInfo {
   data: string;
   fileName: string;
@@ -37,7 +39,6 @@ const InformedConsentCard = () => {
     isLoading: statusesLoading,
     error: statusesError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
-  const [group, setGroup] = useState<ParticipantGroup>(null);
 
   const {
     data: participantData,
@@ -79,19 +80,21 @@ const InformedConsentCard = () => {
       const participantGroup = statuses.groups.find(
         (s) => s.participantGroupId === deploymentId,
       );
-      setGroup(participantGroup);
+
       const commonConsent = participantData.common.values
         ?.toArray()
         .find((v) => {
           if (!v) return false;
           return ((v as any).__type as string).includes("informed_consent");
         });
-      const roleConsents = (participantData.roles as any as Array<any>).map((v) => {
-        const c = (v as any).data
-          .toArray()
-          .find((d) => d.__type.includes("informed_consent"));
-        return { v, c };
-      });
+      const roleConsents = (participantData.roles as any as Array<any>).map(
+        (v) => {
+          const c = (v as any).data
+            .toArray()
+            .find((d) => d.__type.includes("informed_consent"));
+          return { v, c };
+        },
+      );
       const participantsWithConsent = participantGroup.participants.map((p) => {
         const consent = roleConsents.find((rc) => rc.v.roleName === p.role);
         if (consent) return { participant: p, consent: consent.c };
@@ -117,16 +120,20 @@ const InformedConsentCard = () => {
 
   return (
     <CarpAccordion title={t("deployment:informed_consents_card.title")}>
-      <Stack gap={"16px"}>
+      <Stack gap="16px">
         {consents.map(({ participant, consent }) => {
           return (
-            <StyledStack key={participant.participantId} direction={"row"}>
-              <Stack direction={"row"} gap={"4px"}>
+            <StyledStack key={participant.participantId} direction="row">
+              <Stack direction="row" gap="4px">
                 <PersonIcon fontSize="small" />
                 <NameContainer>
-                  {participant.firstName && participant.lastName && (
+                  {(participant.firstName && participant.lastName && (
                     <Typography variant="h4">{`${participant.firstName} ${participant.lastName}`}</Typography>
-                  ) || <Typography variant="h4">{participant.participantId}</Typography>}
+                  )) || (
+                    <Typography variant="h4">
+                      {participant.participantId}
+                    </Typography>
+                  )}
                 </NameContainer>
               </Stack>
               {consent && (

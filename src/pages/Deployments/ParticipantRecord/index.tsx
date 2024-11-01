@@ -14,7 +14,6 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import { Skeleton, Typography } from "@mui/material";
 import { useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import {
   AccountIcon,
   EmailContainer,
@@ -27,7 +26,6 @@ import {
 } from "./styles";
 
 type Props = {
-  deploymentId: string;
   participantData: ParticipantData;
   participantStatus: ParticipantStatus;
   deviceStatusList: DeviceStatus[];

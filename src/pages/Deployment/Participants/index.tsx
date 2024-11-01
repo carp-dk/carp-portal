@@ -2,19 +2,26 @@ import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
 import { Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ParticipantGroup } from "@carp-dk/client";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
 import CarpAccordion from "@Components/CarpAccordion";
-import LoadingSkeleton from "../LoadingSkeleton";
-import { AccountIcon, Initials, NameContainer, RoleContainer } from "./styles";
 import { useTranslation } from "react-i18next";
+import LoadingSkeleton from "../LoadingSkeleton";
+import {
+  AccountIcon,
+  Initials,
+  NameContainer,
+  ParticipantRow,
+  RoleContainer,
+} from "./styles";
 
 const Participants = () => {
   const { t } = useTranslation();
   const { id: studyId, deploymentId } = useParams();
+  const navigate = useNavigate();
 
   const {
     data: statuses,
@@ -41,15 +48,17 @@ const Participants = () => {
 
   return (
     <CarpAccordion title={t("deployment:participants_card.title")}>
-      <Stack spacing={"8px"}>
+      <Stack spacing="8px">
         {group &&
           group.participants.map((p) => (
-            <Stack
-              direction="row"
-              gap={16}
+            <ParticipantRow
               key={p.participantId}
-              display={"grid"}
-              gridTemplateColumns={"25% 20% 20%"}
+              direction="row"
+              onClick={() =>
+                navigate(
+                  `/studies/${studyId}/participants/deployments/${deploymentId}/participants/${p.participantId}`,
+                )
+              }
             >
               <Stack gap="15px" direction="row">
                 <AccountIcon>
@@ -81,7 +90,7 @@ const Participants = () => {
                   {p.role}
                 </Typography>
               </RoleContainer>
-            </Stack>
+            </ParticipantRow>
           ))}
       </Stack>
     </CarpAccordion>

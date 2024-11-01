@@ -1,9 +1,4 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@mui/material";
+import { Accordion, AccordionSummary, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 
 export const StyledAccordion = styled(Accordion)(({ expanded }) => ({

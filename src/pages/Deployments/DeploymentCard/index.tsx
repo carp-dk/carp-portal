@@ -124,7 +124,6 @@ const DeploymentCard = ({
           deployment.participants.map((participant) => (
             <ParticipantRecord
               key={participant.participantId}
-              deploymentId={deployment.participantGroupId}
               participantData={participant}
               participantStatus={deployment.deploymentStatus.participantStatusList.find(
                 (status) => status.participantId === participant.participantId,

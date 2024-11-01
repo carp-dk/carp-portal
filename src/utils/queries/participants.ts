@@ -15,12 +15,12 @@ import {
 import { Statistics } from "@carp-dk/client/models/Statistics";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { InputDataType } from "@carp-dk/client/models/InputDataTypes";
+import { GenericEmailRequest } from "@carp-dk/client/models/Email";
 import dk = carpStudiesCore.dk;
 
 import ddk = carpDepolymentsCore.dk;
 
 import Participant = dk.cachet.carp.studies.application.users.Participant;
-import {GenericEmailRequest} from "@carp-dk/client/models/Email";
 
 import ParticipantData = ddk.cachet.carp.deployments.application.users.ParticipantData;
 import StudyDeploymentStatus = ddk.cachet.carp.deployments.application.StudyDeploymentStatus;
@@ -110,10 +110,7 @@ export const usePostEmailSendGeneric = () => {
 
   return useMutation({
     mutationFn: async (genericEmailRequest: GenericEmailRequest) => {
-      return carpApi.postEmailSendGeneric(
-          genericEmailRequest,
-          getConfig(),
-      );
+      return carpApi.postEmailSendGeneric(genericEmailRequest, getConfig());
     },
     onSuccess: () => {
       setSnackbarSuccess("Email has been sent!");
@@ -121,8 +118,8 @@ export const usePostEmailSendGeneric = () => {
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.httpResponseMessage);
     },
-  })
-}
+  });
+};
 
 export const useAddParticipantByEmail = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
@@ -358,7 +355,6 @@ export const useRegisterDevice = (studyId: string) => {
     { studyDeploymentId: string; roleName: string; deviceId: string }
   >({
     mutationFn: ({ studyDeploymentId, roleName, deviceId }) => {
-      console.log("registering device", studyDeploymentId);
       return carpApi.registerDevice_CORE(
         studyDeploymentId,
         roleName,
