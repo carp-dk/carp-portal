@@ -32,7 +32,7 @@ const CarpAccordion = ({ title, description, children }: Props) => {
           />
         }
       >
-        <Stack direction="column" spacing="10px">
+        <Stack direction="column" gap="10px">
           <Title variant="h3">{title}</Title>
           {description && expanded && (
             <StyledTypography variant="h5">{description}</StyledTypography>

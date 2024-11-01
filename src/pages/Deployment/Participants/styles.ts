@@ -27,6 +27,7 @@ export const Right = styled("div")({
 export const AccountIcon = styled("div")(({ theme }) => ({
   width: 28,
   height: 28,
+  flexShrink: 0,
   backgroundColor: theme.palette.company.isotype,
   borderRadius: "50%",
   position: "relative",

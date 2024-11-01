@@ -31,12 +31,12 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
           <Select
             disabled={!editing}
             required
-            name="phone_number.icoCode"
+            name="phone_number.isoCode"
             error={
               getIn(formik.touched, "phone_number.countryCode") &&
               !!getIn(formik.errors, "phone_number.countryCode")
             }
-            value={formik.values.phone_number.icoCode}
+            value={formik.values.phone_number.isoCode}
             onChange={(e) => {
               formik.setFieldValue(
                 "phone_number.countryCode",

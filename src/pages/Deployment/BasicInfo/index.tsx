@@ -5,12 +5,13 @@ import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participan
 import { ParticipantGroup } from "@carp-dk/client";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { formatDateTime } from "@Utils/utility";
 import { Stop } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
+  ExportButton,
   Left,
   Right,
   SecondaryText,
@@ -20,6 +21,8 @@ import {
   StyledStatusDot,
   StyledStatusText,
 } from "./styles";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { useCreateSummary, useExports } from "@Utils/queries/studies";
 
 const BasicInfo = () => {
   const { deploymentId, id: studyId } = useParams();
@@ -31,6 +34,8 @@ const BasicInfo = () => {
     error: participantError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
   const [deployment, setDeployment] = useState<ParticipantGroup | null>(null);
+
+  const generateExport = useCreateSummary();
 
   useEffect(() => {
     if (!participantDataLoading && participantData && participantData.groups) {
@@ -53,69 +58,81 @@ const BasicInfo = () => {
     );
 
   return (
-    <StyledCard elevation={2}>
-      <Left>
-        <Stack direction="column" gap="8px" alignItems="center">
-          <StyledStatusDot
-            status={deployment.deploymentStatus.__type.split(".").pop()}
-          />
-          <StyledStatusText
-            variant="h6"
-            status={deployment.deploymentStatus.__type.split(".").pop()}
-          >
-            {deployment.deploymentStatus.__type.split(".").pop()}
-          </StyledStatusText>
-        </Stack>
-        {!deployment.deploymentStatus.__type.includes("Stopped") && (
-          <StyledButton variant="outlined">
-            <Stop />
-            {t("common:stop_deployment")}
-          </StyledButton>
-        )}
-      </Left>
-      <Right>
-        <Stack direction="column" gap="8px">
-          <SecondaryText variant="h6">
-            {`${t("common:created_on", {
-              date: formatDateTime(deployment.deploymentStatus.createdOn, {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-              }),
-            })}`}
-          </SecondaryText>
-          {deployment.deploymentStatus.startedOn && (
+    <>
+      <Box display="flex" justifyContent="flex-end" marginBottom={"16px"}>
+        <ExportButton
+          onClick={() =>
+            generateExport.mutate({ studyId, deploymentIds: [deploymentId] })
+          }
+        >
+          <FileDownloadOutlinedIcon fontSize="small" />
+          <Typography variant="h5">Export Data</Typography>
+        </ExportButton>
+      </Box>
+      <StyledCard elevation={2}>
+        <Left>
+          <Stack direction="column" gap="8px" alignItems="center">
+            <StyledStatusDot
+              status={deployment.deploymentStatus.__type.split(".").pop()}
+            />
+            <StyledStatusText
+              variant="h6"
+              status={deployment.deploymentStatus.__type.split(".").pop()}
+            >
+              {deployment.deploymentStatus.__type.split(".").pop()}
+            </StyledStatusText>
+          </Stack>
+          {!deployment.deploymentStatus.__type.includes("Stopped") && (
+            <StyledButton variant="outlined">
+              <Stop fontSize="small" />
+              {t("common:stop_deployment")}
+            </StyledButton>
+          )}
+        </Left>
+        <Right>
+          <Stack direction="column" gap="8px">
             <SecondaryText variant="h6">
-              {`${t("common:started_on", {
-                date: formatDateTime(deployment.deploymentStatus.startedOn, {
+              {`${t("common:created_on", {
+                date: formatDateTime(deployment.deploymentStatus.createdOn, {
                   year: "numeric",
                   month: "numeric",
                   day: "numeric",
                 }),
               })}`}
             </SecondaryText>
-          )}
-          {deployment.deploymentStatus.stoppedOn && (
+            {deployment.deploymentStatus.startedOn && (
+              <SecondaryText variant="h6">
+                {`${t("common:started_on", {
+                  date: formatDateTime(deployment.deploymentStatus.startedOn, {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                  }),
+                })}`}
+              </SecondaryText>
+            )}
+            {deployment.deploymentStatus.stoppedOn && (
+              <SecondaryText variant="h6">
+                {`${t("common:stopped_on", {
+                  date: formatDateTime(deployment.deploymentStatus.stoppedOn, {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                  }),
+                })}`}
+              </SecondaryText>
+            )}
+          </Stack>
+          <StyledDivider />
+          <Stack direction="row" gap="8px" marginTop={1}>
             <SecondaryText variant="h6">
-              {`${t("common:stopped_on", {
-                date: formatDateTime(deployment.deploymentStatus.stoppedOn, {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                }),
-              })}`}
+              {t("common:deployment_id", { id: deploymentId })}
             </SecondaryText>
-          )}
-        </Stack>
-        <StyledDivider />
-        <Stack direction="row" gap="8px" marginTop={1}>
-          <SecondaryText variant="h6">
-            {t("common:deployment_id", { id: deploymentId })}
-          </SecondaryText>
-          <CopyButton textToCopy={deploymentId} idType="Deployment" />
-        </Stack>
-      </Right>
-    </StyledCard>
+            <CopyButton textToCopy={deploymentId} idType="Deployment" />
+          </Stack>
+        </Right>
+      </StyledCard>
+    </>
   );
 };
 

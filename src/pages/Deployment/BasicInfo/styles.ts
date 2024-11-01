@@ -5,7 +5,7 @@ import { getDeploymentStatusColor } from "@Utils/utility";
 export const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
-  padding: "10px 16px",
+  padding: "12px 16px",
   marginBottom: 32,
   borderRadius: 8,
   border: `1px solid ${theme.palette.grey[700]}`,
@@ -95,11 +95,21 @@ export const StyledStatusText = styled(Typography, {
   textTransform: "uppercase",
 }));
 
+
+export const ExportButton = styled(Button)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 16,
+  textTransform: "none",
+  padding: "8px 16px",
+  color: theme.palette.primary.main,
+  gap: 8,
+}));
+
 export const StyledButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.grey[700]}`,
   borderRadius: 16,
   textTransform: "none",
-  padding: "px 16px",
+  padding: "8px 16px",
   color: theme.palette.error.main,
   gap: 8,
   "&:disabled": {

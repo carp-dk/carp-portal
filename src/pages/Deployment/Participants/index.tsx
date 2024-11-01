@@ -36,7 +36,7 @@ const Participants = () => {
   if (error) {
     return (
       <CarpErrorCardComponent
-        message="An error occurred while loading participants"
+        message={t('error:participants')}
         error={error}
       />
     );
@@ -52,24 +52,24 @@ const Participants = () => {
               gap={16}
               key={p.participantId}
               display={"grid"}
-              gridTemplateColumns={"1fr 1fr 1fr"}
+              gridTemplateColumns={"25% 20% 20%"}
             >
-              <Box gap="15px" display="flex" flexDirection="row">
+              <Stack gap="15px" direction="row">
                 <AccountIcon>
                   <Initials variant="h4">
-                    {p.firstName === "" || p.firstName === null
+                    {!p.firstName
                       ? p.role[0]
                       : `${p.firstName[0]}${p.lastName[0]}`}
                   </Initials>
                 </AccountIcon>
-                <Typography variant="h5" alignContent="center">
+                <Typography variant="h5" alignContent="center" noWrap>
                   {p.email ?? <GeneratedAccountLabel />}
                 </Typography>
-              </Box>
+              </Stack>
               <NameContainer>
                 <PersonIcon fontSize="small" />
                 {p.firstName && (
-                  <Typography variant="h5">
+                  <Typography variant="h5" noWrap>
                     {p.firstName} {p.lastName}
                   </Typography>
                 )}

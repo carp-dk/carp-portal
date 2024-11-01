@@ -108,7 +108,7 @@ const InformedConsentCard = () => {
   if (participantDataError || statusesError) {
     return (
       <CarpErrorCardComponent
-        message={t("error.informed_consents")}
+        message={t("error:informed_consents")}
         error={participantDataError ?? statusesError}
       />
     );

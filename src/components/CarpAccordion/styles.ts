@@ -30,5 +30,4 @@ export const Title = styled(Typography)(({ theme }) => ({
 
 export const StyledTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  marginTop: 0,
 }));

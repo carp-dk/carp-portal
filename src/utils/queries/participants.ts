@@ -23,6 +23,7 @@ import Participant = dk.cachet.carp.studies.application.users.Participant;
 import {GenericEmailRequest} from "@carp-dk/client/models/Email";
 
 import ParticipantData = ddk.cachet.carp.deployments.application.users.ParticipantData;
+import StudyDeploymentStatus = ddk.cachet.carp.deployments.application.StudyDeploymentStatus;
 
 type ParticipantGroupStatus =
   dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
@@ -344,5 +345,74 @@ export const useParticipantConsent = (deploymentId: string) => {
       return carpApi.getAllInformedConsent(deploymentId, getConfig());
     },
     queryKey: ["deploymentConsent", deploymentId],
+  });
+};
+
+export const useRegisterDevice = (studyId: string) => {
+  const { setSnackbarError } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    StudyDeploymentStatus.Running,
+    CarpServiceError,
+    { studyDeploymentId: string; roleName: string; deviceId: string }
+  >({
+    mutationFn: ({ studyDeploymentId, roleName, deviceId }) => {
+      console.log("registering device", studyDeploymentId);
+      return carpApi.registerDevice_CORE(
+        studyDeploymentId,
+        roleName,
+        deviceId,
+        getConfig(),
+      );
+    },
+    onError: (error: CarpServiceError) => {
+      if (
+        error.httpResponseMessage !== "The passed device is already registered."
+      ) {
+        setSnackbarError(error.httpResponseMessage);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["deployments", studyId],
+      });
+    },
+    retry: queryClient.defaultMutationOptions().retry,
+  });
+};
+
+export const useDeviceDeployed = (studyId: string) => {
+  const { setSnackbarError } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    StudyDeploymentStatus.Running,
+    CarpServiceError,
+    { studyDeploymentId: string; roleName: string }
+  >({
+    mutationFn: async ({ studyDeploymentId, roleName }) => {
+      const deviceDeployment = await carpApi.GetDeviceDeploymentFor_CORE(
+        studyDeploymentId,
+        roleName,
+        getConfig(),
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      return carpApi.updateDeviceRegistration(
+        studyDeploymentId,
+        roleName,
+        (deviceDeployment as any).lastUpdatedOn,
+        getConfig(),
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["deployments", studyId],
+      });
+    },
+    onError: (error: CarpServiceError) => {
+      setSnackbarError(error.httpResponseMessage);
+    },
+    retry: 0,
   });
 };
