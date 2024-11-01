@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { formatDateTime } from "@Utils/utility";
-
 interface FileInfo {
   data: string;
   fileName: string;
@@ -87,7 +86,7 @@ const InformedConsentCard = () => {
           if (!v) return false;
           return ((v as any).__type as string).includes("informed_consent");
         });
-      const roleConsents = participantData.roles.map((v) => {
+      const roleConsents = (participantData.roles as any as Array<any>).map((v) => {
         const c = (v as any).data
           .toArray()
           .find((d) => d.__type.includes("informed_consent"));
@@ -127,7 +126,7 @@ const InformedConsentCard = () => {
                 <NameContainer>
                   {participant.firstName && participant.lastName && (
                     <Typography variant="h4">{`${participant.firstName} ${participant.lastName}`}</Typography>
-                  )}
+                  ) || <Typography variant="h4">{participant.participantId}</Typography>}
                 </NameContainer>
               </Stack>
               {consent && (

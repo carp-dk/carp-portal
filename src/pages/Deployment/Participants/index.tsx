@@ -1,6 +1,6 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ParticipantGroup } from "@carp-dk/client";
@@ -35,10 +35,7 @@ const Participants = () => {
 
   if (error) {
     return (
-      <CarpErrorCardComponent
-        message={t('error:participants')}
-        error={error}
-      />
+      <CarpErrorCardComponent message={t("error:participants")} error={error} />
     );
   }
 

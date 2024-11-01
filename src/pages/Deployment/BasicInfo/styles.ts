@@ -27,23 +27,6 @@ export const Right = styled("div")({
   },
 });
 
-export const AccountIcon = styled("div")(({ theme }) => ({
-  width: 40,
-  height: 40,
-  backgroundColor: theme.palette.company.isotype,
-  borderRadius: "50%",
-  position: "relative",
-  marginRight: 8,
-}));
-
-export const Initials = styled(Typography)(({ theme }) => ({
-  color: theme.palette.common.white,
-  position: "absolute",
-  top: "52%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-}));
-
 export const StyledDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.grey[300],
   borderWidth: 1,
@@ -51,26 +34,6 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
   marginRight: 10,
   marginLeft: 10,
   height: 64,
-}));
-
-export const RemindersContainer = styled(Button)({
-  display: "flex",
-  alignItems: "center",
-  gap: 4,
-  textTransform: "none",
-});
-
-export const ReminderText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-}));
-
-export const Name = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.primary,
-}));
-
-export const Email = styled(Typography)(({ theme }) => ({
-  marginLeft: 16,
-  color: theme.palette.grey[500],
 }));
 
 export const SecondaryText = styled(Typography)(({ theme }) => ({
@@ -94,7 +57,6 @@ export const StyledStatusText = styled(Typography, {
   color: getDeploymentStatusColor(status),
   textTransform: "uppercase",
 }));
-
 
 export const ExportButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.grey[700]}`,

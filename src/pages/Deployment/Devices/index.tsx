@@ -15,16 +15,18 @@ import {
   CancelButton,
   Description,
   DescriptionContainer,
+  DeviceCard,
+  DeviceName,
+  DeviceRow,
   ModalBox,
   StyledStatusDot,
+  SubDeviceRow,
   Title,
 } from "./styles";
 import { t } from "i18next";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { getDeviceIcon } from "@Utils/utility";
-import { title } from "process";
 import { CarpServiceError } from "@carp-dk/client";
-import { randomUUID } from "crypto";
 import { v4 } from "uuid";
 
 const Devices = () => {
@@ -187,22 +189,9 @@ const Devices = () => {
       <Stack spacing={"16px"} direction={"row"}>
         {devices &&
           devices.map(({ primaryDevice, connections }) => (
-            <Stack
-              key={primaryDevice.name}
-              gap={"8px"}
-              border={"1px solid #ABABAB"}
-              borderRadius={"16px"}
-              display={"flex"}
-              width={"100%"}
-              maxWidth={"25%"}
-              padding={"16px 16px"}
-            >
-              <Stack
+            <DeviceCard key={primaryDevice.name}>
+              <DeviceRow
                 direction={"row"}
-                gap={"16px"}
-                padding={"4px 8px 4px 4px"}
-                display={"grid"}
-                gridTemplateColumns={"1fr 8px 16px"}
                 onClick={() =>
                   setModalState({
                     open: true,
@@ -219,48 +208,30 @@ const Devices = () => {
                 }}
                 justifyContent={"center"}
               >
-                <Stack
-                  direction={"row"}
-                  gap={"8px"}
-                  display={"grid"}
-                  gridTemplateColumns={"18px 1fr"}
-                >
+                <DeviceName direction={"row"}>
                   {getDeviceIcon(primaryDevice.type)}
                   <Typography variant="h4" noWrap>
                     {primaryDevice.name}
                   </Typography>
-                </Stack>
+                </DeviceName>
                 <StyledStatusDot status={primaryDevice.status} />
-              </Stack>
+              </DeviceRow>
               <Stack gap={"4px"}>
                 {connections.map((connection) => {
                   return (
-                    <Stack
-                      key={connection.name}
-                      direction={"row"}
-                      gap={"16px"}
-                      padding={"4px 8px 4px 24px"}
-                      display={"grid"}
-                      gridTemplateColumns={"1fr 8px 16px"}
-                      justifyContent={"center"}
-                    >
-                      <Stack
-                        direction={"row"}
-                        gap={"8px"}
-                        display={"grid"}
-                        gridTemplateColumns={"18px 1fr"}
-                      >
+                    <SubDeviceRow key={connection.name} direction={"row"}>
+                      <DeviceName direction={"row"}>
                         {getDeviceIcon(connection.type)}
                         <Typography variant="h5" noWrap>
                           {connection.name}
                         </Typography>
-                      </Stack>
+                      </DeviceName>
                       <StyledStatusDot status={connection.status} />
-                    </Stack>
+                    </SubDeviceRow>
                   );
                 })}
               </Stack>
-            </Stack>
+            </DeviceCard>
           ))}
       </Stack>
     </CarpAccordion>

@@ -1,24 +1,18 @@
 /* eslint-disable no-underscore-dangle */
 import CopyButton from "@Components/Buttons/CopyButton";
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
-import { useStopParticipantGroup } from "@Utils/queries/participants";
-import { useCreateSummary } from "@Utils/queries/studies";
 import { ParticipantGroup } from "@carp-dk/client";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Skeleton, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DateTooltip from "../DateTooltip";
 import ParticipantRecord from "../ParticipantRecord";
 import {
-  DownloadButton,
   HorizontalStatusContainer,
   IdContainer,
   MinimizeButton,
   Names,
   ParticipantsContainer,
-  StopDeploymentButton,
   StyledCard,
   StyledDivider,
   StyledStatusDot,
@@ -39,11 +33,10 @@ const DeploymentCard = ({
   allDeploymentCount,
 }: Props) => {
   const { id: studyId } = useParams();
-  const stopDeployment = useStopParticipantGroup(studyId);
+  const navigate = useNavigate();
+
   const [isCardOpen, setIsCardOpen] = useState(false);
-  const [openStopConfirmationModal, setOpenStopConfirmationModal] =
-    useState(false);
-  const createSummary = useCreateSummary();
+
   useEffect(() => {
     if (openCardCount === allDeploymentCount) setIsCardOpen(true);
     if (openCardCount === 0) setIsCardOpen(false);
@@ -60,10 +53,6 @@ const DeploymentCard = ({
     });
   };
 
-  const handleStopDeployment = () => {
-    setOpenStopConfirmationModal(false);
-    stopDeployment.mutate(deployment.participantGroupId);
-  };
   let names = useMemo(
     () =>
       deployment.participants
@@ -76,36 +65,20 @@ const DeploymentCard = ({
     [deployment.participants],
   );
 
-  const createAndDownloadSummary = (event) => {
-    event.stopPropagation();
-    createSummary.mutate({
-      studyId,
-      deploymentIds: [deployment.participantGroupId],
-    });
-  };
-
-  const handleStopDeploymentButtonClick = (event) => {
-    event.stopPropagation();
-    setOpenStopConfirmationModal(true);
-  };
-
-  const confirmationModalProps = {
-    open: openStopConfirmationModal,
-    onClose: () => setOpenStopConfirmationModal(false),
-    onConfirm: handleStopDeployment,
-    title: "Stop deployment",
-    description:
-      "The deployment will be permanently stopped and will no longer be running.",
-    boldText: "You can not undo this action.",
-    checkboxLabel: "I'm sure I want to stop it",
-    actionButtonLabel: "Stop",
-  };
   if (names[0] === ",") names = "";
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
-      <TopContainer onClick={handleCardToggle}>
-        <Names variant="h6" noWrap>
+      <TopContainer>
+        <Names
+          variant="h6"
+          noWrap
+          onClick={() =>
+            navigate(
+              `/studies/${studyId}/participants/deployments/${deployment.participantGroupId}`,
+            )
+          }
+        >
           {names && names[0].length > 0 ? names : <i>Generated deployment</i>}
         </Names>
         <StyledDivider />
@@ -129,15 +102,6 @@ const DeploymentCard = ({
             }
           />
         </HorizontalStatusContainer>
-        {deployment.deploymentStatus.stoppedOn ? (
-          <div />
-        ) : (
-          <StopDeploymentButton
-            onClick={(event) => handleStopDeploymentButtonClick(event)}
-          >
-            <Typography variant="h6">Stop deployment</Typography>
-          </StopDeploymentButton>
-        )}
         <IdContainer>
           <Typography variant="h6">
             Deployment ID: {deployment.participantGroupId}
@@ -147,11 +111,6 @@ const DeploymentCard = ({
             idType="Deployment"
           />
         </IdContainer>
-        <StyledDivider />
-        <DownloadButton onClick={(event) => createAndDownloadSummary(event)}>
-          <Typography variant="h6">Export Data</Typography>
-          <FileDownloadOutlinedIcon fontSize="small" />
-        </DownloadButton>
         <MinimizeButton
           disableRipple
           onClick={(event) => handleCardToggle(event)}
@@ -174,16 +133,6 @@ const DeploymentCard = ({
             />
           ))}
       </ParticipantsContainer>
-      <DeleteConfirmationModal
-        open={confirmationModalProps.open}
-        title={confirmationModalProps.title}
-        description={confirmationModalProps.description}
-        boldText={confirmationModalProps.boldText}
-        checkboxLabel={confirmationModalProps.checkboxLabel}
-        actionButtonLabel={confirmationModalProps.actionButtonLabel}
-        onClose={confirmationModalProps.onClose}
-        onConfirm={confirmationModalProps.onConfirm}
-      />
     </StyledCard>
   );
 };
@@ -204,7 +153,6 @@ export const DeploymentSkeletonCard = () => {
             height={14}
           />
         </HorizontalStatusContainer>
-        <Skeleton animation="wave" variant="text" width={84} height={24} />
         <IdContainer>
           <Skeleton animation="wave" variant="text" width={56} height={24} />
           <Skeleton animation="wave" variant="text" width={260} height={24} />
@@ -216,14 +164,6 @@ export const DeploymentSkeletonCard = () => {
             height={19}
           />
         </IdContainer>
-        <StyledDivider />
-        <Skeleton
-          sx={{ ml: "16px" }}
-          variant="rounded"
-          animation="wave"
-          width={116}
-          height={18}
-        />
         <MinimizeButton disableRipple onClick={() => {}} open={false}>
           <KeyboardArrowDownRoundedIcon />
         </MinimizeButton>

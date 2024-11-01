@@ -1,7 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import CopyButton from "@Components/Buttons/CopyButton";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
+import {
+  useParticipantGroupsAccountsAndStatus,
+  useStopParticipantGroup,
+} from "@Utils/queries/participants";
 import { ParticipantGroup } from "@carp-dk/client";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -22,7 +25,8 @@ import {
   StyledStatusText,
 } from "./styles";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { useCreateSummary, useExports } from "@Utils/queries/studies";
+import { useCreateSummary } from "@Utils/queries/studies";
+import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
 
 const BasicInfo = () => {
   const { deploymentId, id: studyId } = useParams();
@@ -33,7 +37,28 @@ const BasicInfo = () => {
     isLoading: participantDataLoading,
     error: participantError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
+  const stopDeployment = useStopParticipantGroup(studyId);
+
   const [deployment, setDeployment] = useState<ParticipantGroup | null>(null);
+  const [openStopConfirmationModal, setOpenStopConfirmationModal] =
+    useState(false);
+
+  const handleStopDeployment = () => {
+    setOpenStopConfirmationModal(false);
+    stopDeployment.mutate(deployment.participantGroupId);
+  };
+
+  const confirmationModalProps = {
+    open: openStopConfirmationModal,
+    onClose: () => setOpenStopConfirmationModal(false),
+    onConfirm: handleStopDeployment,
+    title: "Stop deployment",
+    description:
+      "The deployment will be permanently stopped and will no longer be running.",
+    boldText: "You can not undo this action.",
+    checkboxLabel: "I'm sure I want to stop it",
+    actionButtonLabel: "Stop",
+  };
 
   const generateExport = useCreateSummary();
 
@@ -59,6 +84,16 @@ const BasicInfo = () => {
 
   return (
     <>
+      <DeleteConfirmationModal
+        open={confirmationModalProps.open}
+        title={confirmationModalProps.title}
+        description={confirmationModalProps.description}
+        boldText={confirmationModalProps.boldText}
+        checkboxLabel={confirmationModalProps.checkboxLabel}
+        actionButtonLabel={confirmationModalProps.actionButtonLabel}
+        onClose={confirmationModalProps.onClose}
+        onConfirm={confirmationModalProps.onConfirm}
+      />
       <Box display="flex" justifyContent="flex-end" marginBottom={"16px"}>
         <ExportButton
           onClick={() =>
@@ -83,7 +118,10 @@ const BasicInfo = () => {
             </StyledStatusText>
           </Stack>
           {!deployment.deploymentStatus.__type.includes("Stopped") && (
-            <StyledButton variant="outlined">
+            <StyledButton
+              variant="outlined"
+              onClick={() => setOpenStopConfirmationModal(true)}
+            >
               <Stop fontSize="small" />
               {t("common:stop_deployment")}
             </StyledButton>

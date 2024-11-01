@@ -17,6 +17,7 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   AccountIcon,
+  EmailContainer,
   Initials,
   NameContainer,
   RoleContainer,
@@ -33,13 +34,10 @@ type Props = {
 };
 
 const ParticipantRecord = ({
-  deploymentId,
   participantData,
   participantStatus,
   deviceStatusList,
 }: Props) => {
-  const { id: studyId } = useParams();
-  const navigate = useNavigate();
   const participantRole =
     participantStatus.assignedParticipantRoles.roleNames[0];
   const participantDeviceRoleName =
@@ -53,7 +51,7 @@ const ParticipantRecord = ({
   const lastDataUpload = useMemo(() => {
     const lastData = participantData.dateOfLastDataUpload;
     if (!lastData) {
-      return "";
+      return "Last data: Today";
     }
     const elapsedDays = calculateDaysPassedFromDate(lastData.toString());
     if (elapsedDays === 0) {
@@ -63,32 +61,28 @@ const ParticipantRecord = ({
   }, [participantData.dateOfLastDataUpload]);
 
   return (
-    <StyledContainer
-      onClick={() =>
-        navigate(
-          `/studies/${studyId}/participants/deployments/${deploymentId}/participants/${participantData.participantId}`,
-        )
-      }
-    >
-      <AccountIcon>
-        <Initials variant="h4">
-          {!participantData.firstName || !participantData.lastName
-            ? participantRole[0]
-            : `${participantData.firstName[0]}${participantData.lastName[0]}`}
-        </Initials>
-      </AccountIcon>
-      <Typography variant="h6">
-        {participantData.email ?? <GeneratedAccountLabel />}
-      </Typography>
+    <StyledContainer>
+      <EmailContainer>
+        <AccountIcon>
+          <Initials variant="h4">
+            {!participantData.firstName
+              ? participantRole[0]
+              : `${participantData.firstName[0]}${participantData.lastName[0]}`}
+          </Initials>
+        </AccountIcon>
+        <Typography variant="h6" noWrap>
+          {participantData.email ?? <GeneratedAccountLabel />}
+        </Typography>
+      </EmailContainer>
       <NameContainer>
-        {participantData.firstName && participantData.lastName && (
-          <>
-            <PersonIcon fontSize="small" />
-            <Typography variant="h6">
+        <>
+          <PersonIcon fontSize="small" />
+          {participantData.firstName && (
+            <Typography variant="h6" noWrap>
               {participantData.firstName} {participantData.lastName}
             </Typography>
-          </>
-        )}
+          )}
+        </>
       </NameContainer>
       <RoleContainer>
         <ContactPageIcon fontSize="small" />

@@ -1,28 +1,5 @@
-import { Accordion, AccordionSummary, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
-
-export const StyledAccordion = styled(Accordion)({
-  padding: "10px 24px",
-  marginBottom: 32,
-  borderRadius: 8,
-  "::before": {
-    display: "none",
-  },
-});
-
-export const SyledAccordionSummary = styled(AccordionSummary)({
-  padding: "0",
-});
-
-export const Title = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  padding: "0",
-}));
-
-export const Right = styled("div")({
-  display: "flex",
-  alignItems: "center",
-});
 
 export const AccountIcon = styled("div")(({ theme }) => ({
   width: 28,

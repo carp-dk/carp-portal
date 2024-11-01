@@ -1,4 +1,4 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Stack } from "@mui/material";
 import { styled } from "@Utils/theme";
 import { getDeviceStatusColor } from "@Utils/utility";
 
@@ -12,7 +12,6 @@ export const StyledStatusDot = styled("div", {
   flexShrink: 0,
   alignSelf: "center",
 }));
-
 
 export const ModalBox = styled("div")(({ theme }) => ({
   display: "flex",
@@ -43,20 +42,9 @@ export const Description = styled(Typography)(({ theme }) => ({
   display: "inline",
 }));
 
-export const BoldText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  display: "inline",
-  marginLeft: 4,
-}));
-
 export const Bottom = styled("div")({
   display: "flex",
   justifyContent: "space-between",
-});
-
-export const ButtonsContainer = styled("div")({
-  display: "flex",
-  gap: 16,
 });
 
 export const CancelButton = styled(Button)({
@@ -69,4 +57,37 @@ export const ActionButton = styled(Button)({
   padding: "10px 24px",
   textTransform: "capitalize",
   borderRadius: 16,
+});
+
+export const DeviceCard = styled(Stack)(({ theme }) => ({
+  gap: "8px",
+  border: "1px solid",
+  borderColor: theme.palette.grey[300],
+  borderRadius: "16px",
+  display: "flex",
+  width: "100%",
+  maxWidth: "25%",
+  padding: "16px 16px",
+}));
+
+export const DeviceRow = styled(Stack)({
+  gap: "16px",
+  padding: "4px 8px 4px 4px",
+  display: "grid",
+  gridTemplateColumns: "1fr 8px 16px",
+  justifyContent: "center",
+});
+
+export const SubDeviceRow = styled(Stack)({
+  gap: "16px",
+  padding: "4px 8px 4px 24px",
+  display: "grid",
+  gridTemplateColumns: "1fr 8px 16px",
+  justifyContent: "center",
+});
+
+export const DeviceName = styled(Stack)({
+  gap: "8px",
+  display: "grid",
+  gridTemplateColumns: "18px 1fr",
 });
