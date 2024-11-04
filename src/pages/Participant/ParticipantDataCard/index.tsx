@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import carpCommon from "@cachet/carp-common";
 import { useStudyDetails } from "@Utils/queries/studies";
@@ -59,13 +59,20 @@ const ParticipantDataCard = () => {
   } = useGetParticipantData(deploymentId);
 
   const [participant, setParticipant] = useState<ParticipantData | null>(null);
-  const initalValues =
-    (participantData?.roles as any as Array<any>).length !== 0
-      ? (participantData?.roles as any as Array<any>)
-          .filter((v) => v)
-          .map((v) => v.data.values.toArray().filter((value) => value))
-          .flat()
-      : participantData?.common.values.toArray().filter((v) => v);
+  const initalValues = useMemo(() => {
+    if (
+      participantData?.roles &&
+      (participantData?.roles as any as Array<any>).length !== 0
+    )
+      return (participantData?.roles as any as Array<any>)
+        .filter((v) => v)
+        .map((v) => v.data.values.toArray().filter((value) => value))
+        .flat();
+    if (participantData?.common.values)
+      return participantData?.common.values.toArray().filter((v) => v);
+    return null;
+  }, [participantData]);
+
   useEffect(() => {
     if (participantGroupStatus) {
       setParticipant(
