@@ -9,7 +9,7 @@ import { Checkbox, Modal, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CarpAccordion from "@Components/CarpAccordion";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { getDeviceIcon } from "@Utils/utility";
 import { CarpServiceError } from "@carp-dk/client";
@@ -32,6 +32,7 @@ import LoadingSkeleton from "../LoadingSkeleton";
 
 const Devices = () => {
   const { id: studyId, deploymentId } = useParams();
+  const { t } = useTranslation();
 
   const {
     data: study,
@@ -148,18 +149,19 @@ const Devices = () => {
         aria-describedby="modal-modal-description"
       >
         <ModalBox sx={{ boxShadow: 24 }}>
-          <Title variant="h2">Deployment of a Master Device</Title>
+          <Title variant="h2">
+            {t("deployment:devices_card.device_deployment.title")}
+          </Title>
           <DescriptionContainer>
             <Description variant="h4">
-              The device will be permanently deployed. You can not undo this
-              action.
+              {t("deployment:devices_card.device_deployment.description")}
             </Description>
           </DescriptionContainer>
           <Bottom>
             <Stack direction="row" alignItems="center" gap="8px">
               <Checkbox onClick={() => setAllowDeploy(!allowDeploy)} />
               <Typography variant="h5">
-                I&apos;m sure I want to deploy it
+                {t("deployment:devices_card.device_deployment.submit")}
               </Typography>
             </Stack>
             <Stack direction="row" gap="8px">
@@ -169,7 +171,7 @@ const Devices = () => {
                   setAllowDeploy(false);
                 }}
               >
-                Cancel
+                {t("common:cancel")}
               </CancelButton>
               <ActionButton
                 variant="contained"
@@ -177,7 +179,7 @@ const Devices = () => {
                 onClick={() => onConfirm()}
                 disabled={!allowDeploy}
               >
-                Deploy
+                {t("common:deploy")}
               </ActionButton>
             </Stack>
           </Bottom>
@@ -190,20 +192,23 @@ const Devices = () => {
             <DeviceCard key={primaryDevice.name}>
               <DeviceRow
                 direction="row"
-                onClick={() =>
+                onClick={() => {
+                  if (primaryDevice.status === "Deployed") return;
                   setModalState({
                     open: true,
                     roleName: primaryDevice.name,
                     deviceId: v4(),
-                  })
-                }
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "#ededed",
-                    borderRadius: "100px",
-                    cursor: "pointer",
-                  },
+                  });
                 }}
+                sx={
+                  primaryDevice.status !== "Deployed" && {
+                    "&:hover": {
+                      backgroundColor: "#ededed",
+                      borderRadius: "100px",
+                      cursor: "pointer",
+                    },
+                  }
+                }
                 justifyContent="center"
               >
                 <DeviceName direction="row">

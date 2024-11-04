@@ -139,12 +139,12 @@ const DeploymentsInProgress = () => {
                 <StyledTableCell>
                   <SecondaryCellText variant="h5" noWrap>
                     <Stack direction="row" spacing="16px">
-                      {g.devices.map((d) => (
+                      {g.devices.map((d, idx) => (
                         <Stack
                           direction="row"
                           spacing={0.5}
                           alignItems="center"
-                          key={d.device}
+                          key={g.deploymentId + ":" + idx}
                         >
                           <StyledStatusDot status={d.__type.split(".").pop()} />
                           <Typography variant="h6">

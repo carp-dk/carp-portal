@@ -4,11 +4,14 @@ import BasicInfo from "./BasicInfo";
 import Participants from "./Participants";
 import InformedConsentCard from "./InformedConsentCard";
 import Devices from "./Devices";
+import { useTranslation } from "react-i18next";
 
 const Deployment = () => {
+  const { t } = useTranslation();
+
   const sectionName = ["Deployments", "Deployment"];
-  const description =
-    "See the detailed data of the Deployment. Select the participant for further individual data.";
+  const description = t("deployment:page_description");
+  
   return (
     <StudyPageLayout>
       <StudyHeader path={sectionName} description={description} />

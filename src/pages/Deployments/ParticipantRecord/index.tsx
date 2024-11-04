@@ -24,6 +24,7 @@ import {
   StyledContainer,
   StyledStatusDot,
 } from "./styles";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   participantData: ParticipantData;
@@ -36,6 +37,8 @@ const ParticipantRecord = ({
   participantStatus,
   deviceStatusList,
 }: Props) => {
+  const { t } = useTranslation();
+
   const participantRole =
     participantStatus.assignedParticipantRoles.roleNames[0];
   const participantDeviceRoleName =
@@ -49,13 +52,10 @@ const ParticipantRecord = ({
   const lastDataUpload = useMemo(() => {
     const lastData = participantData.dateOfLastDataUpload;
     if (!lastData) {
-      return "Last data: Today";
+      return "";
     }
     const elapsedDays = calculateDaysPassedFromDate(lastData.toString());
-    if (elapsedDays === 0) {
-      return "Last data: Today";
-    }
-    return `Last data: ${elapsedDays} day${elapsedDays > 1 ? "s" : ""} ago`;
+    return t("common:last_data", { count: elapsedDays });
   }, [participantData.dateOfLastDataUpload]);
 
   return (

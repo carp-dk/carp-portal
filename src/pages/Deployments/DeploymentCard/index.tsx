@@ -116,7 +116,12 @@ const DeploymentCard = ({
           onClick={(event) => handleCardToggle(event)}
           open={isCardOpen}
         >
-          <KeyboardArrowDownRoundedIcon />
+          <KeyboardArrowDownRoundedIcon
+            sx={{
+              transform: isCardOpen ? "rotate(0deg)" : "rotate(-90deg)",
+              transition: "transform 0.3s ease",
+            }}
+          />
         </MinimizeButton>
       </TopContainer>
       <ParticipantsContainer>
@@ -164,7 +169,11 @@ export const DeploymentSkeletonCard = () => {
           />
         </IdContainer>
         <MinimizeButton disableRipple onClick={() => {}} open={false}>
-          <KeyboardArrowDownRoundedIcon />
+          <KeyboardArrowDownRoundedIcon
+            sx={{
+              transform: "rotate(-90deg)",
+            }}
+          />
         </MinimizeButton>
       </TopContainer>
       <ParticipantsContainer />

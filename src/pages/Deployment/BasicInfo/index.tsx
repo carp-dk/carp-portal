@@ -52,12 +52,11 @@ const BasicInfo = () => {
     open: openStopConfirmationModal,
     onClose: () => setOpenStopConfirmationModal(false),
     onConfirm: handleStopDeployment,
-    title: "Stop deployment",
-    description:
-      "The deployment will be permanently stopped and will no longer be running.",
-    boldText: "You can not undo this action.",
-    checkboxLabel: "I'm sure I want to stop it",
-    actionButtonLabel: "Stop",
+    title: t("deployment:stop_deployment.title"),
+    description: t("deployment:stop_deployment.description"),
+    boldText: t("deployment:stop_deployment.alert"),
+    checkboxLabel: t("deployment:stop_deployment.confirm"),
+    actionButtonLabel: t("deployment:stop_deployment.stop"),
   };
 
   const generateExport = useCreateSummary();
@@ -123,7 +122,7 @@ const BasicInfo = () => {
               onClick={() => setOpenStopConfirmationModal(true)}
             >
               <Stop fontSize="small" />
-              {t("common:stop_deployment")}
+              {t("deployment:stop_deployment.title")}
             </StyledButton>
           )}
         </Left>
