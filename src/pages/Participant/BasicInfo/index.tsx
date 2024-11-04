@@ -6,22 +6,24 @@ import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participan
 import { ParticipantData } from "@carp-dk/client";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import LoadingSkeleton from "../LoadingSkeleton";
 import NotificationsIcon from "@mui/icons-material/NotificationsSharp";
 
+import { getUser } from "@carp-dk/authentication-react";
+import { useStudyDetails } from "@Utils/queries/studies";
 import {
   AccountIcon,
   Email,
   Initials,
   Left,
-  Name, RemindersContainer, ReminderText,
+  Name,
+  RemindersContainer,
+  ReminderText,
   Right,
   SecondaryText,
   StyledCard,
   StyledDivider,
 } from "./styles";
-import {getUser} from "@carp-dk/authentication-react";
-import {useStudyDetails} from "@Utils/queries/studies";
+import LoadingSkeleton from "../LoadingSkeleton";
 
 const BasicInfo = () => {
   const [open, setOpen] = useState(false);
@@ -72,7 +74,13 @@ const BasicInfo = () => {
     );
   }, [participant]);
 
-  if (participantDataLoading || !participant || studyDetailsLoading || !studyDetailsData) return <LoadingSkeleton />;
+  if (
+    participantDataLoading ||
+    !participant ||
+    studyDetailsLoading ||
+    !studyDetailsData
+  )
+    return <LoadingSkeleton />;
 
   if (participantError)
     return (
@@ -113,9 +121,9 @@ const BasicInfo = () => {
         open={open}
         to={participant.email}
         initials={initials}
-        researcherEmail={getUser()?.profile?.email || ''}
-        researcherName={getUser()?.profile?.name || ''}
-        studyName={studyDetailsData?.name || ''}
+        researcherEmail={getUser()?.profile?.email || ""}
+        researcherName={getUser()?.profile?.name || ""}
+        studyName={studyDetailsData?.name || ""}
       />
     </StyledCard>
   );

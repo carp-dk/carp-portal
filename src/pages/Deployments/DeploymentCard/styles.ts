@@ -9,17 +9,22 @@ export const GreyText = styled(Typography)(({ theme }) => ({
 export const TopContainer = styled("div")({
   borderRadius: "16px",
   display: "grid",
-  gridTemplateColumns: "1fr 20px 200px 100px 400px auto auto 40px",
+  gridTemplateColumns: "1fr 40px 220px 400px 60px",
   alignItems: "center",
   marginBottom: 16,
   width: "100%",
   padding: "2px 0 2px 16px",
-  cursor: "pointer",
 });
 
-export const Names = styled(Typography)({
+export const Names = styled(Typography)(({ theme }) => ({
   overflow: "hidden",
-});
+  minWidth: "200px",
+  cursor: "pointer",
+  ":hover": {
+    textDecoration: "underline",
+    color: theme.palette.primary.main,
+  },
+}));
 
 export const HorizontalStatusContainer = styled("div")({
   display: "flex",

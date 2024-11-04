@@ -4,34 +4,37 @@ import { getDeviceStatusColor } from "@Utils/utility";
 
 export const StyledContainer = styled("div")({
   display: "grid",
-  gridTemplateColumns: "40px 6fr 5fr 4fr 4fr 2fr 4fr",
+  gridTemplateColumns: "185px 150px 1fr 2fr 3fr 2fr",
   overflow: "hidden",
   alignItems: "center",
-  columnGap: 12,
+  columnGap: "16px",
   textDecoration: "none",
   color: "inherit",
   padding: "12px 16px",
-  "&:hover": {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-  },
+});
+
+export const EmailContainer = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  gap: "15px",
 });
 
 export const NameContainer = styled("div")({
   display: "flex",
   alignItems: "center",
-  gap: 6,
+  gap: "4px",
 });
 
 export const RoleContainer = styled("div")({
   alignItems: "center",
   display: "flex",
-  gap: 6,
+  gap: "4px",
 });
 
 export const StatusContainer = styled("div")({
   display: "flex",
   alignItems: "center",
-  gap: 6,
+  gap: "4px",
 });
 
 export const ActivityDataContainer = styled("div")({
@@ -64,6 +67,7 @@ export const MinimizeButton = styled(Button, {
 export const AccountIcon = styled("div")(({ theme }) => ({
   width: 28,
   height: 28,
+  minWidth: 28,
   backgroundColor: theme.palette.company.isotype,
   borderRadius: "50%",
   position: "relative",

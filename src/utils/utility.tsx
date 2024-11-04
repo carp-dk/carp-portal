@@ -1,4 +1,5 @@
 import ecgHeartIcon from "@Assets/images/ecg_heart.png";
+import ecgHeartIconBlue from "@Assets/images/ecg_heart_blue.png";
 import { Day, Record } from "@Components/RecentDataChart";
 import { customPalette as palette } from "@Utils/theme";
 import carpCommon from "@cachet/carp-common";
@@ -113,7 +114,14 @@ export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
         />
       );
     case "dk.cachet.carp.common.application.devices.MovesenseDevice":
-      return (
+      return isBlue ? (
+        <img
+          src={ecgHeartIconBlue}
+          width="20px"
+          height="20px"
+          alt="heart icon"
+        />
+      ) : (
         <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
       );
     case "dk.cachet.carp.common.application.devices.Smartphone":

@@ -13,7 +13,7 @@ const phoneNumberValidationSchema = yup
   .object({
     phone_number: yup.object({
       countryCode: yup.string(),
-      icoCode: yup.string().notRequired(),
+      isoCode: yup.string().notRequired(),
       number: yup.string(),
     }),
   })
@@ -124,7 +124,7 @@ const diagnosisValidationSchema = yup
   );
 
 const getParticipantDataFormik = (
-  participantData: ExpectedParticipantData[],
+  participantData: ExpectedParticipantData[] | undefined,
   startingData: Data[],
   setParticipantData: UseMutationResult<any, unknown, any, unknown>,
   role: string,
@@ -136,7 +136,7 @@ const getParticipantDataFormik = (
     phone_number: {
       __type: "",
       countryCode: "",
-      icoCode: "",
+      isoCode: "",
       number: "",
     },
     sex: {

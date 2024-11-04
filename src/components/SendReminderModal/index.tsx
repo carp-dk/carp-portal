@@ -1,49 +1,73 @@
-import {Modal, TextField, Typography} from "@mui/material";
-import {useFormik} from "formik";
-import {useEffect} from "react";
-import {
-    CancelButton, TypographyVariant,
-    Content,
-    DoneButton,
-    HorizontalInputContainer, HorizontalInputContainerWithAutoHeight,
-    ModalActions,
-    ModalBox,
-    Title,
-    VerticalInputContainer,
-} from "./styles";
+import { Modal, TextField, Typography } from "@mui/material";
+import { useFormik } from "formik";
+import { useEffect } from "react";
 import * as yup from "yup";
-import {GenericEmailRequest} from "@carp-dk/client/models/Email";
-import {usePostEmailSendGeneric} from "@Utils/queries/participants";
+import { GenericEmailRequest } from "@carp-dk/client/models/Email";
+import { usePostEmailSendGeneric } from "@Utils/queries/participants";
+import {
+  CancelButton,
+  TypographyVariant,
+  Content,
+  DoneButton,
+  HorizontalInputContainer,
+  HorizontalInputContainerWithAutoHeight,
+  ModalActions,
+  ModalBox,
+  Title,
+  VerticalInputContainer,
+} from "./styles";
 
 type Props = {
-    open: boolean,
-    onClose: () => void,
-    to: string,
-    initials: string
-    researcherEmail: string,
-    researcherName: string,
-    studyName: string
+  open: boolean;
+  onClose: () => void;
+  to: string;
+  initials: string;
+  researcherEmail: string;
+  researcherName: string;
+  studyName: string;
 };
 
-const SendReminderModal = ({open, onClose, to, initials, researcherEmail, researcherName, studyName}: Props) => {
-    const postEmailSendGeneric = usePostEmailSendGeneric();
+const validationSchema = yup.object({
+  message: yup.string().required("Message (email content) is required"),
+  subject: yup.string().required("Subject is required"),
+  cc: yup
+    .array()
+    .transform(function (value, originalValue) {
+      if (this.isType(value) && value !== null) {
+        return value;
+      }
+      return originalValue ? originalValue.split(/[\s,]+/) : [];
+    })
+    .of(yup.string().email(({ value }) => `${value} is not a valid email`)),
+});
 
-    const validationSchema = yup.object({
-        message: yup.string().required("Message (email content) is required"),
-        subject: yup.string().required("Subject is required"),
-        cc: yup.array().transform(function (value, originalValue) {
-            if (this.isType(value) && value !== null) {
-                return value;
-            }
-            return originalValue ? originalValue.split(/[\s,]+/) : [];
-        })
-            .of(yup.string().email(({value}) => `${value} is not a valid email`)),
-    });
+const SendReminderModal = ({
+  open,
+  onClose,
+  to,
+  initials,
+  researcherEmail,
+  researcherName,
+  studyName,
+}: Props) => {
+  const postEmailSendGeneric = usePostEmailSendGeneric();
 
-    const reminderFormik = useFormik({
-        initialValues: {
-            cc: researcherEmail,
-            message: `Dear ${initials},
+  const convertTextareaInputToHtml = (str: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urlsWrappedIntoAnchorTags = str.replace(
+      urlRegex,
+      (url) => `<a href="${url}">${url}</a>`,
+    );
+    const withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, "<br>");
+    const wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;
+
+    return wrappedInPre;
+  };
+
+  const reminderFormik = useFormik({
+    initialValues: {
+      cc: researcherEmail,
+      message: `Dear ${initials},
 
 You have recently been invited to participate in the "${studyName}" study.
 
@@ -72,124 +96,106 @@ Hvis du har spørgsmål, så er du velkommen til at skrive til mig på denne mai
 Med venlig hilsen
 
 ${researcherName}`,
-            subject: studyName,
-        },
-        onSubmit: (values) => {
-            let genericEmailRequest: GenericEmailRequest = {
-                recipient: to,
-                subject: values.subject,
-                message: convertTextareaInputToHtml(values.message),
-                cc: values.cc.split(/[\s,]+/).filter(Boolean),
-            }
-            postEmailSendGeneric.mutate(genericEmailRequest)
-        },
-        validationSchema
-    });
+      subject: studyName,
+    },
+    onSubmit: (values) => {
+      const genericEmailRequest: GenericEmailRequest = {
+        recipient: to,
+        subject: values.subject,
+        message: convertTextareaInputToHtml(values.message),
+        cc: values.cc.split(/[\s,]+/).filter(Boolean),
+      };
+      postEmailSendGeneric.mutate(genericEmailRequest);
+    },
+    validationSchema,
+  });
 
-    function convertTextareaInputToHtml(str: string): string {
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        const urlsWrappedIntoAnchorTags = str.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
-        let withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, "<br>");
-        let wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;
+  useEffect(() => {
+    return () => {
+      reminderFormik.resetForm();
+    };
+  }, [open]);
 
-        return wrappedInPre;
-    }
+  useEffect(() => {
+    onClose();
+  }, [postEmailSendGeneric.isSuccess]);
 
-    useEffect(() => {
-        return () => {
-            reminderFormik.resetForm();
-        };
-    }, [open]);
-
-    useEffect(
-        () => {
-            onClose();
-        },
-        [
-            postEmailSendGeneric.isSuccess
-        ],
-    );
-
-    return (
-        <Modal
-            open={open}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            onClose={onClose}
-        >
-            <ModalBox sx={{boxShadow: 24}}>
-                <Title variant="h2">Send a reminder</Title>
-                <Content>
-                    <HorizontalInputContainer>
-                        <Typography variant="h5" width="56px">
-                            To:
-                        </Typography>
-                        <Typography variant="h5">{to}</Typography>
-                    </HorizontalInputContainer>
-                    <HorizontalInputContainerWithAutoHeight>
-                        <TypographyVariant variant="h5">
-                            CC:
-                        </TypographyVariant>
-                        <TextField
-                            type="text"
-                            fullWidth
-                            size="small"
-                            name="cc"
-                            placeholder={"e.g. \"alice@gmail.com, bob@gmail.com\""}
-                            helperText={reminderFormik.errors.cc}
-                            error={!!reminderFormik.errors.cc}
-                            value={reminderFormik.values.cc}
-                            onChange={reminderFormik.handleChange}
-                        />
-                    </HorizontalInputContainerWithAutoHeight>
-                    <HorizontalInputContainerWithAutoHeight>
-                        <TypographyVariant variant="h5">
-                            Subject:
-                        </TypographyVariant>
-                        <TextField
-                            type="text"
-                            fullWidth
-                            size="small"
-                            name="subject"
-                            helperText={reminderFormik.errors.subject}
-                            error={!!reminderFormik.errors.subject}
-                            value={reminderFormik.values.subject}
-                            onChange={reminderFormik.handleChange}
-                        />
-                    </HorizontalInputContainerWithAutoHeight>
-                    <VerticalInputContainer>
-                        <Typography variant="h5">Message:</Typography>
-                        <TextField
-                            type="text"
-                            name="message"
-                            fullWidth
-                            multiline
-                            rows={9}
-                            helperText={reminderFormik.errors.message}
-                            error={!!reminderFormik.errors.message}
-                            value={reminderFormik.values.message}
-                            onChange={reminderFormik.handleChange}
-                        />
-                    </VerticalInputContainer>
-                </Content>
-                <ModalActions>
-                    <CancelButton variant="text" onClick={onClose}>
-                        Cancel
-                    </CancelButton>
-                    <DoneButton
-                        disabled={postEmailSendGeneric.isPending}
-                        variant="contained"
-                        sx={{elevation: 0}}
-                        onClick={() => {
-                            reminderFormik.handleSubmit();
-                        }}
-                    >
-                        Send
-                    </DoneButton>
-                </ModalActions>
-            </ModalBox>
-        </Modal>
-    );
+  return (
+    <Modal
+      open={open}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      onClose={onClose}
+    >
+      <ModalBox sx={{ boxShadow: 24 }}>
+        <Title variant="h2">Send a reminder</Title>
+        <Content>
+          <HorizontalInputContainer>
+            <Typography variant="h5" width="56px">
+              To:
+            </Typography>
+            <Typography variant="h5">{to}</Typography>
+          </HorizontalInputContainer>
+          <HorizontalInputContainerWithAutoHeight>
+            <TypographyVariant variant="h5">CC:</TypographyVariant>
+            <TextField
+              type="text"
+              fullWidth
+              size="small"
+              name="cc"
+              placeholder='e.g. "alice@gmail.com, bob@gmail.com"'
+              helperText={reminderFormik.errors.cc}
+              error={!!reminderFormik.errors.cc}
+              value={reminderFormik.values.cc}
+              onChange={reminderFormik.handleChange}
+            />
+          </HorizontalInputContainerWithAutoHeight>
+          <HorizontalInputContainerWithAutoHeight>
+            <TypographyVariant variant="h5">Subject:</TypographyVariant>
+            <TextField
+              type="text"
+              fullWidth
+              size="small"
+              name="subject"
+              helperText={reminderFormik.errors.subject}
+              error={!!reminderFormik.errors.subject}
+              value={reminderFormik.values.subject}
+              onChange={reminderFormik.handleChange}
+            />
+          </HorizontalInputContainerWithAutoHeight>
+          <VerticalInputContainer>
+            <Typography variant="h5">Message:</Typography>
+            <TextField
+              type="text"
+              name="message"
+              fullWidth
+              multiline
+              rows={9}
+              helperText={reminderFormik.errors.message}
+              error={!!reminderFormik.errors.message}
+              value={reminderFormik.values.message}
+              onChange={reminderFormik.handleChange}
+            />
+          </VerticalInputContainer>
+        </Content>
+        <ModalActions>
+          <CancelButton variant="text" onClick={onClose}>
+            Cancel
+          </CancelButton>
+          <DoneButton
+            disabled={postEmailSendGeneric.isPending}
+            variant="contained"
+            sx={{ elevation: 0 }}
+            onClick={() => {
+              reminderFormik.handleSubmit();
+            }}
+          >
+            Send
+          </DoneButton>
+        </ModalActions>
+      </ModalBox>
+    </Modal>
+  );
 };
 
 export default SendReminderModal;
