@@ -87,7 +87,11 @@ const Participants = () => {
                   textTransform="lowercase"
                   sx={{ "::first-letter": { textTransform: "capitalize" } }}
                 >
-                  {p.role}
+                  {
+                    group.deploymentStatus.participantStatusList.find(
+                      (ps) => ps.participantId === p.participantId,
+                    ).assignedParticipantRoles.roleNames[0]
+                  }
                 </Typography>
               </RoleContainer>
             </ParticipantRow>

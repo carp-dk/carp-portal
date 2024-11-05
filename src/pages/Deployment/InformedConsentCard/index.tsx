@@ -89,9 +89,12 @@ const InformedConsentCard = () => {
         });
       const roleConsents = (participantData.roles as any as Array<any>).map(
         (v) => {
-          const c = (v as any).data
-            .toArray()
-            .find((d) => d.__type.includes("informed_consent"));
+          const c =
+            Object.entries[
+              Object.keys(v.data).find((key) => {
+                return key.includes("informed_consent");
+              })
+            ];
           return { v, c };
         },
       );

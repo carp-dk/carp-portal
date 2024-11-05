@@ -144,6 +144,7 @@ const getParticipantDataFormik = (
       value: "",
     },
     full_name: {
+      __type: "",
       firstName: "",
       lastName: "",
       middleName: "",
@@ -170,7 +171,7 @@ const getParticipantDataFormik = (
       socialSecurityNumber: "",
     },
   };
-
+  
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
       if (data.attribute.inputDataType.name === "informed_consent") return;
@@ -217,10 +218,12 @@ const getParticipantDataFormik = (
     onSubmit: async (values) => {
       const newParticipantData = {};
       Object.values(values).forEach((value) => {
-        if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
-          newParticipantData[(value as any).__type] = null;
-        } else {
-          newParticipantData[(value as any).__type] = value;
+        if (value.__type !== "") {
+          if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
+            newParticipantData[(value as any).__type] = null;
+          } else {
+            newParticipantData[(value as any).__type] = value;
+          }
         }
       });
       await setParticipantData.mutateAsync({
