@@ -11,7 +11,7 @@ i18n
     fallbackLng: "en",
     ns: ["common", "error", "deployment"],
     backend: {
-      loadPath: "./locales/{{lng}}/{{ns}}.json",
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
   });
 
