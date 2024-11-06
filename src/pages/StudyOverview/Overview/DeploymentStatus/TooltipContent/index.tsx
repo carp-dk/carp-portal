@@ -13,8 +13,8 @@ const TooltipContent = () => {
         invitation.
       </Typography>
       <Typography variant="h5">
-        <span style={{ color: getDeploymentStatusColor("Deploying") }}>
-          Deploying
+        <span style={{ color: getDeploymentStatusColor("DeployingDevices") }}>
+          Deploying Devices
         </span>
         : Participants have started registering devices, but are remaining
         devices.

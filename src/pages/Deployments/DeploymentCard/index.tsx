@@ -88,13 +88,10 @@ const DeploymentCard = ({
             status={deployment.deploymentStatus.__type.split(".").pop()}
           />
           <Typography variant="h6">
-            {
-              deployment.deploymentStatus.__type
-                .split(".")
-                .pop()
-                .replace(/([a-z])([A-Z])/g, "$1 $2")
-                .split(" ")[0]
-            }
+            {deployment.deploymentStatus.__type
+              .split(".")
+              .pop()
+              .replace(/([a-z])([A-Z])/g, "$1 $2")}
           </Typography>
           <DateTooltip
             invitedAt={deployment.deploymentStatus.createdOn}

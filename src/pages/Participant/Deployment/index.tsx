@@ -152,11 +152,10 @@ const Deployment = () => {
               status={deploymentInformation.groupStatus}
             />
             <SecondaryText variant="h6">
-              {
-                deploymentInformation.groupStatus
-                  .replace(/([a-z])([A-Z])/g, "$1 $2")
-                  .split(" ")[0]
-              }
+              {deploymentInformation.groupStatus.replace(
+                /([a-z])([A-Z])/g,
+                "$1 $2",
+              )}
             </SecondaryText>
             <DateTooltip
               invitedAt={deploymentInformation.deploymentStatus.invitedOn}

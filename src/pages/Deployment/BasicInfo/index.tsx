@@ -112,14 +112,12 @@ const BasicInfo = () => {
             <StyledStatusText
               variant="h6"
               status={deployment.deploymentStatus.__type.split(".").pop()}
+              align="center"
             >
-              {
-                deployment.deploymentStatus.__type
-                  .split(".")
-                  .pop()
-                  .replace(/([a-z])([A-Z])/g, "$1 $2")
-                  .split(" ")[0]
-              }
+              {deployment.deploymentStatus.__type
+                .split(".")
+                .pop()
+                .replace(/([a-z])([A-Z])/g, "$1 $2")}
             </StyledStatusText>
           </Stack>
           {!deployment.deploymentStatus.__type.includes("Stopped") && (

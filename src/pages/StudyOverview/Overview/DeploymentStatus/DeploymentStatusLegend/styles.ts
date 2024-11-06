@@ -6,7 +6,7 @@ const ParticipantsRow = styled("div")({
   display: "grid",
   gridTemplateColumns: "80px 1fr",
   gap: 8,
-  alignItems: "end",
+  alignItems: "center",
 });
 
 export default ParticipantsRow;

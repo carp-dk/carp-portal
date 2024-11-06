@@ -9,7 +9,7 @@ export const GreyText = styled(Typography)(({ theme }) => ({
 export const TopContainer = styled("div")({
   borderRadius: "16px",
   display: "grid",
-  gridTemplateColumns: "1fr 40px 220px 400px 60px",
+  gridTemplateColumns: "1fr 40px 275px 400px 60px",
   alignItems: "center",
   marginBottom: 16,
   width: "100%",

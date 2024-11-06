@@ -39,6 +39,8 @@ const validationSchema = yup.object().shape({
   type: yup.string().required("Type is required"),
   url: yup.string().test("is-url-valid", "URL is not valid", (value) => {
     try {
+      if (!value) return true;
+
       // eslint-disable-next-line no-new
       new URL(value);
       return true;
