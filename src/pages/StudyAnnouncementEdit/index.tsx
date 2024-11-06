@@ -20,7 +20,6 @@ import * as yup from "yup";
 import { StyledButton, StyledCard, StyledContainer } from "./styles";
 import { MessageData } from "@carp-dk/client";
 
-
 const fileTypes = [
   "image/png",
   "image/jpeg",
