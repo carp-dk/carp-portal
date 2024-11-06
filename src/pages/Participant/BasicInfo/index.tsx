@@ -74,6 +74,8 @@ const BasicInfo = () => {
     );
   }, [participant]);
 
+  const isGeneratedAccount = !participant?.email;
+
   if (
     participantDataLoading ||
     !participant ||
@@ -107,10 +109,10 @@ const BasicInfo = () => {
         {name}
         <Email variant="h6">{participant.email}</Email>
         <StyledDivider />
-        <RemindersContainer onClick={() => setOpen(true)}>
-          <ReminderText variant="h6">Send a reminder</ReminderText>
-          <NotificationsIcon fontSize="small" color="primary" />
-        </RemindersContainer>
+        {!isGeneratedAccount && <RemindersContainer onClick={() => setOpen(true)}>
+        <ReminderText variant="h6">Send a reminder</ReminderText>
+        <NotificationsIcon fontSize="small" color="primary" />
+        </RemindersContainer>}
       </Left>
       <Right>
         <SecondaryText variant="h5">Account ID: {participantId}</SecondaryText>
