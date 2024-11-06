@@ -231,7 +231,7 @@ export const getDeploymentStatusColor = (deploymentStatus: string) => {
       return palette.status.green;
     case "Stopped":
       return palette.status.grey;
-    case "Deploying":
+    case "DeployingDevices":
       return palette.status.blue;
     default:
       return "#000000";
