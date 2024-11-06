@@ -7,6 +7,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   float: "right",
   alignSelf: "flex-end",
   color: theme.palette.primary.main,
+  cursor: "pointer",
 }));
 
 export default StyledButton;

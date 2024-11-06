@@ -14,11 +14,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import carpCommon from "@cachet/carp-common";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { ParticipantData } from "@carp-dk/client/models";
+import { ParticipantStatus } from "@carp-dk/client/models";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import getInputDataName from "@Assets/inputTypeNames";
 import {
@@ -58,23 +58,55 @@ const ParticipantDataCard = () => {
     error: participantDataError,
   } = useGetParticipantData(deploymentId);
 
-  const [participant, setParticipant] = useState<ParticipantData | null>(null);
+  const [participant, setParticipant] = useState<ParticipantStatus | null>(
+    null,
+  );
+  const initalValues = useMemo(() => {
+    const iv = [];
+    if (
+      participantData?.roles &&
+      (participantData?.roles as any as Array<any>).length !== 0 &&
+      (participantData?.roles as any as Array<any>).some(
+        (v) =>
+          v.roleName === participant?.assignedParticipantRoles.roleNames[0],
+      )
+    ) {
+      iv.push(
+        (participantData?.roles as any as Array<any>)
+          .filter(
+            (v) =>
+              v.roleName === participant?.assignedParticipantRoles.roleNames[0],
+          )
+          .map((v) => {
+            return Object.values(v.data).filter((value) => value);
+          })
+          .flat(),
+      );
+    }
+    if (participantData?.common.values)
+      iv.push(participantData?.common.values.toArray().filter((v) => v));
+    return iv.flat();
+  }, [participantData]);
 
   useEffect(() => {
     if (participantGroupStatus) {
       setParticipant(
         participantGroupStatus.groups
           .find((g) => g.participantGroupId === deploymentId)
-          .participants.find((p) => p.participantId === participantId),
+          .deploymentStatus.participantStatusList.find(
+            (p) => p.participantId === participantId,
+          ),
       );
     }
   }, [participantGroupStatus]);
 
   const participantDataFromik = getParticipantDataFormik(
-    study?.protocolSnapshot.expectedParticipantData ? study?.protocolSnapshot.expectedParticipantData.toArray() : [],
-    participantData?.common.values ? participantData?.common.values.toArray().filter((v) => v) : [],
+    study?.protocolSnapshot.expectedParticipantData
+      ? study?.protocolSnapshot.expectedParticipantData.toArray()
+      : [],
+    initalValues,
     setParticipantData,
-    participant?.role,
+    participant?.assignedParticipantRoles.roleNames[0],
     setEditing,
   );
 

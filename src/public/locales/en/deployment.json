@@ -1,0 +1,32 @@
+{
+  "title": "Deployment",
+  "description": "See the detailed data of the Deployment. Select the participant for further individual data.",
+  "participants_card": {
+    "title": "Participants"
+  },
+  "devices_card": {
+    "title": "Devices",
+    "description": "Select the master device in order to deploy.",
+    "device_deployment": {
+      "description": "The device will be permanently deployed. You can not undo this action.",
+      "title": "Deployment of a Master Device",
+      "submit": "I'm sure I want to deploy it"
+    }
+  },
+  "informed_consents_card": {
+    "title": "Informed Consents",
+    "not_registered": "Not registered"
+  },
+  "data_card": {
+    "title": "Data",
+    "description": "See an overview of the collected data for each participant master device."
+  },
+  "stop_deployment": {
+    "title": "Stop deployment",
+    "description": "The deployment will be permanently stopped and will no longer be running.",
+    "alert": "You can not undo this action.",
+    "confirm": "I'm sure I want to stop it",
+    "stop": "Stop"
+  },
+  "page_description": "See the detailed data of the Deployment. Select the participant for further individual data."
+}

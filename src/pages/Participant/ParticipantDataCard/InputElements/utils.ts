@@ -13,7 +13,7 @@ const phoneNumberValidationSchema = yup
   .object({
     phone_number: yup.object({
       countryCode: yup.string(),
-      icoCode: yup.string().notRequired(),
+      isoCode: yup.string().notRequired(),
       number: yup.string(),
     }),
   })
@@ -124,7 +124,7 @@ const diagnosisValidationSchema = yup
   );
 
 const getParticipantDataFormik = (
-  participantData: ExpectedParticipantData[],
+  participantData: ExpectedParticipantData[] | undefined,
   startingData: Data[],
   setParticipantData: UseMutationResult<any, unknown, any, unknown>,
   role: string,
@@ -136,7 +136,7 @@ const getParticipantDataFormik = (
     phone_number: {
       __type: "",
       countryCode: "",
-      icoCode: "",
+      isoCode: "",
       number: "",
     },
     sex: {
@@ -144,6 +144,7 @@ const getParticipantDataFormik = (
       value: "",
     },
     full_name: {
+      __type: "",
       firstName: "",
       lastName: "",
       middleName: "",
@@ -170,7 +171,7 @@ const getParticipantDataFormik = (
       socialSecurityNumber: "",
     },
   };
-
+  
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
       if (data.attribute.inputDataType.name === "informed_consent") return;
@@ -217,10 +218,12 @@ const getParticipantDataFormik = (
     onSubmit: async (values) => {
       const newParticipantData = {};
       Object.values(values).forEach((value) => {
-        if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
-          newParticipantData[(value as any).__type] = null;
-        } else {
-          newParticipantData[(value as any).__type] = value;
+        if (value.__type !== "") {
+          if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
+            newParticipantData[(value as any).__type] = null;
+          } else {
+            newParticipantData[(value as any).__type] = value;
+          }
         }
       });
       await setParticipantData.mutateAsync({

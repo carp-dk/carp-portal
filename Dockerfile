@@ -12,7 +12,7 @@ RUN npm install
 
 COPY --chown=node:node app.js ./
 COPY --chown=node:node .env ./
-COPY --chown=node:node build/* ./build/
+COPY --chown=node:node build/ ./build/
 
 ENV PORT=8080
 

@@ -14,9 +14,9 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import { Skeleton, Typography } from "@mui/material";
 import { useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import {
   AccountIcon,
+  EmailContainer,
   Initials,
   NameContainer,
   RoleContainer,
@@ -24,22 +24,21 @@ import {
   StyledContainer,
   StyledStatusDot,
 } from "./styles";
+import { useTranslation } from "react-i18next";
 
 type Props = {
-  deploymentId: string;
   participantData: ParticipantData;
   participantStatus: ParticipantStatus;
   deviceStatusList: DeviceStatus[];
 };
 
 const ParticipantRecord = ({
-  deploymentId,
   participantData,
   participantStatus,
   deviceStatusList,
 }: Props) => {
-  const { id: studyId } = useParams();
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const participantRole =
     participantStatus.assignedParticipantRoles.roleNames[0];
   const participantDeviceRoleName =
@@ -56,39 +55,32 @@ const ParticipantRecord = ({
       return "";
     }
     const elapsedDays = calculateDaysPassedFromDate(lastData.toString());
-    if (elapsedDays === 0) {
-      return "Last data: Today";
-    }
-    return `Last data: ${elapsedDays} day${elapsedDays > 1 ? "s" : ""} ago`;
+    return t("common:last_data", { count: elapsedDays });
   }, [participantData.dateOfLastDataUpload]);
 
   return (
-    <StyledContainer
-      onClick={() =>
-        navigate(
-          `/studies/${studyId}/participants/deployments/${deploymentId}/participants/${participantData.participantId}`,
-        )
-      }
-    >
-      <AccountIcon>
-        <Initials variant="h4">
-          {!participantData.firstName || !participantData.lastName
-            ? participantRole[0]
-            : `${participantData.firstName[0]}${participantData.lastName[0]}`}
-        </Initials>
-      </AccountIcon>
-      <Typography variant="h6">
-        {participantData.email ?? <GeneratedAccountLabel />}
-      </Typography>
+    <StyledContainer>
+      <EmailContainer>
+        <AccountIcon>
+          <Initials variant="h4">
+            {!participantData.firstName
+              ? participantRole[0]
+              : `${participantData.firstName[0]}${participantData.lastName[0]}`}
+          </Initials>
+        </AccountIcon>
+        <Typography variant="h6" noWrap>
+          {participantData.email ?? <GeneratedAccountLabel />}
+        </Typography>
+      </EmailContainer>
       <NameContainer>
-        {participantData.firstName && participantData.lastName && (
-          <>
-            <PersonIcon fontSize="small" />
-            <Typography variant="h6">
+        <>
+          <PersonIcon fontSize="small" />
+          {participantData.firstName && (
+            <Typography variant="h6" noWrap>
               {participantData.firstName} {participantData.lastName}
             </Typography>
-          </>
-        )}
+          )}
+        </>
       </NameContainer>
       <RoleContainer>
         <ContactPageIcon fontSize="small" />

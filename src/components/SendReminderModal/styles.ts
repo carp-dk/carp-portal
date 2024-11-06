@@ -27,6 +27,12 @@ export const HorizontalInputContainer = styled("div")({
   alignItems: "center",
 });
 
+export const HorizontalInputContainerWithAutoHeight = styled(
+  HorizontalInputContainer,
+)({
+  height: "auto",
+});
+
 export const VerticalInputContainer = styled("div")({
   display: "flex",
   gap: 10,
@@ -63,4 +69,10 @@ export const DoneButton = styled(Button)(({ theme }) => ({
   textTransform: "none",
   padding: "8px 24px",
   borderRadius: 16,
+}));
+
+export const TypographyVariant = styled(Typography)(() => ({
+  marginTop: "10px",
+  marginBottom: "auto",
+  width: "56px",
 }));

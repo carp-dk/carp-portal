@@ -1,10 +1,14 @@
+/* eslint-disable no-underscore-dangle */
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { formatDateTime } from "@Utils/utility";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetParticipantData } from "@Utils/queries/participants";
+import {
+  useGetParticipantData,
+  useParticipantGroupsAccountsAndStatus,
+} from "@Utils/queries/participants";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
   DownloadButton,
@@ -22,7 +26,7 @@ interface FileInfo {
 }
 
 const InformedConsent = () => {
-  const { deploymentId } = useParams();
+  const { participantId, deploymentId, id: studyId } = useParams();
 
   const {
     data: participantData,
@@ -30,6 +34,11 @@ const InformedConsent = () => {
     error,
   } = useGetParticipantData(deploymentId);
   const [consent, setConsent] = useState(null);
+  const {
+    data: participantGroupStatus,
+    isLoading: participantGroupStatusLoading,
+    error: participantGroupStatusError,
+  } = useParticipantGroupsAccountsAndStatus(studyId);
 
   const downloadFile = ({ data, fileName, fileType }: FileInfo) => {
     const blob = new Blob([data], { type: fileType });
@@ -55,15 +64,36 @@ const InformedConsent = () => {
   };
 
   useEffect(() => {
-    if (!isLoading) {
-      if (participantData.common.keys) {
-        const consentData = participantData.common.values.toArray().find(
-          (v) =>
-            // eslint-disable-next-line no-underscore-dangle
-            (v as unknown as any)?.__type ===
-            "dk.carp.webservices.input.informed_consent",
+    if (!isLoading && !participantGroupStatusLoading) {
+      const participant = participantGroupStatus.groups
+        .find((g) => g.participantGroupId === deploymentId)
+        .deploymentStatus.participantStatusList.find(
+          (p) => p.participantId === participantId,
         );
+
+      if (participantData.common.keys) {
+        const consentData = participantData.common.values
+          .toArray()
+          .find((v) =>
+            (v as unknown as any)?.__type.includes("informed_consent"),
+          );
         setConsent(consentData);
+      }
+
+      if (
+        (participantData.roles as any as Array<any>).find(
+          (v) =>
+            v.roleName === participant.assignedParticipantRoles.roleNames[0],
+        )
+      ) {
+        const roleConsent = (participantData.roles as any as Array<any>).find(
+          (v) => {
+            return Object.values(v.data).find((value) =>
+              (value as unknown as any)?.__type.includes("informed_consent"),
+            );
+          },
+        );
+        setConsent(roleConsent);
       }
     }
   }, [participantData]);
@@ -79,13 +109,13 @@ const InformedConsent = () => {
     return "Informed consent not found";
   }, [consent]);
 
-  if (isLoading) return <LoadingSkeleton />;
+  if (isLoading || participantGroupStatusLoading) return <LoadingSkeleton />;
 
-  if (error) {
+  if (error || participantGroupStatusError) {
     return (
       <CarpErrorCardComponent
         message="An error occurred while loading informed consent"
-        error={error}
+        error={error ?? participantGroupStatusError}
       />
     );
   }
