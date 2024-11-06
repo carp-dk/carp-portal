@@ -100,7 +100,7 @@ const BasicInfo = () => {
           }
         >
           <FileDownloadOutlinedIcon fontSize="small" />
-          <Typography variant="h5">Export Data</Typography>
+          <Typography variant="h5">{t("common:export_data")}</Typography>
         </ExportButton>
       </Box>
       <StyledCard elevation={2}>
@@ -113,7 +113,13 @@ const BasicInfo = () => {
               variant="h6"
               status={deployment.deploymentStatus.__type.split(".").pop()}
             >
-              {deployment.deploymentStatus.__type.split(".").pop()}
+              {
+                deployment.deploymentStatus.__type
+                  .split(".")
+                  .pop()
+                  .replace(/([a-z])([A-Z])/g, "$1 $2")
+                  .split(" ")[0]
+              }
             </StyledStatusText>
           </Stack>
           {!deployment.deploymentStatus.__type.includes("Stopped") && (
