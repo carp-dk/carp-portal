@@ -29,9 +29,14 @@ export const ContentWrapper = styled("div")(({ theme }) => ({
 
 export const CardDescription = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
-  display: "flex",
   textAlign: "left",
   marginTop: 16,
+  display: "-webkit-box",
+  WebkitLineClamp: 7,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  wordBreak: "break-word",
 }));
 
 export const CardTitle = styled(Typography)(({ theme }) => ({
@@ -56,6 +61,7 @@ export const InfoContainer = styled("div")({
   flexDirection: "column",
   height: "100%",
   width: "100%",
+  minWidth: 0,
   paddingLeft: 12,
 });
 
