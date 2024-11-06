@@ -20,6 +20,7 @@ import * as yup from "yup";
 import StudyAnnouncementPreview from "../../components/StudyAnnouncementPreview";
 import { StyledContainer } from "../Studies/StudiesSection/styles";
 import { ContainerRight, StyledButton, StyledCard } from "./styles";
+import { MessageData } from "@carp-dk/client";
 
 const { UUID } = carpCommon.dk.cachet.carp.common.application;
 
@@ -84,13 +85,13 @@ const StudyAnnouncementNew = () => {
         announcement: {
           id: UUID.Companion.randomUUID().toString(),
           title: values.title.trim(),
-          subTitle: values.subTitle.trim(),
+          sub_title: values.subTitle.trim(),
           message: values.message.trim(),
           type: values.type as "announcement" | "article" | "news",
           timestamp: new Date().toISOString(),
           image: values.image,
           url: values.url.trim(),
-        },
+        } as MessageData,
         image: values.image,
       });
     },
