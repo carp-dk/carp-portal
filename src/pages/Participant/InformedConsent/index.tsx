@@ -80,18 +80,15 @@ const InformedConsent = () => {
         setConsent(consentData);
       }
 
-      if (
-        (participantData.roles as any as Array<any>).find(
-          (v) =>
-            v.roleName === participant.assignedParticipantRoles.roleNames[0],
-        )
-      ) {
-        const roleConsent = (participantData.roles as any as Array<any>).find(
-          (v) => {
-            return Object.values(v.data).find((value) =>
-              (value as unknown as any)?.__type.includes("informed_consent"),
-            );
-          },
+      const participantRoleData = (
+        participantData.roles as any as Array<any>
+      ).find(
+        (v) => v.roleName === participant.assignedParticipantRoles.roleNames[0],
+      );
+      if (participantRoleData) {
+        const roleConsent = Object.values(participantRoleData.data).find(
+          (value) =>
+            (value as unknown as any)?.__type.includes("informed_consent"),
         );
         setConsent(roleConsent);
       }

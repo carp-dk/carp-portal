@@ -80,7 +80,6 @@ const InformedConsentCard = () => {
       const participantGroup = statuses.groups.find(
         (s) => s.participantGroupId === deploymentId,
       );
-
       const commonConsent = participantData.common.values
         ?.toArray()
         .find((v) => {
@@ -90,7 +89,7 @@ const InformedConsentCard = () => {
       const roleConsents = (participantData.roles as any as Array<any>).map(
         (v) => {
           const c =
-            Object.entries[
+            v.data[
               Object.keys(v.data).find((key) => {
                 return key.includes("informed_consent");
               })
@@ -98,8 +97,11 @@ const InformedConsentCard = () => {
           return { v, c };
         },
       );
+
       const participantsWithConsent = participantGroup.participants.map((p) => {
-        const consent = roleConsents.find((rc) => rc.v.roleName === p.role);
+        const consent = roleConsents.find((rc) =>
+          p.role.localeCompare(rc.v.roleName),
+        );
         if (consent) return { participant: p, consent: consent.c };
         if (commonConsent) return { participant: p, consent: commonConsent };
         return { participant: p, consent: null };
