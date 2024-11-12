@@ -28,7 +28,7 @@ export const ModalBox = styled("div")(({ theme }) => ({
 }));
 
 export const Title = styled(Typography)(({ theme }) => ({
-  color: theme.palette.error.main,
+  color: theme.palette.primary.main,
   marginBottom: 24,
 }));
 

@@ -99,25 +99,25 @@ const Devices = () => {
             .map((connection) => {
               const deviceStatus = participantGroupsAndStatuses.groups
                 .find((s) => s.participantGroupId === deploymentId)
-                .deploymentStatus.deviceStatusList.find(
+                ?.deploymentStatus.deviceStatusList.find(
                   (d) => d.device.roleName === connection.roleName,
                 );
               return {
                 name: connection.roleName,
-                type: deviceStatus.device.__type,
-                status: deviceStatus.__type.split(".").pop(),
+                type: deviceStatus?.device.__type,
+                status: deviceStatus?.__type.split(".").pop(),
               };
             });
           const deviceStatus = participantGroupsAndStatuses.groups
             .find((s) => s.participantGroupId === deploymentId)
-            .deploymentStatus.deviceStatusList.find(
+            ?.deploymentStatus.deviceStatusList.find(
               (d) => d.device.roleName === device.roleName,
             );
           return {
             primaryDevice: {
               name: device.roleName,
-              type: deviceStatus.device.__type,
-              status: deviceStatus.__type.split(".").pop(),
+              type: deviceStatus?.device.__type,
+              status: deviceStatus?.__type.split(".").pop(),
             },
             connections,
           };
