@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { formatDateTime } from "@Utils/utility";
+import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
 import {
   DownloadButton,
   LastUploadText,
@@ -158,9 +158,8 @@ const InformedConsentCard = () => {
                     </LastUploadText>
                   </i>
                   <DownloadButton
-                    onClick={(e) =>
-                      exportToJson(e, participant.participantId, consent)
-                    }
+                    document={convertICToReactPdf(JSON.parse(consent.consent))}
+                    fileName="informedConsent.pdf"
                   >
                     <FileDownloadOutlinedIcon />
                     <Typography variant="h6">

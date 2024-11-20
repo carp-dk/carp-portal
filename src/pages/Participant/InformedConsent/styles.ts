@@ -1,4 +1,5 @@
-import { Button, Card, Divider, Typography } from "@mui/material";
+import { Card, Divider, Typography } from "@mui/material";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { styled } from "@Utils/theme";
 
 export const StyledCard = styled(Card)({
@@ -22,17 +23,19 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.grey[500],
   borderWidth: 1,
   width: 1,
-  marginRight: 8,
+  marginRight: 16,
   marginLeft: 16,
   height: 20,
 }));
 
-export const DownloadButton = styled(Button)(({ theme }) => ({
+export const DownloadButton = styled(PDFDownloadLink)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   color: theme.palette.primary.main,
   backgroundColor: "transparent",
   border: "none",
   cursor: "pointer",
-  textTransform: "none",
+  textDecoration: "none",
   gap: 4,
 }));
 

@@ -18,6 +18,7 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import WatchRoundedIcon from "@mui/icons-material/WatchRounded";
+import { Document, Page, Text, StyleSheet } from "@react-pdf/renderer";
 
 import getSerializer = kotlinx.serialization.getSerializer;
 import DefaultSerializer = carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
@@ -307,4 +308,111 @@ export const getParticipantDataName = (dataType: string) => {
     default:
       return "";
   }
+};
+
+interface ConsentObject {
+  __type: string;
+  identifier: string;
+  endDate: string;
+  consentDocument: ConsentDocument;
+  signature: Signature;
+}
+
+interface Signature {
+  __type: string;
+  firstName: string;
+  lastName: string;
+  signatureImage: string;
+}
+
+interface SignatureMetaData {
+  __type: string;
+  identifier: string;
+  requiresName: boolean;
+  requiresSignatureImage: boolean;
+}
+
+interface ConsentDocument {
+  __type: string;
+  title: string;
+  signatures: SignatureMetaData[];
+  sections: Section[];
+}
+
+interface Section {
+  __type: string;
+  type: string;
+  title: string;
+  summary: string;
+  content: string;
+}
+
+const styles = StyleSheet.create({
+  body: {
+    paddingTop: 35,
+    paddingBottom: 65,
+    paddingHorizontal: 35,
+  },
+  h1: {
+    fontSize: 24,
+    textAlign: "center",
+    fontWeight: 700,
+    margin: 12,
+  },
+  h2: {
+    fontSize: 18,
+    fontWeight: 500,
+    margin: "12 12 0 12",
+  },
+  text: {
+    margin: "12 12 12 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
+  italics: {
+    fontStyle: "italic",
+    textAlign: "justify",
+    margin: "12 12 0 12",
+    fontSize: 12,
+    fontWeight: 300,
+    fontFamily: "Times-Italic",
+  },
+  pageNumber: {
+    position: "absolute",
+    fontSize: 12,
+    bottom: 30,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    color: "grey",
+  },
+});
+
+export const convertICToReactPdf = (consent: ConsentObject) => {
+  return (
+    <Document>
+      <Page style={styles.body}>
+        <Text style={styles.h1}>{consent.consentDocument.title}</Text>
+        {consent.consentDocument.sections.map((section) => {
+          return (
+            <div key={section.type}>
+              <Text style={styles.h2}>{section.title}</Text>
+              <Text style={styles.italics}>
+                {section.summary.replaceAll("\n", " ")}
+              </Text>
+              <Text style={styles.text}>{section.content}</Text>
+            </div>
+          );
+        })}
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
+      </Page>
+    </Document>
+  );
 };
