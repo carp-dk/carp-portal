@@ -18,7 +18,13 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import WatchRoundedIcon from "@mui/icons-material/WatchRounded";
-import { Document, Page, Text, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  StyleSheet,
+  Image as PdfImage,
+} from "@react-pdf/renderer";
 
 import getSerializer = kotlinx.serialization.getSerializer;
 import DefaultSerializer = carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
@@ -378,6 +384,18 @@ const styles = StyleSheet.create({
     fontWeight: 300,
     fontFamily: "Times-Italic",
   },
+  date: {
+    margin: "0 12 12 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
+  signatureName: {
+    margin: "6 12 6 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
   pageNumber: {
     position: "absolute",
     fontSize: 12,
@@ -389,7 +407,33 @@ const styles = StyleSheet.create({
   },
 });
 
-export const convertICToReactPdf = (consent: ConsentObject) => {
+export const convertByteArrayToImage = async (byteArray: number[]) => {
+  const imageByteArray = new Uint8Array(byteArray);
+  const imageBlob = new Blob([imageByteArray], { type: "image/png" });
+  const imageBitmap = await createImageBitmap(imageBlob);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = imageBitmap.width;
+  canvas.height = imageBitmap.height;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.drawImage(imageBitmap, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const { data } = imageData;
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = 0;
+    data[i + 1] = 0;
+    data[i + 2] = 0;
+  }
+  ctx.putImageData(imageData, 0, 0);
+
+  return canvas.toDataURL("image/png");
+};
+
+export const convertICToReactPdf = async (consent: ConsentObject) => {
   return (
     <Document>
       <Page style={styles.body}>
@@ -405,6 +449,22 @@ export const convertICToReactPdf = (consent: ConsentObject) => {
             </div>
           );
         })}
+        <PdfImage
+          style={{ width: 150, marginLeft: 12, marginTop: 50 }}
+          src={await convertByteArrayToImage(
+            JSON.parse(consent.signature.signatureImage),
+          )}
+        />
+        <Text
+          style={styles.signatureName}
+        >{`${consent.signature.firstName} ${consent.signature.lastName}`}</Text>
+        <Text style={styles.date}>
+          {formatDateTime(consent.endDate, {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+          })}
+        </Text>
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>

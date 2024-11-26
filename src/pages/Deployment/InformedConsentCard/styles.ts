@@ -4,8 +4,8 @@ import {
   Accordion,
   AccordionSummary,
   Stack,
+  Button,
 } from "@mui/material";
-import { PDFDownloadLink } from "@react-pdf/renderer";
 import { styled } from "@Utils/theme";
 
 export const StyledAccordion = styled(Accordion)(({ expanded }) => ({
@@ -66,7 +66,7 @@ export const NameContainer = styled("div")({
   gap: 6,
 });
 
-export const DownloadButton = styled(PDFDownloadLink)(({ theme }) => ({
+export const DownloadButton = styled(Button)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   height: "36px",
@@ -76,7 +76,7 @@ export const DownloadButton = styled(PDFDownloadLink)(({ theme }) => ({
   borderColor: theme.palette.grey[700],
   borderRadius: 16,
   cursor: "pointer",
-  textDecoration: "none",
+  textTransform: "none",
   padding: "8px 16px",
   gap: 8,
 }));

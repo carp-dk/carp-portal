@@ -9,6 +9,7 @@ import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from "@Utils/queries/participants";
+import { pdf } from "@react-pdf/renderer";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
   DownloadButton,
@@ -33,6 +34,22 @@ const InformedConsent = () => {
     isLoading: participantGroupStatusLoading,
     error: participantGroupStatusError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
+
+  const downloadPdf = async () => {
+    const blob = await pdf(
+      await convertICToReactPdf(JSON.parse(consent.consent)),
+    ).toBlob();
+    const a = document.createElement("a");
+    a.download = "informedConsent.pdf";
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+  };
 
   useEffect(() => {
     if (!isLoading && !participantGroupStatusLoading) {
@@ -96,10 +113,7 @@ const InformedConsent = () => {
         {consent && (
           <>
             <StyledDivider />
-            <DownloadButton
-              document={convertICToReactPdf(JSON.parse(consent.consent))}
-              fileName="informedConsent.pdf"
-            >
+            <DownloadButton onClick={() => downloadPdf()}>
               <Typography variant="h6">Export</Typography>
               <FileDownloadOutlinedIcon fontSize="small" />
             </DownloadButton>

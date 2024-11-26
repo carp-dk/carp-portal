@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
+import { pdf } from "@react-pdf/renderer";
 import {
   DownloadButton,
   LastUploadText,
@@ -23,12 +24,6 @@ import {
   StyledStack,
 } from "./styles";
 import LoadingSkeleton from "../LoadingSkeleton";
-
-interface FileInfo {
-  data: string;
-  fileName: string;
-  fileType: string;
-}
 
 const InformedConsentCard = () => {
   const { t } = useTranslation();
@@ -48,10 +43,12 @@ const InformedConsentCard = () => {
   const [consents, setConsents] =
     useState<{ participant: ParticipantData; consent: InformedConsent }[]>();
 
-  const downloadFile = ({ data, fileName, fileType }: FileInfo) => {
-    const blob = new Blob([data], { type: fileType });
+  const downloadPdf = async (consent: InformedConsent) => {
+    const blob = await pdf(
+      await convertICToReactPdf(JSON.parse(consent.consent)),
+    ).toBlob();
     const a = document.createElement("a");
-    a.download = fileName;
+    a.download = "informedConsent.pdf";
     a.href = window.URL.createObjectURL(blob);
     const clickEvt = new MouseEvent("click", {
       view: window,
@@ -60,19 +57,6 @@ const InformedConsentCard = () => {
     });
     a.dispatchEvent(clickEvt);
     a.remove();
-  };
-
-  const exportToJson = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    participantId: string,
-    consent: InformedConsent,
-  ) => {
-    e.preventDefault();
-    downloadFile({
-      data: JSON.stringify(consent),
-      fileName: `${participantId}_informedConsent.json`,
-      fileType: "text/json",
-    });
   };
 
   useEffect(() => {
@@ -157,10 +141,7 @@ const InformedConsentCard = () => {
                       })}
                     </LastUploadText>
                   </i>
-                  <DownloadButton
-                    document={convertICToReactPdf(JSON.parse(consent.consent))}
-                    fileName="informedConsent.pdf"
-                  >
+                  <DownloadButton onClick={() => downloadPdf(consent)}>
                     <FileDownloadOutlinedIcon />
                     <Typography variant="h6">
                       {t("common:export_data")}
