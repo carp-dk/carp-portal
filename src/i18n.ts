@@ -9,7 +9,7 @@ i18n
     supportedLngs: ["en", "da"],
     lng: "en",
     fallbackLng: "en",
-    ns: ["common", "error", "deployment"],
+    ns: ["common", "error", "deployment", "participant"],
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
     },

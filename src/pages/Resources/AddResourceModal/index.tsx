@@ -29,7 +29,7 @@ interface Props {
 }
 
 const resourceTypes = {
-  "Informed Consent": "informed_consent",
+  "Consent Document": "informed_consent",
 };
 
 const validationSchema = yup.object({

@@ -10,6 +10,7 @@ import NotificationsIcon from "@mui/icons-material/NotificationsSharp";
 
 import { getUser } from "@carp-dk/authentication-react";
 import { useStudyDetails } from "@Utils/queries/studies";
+import { useTranslation } from "react-i18next";
 import {
   AccountIcon,
   Email,
@@ -26,6 +27,7 @@ import {
 import LoadingSkeleton from "../LoadingSkeleton";
 
 const BasicInfo = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { participantId, deploymentId, id: studyId } = useParams();
 
@@ -109,13 +111,19 @@ const BasicInfo = () => {
         {name}
         <Email variant="h6">{participant.email}</Email>
         <StyledDivider />
-        {!isGeneratedAccount && <RemindersContainer onClick={() => setOpen(true)}>
-        <ReminderText variant="h6">Send a reminder</ReminderText>
-        <NotificationsIcon fontSize="small" color="primary" />
-        </RemindersContainer>}
+        {!isGeneratedAccount && (
+          <RemindersContainer onClick={() => setOpen(true)}>
+            <ReminderText variant="h6">
+              {t("participant:basic_info.send_reminder")}
+            </ReminderText>
+            <NotificationsIcon fontSize="small" color="primary" />
+          </RemindersContainer>
+        )}
       </Left>
       <Right>
-        <SecondaryText variant="h5">Account ID: {participantId}</SecondaryText>
+        <SecondaryText variant="h5">
+          {t("common:participant_id", { participantId })}
+        </SecondaryText>
         <CopyButton textToCopy={participantId} idType="Account" />
       </Right>
       <SendReminderModal

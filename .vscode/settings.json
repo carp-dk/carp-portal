@@ -8,7 +8,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "i18n-ally.localesPaths": [
-    "src/locales"
+    "src/public/locales",
   ],
   "i18n-ally.keystyle": "nested",
 }
