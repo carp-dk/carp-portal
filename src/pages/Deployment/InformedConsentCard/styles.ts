@@ -1,10 +1,10 @@
 import {
-  Button,
   Divider,
   Typography,
   Accordion,
   AccordionSummary,
   Stack,
+  Button,
 } from "@mui/material";
 import { styled } from "@Utils/theme";
 
@@ -67,6 +67,8 @@ export const NameContainer = styled("div")({
 });
 
 export const DownloadButton = styled(Button)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
   height: "36px",
   color: theme.palette.primary.main,
   backgroundColor: "transparent",

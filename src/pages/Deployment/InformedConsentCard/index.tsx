@@ -13,7 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { formatDateTime } from "@Utils/utility";
+import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
+import { pdf } from "@react-pdf/renderer";
 import {
   DownloadButton,
   LastUploadText,
@@ -23,12 +24,6 @@ import {
   StyledStack,
 } from "./styles";
 import LoadingSkeleton from "../LoadingSkeleton";
-
-interface FileInfo {
-  data: string;
-  fileName: string;
-  fileType: string;
-}
 
 const InformedConsentCard = () => {
   const { t } = useTranslation();
@@ -48,10 +43,12 @@ const InformedConsentCard = () => {
   const [consents, setConsents] =
     useState<{ participant: ParticipantData; consent: InformedConsent }[]>();
 
-  const downloadFile = ({ data, fileName, fileType }: FileInfo) => {
-    const blob = new Blob([data], { type: fileType });
+  const downloadPdf = async (consent: InformedConsent) => {
+    const blob = await pdf(
+      await convertICToReactPdf(JSON.parse(consent.consent)),
+    ).toBlob();
     const a = document.createElement("a");
-    a.download = fileName;
+    a.download = "informedConsent.pdf";
     a.href = window.URL.createObjectURL(blob);
     const clickEvt = new MouseEvent("click", {
       view: window,
@@ -62,25 +59,11 @@ const InformedConsentCard = () => {
     a.remove();
   };
 
-  const exportToJson = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    participantId: string,
-    consent: InformedConsent,
-  ) => {
-    e.preventDefault();
-    downloadFile({
-      data: JSON.stringify(consent),
-      fileName: `${participantId}_informedConsent.json`,
-      fileType: "text/json",
-    });
-  };
-
   useEffect(() => {
     if (statuses && participantData) {
       const participantGroup = statuses.groups.find(
         (s) => s.participantGroupId === deploymentId,
       );
-
       const commonConsent = participantData.common.values
         ?.toArray()
         .find((v) => {
@@ -90,7 +73,7 @@ const InformedConsentCard = () => {
       const roleConsents = (participantData.roles as any as Array<any>).map(
         (v) => {
           const c =
-            Object.entries[
+            v.data[
               Object.keys(v.data).find((key) => {
                 return key.includes("informed_consent");
               })
@@ -98,8 +81,11 @@ const InformedConsentCard = () => {
           return { v, c };
         },
       );
+
       const participantsWithConsent = participantGroup.participants.map((p) => {
-        const consent = roleConsents.find((rc) => rc.v.roleName === p.role);
+        const consent = roleConsents.find((rc) =>
+          p.role.localeCompare(rc.v.roleName),
+        );
         if (consent) return { participant: p, consent: consent.c };
         if (commonConsent) return { participant: p, consent: commonConsent };
         return { participant: p, consent: null };
@@ -155,11 +141,7 @@ const InformedConsentCard = () => {
                       })}
                     </LastUploadText>
                   </i>
-                  <DownloadButton
-                    onClick={(e) =>
-                      exportToJson(e, participant.participantId, consent)
-                    }
-                  >
+                  <DownloadButton onClick={() => downloadPdf(consent)}>
                     <FileDownloadOutlinedIcon />
                     <Typography variant="h6">
                       {t("common:export_data")}

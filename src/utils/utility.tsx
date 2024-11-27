@@ -18,6 +18,13 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import WatchRoundedIcon from "@mui/icons-material/WatchRounded";
+import {
+  Document,
+  Page,
+  Text,
+  StyleSheet,
+  Image as PdfImage,
+} from "@react-pdf/renderer";
 
 import getSerializer = kotlinx.serialization.getSerializer;
 import DefaultSerializer = carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
@@ -307,4 +314,165 @@ export const getParticipantDataName = (dataType: string) => {
     default:
       return "";
   }
+};
+
+interface ConsentObject {
+  __type: string;
+  identifier: string;
+  endDate: string;
+  consentDocument: ConsentDocument;
+  signature: Signature;
+}
+
+interface Signature {
+  __type: string;
+  firstName: string;
+  lastName: string;
+  signatureImage: string;
+}
+
+interface SignatureMetaData {
+  __type: string;
+  identifier: string;
+  requiresName: boolean;
+  requiresSignatureImage: boolean;
+}
+
+interface ConsentDocument {
+  __type: string;
+  title: string;
+  signatures: SignatureMetaData[];
+  sections: Section[];
+}
+
+interface Section {
+  __type: string;
+  type: string;
+  title: string;
+  summary: string;
+  content: string;
+}
+
+const styles = StyleSheet.create({
+  body: {
+    paddingTop: 35,
+    paddingBottom: 65,
+    paddingHorizontal: 35,
+  },
+  h1: {
+    fontSize: 24,
+    textAlign: "center",
+    fontWeight: 700,
+    margin: 12,
+  },
+  h2: {
+    fontSize: 18,
+    fontWeight: 500,
+    margin: "12 12 0 12",
+  },
+  text: {
+    margin: "12 12 12 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
+  italics: {
+    fontStyle: "italic",
+    textAlign: "justify",
+    margin: "12 12 0 12",
+    fontSize: 12,
+    fontWeight: 300,
+    fontFamily: "Times-Italic",
+  },
+  date: {
+    margin: "0 12 12 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
+  signatureName: {
+    margin: "6 12 6 12",
+    fontSize: 12,
+    textAlign: "justify",
+    fontWeight: 300,
+  },
+  pageNumber: {
+    position: "absolute",
+    fontSize: 12,
+    bottom: 30,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    color: "grey",
+  },
+});
+
+export const convertByteArrayToImage = async (byteArray: number[]) => {
+  const imageByteArray = new Uint8Array(byteArray);
+  const imageBlob = new Blob([imageByteArray], { type: "image/png" });
+  const imageBitmap = await createImageBitmap(imageBlob);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = imageBitmap.width;
+  canvas.height = imageBitmap.height;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.drawImage(imageBitmap, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  const { data } = imageData;
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = 0;
+    data[i + 1] = 0;
+    data[i + 2] = 0;
+  }
+  ctx.putImageData(imageData, 0, 0);
+
+  return canvas.toDataURL("image/png");
+};
+
+export const convertICToReactPdf = async (consent: ConsentObject) => {
+  return (
+    <Document>
+      <Page style={styles.body}>
+        <Text style={styles.h1}>{consent.consentDocument.title}</Text>
+        {consent.consentDocument.sections.map((section) => {
+          return (
+            <div key={section.type}>
+              <Text style={styles.h2}>{section.title}</Text>
+              <Text style={styles.italics}>
+                {section.summary.replaceAll("\n", " ")}
+              </Text>
+              <Text style={styles.text}>{section.content}</Text>
+            </div>
+          );
+        })}
+        <PdfImage
+          style={{ width: 150, marginLeft: 12, marginTop: 50 }}
+          src={await convertByteArrayToImage(
+            JSON.parse(consent.signature.signatureImage),
+          )}
+        />
+        <Text
+          style={styles.signatureName}
+        >{`${consent.signature.firstName} ${consent.signature.lastName}`}</Text>
+        <Text style={styles.date}>
+          {formatDateTime(consent.endDate, {
+            year: "numeric",
+            month: "long",
+            day: "2-digit",
+          })}
+        </Text>
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+          fixed
+        />
+      </Page>
+    </Document>
+  );
 };

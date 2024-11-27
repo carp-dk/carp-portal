@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { formatDateTime } from "@Utils/utility";
+import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from "@Utils/queries/participants";
+import { pdf } from "@react-pdf/renderer";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
   DownloadButton,
@@ -18,12 +19,6 @@ import {
   StyledDivider,
   Title,
 } from "./styles";
-
-interface FileInfo {
-  data: string;
-  fileName: string;
-  fileType: string;
-}
 
 const InformedConsent = () => {
   const { participantId, deploymentId, id: studyId } = useParams();
@@ -40,10 +35,12 @@ const InformedConsent = () => {
     error: participantGroupStatusError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
 
-  const downloadFile = ({ data, fileName, fileType }: FileInfo) => {
-    const blob = new Blob([data], { type: fileType });
+  const downloadPdf = async () => {
+    const blob = await pdf(
+      await convertICToReactPdf(JSON.parse(consent.consent)),
+    ).toBlob();
     const a = document.createElement("a");
-    a.download = fileName;
+    a.download = "informedConsent.pdf";
     a.href = window.URL.createObjectURL(blob);
     const clickEvt = new MouseEvent("click", {
       view: window,
@@ -52,15 +49,6 @@ const InformedConsent = () => {
     });
     a.dispatchEvent(clickEvt);
     a.remove();
-  };
-
-  const exportToJson = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    downloadFile({
-      data: JSON.stringify(consent),
-      fileName: "informedConsent.json",
-      fileType: "text/json",
-    });
   };
 
   useEffect(() => {
@@ -80,23 +68,20 @@ const InformedConsent = () => {
         setConsent(consentData);
       }
 
-      if (
-        (participantData.roles as any as Array<any>).find(
-          (v) =>
-            v.roleName === participant.assignedParticipantRoles.roleNames[0],
-        )
-      ) {
-        const roleConsent = (participantData.roles as any as Array<any>).find(
-          (v) => {
-            return Object.values(v.data).find((value) =>
-              (value as unknown as any)?.__type.includes("informed_consent"),
-            );
-          },
+      const participantRoleData = (
+        participantData.roles as any as Array<any>
+      ).find(
+        (v) => v.roleName === participant.assignedParticipantRoles.roleNames[0],
+      );
+      if (participantRoleData) {
+        const roleConsent = Object.values(participantRoleData.data).find(
+          (value) =>
+            (value as unknown as any)?.__type.includes("informed_consent"),
         );
         setConsent(roleConsent);
       }
     }
-  }, [participantData]);
+  }, [participantGroupStatus, participantData]);
 
   const dateOfLastUpdate = useMemo(() => {
     if (consent) {
@@ -128,7 +113,7 @@ const InformedConsent = () => {
         {consent && (
           <>
             <StyledDivider />
-            <DownloadButton onClick={(e) => exportToJson(e)}>
+            <DownloadButton onClick={() => downloadPdf()}>
               <Typography variant="h6">Export</Typography>
               <FileDownloadOutlinedIcon fontSize="small" />
             </DownloadButton>
