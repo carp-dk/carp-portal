@@ -90,7 +90,7 @@ const ProtocolInfo = () => {
           </AddVersionButton>
           <VersionContainer>
             <ProtocolVersion variant="h4">
-              Study protocol v{protocol.versionTag}
+              Current version: {protocol.versionTag}
             </ProtocolVersion>
             <Typography variant="h6">
               Update the Protocol data by adding a new version
