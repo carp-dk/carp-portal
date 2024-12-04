@@ -61,7 +61,7 @@ type Props = {
 };
 
 const ProtocolInfo = ({ protocolId }: Props) => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery("(max-width:1725px)");
   const { data: protocol, isLoading: protocolLoading } =
     useProtocolDetails(protocolId);
   if (protocolLoading) return <ProtocolInfoSkeleton />;

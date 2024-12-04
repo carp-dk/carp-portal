@@ -55,9 +55,6 @@ export const StyledContainer = styled("div")(({ theme }) => ({
     backgroundColor: "#fff",
     boxShadow: "none",
   },
-  "& .MuiPaper-root .MuiBox-root .MuiBox-root .MuiBox-root": {
-    width: "100%",
-  },
   "& .MuiPaper-root > div.MuiBox-root:last-of-type > div > div": {
     width: "100%",
     paddingLeft: 8,

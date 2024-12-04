@@ -6,12 +6,25 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from "@Utils/queries/studies";
-import { FormLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  FormLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import LinkIcon from "@mui/icons-material/Link";
 import { useFormik } from "formik";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import * as yup from "yup";
 import StudySetupSkeleton from "../StudySetupSkeleton";
-import { Heading, StyledCard, Subheading } from "../styles";
+import {
+  Heading,
+  ProtocolInformation,
+  StyledCard,
+  Subheading,
+} from "../styles";
 
 const studyDetailsValidationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -24,6 +37,7 @@ const studyProtocolValidationSchema = yup.object({
 
 const StudyData = () => {
   const { id: studyId } = useParams();
+  const navigate = useNavigate();
   const {
     data: studyDetails,
     isLoading: studyDetailsLoading,
@@ -129,9 +143,24 @@ const StudyData = () => {
         }
         onBlur={handleDetailsBlur}
       />
-      <FormLabel disabled={!studyStatus.canSetStudyProtocol} required>
-        Protocol
-      </FormLabel>
+      <Stack
+        spacing={2}
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        margin="16px 0 8px 0"
+      >
+        <FormLabel disabled={!studyStatus.canSetStudyProtocol} required>
+          Protocol
+        </FormLabel>
+        <ProtocolInformation
+          direction="row"
+          onClick={() => navigate(`/studies/${studyId}/protocol`)}
+        >
+          <Typography variant="h6">See detailed information</Typography>
+          <LinkIcon sx={{ fontSize: 16 }} />
+        </ProtocolInformation>
+      </Stack>
       <Select
         disabled={!studyStatus.canSetStudyProtocol}
         variant="outlined"

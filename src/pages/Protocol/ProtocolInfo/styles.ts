@@ -27,7 +27,7 @@ export const Left = styled("div")({
   gap: 26,
   flexShrink: 2,
   "@media (max-width: 1250px)": {
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     width: "100%",
   },
 });

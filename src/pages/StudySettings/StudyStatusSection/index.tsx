@@ -198,8 +198,8 @@ const StudyStatusSection: React.FC = () => {
           <DeleteStudyButton
             onClick={() => setOpenDeleteConfirmationModal(true)}
           >
-            <Typography variant="h6">Delete Study</Typography>
             <DeleteForeverRoundedIcon fontSize="small" />
+            <Typography variant="h5">Delete Study</Typography>
           </DeleteStudyButton>
         </InnerLeftContainer>
         {!isDownMd && <StyledDivider />}

@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 
 export const StyledContainer = styled("div", {
@@ -35,4 +35,10 @@ export const Subheading = styled(Typography, {
 })<{ disabled?: boolean }>(({ disabled, theme }) => ({
   color: theme.palette.text.primary,
   opacity: disabled ? "0.5" : 1,
+}));
+
+export const ProtocolInformation = styled(Stack)(({ theme }) => ({
+  gap: "8px",
+  color: theme.palette.primary.main,
+  cursor: "pointer",
 }));
