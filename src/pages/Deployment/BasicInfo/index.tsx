@@ -131,45 +131,58 @@ const BasicInfo = () => {
           )}
         </Left>
         <Right>
-          <Stack direction="column" gap="8px">
-            <SecondaryText variant="h6">
-              {`${t("common:created_on", {
-                date: formatDateTime(deployment.deploymentStatus.createdOn, {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-                }),
-              })}`}
-            </SecondaryText>
-            {deployment.deploymentStatus.startedOn && (
+          <Stack direction="column">
+            <Stack
+              direction="row"
+              gap="8px"
+              justifyContent="end"
+              marginRight="36px"
+            >
               <SecondaryText variant="h6">
-                {`${t("common:started_on", {
-                  date: formatDateTime(deployment.deploymentStatus.startedOn, {
+                {`${t("common:created_on", {
+                  date: formatDateTime(deployment.deploymentStatus.createdOn, {
                     year: "numeric",
                     month: "numeric",
                     day: "numeric",
                   }),
                 })}`}
               </SecondaryText>
-            )}
-            {deployment.deploymentStatus.stoppedOn && (
+              {deployment.deploymentStatus.startedOn && (
+                <SecondaryText variant="h6">
+                  {`${t("common:started_on", {
+                    date: formatDateTime(
+                      deployment.deploymentStatus.startedOn,
+                      {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                      },
+                    ),
+                  })}`}
+                </SecondaryText>
+              )}
+              {deployment.deploymentStatus.stoppedOn && (
+                <SecondaryText variant="h6">
+                  {`${t("common:stopped_on", {
+                    date: formatDateTime(
+                      deployment.deploymentStatus.stoppedOn,
+                      {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                      },
+                    ),
+                  })}`}
+                </SecondaryText>
+              )}
+            </Stack>
+            <StyledDivider />
+            <Stack direction="row" gap="16px" justifyContent="end">
               <SecondaryText variant="h6">
-                {`${t("common:stopped_on", {
-                  date: formatDateTime(deployment.deploymentStatus.stoppedOn, {
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                  }),
-                })}`}
+                {t("common:deployment_id", { id: deploymentId })}
               </SecondaryText>
-            )}
-          </Stack>
-          <StyledDivider />
-          <Stack direction="row" gap="8px" marginTop={1}>
-            <SecondaryText variant="h6">
-              {t("common:deployment_id", { id: deploymentId })}
-            </SecondaryText>
-            <CopyButton textToCopy={deploymentId} idType="Deployment" />
+              <CopyButton textToCopy={deploymentId} idType="Deployment" />
+            </Stack>
           </Stack>
         </Right>
       </StyledCard>
