@@ -58,6 +58,15 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
               setSnackbarError("You do not have access to this resource.");
               navigate("/", { replace: true });
             }
+            if (
+              failureCount === 1 &&
+              (error as unknown as CarpServiceError).httpResponseCode === 401
+            ) {
+              setSnackbarError(
+                "You are not authorized to access this resource.",
+              );
+              navigate("/", { replace: true });
+            }
             return failureCount < 3;
           },
         },

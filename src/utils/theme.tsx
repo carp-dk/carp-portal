@@ -1,9 +1,9 @@
 import {
-  museosans100,
-  museosans300,
-  museosans500,
-  museosans700,
-  museosans900,
+  opensans100,
+  opensans300,
+  opensans500,
+  opensans700,
+  opensans900,
 } from "@Assets/fonts";
 import { createTheme } from "@mui/material/styles";
 import { createStyled } from "@mui/system";
@@ -150,19 +150,19 @@ export const themeInstance = createTheme({
           lineHeight: "1.25rem",
           fontWeight: 300,
         },
-        "@font-face": museosans100,
+        "@font-face": opensans100,
         fallbacks: [
           {
-            "@font-face": museosans300,
+            "@font-face": opensans300,
           },
           {
-            "@font-face": museosans500,
+            "@font-face": opensans500,
           },
           {
-            "@font-face": museosans700,
+            "@font-face": opensans700,
           },
           {
-            "@font-face": museosans900,
+            "@font-face": opensans900,
           },
         ],
       },
@@ -191,7 +191,7 @@ export const themeInstance = createTheme({
         root: {
           fontSize: "1rem",
           lineHeight: "1.5rem",
-          fontWeight: 600,
+          fontWeight: 700,
           marginTop: 26,
           marginBottom: 8,
           display: "block",
@@ -260,57 +260,57 @@ export const themeInstance = createTheme({
     },
   },
   typography: {
-    fontFamily: "Museo Sans",
+    fontFamily: "Open Sans",
     h1: {
       fontSize: "2.8125rem",
       lineHeight: "3.25rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h2: {
       fontSize: "1.5rem",
       lineHeight: "2rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h3: {
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h4: {
       fontSize: "1rem",
       lineHeight: "1.5rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h5: {
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h6: {
       fontSize: "0.75rem",
       lineHeight: "1rem",
-      fontWeight: 600,
+      fontWeight: 700,
       letterSpacing: "0.5px",
     },
     body2: {
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     button: {
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h1_web: {
       fontSize: "2.8125rem",
       lineHeight: "3.25rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h2_web: {
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
-      fontWeight: 600,
+      fontWeight: 700,
     },
     h3_web: {
       fontSize: "1.375rem",

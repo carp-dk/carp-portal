@@ -21,7 +21,6 @@ export const Left = styled("div")({
 
 export const Right = styled("div")({
   display: "flex",
-  alignItems: "center",
   "& button": {
     paddingBottom: 10,
   },
@@ -30,10 +29,11 @@ export const Right = styled("div")({
 export const StyledDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.grey[300],
   borderWidth: 1,
-  width: 1,
-  marginRight: 10,
-  marginLeft: 10,
-  height: 64,
+  width: 400,
+  marginTop: 10,
+  marginBottom: 10,
+  marginRight: 36,
+  height: 1,
 }));
 
 export const SecondaryText = styled(Typography)(({ theme }) => ({

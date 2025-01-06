@@ -15,7 +15,7 @@ export const StyledContainer = styled(Card)(({ theme }) => ({
   padding: "0 32px",
   boxShadow: "none",
   gap: 24,
-  "@media (max-width: 1250px)": {
+  "@media (max-width: 1725px)": {
     height: "auto",
     padding: 24,
     flexDirection: "column",
@@ -30,7 +30,7 @@ export const Left = styled("div")({
   gap: 8,
   height: "100%",
   flexShrink: 2,
-  "@media (max-width: 1250px)": {
+  "@media (max-width: 1725px)": {
     justifyContent: "space-between",
     width: "100%",
   },
@@ -60,7 +60,7 @@ export const Right = styled("div")({
   justifyContent: "end",
   flexShrink: 0,
   gap: 18,
-  "@media (max-width: 1250px)": {
+  "@media (max-width: 1725px)": {
     justifyContent: "space-between",
     width: "100%",
   },
@@ -109,7 +109,7 @@ export const CreationInfoContainer = styled("div")(({ theme }) => ({
   color: theme.palette.text.secondary,
   height: 20,
   padding: 2,
-  "@media (max-width: 1250px)": {
+  "@media (max-width: 1725px)": {
     justifyContent: "flex-start",
   },
 }));

@@ -63,7 +63,7 @@ export const InnerLeftContainer = styled("div")({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "flex-end",
-  gap: 12,
+  gap: "4px",
   flexShrink: 0,
 });
 
@@ -108,15 +108,14 @@ export const CreationInfoContainer = styled("div")(({ theme }) => ({
 }));
 
 export const DeleteStudyButton = styled(Button)(({ theme }) => ({
-  padding: 2,
-  height: 20,
+  padding: "8px 16px",
+  height: 36,
   alignSelf: "flex-end",
   color: theme.palette.error.main,
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 16,
   textTransform: "none",
-  "& svg": {
-    marginLeft: 10,
-    marginRight: "-4px",
-  },
+  gap: "8px",
   "@media (max-width: 1250px)": {
     alignSelf: "flex-start",
   },

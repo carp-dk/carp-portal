@@ -84,7 +84,7 @@ const Status = () => {
           <StyledLink
             variant="h6"
             onClick={() => {
-              navigate("/protocols");
+              navigate(`/studies/${studyId}/settings`);
             }}
           >
             See detailed information in Study Settings

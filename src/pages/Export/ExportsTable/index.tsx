@@ -84,6 +84,17 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
     muiSkeletonProps: {
       animation: "wave",
     },
+    muiPaginationProps: {
+      SelectProps: {
+        sx: {
+          border: "1px solid #d9d9d9",
+          borderRadius: "8px",
+          height: "35px",
+          padding: "4px 0 0 12px",
+          elevation: 3,
+        },
+      },
+    },
     state: {
       showSkeletons: exportsLoading,
     },
