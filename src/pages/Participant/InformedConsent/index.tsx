@@ -2,6 +2,7 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -12,13 +13,14 @@ import {
 import { pdf } from "@react-pdf/renderer";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
-  DownloadButton,
+  ActionButton,
   LastUploadText,
   Right,
   StyledCard,
   StyledDivider,
   Title,
 } from "./styles";
+import UploadInformedConsentModal from "./UploadInformedConsentModal";
 
 const InformedConsent = () => {
   const { participantId, deploymentId, id: studyId } = useParams();
@@ -34,6 +36,12 @@ const InformedConsent = () => {
     isLoading: participantGroupStatusLoading,
     error: participantGroupStatusError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
+
+  const [open, setOpen] = useState(false);
+
+  const onModalClose = () => {
+    setOpen(false);
+  };
 
   const downloadPdf = async () => {
     const blob = await pdf(
@@ -106,21 +114,26 @@ const InformedConsent = () => {
   }
 
   return (
-    <StyledCard elevation={2}>
-      <Title variant="h3">Informed Consent</Title>
-      <Right>
-        <LastUploadText variant="h6">{dateOfLastUpdate}</LastUploadText>
-        {consent && (
-          <>
-            <StyledDivider />
-            <DownloadButton onClick={() => downloadPdf()}>
+    <>
+      <UploadInformedConsentModal open={open} onClose={onModalClose} />
+      <StyledCard elevation={2}>
+        <Title variant="h3">Informed Consent</Title>
+        <Right>
+          <LastUploadText variant="h6">{dateOfLastUpdate}</LastUploadText>
+          {consent && <StyledDivider />}
+          <ActionButton onClick={() => setOpen(true)}>
+            <Typography variant="h6">Upload</Typography>
+            <FileUploadOutlinedIcon fontSize="small" />
+          </ActionButton>
+          {consent && (
+            <ActionButton onClick={() => downloadPdf()}>
               <Typography variant="h6">Export</Typography>
               <FileDownloadOutlinedIcon fontSize="small" />
-            </DownloadButton>
-          </>
-        )}
-      </Right>
-    </StyledCard>
+            </ActionButton>
+          )}
+        </Right>
+      </StyledCard>
+    </>
   );
 };
 
