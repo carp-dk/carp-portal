@@ -4,7 +4,7 @@ import {
   useParticipantsAccounts,
 } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { formatDate } from "@Utils/utility";
+import { formatDateTime } from "@Utils/utility";
 import carpStudies from "@cachet/carp-studies-core";
 import { ParticipantAccount } from "@carp-dk/client";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -90,7 +90,11 @@ const ParticipantsTable = ({
         if (deployment) {
           return (
             <Typography variant="h5">
-              {formatDate(deployment.invitedOn.toEpochMilliseconds())}
+              {formatDateTime(deployment.invitedOn.toEpochMilliseconds(), {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
             </Typography>
           );
         }
