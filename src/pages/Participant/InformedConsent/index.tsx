@@ -114,7 +114,7 @@ const InformedConsent = () => {
           <>
             <StyledDivider />
             <DownloadButton onClick={() => downloadPdf()}>
-              <Typography variant="h6">Export</Typography>
+              <Typography variant="h6">Download PDF</Typography>
               <FileDownloadOutlinedIcon fontSize="small" />
             </DownloadButton>
           </>

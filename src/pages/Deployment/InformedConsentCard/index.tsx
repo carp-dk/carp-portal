@@ -144,7 +144,7 @@ const InformedConsentCard = () => {
                   <DownloadButton onClick={() => downloadPdf(consent)}>
                     <FileDownloadOutlinedIcon />
                     <Typography variant="h6">
-                      {t("common:export_data")}
+                      {t("common:download_pdf")}
                     </Typography>
                   </DownloadButton>
                 </Right>
