@@ -14,7 +14,7 @@ const TooltipContent = () => {
       </Typography>
       <Typography variant="h5">
         <span style={{ color: getDeploymentStatusColor("DeployingDevices") }}>
-          Deploying Devices
+          Deploying
         </span>
         : Participants have started registering devices, but are remaining
         devices.
