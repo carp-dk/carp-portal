@@ -66,7 +66,7 @@ const DeploymentStatus = () => {
         deploying: {
           id: 1,
           value: 0,
-          label: "Deploying Devices",
+          label: "Deploying",
           color: getDeploymentStatusColor("DeployingDevices"),
         },
         running: {
