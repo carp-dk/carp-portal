@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import CopyButton from "@Components/Buttons/CopyButton";
-import { ParticipantGroup } from "@carp-dk/client";
+import { ParticipantGroup } from "@carp-dk/client/models/ParticipantGroups";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Skeleton, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
@@ -79,7 +79,11 @@ const DeploymentCard = ({
             )
           }
         >
-          {names && names[0].length > 0 ? names : <i>Generated deployment</i>}
+          {!deployment.participants.every((p) => p.email == null) ? (
+            names
+          ) : (
+            <i>Generated deployment</i>
+          )}
         </Names>
         <StyledDivider />
         <HorizontalStatusContainer>

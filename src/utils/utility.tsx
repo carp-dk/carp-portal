@@ -68,7 +68,7 @@ export const formatDateTime = (
   },
 ) => {
   const date = new Date(dateString);
-  return `${date.toLocaleString("en-GB", options)}`;
+  return `${date.toLocaleString("en-US", options)}`;
 };
 
 export const formatDate = (dateString: number | string) => {

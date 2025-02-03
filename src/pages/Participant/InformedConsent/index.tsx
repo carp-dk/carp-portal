@@ -185,18 +185,19 @@ const InformedConsent = () => {
                 <Typography variant="h6">{t("common:upload")}</Typography>
                 <FileUploadOutlinedIcon fontSize="small" />
               </ActionButton>
-              {consentFile && (
-                <ActionButton onClick={() => downloadFile()}>
-                  <Typography variant="h6">{t("common:download")}</Typography>
-                  <FileDownloadOutlinedIcon fontSize="small" />
-                </ActionButton>
-              )}
+              <ActionButton
+                onClick={() => downloadFile()}
+                disabled={!consentFile}
+              >
+                <Typography variant="h6">{t("common:download")}</Typography>
+                <FileDownloadOutlinedIcon fontSize="small" />
+              </ActionButton>
             </Stack>
             <Stack
               display="grid"
               direction="row"
               alignItems="center"
-              gridTemplateColumns="310px 20px 100px 100px"
+              gridTemplateColumns="310px 20px 200px"
             >
               <LastUploadText variant="h6" textAlign="end">
                 {dateOfLastUpdateForParticipantData}
@@ -204,7 +205,9 @@ const InformedConsent = () => {
               {consent && <StyledDivider />}
               {consent && (
                 <ActionButton onClick={() => downloadPdf()}>
-                  <Typography variant="h6">{t("common:export")}</Typography>
+                  <Typography variant="h6">
+                    {t("common:download_pdf")}
+                  </Typography>
                   <FileDownloadOutlinedIcon fontSize="small" />
                 </ActionButton>
               )}

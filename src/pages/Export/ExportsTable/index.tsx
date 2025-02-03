@@ -53,7 +53,7 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
       },
       {
         accessorKey: "download",
-        header: "Export",
+        header: "Download",
         Cell: DownloadButton,
         enableSorting: false,
         size: 100,

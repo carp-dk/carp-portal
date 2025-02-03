@@ -16,5 +16,6 @@
   "add": "Add",
   "download": "Download",
   "export": "Export",
-  "upload": "Upload"
+  "upload": "Upload",
+  "download_pdf": "Download PDF"
 }
