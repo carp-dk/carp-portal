@@ -17,5 +17,6 @@
   "download": "Download",
   "export": "Export",
   "upload": "Upload",
-  "download_pdf": "Download PDF"
+  "download_pdf": "Download PDF",
+  "download_uploaded_file": "Download uploaded file"
 }
