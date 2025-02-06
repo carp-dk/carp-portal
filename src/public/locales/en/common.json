@@ -13,5 +13,10 @@
   "last_data_one": "Last data: {{count}} day ago",
   "last_data_other": "Last data: {{count}} days ago",
   "participant_id": "Participant ID: {{participantId}}",
-  "download_pdf": "Download PDF"
+  "add": "Add",
+  "download": "Download",
+  "export": "Export",
+  "upload": "Upload",
+  "download_pdf": "Download PDF",
+  "download_uploaded_file": "Download uploaded file"
 }
