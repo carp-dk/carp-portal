@@ -1,13 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import * as yup from "yup";
 import carpStudies from "@cachet/carp-studies-core";
-import carpDeployments from "@cachet/carp-deployments-core";
 import { useFormik } from "formik";
 import { UseMutationResult } from "@tanstack/react-query";
-import ddk = carpDeployments.dk;
+import { Data } from "@carp-dk/client";
 import sdk = carpStudies.dk;
 import ExpectedParticipantData = sdk.cachet.carp.common.application.users.ExpectedParticipantData;
-import Data = ddk.cachet.carp.common.application.data.Data;
 
 const phoneNumberValidationSchema = yup
   .object({
@@ -206,7 +204,10 @@ const getParticipantDataFormik = (
 
   startingData?.forEach((data) => {
     const [k, e] = Object.entries(data)[0];
-    initialValues[k.split(".").pop()] = { ...e };
+    initialValues[k.split(".").pop()] = {
+      ...initialValues[k.split(".").pop()],
+      ...e,
+    };
   });
 
   const formik = useFormik({

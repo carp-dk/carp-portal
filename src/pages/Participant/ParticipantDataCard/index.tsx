@@ -177,7 +177,7 @@ const ParticipantDataCard = () => {
                           disabled={!editing}
                           required
                           name={`${data.inputDataType.name}.value`}
-                          value={participantDataFromik.values.sex.value}
+                          value={participantDataFromik.values.sex.value ?? ""}
                           onChange={participantDataFromik.handleChange}
                           onBlur={participantDataFromik.handleBlur}
                           label={getInputDataName(data.inputDataType.name)}

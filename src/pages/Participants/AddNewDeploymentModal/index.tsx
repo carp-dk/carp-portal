@@ -5,8 +5,12 @@ import {
 } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { getRandomNumber } from "@Utils/utility";
-import carpStudies from "@cachet/carp-studies-core";
-import { ParticipantAccount, ParticipantWithRoles } from "@carp-dk/client";
+import {
+  EmailAccountIdentity,
+  ParticipantAccount,
+  ParticipantWithRoles,
+  UsernameAccountIdentity,
+} from "@carp-dk/client";
 import {
   FormControl,
   MenuItem,
@@ -40,9 +44,6 @@ import {
   StyledTableContainer,
   StyledTableRow,
 } from "./styles";
-
-import EmailAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.EmailAccountIdentity;
-import UsernameAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.UsernameAccountIdentity;
 
 type Props = {
   open: boolean;

@@ -1,17 +1,14 @@
 import carpApi from "@Utils/api/api";
 import { useCurrentUser } from "@Utils/queries/auth";
 import { useSnackbar } from "@Utils/snackbar";
-import carpProtocols from "@cachet/carp-protocols-core";
 import {
   CarpServiceError,
   LatestProtocol,
   StudyProtocol,
+  StudyProtocolSnapshot,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-
-type StudyProtocolSnapshot =
-  carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot;
 
 export const useProtocols = () => {
   const { data: currentUser } = useCurrentUser();

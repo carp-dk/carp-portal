@@ -8,12 +8,12 @@ import {
   useStudyStatus,
 } from "@Utils/queries/studies";
 import { formatDateTime } from "@Utils/utility";
-import carpStudies from "@cachet/carp-studies-core";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { Skeleton, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { StudyStatus } from "@carp-dk/client";
 import StartStudyConfirmationModal from "../StartStudyConfirmationModal";
 import {
   Container,
@@ -32,7 +32,6 @@ import {
   StyledDivider,
   StyledStatusDot,
 } from "./styles";
-import StudyStatus = carpStudies.dk.cachet.carp.studies.application.StudyStatus;
 
 const StudyStatusSectionSkeleton: React.FC = () => {
   const isDownMd = useMediaQuery("(max-width:1250px)");
