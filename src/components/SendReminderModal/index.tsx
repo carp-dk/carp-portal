@@ -2,7 +2,7 @@ import { Modal, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import * as yup from "yup";
-import { GenericEmailRequest } from "@carp-dk/client/models/Email";
+import { GenericEmailRequest } from "@carp-dk/client";
 import { usePostEmailSendGeneric } from "@Utils/queries/participants";
 import {
   CancelButton,

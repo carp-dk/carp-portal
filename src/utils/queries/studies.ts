@@ -1,8 +1,5 @@
 import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
-import carpProtocols from "@cachet/carp-protocols-core";
-import carpStudies from "@cachet/carp-studies-core";
-import { getConfig } from "@carp-dk/authentication-react";
 
 import {
   CarpServiceError,
@@ -13,40 +10,19 @@ import {
   StudyOverview,
   User,
   CarpFile,
+  StudyProtocolSnapshot,
+  StudyDetails,
+  StudyStatus,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "./auth";
-
-type StudyProtocolSnapshotType =
-  carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot;
-
-type StudyStatus = carpStudies.dk.cachet.carp.studies.application.StudyStatus;
-type StudyDetails = carpStudies.dk.cachet.carp.studies.application.StudyDetails;
-type StudyDescriptionUpdateParams = {
-  studyId: string;
-  description: string;
-  name: string;
-};
-type StudyDetailsUpdateParams = {
-  studyId: string;
-  description: string;
-  name: string;
-};
-type StudyCreationParams = {
-  description: string;
-  name: string;
-};
-type SummaryCreationParams = {
-  studyId: string;
-  deploymentIds?: string[];
-};
 
 export const useStudies = () => {
   const { data: currentUser, isLoading: isCurrentUserLoading } =
     useCurrentUser();
 
   return useQuery<StudyOverview[], CarpServiceError, StudyOverview[], any>({
-    queryFn: () => carpApi.getStudiesOverview(getConfig()),
+    queryFn: () => carpApi.studies.getOverview(),
     queryKey: ["studies"],
     enabled: currentUser !== undefined && !isCurrentUserLoading,
   });
@@ -60,14 +36,21 @@ export const useSetStudyDescription = (
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: StudyDescriptionUpdateParams) => {
-      await carpApi.setInternalDescription_CORE(
-        params.studyId,
-        params.name,
-        params.description,
-        getConfig(),
-      );
-      return params;
+    mutationFn: async ({
+      studyId,
+      name,
+      description,
+    }: {
+      studyId: string;
+      name: string;
+      description: string;
+    }) => {
+      await carpApi.study.setDescription({
+        studyId,
+        studyName: name,
+        studyDescription: description,
+      });
+      return { studyId, name, description };
     },
     onMutate: async (params) => {
       await queryClient.cancelQueries({
@@ -94,7 +77,7 @@ export const useSetStudyDescription = (
       setInEdit(false);
     },
     onError: (error: CarpServiceError, params, context) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
       queryClient.setQueryData(
         ["studyDetails", params.studyId],
         context.previousValue,
@@ -109,25 +92,39 @@ export const useSetStudyDetails = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: StudyDetailsUpdateParams) => {
-      return carpApi.setInternalDescription_CORE(
-        params.studyId,
-        params.name,
-        params.description,
-        getConfig(),
-      );
+    mutationFn: async ({
+      studyId,
+      name,
+      description,
+    }: {
+      studyId: string;
+      name: string;
+      description: string;
+    }) => {
+      return carpApi.study.setDescription({
+        studyId,
+        studyName: name,
+        studyDescription: description,
+      });
     },
-    onSuccess: (_, data: StudyDetailsUpdateParams) => {
+    onSuccess: (
+      _,
+      {
+        studyId,
+      }: {
+        studyId: string;
+      },
+    ) => {
       setSnackbarSuccess("Updated study details!");
       queryClient.invalidateQueries({
-        queryKey: ["studyDetails", data.studyId],
+        queryKey: ["studyDetails", studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["studyStatus", data.studyId],
+        queryKey: ["studyStatus", studyId],
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -138,13 +135,18 @@ export const useCreateStudy = () => {
   const { data: currentUser } = useCurrentUser();
 
   return useMutation({
-    mutationFn: async (params: StudyCreationParams) => {
-      return carpApi.createStudy_CORE(
-        currentUser.accountId.stringRepresentation,
-        params.name,
-        params.description,
-        getConfig(),
-      );
+    mutationFn: async ({
+      name,
+      description,
+    }: {
+      name: string;
+      description: string;
+    }) => {
+      return carpApi.studies.create({
+        ownerId: currentUser.accountId.stringRepresentation,
+        name,
+        description,
+      });
     },
     onSuccess: () => {
       setSnackbarSuccess("Study created successfuly");
@@ -153,21 +155,21 @@ export const useCreateStudy = () => {
       queryClient.invalidateQueries({ queryKey: ["studies"] });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
 
 export const useStudyStatus = (studyId: string) => {
   return useQuery<StudyStatus, CarpServiceError, StudyStatus, any>({
-    queryFn: () => carpApi.getStudyStatus_CORE(studyId, getConfig()),
+    queryFn: () => carpApi.study.getStatus({ studyId }),
     queryKey: ["studyStatus", studyId],
   });
 };
 
 export const useStudyDetails = (studyId: string) => {
   return useQuery<StudyDetails, CarpServiceError, StudyDetails, any>({
-    queryFn: () => carpApi.getStudyDetails_CORE(studyId, getConfig()),
+    queryFn: () => carpApi.study.getDetails({ studyId }),
     queryKey: ["studyDetails", studyId],
     retry: 1,
   });
@@ -176,7 +178,7 @@ export const useStudyDetails = (studyId: string) => {
 export const useResearchers = (studyId: string) => {
   return useQuery<User[], CarpServiceError, User[], any>({
     queryFn: async () => {
-      return carpApi.getResearchersForStudy(studyId, getConfig());
+      return carpApi.study.researchers.getStudyResearchers({ studyId });
     },
     queryKey: ["researchers", studyId],
   });
@@ -189,9 +191,12 @@ export const useSetStudyProtocol = () => {
   return useMutation({
     mutationFn: async (data: {
       studyId: string;
-      protocol: StudyProtocolSnapshotType;
+      protocol: StudyProtocolSnapshot;
     }) => {
-      return carpApi.setProtocol_CORE(data.studyId, data.protocol, getConfig());
+      return carpApi.study.setProtocol({
+        studyId: data.studyId,
+        protocol: data.protocol,
+      });
     },
     onSuccess: (_, data) => {
       setSnackbarSuccess("Updated protocol!");
@@ -203,7 +208,7 @@ export const useSetStudyProtocol = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -218,12 +223,11 @@ export const useSetStudyInvitation = () => {
       invitationName: string;
       invitationDescription: string;
     }) => {
-      return carpApi.setInvitation_CORE(
-        data.studyId,
-        data.invitationName,
-        data.invitationDescription,
-        getConfig(),
-      );
+      return carpApi.study.setInvitation({
+        studyId: data.studyId,
+        title: data.invitationName,
+        description: data.invitationDescription,
+      });
     },
     onSuccess: (_, data) => {
       setSnackbarSuccess("Updated study invitation details!");
@@ -235,7 +239,7 @@ export const useSetStudyInvitation = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -246,14 +250,14 @@ export const useSetStudyLive = () => {
 
   return useMutation({
     mutationFn: async (studyId: string) => {
-      return carpApi.goLive_CORE(studyId, getConfig());
+      return carpApi.study.goLive({ studyId });
     },
     onSuccess: (_, studyId) => {
       queryClient.invalidateQueries({ queryKey: ["studyStatus", studyId] });
       setSnackbarSuccess("Study is now live!");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -264,17 +268,16 @@ export const useAddResearcherToStudy = (studyId: string) => {
 
   return useMutation({
     mutationFn: async (email: string) => {
-      const isResearcher = await carpApi.isAccountOfRole(
-        email,
-        "RESEARCHER",
-        getConfig(),
-      );
+      const isResearcher = await carpApi.accounts.isAccountOfRole({
+        emailAddress: email,
+        role: "RESEARCHER",
+      });
 
       if (!isResearcher) {
         setSnackbarError("Email does not belong to a researcher.");
         return null;
       }
-      return carpApi.addResearcherToStudy(studyId, email, getConfig());
+      return carpApi.study.researchers.addResearcherToStudy({ studyId, email });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
@@ -292,14 +295,17 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
 
   return useMutation({
     mutationFn: async (email: string) => {
-      return carpApi.removeResearchersFromStudy(studyId, email, getConfig());
+      return carpApi.study.researchers.removeResearcherFromStudy({
+        studyId,
+        email,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
       setSnackbarSuccess("Removed researcher from study!");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -312,7 +318,7 @@ export const useDeleteStudy = () => {
   return useMutation({
     mutationFn: async (studyId: string) => {
       id = studyId;
-      return carpApi.deleteStudy_CORE(studyId, getConfig());
+      return carpApi.study.delete({ studyId });
     },
     onSuccess: () => {
       queryClient.setQueryData(["studies"], (old: StudyOverview[]) =>
@@ -322,14 +328,14 @@ export const useDeleteStudy = () => {
       setSnackbarSuccess("Study deleted!");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
 
 export const useExports = (studyId: string) => {
   return useQuery<Export[], CarpServiceError>({
-    queryFn: () => carpApi.pollExports(studyId, getConfig()),
+    queryFn: () => carpApi.study.exports.getAll({ studyId }),
     queryKey: ["exports", studyId],
   });
 };
@@ -339,12 +345,17 @@ export const useCreateSummary = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: SummaryCreationParams) => {
-      return carpApi.createSummary(
-        params.studyId,
-        params.deploymentIds,
-        getConfig(),
-      );
+    mutationFn: async ({
+      studyId,
+      deploymentIds,
+    }: {
+      studyId: string;
+      deploymentIds: string[];
+    }) => {
+      return carpApi.study.exports.create({
+        studyId,
+        deploymentIds,
+      });
     },
     onSuccess: (response, variables) => {
       const { id } = response;
@@ -364,7 +375,7 @@ export const useCreateSummary = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -374,15 +385,15 @@ export const useDeleteExport = (studyId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (summaryId: string) => {
-      return carpApi.deleteExport(studyId, summaryId, getConfig());
+    mutationFn: async (exportId: string) => {
+      return carpApi.study.exports.delete({ studyId, exportId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exports", studyId] });
       setSnackbarSuccess("Export deleted!");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -393,16 +404,15 @@ export const useDownloadSummary = () => {
   return useMutation({
     mutationFn: async ({
       studyId,
-      summaryId,
+      exportId,
     }: {
       studyId: string;
-      summaryId: string;
+      exportId: string;
     }) => {
-      const response = await carpApi.downloadExport(
+      const response = await carpApi.study.exports.download({
         studyId,
-        summaryId,
-        getConfig(),
-      );
+        exportId,
+      });
       // @ts-ignore: idk
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const blob = new Blob([response.data], { type: "application/zip" });
@@ -418,19 +428,18 @@ export const useDownloadSummary = () => {
       setSnackbarSuccess("Export will start shortly");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
 
 const getCollectionFiles = async (collectionName: string, studyId: string) => {
   try {
-    return await carpApi.getCollectionByName(
+    return await carpApi.study.collections.getByName({
       collectionName,
       studyId,
-      getConfig(),
-    );
-  } catch {
+    });
+  } catch (error) {
     return { documents: [] } as Collection;
   }
 };
@@ -449,11 +458,10 @@ export const useDeleteStudyAnnouncement = () => {
 
   return useMutation({
     mutationFn: async (props: { studyId: string; announcementId: string }) => {
-      return carpApi.deleteDocumentById(
-        props.studyId,
-        props.announcementId,
-        getConfig(),
-      );
+      return carpApi.study.collections.deleteDocumentById({
+        studyId: props.studyId,
+        documentId: props.announcementId,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Announcement deleted!");
@@ -462,15 +470,13 @@ export const useDeleteStudyAnnouncement = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
 
 export const uploadImageRequest = async (studyId: string, file: File) => {
-  const formData = new FormData();
-  formData.append("image", new Blob([file]), file.name);
-  return carpApi.uploadImageToStudy(studyId, formData, getConfig());
+  return carpApi.study.collections.uploadImage({ studyId, image: file });
 };
 
 export const useCreateAnnouncement = () => {
@@ -493,12 +499,11 @@ export const useCreateAnnouncement = () => {
           throw error;
         }
       }
-      return carpApi.createDocumentInCollection(
-        "messages",
-        props.studyId,
-        announcement,
-        getConfig(),
-      );
+      return carpApi.study.collections.createDocument({
+        collectionName: "messages",
+        studyId: props.studyId,
+        document: announcement,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Announcement created!");
@@ -507,7 +512,7 @@ export const useCreateAnnouncement = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -515,11 +520,10 @@ export const useCreateAnnouncement = () => {
 export const useAnnouncement = (studyId: string, announcementId: string) => {
   return useQuery<MessageData, CarpServiceError>({
     queryFn: async () => {
-      const response = await carpApi.getDocumentById(
+      const response = await carpApi.study.collections.getDocumentById({
         studyId,
-        announcementId,
-        getConfig(),
-      );
+        documentId: announcementId,
+      });
       return response.data as MessageData;
     },
     queryKey: ["announcements", studyId, announcementId],
@@ -551,12 +555,11 @@ export const useUpdateAnnouncement = () => {
         }
       }
 
-      return carpApi.updateDocumentById(
-        props.studyId,
-        props.announcementId,
-        announcement,
-        getConfig(),
-      );
+      return carpApi.study.collections.updateDocumentById({
+        studyId: props.studyId,
+        documentId: props.announcementId,
+        document: announcement,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Announcement updated!");
@@ -573,7 +576,7 @@ export const useUpdateAnnouncement = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -596,13 +599,12 @@ export const useCreateResource = () => {
       name: string;
       resource: ResourceData;
     }) => {
-      return carpApi.createDocumentInCollection(
-        "resources",
-        props.studyId,
-        props.resource,
-        getConfig(),
-        props.name,
-      );
+      return carpApi.study.collections.createDocument({
+        collectionName: "resources",
+        studyId: props.studyId,
+        document: props.resource,
+        fileName: props.name,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Resource created!");
@@ -611,7 +613,7 @@ export const useCreateResource = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -622,11 +624,10 @@ export const useDeleteResource = () => {
 
   return useMutation({
     mutationFn: async (props: { studyId: string; resourceId: string }) => {
-      return carpApi.deleteDocumentById(
-        props.studyId,
-        props.resourceId,
-        getConfig(),
-      );
+      return carpApi.study.collections.deleteDocumentById({
+        studyId: props.studyId,
+        documentId: props.resourceId,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Resource deleted!");
@@ -635,7 +636,7 @@ export const useDeleteResource = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -652,13 +653,12 @@ export const useUpdateResource = () => {
       name: string;
     }) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return carpApi.updateDocumentById(
-        props.studyId,
-        props.resourceId,
-        props.resource,
-        getConfig(),
-        props.name,
-      );
+      return carpApi.study.collections.updateDocumentById({
+        studyId: props.studyId,
+        documentId: props.resourceId,
+        document: props.resource,
+        fileName: props.name,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Resource updated!");
@@ -667,7 +667,7 @@ export const useUpdateResource = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -690,13 +690,12 @@ export const useCreateTranslation = () => {
       name: string;
       translation: ResourceData;
     }) => {
-      return carpApi.createDocumentInCollection(
-        "localizations",
-        props.studyId,
-        props.translation,
-        getConfig(),
-        props.name,
-      );
+      return carpApi.study.collections.createDocument({
+        collectionName: "localizations",
+        studyId: props.studyId,
+        document: props.translation,
+        fileName: props.name,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Translation created!");
@@ -705,7 +704,7 @@ export const useCreateTranslation = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -721,13 +720,12 @@ export const useUpdateTranslation = () => {
       translation: ResourceData;
     }) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      return carpApi.updateDocumentById(
-        props.studyId,
-        props.translationId,
-        props.translation,
-        getConfig(),
-        props.translation.name,
-      );
+      return carpApi.study.collections.updateDocumentById({
+        studyId: props.studyId,
+        documentId: props.translationId,
+        document: props.translation,
+        fileName: props.translation.name,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Translation updated!");
@@ -736,7 +734,7 @@ export const useUpdateTranslation = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -746,11 +744,10 @@ export const useDeleteTranslation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (props: { studyId: string; translationId: string }) => {
-      return carpApi.deleteDocumentById(
-        props.studyId,
-        props.translationId,
-        getConfig(),
-      );
+      return carpApi.study.collections.deleteDocumentById({
+        studyId: props.studyId,
+        documentId: props.translationId,
+      });
     },
     onSuccess: (_, variables) => {
       setSnackbarSuccess("Translation deleted!");
@@ -759,7 +756,7 @@ export const useDeleteTranslation = () => {
       });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -770,28 +767,31 @@ export const useCreateFile = () => {
 
   return useMutation({
     mutationFn: async (props: { studyId: string; formData: FormData }) => {
-      return carpApi.createFile(props.studyId, props.formData, getConfig());
+      return carpApi.study.files.createFile({
+        studyId: props.studyId,
+        formData: props.formData,
+      });
     },
     onSuccess: () => {
       setSnackbarSuccess("File uploaded!");
       queryClient.invalidateQueries({ queryKey: ["files"] });
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
 
 export const useGetFiles = (studyId: string) => {
   return useQuery<CarpFile[], CarpServiceError>({
-    queryFn: async () => carpApi.getFiles(studyId, getConfig()),
+    queryFn: async () => carpApi.study.files.getFiles({ studyId }),
     queryKey: ["files"],
   });
 };
 
 export const useGetOneFile = (studyId: string, fileId: number) => {
   return useQuery<CarpFile, CarpServiceError>({
-    queryFn: async () => carpApi.getFile(studyId, fileId, getConfig()),
+    queryFn: async () => carpApi.study.files.getFile({ studyId, fileId }),
     queryKey: ["file", fileId],
   });
 };
@@ -801,11 +801,10 @@ export const useDownloadFile = (studyId: string) => {
 
   return useMutation({
     mutationFn: async (file: CarpFile) => {
-      const response = await carpApi.downloadFile(
+      const response = await carpApi.study.files.downloadFile({
         studyId,
-        file.id,
-        getConfig(),
-      );
+        fileId: file.id,
+      });
       const blob = new Blob([response], {
         type: file.metadata["content-type"],
       });
@@ -820,7 +819,7 @@ export const useDownloadFile = (studyId: string) => {
       setSnackbarSuccess("File will start downloading shortly");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };

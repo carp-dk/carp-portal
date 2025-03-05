@@ -1,7 +1,7 @@
 import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
 import {
-  useParticipantGroupsStatus,
   useParticipantsAccounts,
+  useParticipantsStatus,
 } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { formatDateTime } from "@Utils/utility";
@@ -51,7 +51,7 @@ const ParticipantsTable = ({
     isError: isParticipantsAccountsError,
   } = useParticipantsAccounts(studyId);
   const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
-    useParticipantGroupsStatus(studyId);
+    useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [columns, setColumns] = useState<MRT_ColumnDef<ParticipantAccount>[]>(
     [],
@@ -61,7 +61,8 @@ const ParticipantsTable = ({
   const InvitedOnColumn = useCallback(
     (cell: { row: { original: { email: string; username: string } } }) => {
       if (!isDeploymentsStatusLoading) {
-        const deployment = deploymentsStatus.find(
+        console.log(deploymentsStatus);
+        const deployment = deploymentsStatus.toArray().find(
           (pg): pg is ParticipantGroupStatus.InDeployment =>
             pg instanceof ParticipantGroupStatus.InDeployment &&
             pg.participants.toArray().some((participant) => {
@@ -82,6 +83,7 @@ const ParticipantsTable = ({
                   );
                 // TODO: Add case for other account identities
                 default:
+                  console.error("Unknown account identity type");
                   return false;
               }
             }),
@@ -162,6 +164,7 @@ const ParticipantsTable = ({
     openImportParticipantModal();
   };
 
+  console.log(participantsAccounts);
   const table = useMaterialReactTable<ParticipantAccount>({
     columns: columns as MRT_ColumnDef<ParticipantAccount, any>[],
     data: participantsAccounts ?? [],

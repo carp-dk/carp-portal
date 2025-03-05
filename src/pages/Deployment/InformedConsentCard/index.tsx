@@ -5,13 +5,16 @@ import CarpAccordion from "@Components/CarpAccordion";
 import { Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useTranslation } from "react-i18next";
-import { ParticipantData, CarpFile } from "@carp-dk/client";
+import {
+  CarpFile,
+  InformedConsentType,
+  ParticipantDataInput,
+} from "@carp-dk/client";
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from "@Utils/queries/participants";
 import { useEffect, useState } from "react";
-import { InformedConsent } from "@carp-dk/client/models/InputDataTypes";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
 import { pdf } from "@react-pdf/renderer";
@@ -52,13 +55,13 @@ const InformedConsentCard = () => {
 
   const [consents, setConsents] = useState<
     {
-      participant: ParticipantData;
-      consent: InformedConsent;
+      participant: ParticipantDataInput;
+      consent: InformedConsentType;
       consentFile: CarpFile;
     }[]
   >();
 
-  const downloadPdf = async (consent: InformedConsent) => {
+  const downloadPdf = async (consent: InformedConsentType) => {
     const blob = await pdf(
       await convertICToReactPdf(JSON.parse(consent.consent)),
     ).toBlob();
@@ -83,27 +86,19 @@ const InformedConsentCard = () => {
       const participantGroup = statuses.groups.find(
         (s) => s.participantGroupId === deploymentId,
       );
-      const commonConsent = participantData.common.values
-        ?.toArray()
-        .find((v) => {
-          if (!v) return false;
-          return ((v as any).__type as string).includes("informed_consent");
-        });
-      const roleConsents = (participantData.roles as any as Array<any>).map(
-        (v) => {
-          const c =
-            v.data[
-              Object.keys(v.data).find((key) => {
-                return key.includes("informed_consent");
-              })
-            ];
-          return { v, c };
+      const commonConsent = participantData.common[
+        InformedConsentType.type
+      ] as InformedConsentType;
+      const roleConsents = Object.entries(participantData.roles).map(
+        ([role, v]) => {
+          const c = v[InformedConsentType.type] as InformedConsentType;
+          return { role, c };
         },
       );
 
       const participantsWithConsent = participantGroup.participants.map((p) => {
         const consent = roleConsents.find((rc) =>
-          p.role.localeCompare(rc.v.roleName),
+          p.role.localeCompare(rc.role),
         );
         if (consent)
           return { participant: p, consent: consent.c, consentFile: null };

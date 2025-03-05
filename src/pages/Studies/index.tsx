@@ -13,7 +13,8 @@ const Studies = () => {
   }
 
   const isAdmin =
-    currentUser.role === "SYSTEM_ADMIN" || currentUser.role === "CARP_ADMIN";
+    currentUser.role.includes("SYSTEM_ADMIN") ||
+    currentUser.role.includes("CARP_ADMIN");
 
   return (
     <PrivatePageLayout>

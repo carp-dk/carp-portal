@@ -16,9 +16,8 @@ import {
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import carpCommon from "@cachet/carp-common";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { ParticipantStatus } from "@carp-dk/client/models";
+import { CarpInputDataTypes, ParticipantStatus, cdk } from "@carp-dk/client";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import getInputDataName from "@Assets/inputTypeNames";
 import {
@@ -32,9 +31,7 @@ import {
   Top,
 } from "./styles";
 import getInputElement from "./InputElements/selector";
-import dk = carpCommon.dk;
-import CarpInputDataTypes = dk.cachet.carp.common.application.data.input.CarpInputDataTypes;
-import SelectOne = dk.cachet.carp.common.application.data.input.elements.SelectOne;
+import SelectOne = cdk.cachet.carp.common.application.data.input.elements.SelectOne;
 import LoadingSkeleton from "../LoadingSkeleton";
 import getParticipantDataFormik from "./InputElements/utils";
 
@@ -65,28 +62,22 @@ const ParticipantDataCard = () => {
     const iv = [];
     if (
       participantData?.roles &&
-      (participantData?.roles as any as Array<any>).length !== 0 &&
-      (participantData?.roles as any as Array<any>).some(
-        (v) =>
-          v.roleName === participant?.assignedParticipantRoles.roleNames[0],
-      )
+      participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
     ) {
-      iv.push(
-        (participantData?.roles as any as Array<any>)
-          .filter(
-            (v) =>
-              v.roleName === participant?.assignedParticipantRoles.roleNames[0],
-          )
-          .map((v) => {
-            return Object.values(v.data).filter((value) => value);
-          })
-          .flat(),
-      );
+      Object.entries(
+        participantData?.roles[
+          participant?.assignedParticipantRoles.roleNames[0]
+        ],
+      ).forEach(([key, value]) => {
+        iv.push({ [key]: value });
+      });
     }
-    if (participantData?.common.values)
-      iv.push(participantData?.common.values.toArray().filter((v) => v));
-    return iv.flat();
-  }, [participantData]);
+
+    if (participantData?.common) {
+      iv.push(Object.fromEntries(Object.entries(participantData?.common)));
+    }
+    return iv;
+  }, [participantData, participant]);
 
   useEffect(() => {
     if (participantGroupStatus) {

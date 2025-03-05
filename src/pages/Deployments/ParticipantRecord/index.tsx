@@ -7,13 +7,14 @@ import {
 } from "@Utils/utility";
 import {
   DeviceStatus,
-  ParticipantData,
+  ParticipantDataInput,
   ParticipantStatus,
 } from "@carp-dk/client";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import { Skeleton, Typography } from "@mui/material";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AccountIcon,
   EmailContainer,
@@ -24,10 +25,9 @@ import {
   StyledContainer,
   StyledStatusDot,
 } from "./styles";
-import { useTranslation } from "react-i18next";
 
 type Props = {
-  participantData: ParticipantData;
+  participantData: ParticipantDataInput;
   participantStatus: ParticipantStatus;
   deviceStatusList: DeviceStatus[];
 };
