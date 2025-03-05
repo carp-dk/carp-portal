@@ -15,11 +15,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: [
-      "node_modules/*",
-      "dist",
-      "non_npm_dependencies/*",
-    ],
+    ignores: ["node_modules/*", "dist", "non_npm_dependencies/*"],
   },
   ...compat.extends("@carp-dk/eslint-config"),
   {

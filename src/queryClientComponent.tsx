@@ -28,7 +28,8 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
               failureCount === 0 &&
-              (error as unknown as CarpServiceError).code === 403 &&
+              ((error as unknown as CarpServiceError).code === 403 ||
+                (error as unknown as CarpServiceError).code === 401) &&
               !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;

@@ -61,7 +61,6 @@ const ParticipantsTable = ({
   const InvitedOnColumn = useCallback(
     (cell: { row: { original: { email: string; username: string } } }) => {
       if (!isDeploymentsStatusLoading) {
-        console.log(deploymentsStatus);
         const deployment = deploymentsStatus.toArray().find(
           (pg): pg is ParticipantGroupStatus.InDeployment =>
             pg instanceof ParticipantGroupStatus.InDeployment &&
@@ -134,7 +133,7 @@ const ParticipantsTable = ({
           return row?.id !== null ? "Yes" : "No";
         },
         id: "user_id",
-        header: "Registered",
+        header: "Invited",
       },
       {
         id: "invitedOn",
@@ -164,7 +163,6 @@ const ParticipantsTable = ({
     openImportParticipantModal();
   };
 
-  console.log(participantsAccounts);
   const table = useMaterialReactTable<ParticipantAccount>({
     columns: columns as MRT_ColumnDef<ParticipantAccount, any>[],
     data: participantsAccounts ?? [],
