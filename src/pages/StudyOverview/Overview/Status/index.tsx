@@ -2,10 +2,10 @@ import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useStudyDetails, useStudyStatus } from "@Utils/queries/studies";
 import { formatDateTime } from "@Utils/utility";
 import kotlinx from "@cachet/carp-kotlinx-datetime";
-import carpStudies from "@cachet/carp-studies-core";
 import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+import { StudyStatus } from "@carp-dk/client";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
   ProtocolData,
@@ -18,7 +18,6 @@ import {
   StyledTitle,
   Top,
 } from "./styles";
-import StudyStatus = carpStudies.dk.cachet.carp.studies.application.StudyStatus;
 // HACK toEpochMilliseconds is not a function if Insant is not imported
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Instant = kotlinx.datetime.Instant;

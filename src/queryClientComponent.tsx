@@ -1,4 +1,6 @@
+import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
+import { getUser } from "@carp-dk/authentication-react";
 import { CarpServiceError } from "@carp-dk/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -26,7 +28,8 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
               failureCount === 0 &&
-              (error as unknown as CarpServiceError).httpResponseCode === 403 &&
+              ((error as unknown as CarpServiceError).code === 403 ||
+                (error as unknown as CarpServiceError).code === 401) &&
               !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;
@@ -35,6 +38,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                 .signinSilent()
                 .then(() => {
                   // we invalidate all active queries to let them refetch automatically
+                  carpApi.setAuthToken(getUser()?.access_token);
                   queryClient.invalidateQueries({ refetchType: "active" });
                   return true;
                 })
@@ -51,7 +55,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                 });
             } else if (
               failureCount === 1 &&
-              (error as unknown as CarpServiceError).httpResponseCode === 403
+              (error as unknown as CarpServiceError).code === 403
             ) {
               // we already tried refreshing the token. the user really shouldn't be able to access this
               // throw them back to the homepage
@@ -60,7 +64,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             }
             if (
               failureCount === 1 &&
-              (error as unknown as CarpServiceError).httpResponseCode === 401
+              (error as unknown as CarpServiceError).code === 401
             ) {
               setSnackbarError(
                 "You are not authorized to access this resource.",
@@ -73,6 +77,8 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
       },
     });
   }, []);
+
+  carpApi.setAuthToken(getUser()?.access_token);
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

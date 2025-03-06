@@ -12,7 +12,7 @@ import {
 } from "@Utils/queries/participants";
 import { pdf } from "@react-pdf/renderer";
 import { useDownloadFile, useGetFiles } from "@Utils/queries/studies";
-import { CarpFile } from "@carp-dk/client/models/CarpFile";
+import { CarpFile, InformedConsentType } from "@carp-dk/client";
 import { useTranslation } from "react-i18next";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
@@ -103,24 +103,17 @@ const InformedConsent = () => {
         );
 
       if (participantData.common.keys) {
-        const consentData = participantData.common.values
-          .toArray()
-          .find((v) =>
-            (v as unknown as any)?.__type.includes("informed_consent"),
-          );
+        const consentData =
+          participantData.common.values[InformedConsentType.type];
         setConsent(consentData);
       }
 
-      const participantRoleData = (
-        participantData.roles as any as Array<any>
-      ).find(
-        (v) => v.roleName === participant.assignedParticipantRoles.roleNames[0],
-      );
+      const participantRoleData =
+        participantData.roles[
+          participant.assignedParticipantRoles.roleNames[0]
+        ];
       if (participantRoleData) {
-        const roleConsent = Object.values(participantRoleData.data).find(
-          (value) =>
-            (value as unknown as any)?.__type.includes("informed_consent"),
-        );
+        const roleConsent = participantRoleData[InformedConsentType.type];
         setConsent(roleConsent);
       }
     }

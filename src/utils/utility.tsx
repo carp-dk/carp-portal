@@ -2,9 +2,12 @@ import ecgHeartIcon from "@Assets/images/ecg_heart.png";
 import ecgHeartIconBlue from "@Assets/images/ecg_heart_blue.png";
 import { Day, Record } from "@Components/RecentDataChart";
 import { customPalette as palette } from "@Utils/theme";
-import carpCommon from "@cachet/carp-common";
-import { kotlinx } from "@cachet/carp-kotlinx-serialization";
-import carpProtocols from "@cachet/carp-protocols-core";
+import {
+  DefaultSerializer,
+  getSerializer,
+  Json,
+  StudyProtocolSnapshot,
+} from "@carp-dk/client";
 import AirRoundedIcon from "@mui/icons-material/AirRounded";
 import CloudIcon from "@mui/icons-material/Cloud";
 import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
@@ -26,15 +29,6 @@ import {
   Image as PdfImage,
 } from "@react-pdf/renderer";
 
-import getSerializer = kotlinx.serialization.getSerializer;
-import DefaultSerializer = carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
-
-type StudyProtocolSnapshotType =
-  carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot;
-const { StudyProtocolSnapshot } =
-  carpProtocols.dk.cachet.carp.protocols.application;
-
-type Json = kotlinx.serialization.json.Json;
 const dataLegendColors = {
   activity: "#245B78",
   airquality: "#B26101",
@@ -280,9 +274,7 @@ export const getMaxDatapoints = (days?: Day[]): number => {
   );
 };
 
-export const downloadProtocolAsJSONFile = (
-  protocol: StudyProtocolSnapshotType,
-) => {
+export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   const json: Json = DefaultSerializer;
   const serializer = getSerializer(StudyProtocolSnapshot);
   const jsonToDownload = json.encodeToString(serializer, protocol);
