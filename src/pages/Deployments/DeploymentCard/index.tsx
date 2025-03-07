@@ -65,7 +65,7 @@ const DeploymentCard = ({
     [deployment.participants],
   );
 
-  if (names[0] === ",") names = "";
+  if (names[0] === "," || names === "") names = "Names not available";
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
