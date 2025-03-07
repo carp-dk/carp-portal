@@ -60,6 +60,7 @@ const ParticipantDataCard = () => {
   );
   const initalValues = useMemo(() => {
     const iv = [];
+    if (!participantData || !participant) return iv;
     if (
       participantData?.roles &&
       participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
@@ -74,7 +75,9 @@ const ParticipantDataCard = () => {
     }
 
     if (participantData?.common) {
-      iv.push(Object.fromEntries(Object.entries(participantData?.common)));
+      if (Object.entries(participantData?.common).length !== 0) {
+        iv.push(Object.fromEntries(Object.entries(participantData?.common)));
+      }
     }
     return iv;
   }, [participantData, participant]);

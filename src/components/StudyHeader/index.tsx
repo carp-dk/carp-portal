@@ -1,7 +1,8 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { Skeleton } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Breadcrumbs, Skeleton } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
+import { NavigateNext } from "@mui/icons-material";
 import {
   Description,
   Path,
@@ -11,7 +12,7 @@ import {
 
 type Props = {
   description: string;
-  path: string[];
+  path: { name: string; uri: string }[];
 };
 
 const StudyHeader = ({ description, path }: Props) => {
@@ -29,27 +30,28 @@ const StudyHeader = ({ description, path }: Props) => {
 
   return (
     <StudyHeaderContainer>
-      <PathContainer>
+      <Breadcrumbs separator={<NavigateNext />}>
         {isLoading ? (
           <Skeleton height="32px" width="220px" animation="wave" />
         ) : (
           <Path variant="h2">{studyDetails.name}</Path>
         )}
-        <Path variant="h2">&gt;</Path>
-        <Path variant="h2" section>
-          {path[0]}
-        </Path>
-        {path.length > 1 && (
-          <>
-            <Path variant="h2" section>
-              &gt;
-            </Path>
-            <Path variant="h2" section>
-              {path[1]}
-            </Path>
-          </>
-        )}
-      </PathContainer>
+        {path.map((p) => {
+          return (
+            <Link
+              to={p.uri}
+              replace={false}
+              key={p.name}
+              style={{ textDecoration: "none" }}
+            >
+              <Path variant="h2" section>
+                {p.name}
+              </Path>
+            </Link>
+          );
+        })}
+      </Breadcrumbs>
+      <PathContainer />
       <Description variant="h5">{description}</Description>
     </StudyHeaderContainer>
   );

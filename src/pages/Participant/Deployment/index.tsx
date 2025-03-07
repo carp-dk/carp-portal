@@ -4,13 +4,13 @@ import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
 import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
 import { useCreateSummary } from "@Utils/queries/studies";
 import { calculateDaysPassedFromDate, getDeviceIcon } from "@Utils/utility";
-import { ParticipantData } from "@carp-dk/client";
+import { ParticipantDataInput } from "@carp-dk/client";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DateTooltip from "../../Deployments/DateTooltip";
 import LoadingSkeleton from "../LoadingSkeleton";
 import {
@@ -36,7 +36,7 @@ import {
 
 const Deployment = () => {
   const { id: studyId, deploymentId } = useParams();
-  const navigate = useNavigate();
+
   const {
     data: deployment,
     isLoading: deploymentIsLoading,
@@ -47,7 +47,7 @@ const Deployment = () => {
     groupStatus: string;
     deploymentStatus: any;
     participants: {
-      participant: ParticipantData & { lastUpload: string };
+      participant: ParticipantDataInput & { lastUpload: string };
       roleName: string;
       deviceInfo: {
         deviceStatus: string;
@@ -93,7 +93,10 @@ const Deployment = () => {
           const device = group.deploymentStatus.deviceStatusList.find(
             (d) => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
           );
-          const lastUpload = lastDataUpload(p.dateOfLastDataUpload);
+          // TODO: Fix this type assertion in client
+          const lastUpload = lastDataUpload(
+            p.dateOfLastDataUpload as unknown as Date,
+          );
           return {
             participant: { ...p, lastUpload },
             roleName,
@@ -118,7 +121,7 @@ const Deployment = () => {
     }
   }, [deployment, deploymentIsLoading]);
 
-  const getParticipantInitials = (participant: ParticipantData) => {
+  const getParticipantInitials = (participant: ParticipantDataInput) => {
     if (
       participant.firstName === "" ||
       participant.lastName === "" ||
@@ -179,11 +182,7 @@ const Deployment = () => {
       <ParticipantsContainer>
         {deploymentInformation.participants?.map((p) => (
           <StyledContainer
-            onClick={() =>
-              navigate(
-                `/studies/${studyId}/participants/deployments/${deploymentId}/participants/${p.participant.participantId}`,
-              )
-            }
+            to={`/studies/${studyId}/deployments/${deploymentId}/participants/${p.participant.participantId}`}
             key={p.participant.participantId}
           >
             <AccountIcon>

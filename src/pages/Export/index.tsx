@@ -5,10 +5,11 @@ import { useExports } from "@Utils/queries/studies";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getUri, PageType } from "@Utils/utility";
 import ExportsTable from "./ExportsTable";
 
 const Export: React.FC = () => {
-  const sectionName = "Exports";
+  const sectionName = { name: "Exports", uri: getUri(PageType.EXPORTS) };
   const description =
     "In order to export study data, click on the New Export button.";
   const { id: studyId } = useParams();

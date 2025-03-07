@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import CopyButton from "@Components/Buttons/CopyButton";
-import { ParticipantGroup } from "@carp-dk/client/models/ParticipantGroups";
+import { ParticipantGroup } from "@carp-dk/client";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import { Skeleton, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
@@ -75,7 +75,7 @@ const DeploymentCard = ({
           noWrap
           onClick={() =>
             navigate(
-              `/studies/${studyId}/participants/deployments/${deployment.participantGroupId}`,
+              `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
             )
           }
         >
@@ -136,6 +136,7 @@ const DeploymentCard = ({
           deployment.participants.map((participant) => (
             <ParticipantRecord
               key={participant.participantId}
+              deploymentId={deployment.participantGroupId}
               participantData={participant}
               participantStatus={deployment.deploymentStatus.participantStatusList.find(
                 (status) => status.participantId === participant.participantId,

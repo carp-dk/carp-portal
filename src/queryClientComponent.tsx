@@ -38,6 +38,13 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                 .signinSilent()
                 .then(() => {
                   // we invalidate all active queries to let them refetch automatically
+                  if (!getUser()) {
+                    queryClient.clear();
+                    auth.signoutSilent();
+                    navigate("/", { replace: true });
+
+                    return false;
+                  }
                   carpApi.setAuthToken(getUser()?.access_token);
                   queryClient.invalidateQueries({ refetchType: "active" });
                   return true;
