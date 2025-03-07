@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 
 export const StyledContainer = styled("div")(({ theme }) => ({
@@ -88,4 +88,9 @@ export const CreateSummaryButton = styled(Button)(({ theme }) => ({
   borderRadius: 16,
   height: 36,
   borderColor: theme.palette.grey[700],
+}));
+
+export const DeletingWarning = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
+  alignSelf: "center",
 }));
