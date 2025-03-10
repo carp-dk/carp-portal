@@ -18,6 +18,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router";
 import * as yup from "yup";
+import { formatDateTime } from "@Utils/utility";
 import StudySetupSkeleton from "../StudySetupSkeleton";
 import {
   Heading,
@@ -175,7 +176,17 @@ const StudyData = () => {
             key={protocol.id.stringRepresentation}
             value={protocol.id.stringRepresentation}
           >
-            {protocol.name}
+            <Stack
+              width="100%"
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography>{protocol.name}</Typography>
+              <Typography variant="caption">
+                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+              </Typography>
+            </Stack>
           </MenuItem>
         ))}
       </Select>

@@ -7,13 +7,15 @@ import {
 } from "@Utils/utility";
 import {
   DeviceStatus,
-  ParticipantData,
+  ParticipantDataInput,
   ParticipantStatus,
 } from "@carp-dk/client";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import { Skeleton, Typography } from "@mui/material";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import {
   AccountIcon,
   EmailContainer,
@@ -24,20 +26,22 @@ import {
   StyledContainer,
   StyledStatusDot,
 } from "./styles";
-import { useTranslation } from "react-i18next";
 
 type Props = {
-  participantData: ParticipantData;
+  participantData: ParticipantDataInput;
+  deploymentId: string;
   participantStatus: ParticipantStatus;
   deviceStatusList: DeviceStatus[];
 };
 
 const ParticipantRecord = ({
   participantData,
+  deploymentId,
   participantStatus,
   deviceStatusList,
 }: Props) => {
   const { t } = useTranslation();
+  const { id: studyId } = useParams();
 
   const participantRole =
     participantStatus.assignedParticipantRoles.roleNames[0];
@@ -59,7 +63,9 @@ const ParticipantRecord = ({
   }, [participantData.dateOfLastDataUpload]);
 
   return (
-    <StyledContainer>
+    <StyledContainer
+      to={`/studies/${studyId}/deployments/${deploymentId}/participants/${participantData.participantId}`}
+    >
       <EmailContainer>
         <AccountIcon>
           <Initials variant="h4">
@@ -101,7 +107,7 @@ const ParticipantRecord = ({
 
 export const ParticipantRecordSkeleton = () => {
   return (
-    <StyledContainer>
+    <StyledContainer to="">
       <Skeleton animation="wave" variant="circular" width={36} height={36} />
       <Skeleton
         animation="wave"

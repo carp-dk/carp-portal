@@ -2,9 +2,12 @@ import ecgHeartIcon from "@Assets/images/ecg_heart.png";
 import ecgHeartIconBlue from "@Assets/images/ecg_heart_blue.png";
 import { Day, Record } from "@Components/RecentDataChart";
 import { customPalette as palette } from "@Utils/theme";
-import carpCommon from "@cachet/carp-common";
-import { kotlinx } from "@cachet/carp-kotlinx-serialization";
-import carpProtocols from "@cachet/carp-protocols-core";
+import {
+  DefaultSerializer,
+  getSerializer,
+  Json,
+  StudyProtocolSnapshot,
+} from "@carp-dk/client";
 import AirRoundedIcon from "@mui/icons-material/AirRounded";
 import CloudIcon from "@mui/icons-material/Cloud";
 import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
@@ -25,16 +28,8 @@ import {
   StyleSheet,
   Image as PdfImage,
 } from "@react-pdf/renderer";
+import { useParams } from "react-router";
 
-import getSerializer = kotlinx.serialization.getSerializer;
-import DefaultSerializer = carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
-
-type StudyProtocolSnapshotType =
-  carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot;
-const { StudyProtocolSnapshot } =
-  carpProtocols.dk.cachet.carp.protocols.application;
-
-type Json = kotlinx.serialization.json.Json;
 const dataLegendColors = {
   activity: "#245B78",
   airquality: "#B26101",
@@ -68,7 +63,7 @@ export const formatDateTime = (
   },
 ) => {
   const date = new Date(dateString);
-  return `${date.toLocaleString("en-GB", options)}`;
+  return `${date.toLocaleString("en-US", options)}`;
 };
 
 export const formatDate = (dateString: number | string) => {
@@ -280,9 +275,7 @@ export const getMaxDatapoints = (days?: Day[]): number => {
   );
 };
 
-export const downloadProtocolAsJSONFile = (
-  protocol: StudyProtocolSnapshotType,
-) => {
+export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   const json: Json = DefaultSerializer;
   const serializer = getSerializer(StudyProtocolSnapshot);
   const jsonToDownload = json.encodeToString(serializer, protocol);
@@ -475,4 +468,54 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
       </Page>
     </Document>
   );
+};
+
+export enum PageType {
+  OVERVIEW,
+  SETTINGS,
+  PROTOCOL,
+  RESOURCES,
+  TRANSLATION,
+  PARTICIPANTS,
+  PARTICIPANT,
+  DEPLOYMENTS,
+  DEPLOYMENT,
+  ANNOUNCEMENTS,
+  EDIT_ANNOUNCEMENT,
+  EXPORTS,
+}
+
+export const getUri = (pageType: PageType) => {
+  const { id: studyId, deploymentId, participantId } = useParams();
+
+  switch (pageType) {
+    case PageType.OVERVIEW:
+      return `/studies/${studyId}/overview`;
+    case PageType.SETTINGS:
+      return `/studies/${studyId}/settings`;
+    case PageType.PROTOCOL:
+      return `/studies/${studyId}/protocol`;
+    case PageType.RESOURCES:
+      return `/studies/${studyId}/resources`;
+    case PageType.TRANSLATION:
+      return `/studies/${studyId}/translations`;
+    case PageType.PARTICIPANTS:
+      return `/studies/${studyId}/participants`;
+    case PageType.PARTICIPANT:
+      return `/studies/${studyId}/deployments/${deploymentId}/participants/${participantId}`;
+    case PageType.DEPLOYMENTS:
+      return `/studies/${studyId}/deployments`;
+    case PageType.DEPLOYMENT:
+      return `/studies/${studyId}/deployments/${deploymentId}`;
+    case PageType.ANNOUNCEMENTS:
+      return `/studies/${studyId}/announcements`;
+    case PageType.EDIT_ANNOUNCEMENT:
+      return `/studies/${studyId}/announcements/new`;
+    case PageType.EXPORTS:
+      return `/studies/${studyId}/exports`;
+    default:
+      // eslint-disable-next-line no-console
+      console.error("Unknown page type");
+      return "/";
+  }
 };

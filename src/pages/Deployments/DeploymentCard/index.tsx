@@ -65,7 +65,7 @@ const DeploymentCard = ({
     [deployment.participants],
   );
 
-  if (names[0] === ",") names = "";
+  if (names[0] === "," || names === "") names = "Names not available";
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
@@ -75,11 +75,15 @@ const DeploymentCard = ({
           noWrap
           onClick={() =>
             navigate(
-              `/studies/${studyId}/participants/deployments/${deployment.participantGroupId}`,
+              `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
             )
           }
         >
-          {names && names[0].length > 0 ? names : <i>Generated deployment</i>}
+          {!deployment.participants.every((p) => p.email == null) ? (
+            names
+          ) : (
+            <i>Generated deployment</i>
+          )}
         </Names>
         <StyledDivider />
         <HorizontalStatusContainer>
@@ -132,6 +136,7 @@ const DeploymentCard = ({
           deployment.participants.map((participant) => (
             <ParticipantRecord
               key={participant.participantId}
+              deploymentId={deployment.participantGroupId}
               participantData={participant}
               participantStatus={deployment.deploymentStatus.participantStatusList.find(
                 (status) => status.participantId === participant.participantId,

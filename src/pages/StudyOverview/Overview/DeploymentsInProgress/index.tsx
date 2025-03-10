@@ -121,7 +121,7 @@ const DeploymentsInProgress = () => {
                     variant="h5"
                     onClick={() =>
                       navigate(
-                        `/studies/${studyId}/participants/deployments/${g.deploymentId}`,
+                        `/studies/${studyId}/deployments/${g.deploymentId}`,
                       )
                     }
                     sx={{
@@ -144,7 +144,8 @@ const DeploymentsInProgress = () => {
                           direction="row"
                           spacing={0.5}
                           alignItems="center"
-                          key={g.deploymentId + ":" + idx}
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={`${g.deploymentId}:${idx}`}
                         >
                           <StyledStatusDot status={d.__type.split(".").pop()} />
                           <Typography variant="h6">

@@ -3,6 +3,7 @@ import StudyPageLayout from "@Components/Layout/StudyPageLayout";
 import StudyHeader from "@Components/StudyHeader";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getUri, PageType } from "@Utils/utility";
 import AddNewDeploymentModal from "./AddNewDeploymentModal";
 import AddParticipantModal from "./AddParticipantModal";
 import ImportParticipantsModal from "./ImportParticipantsModal";
@@ -15,7 +16,10 @@ const Participants = () => {
   const [newDeploymentModalOpen, setNewDeploymentModalOpen] = useState(false);
   const [actionNeededModalOpen, setActionNeededModalOpen] = useState(false);
   const [participantsToAdd, setParticipantsToAdd] = useState([]);
-  const sectionName = "Participants";
+  const sectionName = {
+    name: "Participants",
+    uri: getUri(PageType.PARTICIPANTS),
+  };
   const description = "See all the participants of the Study.";
   const navigate = useNavigate();
   const { id: studyId } = useParams();

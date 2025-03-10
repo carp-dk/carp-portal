@@ -105,7 +105,7 @@ const NavigationBar = () => {
         <List>
           <NavigationBarItem
             text="Deployments"
-            path={`${studyPath}/participants/deployments`}
+            path={`${studyPath}/deployments`}
             icon={<DeploymentsIcon />}
             showTooltip={!open}
           />

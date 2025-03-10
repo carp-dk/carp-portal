@@ -1,12 +1,16 @@
 import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
 import {
-  useParticipantGroupsStatus,
   useParticipantsAccounts,
+  useParticipantsStatus,
 } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { formatDate } from "@Utils/utility";
-import carpStudies from "@cachet/carp-studies-core";
-import { ParticipantAccount } from "@carp-dk/client";
+import { formatDateTime } from "@Utils/utility";
+import {
+  EmailAccountIdentity,
+  ParticipantAccount,
+  ParticipantGroupStatus,
+  UsernameAccountIdentity,
+} from "@carp-dk/client";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
@@ -25,9 +29,6 @@ import {
   StyledContainer,
   TopToolbarButton,
 } from "./styles";
-import ParticipantGroupStatus = carpStudies.dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
-import EmailAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.EmailAccountIdentity;
-import UsernameAccountIdentity = carpStudies.dk.cachet.carp.common.application.users.UsernameAccountIdentity;
 
 interface Props {
   openNewDeploymentModal: () => void;
@@ -51,7 +52,7 @@ const ParticipantsTable = ({
     isError: isParticipantsAccountsError,
   } = useParticipantsAccounts(studyId);
   const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
-    useParticipantGroupsStatus(studyId);
+    useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [columns, setColumns] = useState<MRT_ColumnDef<ParticipantAccount>[]>(
     [],
@@ -61,7 +62,7 @@ const ParticipantsTable = ({
   const InvitedOnColumn = useCallback(
     (cell: { row: { original: { email: string; username: string } } }) => {
       if (!isDeploymentsStatusLoading) {
-        const deployment = deploymentsStatus.find(
+        const deployment = deploymentsStatus.toArray().find(
           (pg): pg is ParticipantGroupStatus.InDeployment =>
             pg instanceof ParticipantGroupStatus.InDeployment &&
             pg.participants.toArray().some((participant) => {
@@ -82,6 +83,7 @@ const ParticipantsTable = ({
                   );
                 // TODO: Add case for other account identities
                 default:
+                  console.error("Unknown account identity type");
                   return false;
               }
             }),
@@ -90,7 +92,11 @@ const ParticipantsTable = ({
         if (deployment) {
           return (
             <Typography variant="h5">
-              {formatDate(deployment.invitedOn.toEpochMilliseconds())}
+              {formatDateTime(deployment.invitedOn.toEpochMilliseconds(), {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
             </Typography>
           );
         }
@@ -128,7 +134,7 @@ const ParticipantsTable = ({
           return row?.id !== null ? "Yes" : "No";
         },
         id: "user_id",
-        header: "Registered",
+        header: "Invited",
       },
       {
         id: "invitedOn",

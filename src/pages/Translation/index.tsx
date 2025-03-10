@@ -12,7 +12,12 @@ import {
   useDeleteTranslation,
   useStudyTranslations,
 } from "@Utils/queries/studies";
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
+import {
+  formatDateTime,
+  getRandomNumber,
+  getUri,
+  PageType,
+} from "@Utils/utility";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   IconButton,
@@ -41,6 +46,10 @@ import {
 
 const Translations = () => {
   const { id: studyId } = useParams();
+  const sectionName = {
+    name: "Translations",
+    uri: getUri(PageType.TRANSLATION),
+  };
   const {
     data: translations,
     isLoading: translationsLoading,
@@ -83,11 +92,11 @@ const Translations = () => {
     actionButtonLabel: "Delete",
   };
 
-  if (translationsError && translationsError.httpResponseCode !== 404) {
+  if (translationsError && translationsError.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader
-          path={["Translations"]}
+          path={[sectionName]}
           description="View this study's localization files"
         />
         <CarpErrorCardComponent
@@ -101,7 +110,7 @@ const Translations = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["Translations"]}
+        path={[sectionName]}
         description="View this study's localization files"
       />
       <StyledCard>

@@ -39,7 +39,7 @@ type LanguageLabelsMapping = {
 export const languageLabels: LanguageLabelsMapping = {
   BG: { primary: "Bulgarian", secondary: "bg" },
   HR: { primary: "Croatian", secondary: "hr" },
-  CZ: { primary: "Czech", secondary: "cs" },
+  CZ: { primary: "Czech", secondary: "cz" },
   DK: { primary: "Danish", secondary: "da" },
   NL: { primary: "Dutch", secondary: "nl" },
   GB: { primary: "English", secondary: "en" },

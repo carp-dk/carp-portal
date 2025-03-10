@@ -4,14 +4,13 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from "@Utils/queries/studies";
-import carpStudies from "@cachet/carp-studies-core";
 import { FormLabel, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useParams } from "react-router";
 import * as yup from "yup";
+import { StudyStatus } from "@carp-dk/client";
 import StudySetupSkeleton from "../StudySetupSkeleton";
 import { Heading, StyledCard, Subheading } from "../styles";
-import StudyStatus = carpStudies.dk.cachet.carp.studies.application.StudyStatus;
 
 const studyInvitationValidationSchema = yup.object({
   invitationName: yup.string(),

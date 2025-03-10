@@ -33,7 +33,7 @@
   },
   "include": [
     "src",
-    ".eslintrc", 
+    "eslint.config.mjs",
   ],
   "exclude": ["**/node_modules", "**/.*/", "build"]
 }
