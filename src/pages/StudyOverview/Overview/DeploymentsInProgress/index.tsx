@@ -121,7 +121,7 @@ const DeploymentsInProgress = () => {
                     variant="h5"
                     onClick={() =>
                       navigate(
-                        `/studies/${studyId}/participants/deployments/${g.deploymentId}`,
+                        `/studies/${studyId}/deployments/${g.deploymentId}`,
                       )
                     }
                     sx={{

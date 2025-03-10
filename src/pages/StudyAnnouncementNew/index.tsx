@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { MessageData, UUID } from "@carp-dk/client";
+import { getUri, PageType } from "@Utils/utility";
 import StudyAnnouncementPreview from "../../components/StudyAnnouncementPreview";
 import { StyledContainer } from "../Studies/StudiesSection/styles";
 import { ContainerRight, StyledButton, StyledCard } from "./styles";
@@ -117,7 +118,13 @@ const StudyAnnouncementNew = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["New announcement"]}
+        path={[
+          { name: "Announcement", uri: getUri(PageType.ANNOUNCEMENTS) },
+          {
+            name: "New announcement",
+            uri: getUri(PageType.EDIT_ANNOUNCEMENT),
+          },
+        ]}
         description="Create an announcement for this study"
       />
       <StyledContainer sx={{ flexDirection: "row" }}>

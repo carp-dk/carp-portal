@@ -111,8 +111,14 @@ export const useSetStudyDetails = () => {
       _,
       {
         studyId,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        name,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        description,
       }: {
         studyId: string;
+        name: string;
+        description: string;
       },
     ) => {
       setSnackbarSuccess("Updated study details!");

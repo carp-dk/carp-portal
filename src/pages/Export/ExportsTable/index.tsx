@@ -13,7 +13,11 @@ import DeleteButton from "../DeleteButton";
 import DownloadButton from "../DownloadButton";
 import StatusCell from "../StatusCell";
 import TypeCell from "../TypeCell";
-import { CreateSummaryButton, StyledContainer } from "./styles";
+import {
+  CreateSummaryButton,
+  DeletingWarning,
+  StyledContainer,
+} from "./styles";
 
 type Props = {
   exports: Export[];
@@ -113,10 +117,13 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
       <CreateSummaryButton
         variant="outlined"
         startIcon={<AddRoundedIcon />}
-        onClick={() => createSummary.mutate({ studyId })}
+        onClick={() => createSummary.mutate({ studyId, deploymentIds: [] })}
       >
         New Export
       </CreateSummaryButton>
+      <DeletingWarning variant="h4">
+        Exports are deleted 7 days after creation.
+      </DeletingWarning>
       <MaterialReactTable table={table} />
     </StyledContainer>
   );

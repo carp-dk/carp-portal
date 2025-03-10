@@ -28,6 +28,7 @@ import {
   StyleSheet,
   Image as PdfImage,
 } from "@react-pdf/renderer";
+import { useParams } from "react-router";
 
 const dataLegendColors = {
   activity: "#245B78",
@@ -467,4 +468,54 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
       </Page>
     </Document>
   );
+};
+
+export enum PageType {
+  OVERVIEW,
+  SETTINGS,
+  PROTOCOL,
+  RESOURCES,
+  TRANSLATION,
+  PARTICIPANTS,
+  PARTICIPANT,
+  DEPLOYMENTS,
+  DEPLOYMENT,
+  ANNOUNCEMENTS,
+  EDIT_ANNOUNCEMENT,
+  EXPORTS,
+}
+
+export const getUri = (pageType: PageType) => {
+  const { id: studyId, deploymentId, participantId } = useParams();
+
+  switch (pageType) {
+    case PageType.OVERVIEW:
+      return `/studies/${studyId}/overview`;
+    case PageType.SETTINGS:
+      return `/studies/${studyId}/settings`;
+    case PageType.PROTOCOL:
+      return `/studies/${studyId}/protocol`;
+    case PageType.RESOURCES:
+      return `/studies/${studyId}/resources`;
+    case PageType.TRANSLATION:
+      return `/studies/${studyId}/translations`;
+    case PageType.PARTICIPANTS:
+      return `/studies/${studyId}/participants`;
+    case PageType.PARTICIPANT:
+      return `/studies/${studyId}/deployments/${deploymentId}/participants/${participantId}`;
+    case PageType.DEPLOYMENTS:
+      return `/studies/${studyId}/deployments`;
+    case PageType.DEPLOYMENT:
+      return `/studies/${studyId}/deployments/${deploymentId}`;
+    case PageType.ANNOUNCEMENTS:
+      return `/studies/${studyId}/announcements`;
+    case PageType.EDIT_ANNOUNCEMENT:
+      return `/studies/${studyId}/announcements/new`;
+    case PageType.EXPORTS:
+      return `/studies/${studyId}/exports`;
+    default:
+      // eslint-disable-next-line no-console
+      console.error("Unknown page type");
+      return "/";
+  }
 };

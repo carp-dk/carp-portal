@@ -56,7 +56,7 @@ const Participants = () => {
               direction="row"
               onClick={() =>
                 navigate(
-                  `/studies/${studyId}/participants/deployments/${deploymentId}/participants/${p.participantId}`,
+                  `/studies/${studyId}/deployments/${deploymentId}/participants/${p.participantId}`,
                 )
               }
             >

@@ -3,7 +3,6 @@ import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
 import SendReminderModal from "@Components/SendReminderModal";
 import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
-import { ParticipantData } from "@carp-dk/client";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import NotificationsIcon from "@mui/icons-material/NotificationsSharp";
@@ -11,6 +10,7 @@ import NotificationsIcon from "@mui/icons-material/NotificationsSharp";
 import { getUser } from "@carp-dk/authentication-react";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { useTranslation } from "react-i18next";
+import { ParticipantDataInput } from "@carp-dk/client";
 import {
   AccountIcon,
   Email,
@@ -43,7 +43,9 @@ const BasicInfo = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const [participant, setParticipant] = useState<ParticipantData | null>(null);
+  const [participant, setParticipant] = useState<ParticipantDataInput | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!participantDataLoading && participantData && participantData.groups) {

@@ -5,6 +5,7 @@ import SiteUnavailable from "@Components/SiteUnavailable";
 import StudyHeader from "@Components/StudyHeader";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { useParams } from "react-router-dom";
+import { getUri, PageType } from "@Utils/utility";
 import ProtocolCards from "./ProtocolCards";
 import ProtocolInfo from "./ProtocolInfo";
 
@@ -15,7 +16,10 @@ const StudyProtocol = () => {
     isLoading: studyLoading,
     error: studyError,
   } = useStudyDetails(studyId);
-  const sectionName = "Study Protocol";
+  const sectionName = {
+    name: "Study Protocol",
+    uri: getUri(PageType.PROTOCOL),
+  };
   const description = "See detailed information of Study Protocol.";
   const siteUnavailableDescription = [
     "In order to overview Study Protocol Page, it is necessary to set a protocol for your study first.",
@@ -54,7 +58,7 @@ const StudyProtocol = () => {
       ) : (
         <>
           <StudyHeader
-            path={[sectionName, study.protocolSnapshot.name]}
+            path={[sectionName, { name: study.protocolSnapshot.name, uri: "" }]}
             description={description}
           />
           <ProtocolInfo

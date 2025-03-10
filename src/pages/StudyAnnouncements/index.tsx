@@ -7,6 +7,7 @@ import { MessageData } from "@carp-dk/client";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { getUri, PageType } from "@Utils/utility";
 import StudyAnnouncement, {
   StudyAnnouncmentSkeleton,
 } from "./StudyAnnouncement";
@@ -14,6 +15,10 @@ import { AnnouncementsContainer, StyledFab } from "./styles";
 
 const StudyAnnouncements = () => {
   const { id: studyId } = useParams();
+  const sectionName = {
+    name: "Announcement",
+    uri: getUri(PageType.ANNOUNCEMENTS),
+  };
   const {
     data: announcements,
     isLoading,
@@ -25,11 +30,11 @@ const StudyAnnouncements = () => {
     navigate(`/studies/${studyId}/announcements/new`);
   };
 
-  if (error && error.httpResponseCode !== 404) {
+  if (error && error.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader
-          path={["Announcements"]}
+          path={[sectionName]}
           description="View announcements created by researchers for this study"
         />
         <CarpErrorCardComponent
@@ -43,7 +48,7 @@ const StudyAnnouncements = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["Announcements"]}
+        path={[sectionName]}
         description="View announcements created by researchers for this study"
       />
       <AnnouncementsContainer>

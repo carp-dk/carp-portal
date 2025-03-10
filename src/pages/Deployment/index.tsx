@@ -1,6 +1,7 @@
 import StudyPageLayout from "@Components/Layout/StudyPageLayout";
 import StudyHeader from "@Components/StudyHeader";
 import { useTranslation } from "react-i18next";
+import { getUri, PageType } from "@Utils/utility";
 import BasicInfo from "./BasicInfo";
 import Participants from "./Participants";
 import InformedConsentCard from "./InformedConsentCard";
@@ -9,7 +10,10 @@ import Devices from "./Devices";
 const Deployment = () => {
   const { t } = useTranslation();
 
-  const sectionName = ["Deployments", "Deployment"];
+  const sectionName = [
+    { name: "Deployments", uri: getUri(PageType.DEPLOYMENTS) },
+    { name: "Deployment", uri: getUri(PageType.DEPLOYMENT) },
+  ];
   const description = t("deployment:page_description");
 
   return (
