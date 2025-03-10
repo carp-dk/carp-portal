@@ -4,6 +4,7 @@ import StudyHeader from "@Components/StudyHeader";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { getUri, PageType } from "@Utils/utility";
 import AddResearcherModal from "./AddResearcherModal";
 import Invitations from "./Invitations";
 import StudyData from "./StudyData";
@@ -12,7 +13,10 @@ import StudyStatusSection from "./StudyStatusSection";
 import { StyledContainer } from "./styles";
 
 const Studies: React.FC = () => {
-  const sectionName = "Study Settings";
+  const sectionName = {
+    name: "Study Settings",
+    uri: getUri(PageType.SETTINGS),
+  };
   const description =
     "Give a name, description, set a protocol and invitation.";
   const { id: studyId } = useParams();

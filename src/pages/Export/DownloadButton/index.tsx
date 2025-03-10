@@ -14,7 +14,7 @@ const DownloadButton = ({ cell }: ButtonCellProps) => {
   const studyId = cell.row.original.study_id;
   const { status } = cell.row.original;
   const handleDownload = () => {
-    downloadSummary.mutate({ studyId, summaryId });
+    downloadSummary.mutate({ studyId, exportId: summaryId });
   };
 
   return (

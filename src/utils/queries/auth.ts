@@ -1,5 +1,5 @@
-import { getConfig, getUser } from "@carp-dk/authentication-react";
-import { CarpServiceError, User } from "@carp-dk/client";
+import { getUser } from "@carp-dk/authentication-react";
+import { CarpServiceError, parseUser, User } from "@carp-dk/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import carpApi from "@Utils/api/api";
 import { useSnackbar } from "@Utils/snackbar";
@@ -9,14 +9,14 @@ export const useInviteResearcher = () => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
 
   return useMutation<void, CarpServiceError, string, any>({
-    mutationFn: (email: string) => {
-      return carpApi.inviteResearcher(email, getConfig()); // TODO: add invite researcher to http client
+    mutationFn: (emailAddress: string) => {
+      return carpApi.accounts.invite({ emailAddress, role: "Researcher" }); // TODO: add invite researcher to http client
     },
     onSuccess: () => {
       setSnackbarSuccess("Invitation sent");
     },
     onError: (error: CarpServiceError) => {
-      setSnackbarError(error.httpResponseMessage);
+      setSnackbarError(error.message);
     },
   });
 };
@@ -27,7 +27,8 @@ export const useCurrentUser = () => {
   return useQuery<User, CarpServiceError, User, any>({
     queryKey: ["currentUser"],
     queryFn: async () => {
-      const user = carpApi.parseUser(getUser()?.access_token);
+      const user = parseUser(getUser()?.access_token);
+      carpApi.setAuthToken(getUser()?.access_token);
       return user;
     },
     retry: false,

@@ -69,7 +69,7 @@ export const NameContainer = styled("div")({
 export const DownloadButton = styled(Button)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  height: "36px",
+  height: "72px",
   color: theme.palette.primary.main,
   backgroundColor: "transparent",
   border: "1px solid",

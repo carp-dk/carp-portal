@@ -19,6 +19,11 @@ export const Description = styled(Typography)(({ theme }) => ({
   color: theme.palette.secondary.dark,
 }));
 
+export const Warning = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
+  marginTop: 16,
+}));
+
 export const StudyHeaderContainer = styled("div")({
   marginBottom: 24,
 });

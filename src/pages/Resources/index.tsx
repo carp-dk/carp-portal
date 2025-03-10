@@ -3,7 +3,12 @@ import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
 import StudyPageLayout from "@Components/Layout/StudyPageLayout";
 import StudyHeader from "@Components/StudyHeader";
 import { useDeleteResource, useStudyResources } from "@Utils/queries/studies";
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
+import {
+  formatDateTime,
+  getRandomNumber,
+  getUri,
+  PageType,
+} from "@Utils/utility";
 import { CarpDocument } from "@carp-dk/client";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,6 +38,7 @@ import {
 
 const Resources = () => {
   const { id: studyId } = useParams();
+  const sectionNames = [{ name: "Resources", uri: getUri(PageType.RESOURCES) }];
   const {
     data: resources,
     isLoading: resourcesLoading,
@@ -70,11 +76,11 @@ const Resources = () => {
     actionButtonLabel: "Delete",
   };
 
-  if (resourcesError && resourcesError.httpResponseCode !== 404) {
+  if (resourcesError && resourcesError.code !== 404) {
     return (
       <StudyPageLayout>
         <StudyHeader
-          path={["Resources"]}
+          path={sectionNames}
           description="View files related to this study"
         />
         <CarpErrorCardComponent
@@ -88,7 +94,7 @@ const Resources = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["Resources"]}
+        path={sectionNames}
         description="View files related to this study"
       />
       <StyledCard>

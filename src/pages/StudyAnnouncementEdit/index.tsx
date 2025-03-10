@@ -17,8 +17,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
-import { StyledButton, StyledCard, StyledContainer } from "./styles";
 import { MessageData } from "@carp-dk/client";
+import { getUri, PageType } from "@Utils/utility";
+import { StyledButton, StyledCard, StyledContainer } from "./styles";
 
 const fileTypes = [
   "image/png",
@@ -139,7 +140,13 @@ const StudyAnnouncementEdit = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["Edit announcement"]}
+        path={[
+          { name: "Announcement", uri: getUri(PageType.ANNOUNCEMENTS) },
+          {
+            name: "Edit announcement",
+            uri: getUri(PageType.EDIT_ANNOUNCEMENT),
+          },
+        ]}
         description="Edit an announcement for this study"
       />
       <StyledContainer>

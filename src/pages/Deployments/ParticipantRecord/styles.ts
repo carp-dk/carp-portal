@@ -1,8 +1,9 @@
 import { Button, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 import { getDeviceStatusColor } from "@Utils/utility";
+import { Link } from "react-router-dom";
 
-export const StyledContainer = styled("div")({
+export const StyledContainer = styled(Link)({
   display: "grid",
   gridTemplateColumns: "185px 150px 1fr 2fr 3fr 2fr",
   overflow: "hidden",
@@ -10,7 +11,15 @@ export const StyledContainer = styled("div")({
   columnGap: "16px",
   textDecoration: "none",
   color: "inherit",
-  padding: "12px 16px",
+  padding: "12px 0px 12px 16px",
+  marginRight: "16px",
+  borderRadius: "16px",
+  ":hover": {
+    backgroundColor: "#EDEDED",
+    transition: "background-color 0.2s ease-in-out",
+    cursor: "pointer",
+    borderRadius: "16px",
+  },
 });
 
 export const EmailContainer = styled("div")({

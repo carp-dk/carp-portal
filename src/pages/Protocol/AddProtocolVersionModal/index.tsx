@@ -1,9 +1,12 @@
 import DragAndDrop from "@Components/DragAndDrop";
 import { useUpdateProtocol } from "@Utils/queries/protocols";
-import carpCommon from "@cachet/carp-common";
-import { kotlinx } from "@cachet/carp-kotlinx-serialization";
-import carpProtocols from "@cachet/carp-protocols-core";
-import { ProtocolJSONObject } from "@carp-dk/client";
+import {
+  DefaultSerializer,
+  getSerializer,
+  Json,
+  StudyProtocol,
+  StudyProtocolSnapshot,
+} from "@carp-dk/client";
 import { FormLabel, Modal, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
@@ -18,14 +21,6 @@ import {
   ModalDescription,
   ModalTitle,
 } from "./styles";
-import getSerializer = kotlinx.serialization.getSerializer;
-
-const { StudyProtocolSnapshot } =
-  carpProtocols.dk.cachet.carp.protocols.application;
-const DefaultSerializer =
-  carpCommon.dk.cachet.carp.common.infrastructure.serialization.JSON;
-
-type Json = kotlinx.serialization.json.Json;
 
 interface Props {
   open: boolean;
@@ -95,7 +90,7 @@ const AddProtocolVersionModal = ({
     onSubmit: async (values) => {
       const protocol = JSON.parse(
         await (values.file as File).text(),
-      ) as ProtocolJSONObject;
+      ) as StudyProtocol;
       updateProtocol.mutate({
         name: values.name,
         description: values.description,
@@ -129,7 +124,7 @@ const AddProtocolVersionModal = ({
           await addProtocolFormik.setFieldTouched("protocol", true);
           addProtocolFormik.setFieldValue("protocol", text);
           // automatically populate the ``name`` field from the uploaded protocol if it's empty
-          const parsed = JSON.parse(text) as ProtocolJSONObject;
+          const parsed = JSON.parse(text) as StudyProtocol;
           setFileName(theFile.name);
           if (addProtocolFormik.values.name === "") {
             if (parsed.name) {

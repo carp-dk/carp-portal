@@ -117,7 +117,7 @@ const InactiveDeployments = () => {
               <StyledTableRow
                 onClick={() =>
                   navigate(
-                    `/studies/${studyId}/participants/deployments/${participant.deploymentId}`,
+                    `/studies/${studyId}/deployments/${participant.deploymentId}`,
                   )
                 }
                 key={participant.deploymentId as unknown as string}

@@ -1,6 +1,7 @@
 import { Button, Card, Divider, Typography } from "@mui/material";
 import { styled } from "@Utils/theme";
 import { getDeviceStatusColor, getDeploymentStatusColor } from "@Utils/utility";
+import { Link } from "react-router-dom";
 
 export const StyledCard = styled(Card)({
   display: "flex",
@@ -164,7 +165,7 @@ export const ParticipantsContainer = styled("div")({
   gap: 8,
 });
 
-export const StyledContainer = styled("div")({
+export const StyledContainer = styled(Link)({
   display: "grid",
   gridTemplateColumns:
     "28px minmax(0px, 172px) minmax(0px, 172px) 0.75fr 1fr 1fr 2fr",
@@ -174,6 +175,7 @@ export const StyledContainer = styled("div")({
   textDecoration: "none",
   color: "inherit",
   padding: "12px 4px",
+  borderRadius: 16,
   "&:hover": {
     backgroundColor: "rgba(0, 0, 0, 0.04)",
   },

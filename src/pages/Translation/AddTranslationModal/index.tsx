@@ -1,12 +1,21 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { languageLabels } from "@Assets/languageMap";
 import DragAndDrop from "@Components/DragAndDrop";
-import { FormLabel, Modal } from "@mui/material";
+import {
+  Autocomplete,
+  FormLabel,
+  InputAdornment,
+  MenuItem,
+  Modal,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useCreateTranslation } from "@Utils/queries/studies";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import ReactFlagsSelect from "react-flags-select";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
+import * as flags from "react-flags-select";
 import {
   CancelButton,
   DoneButton,
@@ -121,14 +130,99 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
         </ModalDescription>
         <ModalContainer>
           <ModalContent>
-            <FormLabel required>Language</FormLabel>
-            <ReactFlagsSelect
-              countries={[...Object.keys(languageLabels)]}
-              customLabels={languageLabels}
-              placeholder="Select Language"
-              selected={formik.values.language}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/no-unsafe-member-access
-              onSelect={(code) => formik.setFieldValue("language", code)}
+            <FormLabel id="languageLabel" required>
+              Language
+            </FormLabel>
+            <Autocomplete
+              options={Object.keys(languageLabels)}
+              value={formik.values.language || null}
+              onChange={(_, newValue) => {
+                formik.setFieldValue("language", newValue);
+              }}
+              filterOptions={(options, params) => {
+                return options.filter((option) =>
+                  languageLabels[option].primary
+                    .toLowerCase()
+                    .includes(params.inputValue.toLowerCase()),
+                );
+              }}
+              onBlur={formik.handleBlur}
+              fullWidth
+              getOptionLabel={(option) =>
+                `${languageLabels[option].primary} ${
+                  languageLabels[option].secondary
+                }`
+              }
+              renderInput={(params) => {
+                if (!formik.values.language) {
+                  return (
+                    <TextField
+                      {...params}
+                      placeholder="Select Language"
+                      size="small"
+                    />
+                  );
+                }
+                const countryCode =
+                  formik.values.language[0].toUpperCase() +
+                  formik.values.language[1].toLowerCase();
+                let CountryFlag;
+                if (countryCode in flags) {
+                  CountryFlag = flags[countryCode];
+                } else {
+                  CountryFlag = "div";
+                }
+                return (
+                  <TextField
+                    {...params}
+                    placeholder="Select Language"
+                    size="small"
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          sx={{ marginRight: 0 }}
+                        >
+                          <CountryFlag
+                            name={formik.values.language}
+                            selected=""
+                            onSelect={undefined}
+                            width={25}
+                            style={{ marginLeft: "10px" }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                );
+              }}
+              renderOption={(props, option) => {
+                // eslint-disable-next-line react/prop-types
+                const { key, ...optionProps } = props;
+                const countryCode =
+                  option[0].toUpperCase() + option[1].toLowerCase();
+                let CountryFlag;
+                if (countryCode in flags) {
+                  CountryFlag = flags[countryCode];
+                } else {
+                  CountryFlag = "div";
+                }
+                return (
+                  <MenuItem key={key} {...optionProps}>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                      <CountryFlag
+                        name={option}
+                        selected=""
+                        onSelect={undefined}
+                        width={30}
+                      />
+                      {languageLabels[option].primary}
+                    </Stack>
+                  </MenuItem>
+                );
+              }}
             />
             <FormLabel required>Upload Translation File</FormLabel>
             <DragAndDrop

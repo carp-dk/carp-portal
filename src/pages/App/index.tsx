@@ -132,7 +132,7 @@ const App = () => {
           }
         />
         <Route
-          path="/studies/:id/participants/deployments/:deploymentId/participants/:participantId"
+          path="/studies/:id/deployments/:deploymentId/participants/:participantId"
           element={
             <ProtectedRoute>
               <Participant />
@@ -148,7 +148,7 @@ const App = () => {
           }
         />
         <Route
-          path="/studies/:id/participants/deployments"
+          path="/studies/:id/deployments"
           element={
             <ProtectedRoute>
               <Deployments />
@@ -156,7 +156,7 @@ const App = () => {
           }
         />
         <Route
-          path="/studies/:id/participants/deployments/:deploymentId"
+          path="/studies/:id/deployments/:deploymentId"
           element={
             <ProtectedRoute>
               <Deployment />

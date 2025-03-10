@@ -2,7 +2,6 @@ import DragAndDrop from "@Components/DragAndDrop";
 import StudyPageLayout from "@Components/Layout/StudyPageLayout";
 import StudyHeader from "@Components/StudyHeader";
 import { useCreateAnnouncement } from "@Utils/queries/studies";
-import carpCommon from "@cachet/carp-common";
 import {
   CircularProgress,
   FormControl,
@@ -17,12 +16,11 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
+import { MessageData, UUID } from "@carp-dk/client";
+import { getUri, PageType } from "@Utils/utility";
 import StudyAnnouncementPreview from "../../components/StudyAnnouncementPreview";
 import { StyledContainer } from "../Studies/StudiesSection/styles";
 import { ContainerRight, StyledButton, StyledCard } from "./styles";
-import { MessageData } from "@carp-dk/client";
-
-const { UUID } = carpCommon.dk.cachet.carp.common.application;
 
 const fileTypes = [
   "image/png",
@@ -120,7 +118,13 @@ const StudyAnnouncementNew = () => {
   return (
     <StudyPageLayout>
       <StudyHeader
-        path={["New announcement"]}
+        path={[
+          { name: "Announcement", uri: getUri(PageType.ANNOUNCEMENTS) },
+          {
+            name: "New announcement",
+            uri: getUri(PageType.EDIT_ANNOUNCEMENT),
+          },
+        ]}
         description="Create an announcement for this study"
       />
       <StyledContainer sx={{ flexDirection: "row" }}>

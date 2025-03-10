@@ -4,14 +4,13 @@ import SiteUnavailable from "@Components/SiteUnavailable";
 import StudyHeader from "@Components/StudyHeader";
 import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
 import { useStudyStatus } from "@Utils/queries/studies";
-import carpStudies from "@cachet/carp-studies-core";
-import { ParticipantGroup } from "@carp-dk/client";
+import { ParticipantGroup, StudyStatus } from "@carp-dk/client";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { getUri, PageType } from "@Utils/utility";
 import DeploymentCard, { DeploymentSkeletonCard } from "./DeploymentCard";
 import Pagination from "./Pagination";
 import Toolbar from "./Toolbar";
-import StudyStatus = carpStudies.dk.cachet.carp.studies.application.StudyStatus;
 
 const PageSize = 8;
 
@@ -83,9 +82,12 @@ const Deployments = () => {
         );
       }
     }
-  }, [searchText, currentPage, deploymentsData]);
+  }, [searchText, currentPage, deploymentsData, studyStatus]);
 
-  const sectionName = "Deployments";
+  const sectionName = {
+    name: "Deployments",
+    uri: getUri(PageType.DEPLOYMENTS),
+  };
   const description =
     "See all the deployments, expand them for more information.";
   const siteUnavailableDescription = [

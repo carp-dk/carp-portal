@@ -72,7 +72,7 @@ const Devices = () => {
       })
       .catch((err) => {
         if (
-          (err as CarpServiceError).httpResponseMessage !==
+          (err as CarpServiceError).message !==
           "The passed device is already registered."
         ) {
           throw err;

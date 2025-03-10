@@ -10,8 +10,7 @@ import { PieValueType } from "@mui/x-charts";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import carpStudies from "@cachet/carp-studies-core";
-import carpDeployments from "@cachet/carp-deployments-core";
+import { ParticipantGroupStatus, StudyDeploymentStatus } from "@carp-dk/client";
 import LoadingSkeleton from "../LoadingSkeleton";
 import DeploymentStatusLegend from "./DeploymentStatusLegend";
 import TooltipContent from "./TooltipContent";
@@ -22,8 +21,6 @@ import {
   StyledTooltip,
   Top,
 } from "./styles";
-import ParticipantGroupStatus = carpStudies.dk.cachet.carp.studies.application.users.ParticipantGroupStatus;
-import StudyDeploymentStatus = carpDeployments.dk.cachet.carp.deployments.application.StudyDeploymentStatus;
 
 const DeploymentStatus = () => {
   const navigate = useNavigate();
@@ -38,7 +35,7 @@ const DeploymentStatus = () => {
 
   useEffect(() => {
     if (!participantStatus) return;
-    const data = participantStatus.reduce(
+    const data = participantStatus.toArray().reduce(
       (acc, curr) => {
         if (curr instanceof ParticipantGroupStatus.InDeployment) {
           const depStatus = curr.studyDeploymentStatus;
@@ -66,7 +63,7 @@ const DeploymentStatus = () => {
         deploying: {
           id: 1,
           value: 0,
-          label: "Deploying Devices",
+          label: "Deploying",
           color: getDeploymentStatusColor("DeployingDevices"),
         },
         running: {
@@ -117,9 +114,7 @@ const DeploymentStatus = () => {
           </StyledTooltip>
         </StyledTitle>
         <StyledButton
-          onClick={() =>
-            navigate(`/studies/${studyId}/participants/deployments`)
-          }
+          onClick={() => navigate(`/studies/${studyId}/deployments`)}
           variant="outlined"
         >
           <ManageAccountsIcon fontSize="small" color="primary" />
@@ -150,7 +145,7 @@ const DeploymentStatus = () => {
             }}
             tooltip={{ trigger: "none" }}
           >
-            <PieCenterLabel>{participantStatus.length}</PieCenterLabel>
+            <PieCenterLabel>{participantStatus.size()}</PieCenterLabel>
           </PieChart>
         </div>
         <DeploymentStatusLegend data={statuses} />
