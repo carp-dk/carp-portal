@@ -41,7 +41,7 @@ const consentSchema = yup.object({
 
 const UploadInformedConsentModal = ({ open, onClose }: Props) => {
   const { t } = useTranslation();
-  const { participantId, id: studyId } = useParams();
+  const { participantId, deploymentId, id: studyId } = useParams();
 
   const uploading = false;
   const createFile = useCreateFile();
@@ -62,6 +62,7 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
           "participant-id": participantId,
         }),
       );
+      formData.append("deployment_id", deploymentId);
       await createFile.mutateAsync({
         studyId,
         formData,

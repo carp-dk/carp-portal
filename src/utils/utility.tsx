@@ -340,12 +340,19 @@ interface ConsentDocument {
   sections: Section[];
 }
 
+interface DataTypeSection {
+  __type: string;
+  dataName: string;
+  dataInformation: string;
+}
+
 interface Section {
   __type: string;
   type: string;
   title: string;
   summary: string;
   content: string;
+  dataTypes: DataTypeSection[];
 }
 
 Font.register({
@@ -370,8 +377,13 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     margin: "12 12 0 12",
   },
+  h3: {
+    fontSize: 14,
+    fontWeight: 400,
+    margin: "12 12 0 12",
+  },
   text: {
-    margin: "12 12 12 12",
+    margin: "0 12 12 12",
     fontSize: 12,
     textAlign: "justify",
     fontWeight: 300,
@@ -444,6 +456,17 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
                 {section.summary.replaceAll("\n", " ")}
               </Text>
               <Text style={styles.text}>{section.content}</Text>
+              {section.dataTypes &&
+                section.dataTypes.map((dataType) => {
+                  return (
+                    <div key={dataType.dataName}>
+                      <Text style={styles.h3}>{dataType.dataName}</Text>
+                      <Text style={styles.text}>
+                        {dataType.dataInformation}
+                      </Text>
+                    </div>
+                  );
+                })}
             </div>
           );
         })}
