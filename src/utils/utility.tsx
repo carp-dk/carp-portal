@@ -377,11 +377,9 @@ const styles = StyleSheet.create({
     fontWeight: 300,
   },
   italics: {
-    fontStyle: "italic",
     textAlign: "justify",
     margin: "12 12 0 12",
     fontSize: 12,
-    fontWeight: 300,
     fontFamily: "Times-Italic",
   },
   date: {
