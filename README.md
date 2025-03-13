@@ -33,7 +33,7 @@ VITE_KEYCLOAK_REDIRECT_URI= <Valid Keycloak redirect URL to redirect after login
 
 ### Folder structure
 
-The [src](src) folder contains all the Typescript source code and static asset for the web interface. The web interface is using custom CARP fonts (MuseoSansRounded), and these custom font files can be found in the [fonts](src/assets/fonts) folder. The carp logo and the image used on the landing page are located in the [images](src/assets/images) folder. The [components](src/components) folder holds all the reusable components for the application and [pages](src/pages) contains the full sites, which are usually build up using the reusable components.
+The [src](src) folder contains all the Typescript source code and static asset for the web interface. The web interface is using custom CARP fonts, and these custom font files can be found in the [fonts](src/assets/fonts) folder. The carp logo and the image used on the landing page are located in the [images](src/assets/images) folder. The [components](src/components) folder holds all the reusable components for the application and [pages](src/pages) contains the full sites, which are usually build up using the reusable components.
 
 ## Deployment
 
