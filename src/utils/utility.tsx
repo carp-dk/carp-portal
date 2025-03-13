@@ -27,8 +27,10 @@ import {
   Text,
   StyleSheet,
   Image as PdfImage,
+  Font,
 } from "@react-pdf/renderer";
 import { useParams } from "react-router";
+import TimesItalics from "src/assets/fonts/Times-Italic Regular.ttf";
 
 const dataLegendColors = {
   activity: "#245B78",
@@ -345,6 +347,11 @@ interface Section {
   summary: string;
   content: string;
 }
+
+Font.register({
+  family: "Times-Italic",
+  src: TimesItalics,
+});
 
 const styles = StyleSheet.create({
   body: {
