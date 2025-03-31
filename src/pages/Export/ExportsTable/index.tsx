@@ -117,7 +117,7 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
       <CreateSummaryButton
         variant="outlined"
         startIcon={<AddRoundedIcon />}
-        onClick={() => createSummary.mutate({ studyId, deploymentIds: [] })}
+        onClick={() => createSummary.mutate({ studyId, deploymentIds: null })}
       >
         New Export
       </CreateSummaryButton>
