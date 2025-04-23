@@ -1,4 +1,3 @@
-import {DataStreamSummary, DataStreamSummaryRequest} from "../../../../carp-client-ts/src";
 import {StyledCard, StyledTitle, StyledDescription, WrapperForControlsAndChart} from "./styles";
 import {Skeleton, Box} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
@@ -7,12 +6,17 @@ import {mapDataToChartData} from "@Components/StackedBarChartWrapper/helper";
 import React from "react";
 import {LocalDate, LocalDateTime} from "@js-joda/core";
 import {useDataStreamsSummary} from "@Utils/queries/dataStreams";
+import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-dk/client";
 
-interface Props {
+export interface StackedBarChartWrapperProps {
     studyId: string;
+    deploymentId?: string;
+    participantId?: string;
     title: string;
     subtitle: string;
-    type: string;
+    type: DataStreamType;
+    scope: DataStreamScope;
+    headingColor: string;
 }
 
 const taskColors = {
@@ -24,7 +28,7 @@ const taskColors = {
     "Video": "#81CFFA"
 }
 
-const StackedBarChartWrapper = (props: Props) => {
+const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
     const [toDate, setToDate] = React.useState(LocalDate.now());
     const fromDate = toDate.minusDays(14)
     const [expanded, setExpanded] = React.useState(false);
@@ -43,10 +47,10 @@ const StackedBarChartWrapper = (props: Props) => {
 
     const dataStreamSummaryRequest: DataStreamSummaryRequest = {
         study_id: props.studyId,
-        deployment_id: undefined,
-        participant_id: undefined,
-        scope: "study",
-        type: "survey",
+        deployment_id: props.deploymentId,
+        participant_id: props.participantId,
+        scope: props.scope,
+        type: props.type,
         from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
         to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
     }

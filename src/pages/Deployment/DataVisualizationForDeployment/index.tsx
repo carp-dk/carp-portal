@@ -61,8 +61,8 @@ const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
     }
 ]
 
-const DataVisualizationForStudy = () => {
-    const {id: studyId} = useParams();
+const DataVisualizationForDeployment = () => {
+    const {id: studyId, deploymentId} = useParams();
 
     return (
         <StyledContainer>
@@ -74,11 +74,12 @@ const DataVisualizationForStudy = () => {
                     <React.Fragment key={cfg.type}>
                         <StackedBarChartWrapper
                             studyId={studyId}
+                            deploymentId={deploymentId}
                             type={cfg.type}
                             title={cfg.title}
                             subtitle={cfg.subtitle}
                             headingColor={cfg.headingColor}
-                            scope={'study'}
+                            scope={'deployment'}
                         />
                         <Box sx={{p: 2.5}}/>
                     </React.Fragment>
@@ -89,4 +90,4 @@ const DataVisualizationForStudy = () => {
     );
 }
 
-export default DataVisualizationForStudy;
+export default DataVisualizationForDeployment;
