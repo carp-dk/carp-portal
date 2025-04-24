@@ -53,12 +53,6 @@ const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
         type: "sensing",
         headingColor: '#186537'
     },
-    {
-        title: "One Time Sensing",
-        subtitle: "Number of One Time Sensing tasks done by this participant.",
-        type: "one_time_sensing",
-        headingColor: '#a31313',
-    }
 ]
 
 const DataVisualizationForDeployment = () => {
