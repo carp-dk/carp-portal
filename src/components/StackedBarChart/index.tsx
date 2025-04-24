@@ -10,6 +10,9 @@ const StackedBarChart = ({
                              series, data
                          }: StackedBarChartForDataStreamsSummaryProps) => {
 
+    console.log(series)
+    console.log(data)
+
     function CustomAxisLine(props) {
         return <div/>;
     }
@@ -19,12 +22,22 @@ const StackedBarChart = ({
             skipAnimation={true}
             dataset={data}
             series={series}
+            slotProps={{
+                legend: {
+                    direction: 'vertical',
+                    position: {
+                        vertical: 'middle',
+                        horizontal: 'start'
+                    },
+                }
+            }}
             slots={
                 {
-                    axisLine: CustomAxisLine,
+                    // axisLine: CustomAxisLine,
                 }
             }
             xAxis={[{scaleType: 'band', dataKey: 'date'}]}
+
         />
     )
 };
