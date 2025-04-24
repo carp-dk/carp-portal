@@ -30,16 +30,10 @@ const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
         headingColor: '#67CE67'
     },
     {
-        title: "Image",
-        subtitle: "Number of Image tasks done by this participant.",
+        title: "Image/Video",
+        subtitle: "Number of Image/Video tasks done by this participant.",
         type: "image",
         headingColor: '#228B89'
-    },
-    {
-        title: "Video",
-        subtitle: "Number of Video tasks done by this participant.",
-        type: "video",
-        headingColor: '#81CFFA'
     },
     {
         title: "Informed Consent",
