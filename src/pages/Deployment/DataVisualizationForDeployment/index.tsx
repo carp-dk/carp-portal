@@ -36,12 +36,6 @@ const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
         headingColor: '#228B89'
     },
     {
-        title: "Informed Consent",
-        subtitle: "Number of Informed Consent tasks done by this participant.",
-        type: "informed_consent",
-        headingColor: '#b111ff'
-    },
-    {
         title: "Sensing",
         subtitle: "Number of Sensing tasks done by this participant.",
         type: "sensing",
