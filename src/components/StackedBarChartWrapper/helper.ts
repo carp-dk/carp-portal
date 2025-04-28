@@ -35,6 +35,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
         label: task,
         dataKey: task,
         stack: '',
+        labelMarkType: 'circle',
     }));
 
     return {series, mappedData}
