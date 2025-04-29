@@ -1,4 +1,16 @@
 import {DataStreamSummary} from "../../../../carp-client-ts/src";
+import { parseISO, getISOWeek, getISODay, getISOWeekYear } from 'date-fns';
+
+export const colors = [
+    "#8A9251", // Olive green
+    "#679C91", // Desaturated teal
+    "#4B9BBE", // Sky blue
+    "#377895", // Steel blue
+    "#2E5F7D", // Dark blue-gray
+    "#254765", // Charcoal navy
+    "#1C314E", // Deep indigo
+    "#131D37"  // Midnight blue
+];
 
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map(item => item.task)));
@@ -31,11 +43,12 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     });
 
 
-    let series = Array.from(uniqueTasks).map((task) => ({
+    let series = Array.from(uniqueTasks).map((task, index) => ({
         label: task,
         dataKey: task,
-        stack: '',
+        stack: 'stack',
         labelMarkType: 'circle',
+        color: colors[index % colors.length], // 🎨 assign color cyclically
     }));
 
     return {series, mappedData}
@@ -53,4 +66,12 @@ function generateDateRange(startISO: string, endISO: string): string[] {
     }
 
     return dates;
+}
+
+export function fancyDateFromISOString(isoString: string): string {
+    const year = isoString.substring(0, 4);
+    const month = isoString.substring(5, 7);
+    const day = isoString.substring(8, 10);
+
+    return `${day}/${month}/${year}`;
 }

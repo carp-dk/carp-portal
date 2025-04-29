@@ -1,12 +1,21 @@
-import {StyledCard, StyledTitle, StyledDescription, WrapperForControlsAndChart} from "./styles";
-import {Skeleton, Box} from "@mui/material";
+import {
+    StyledCard,
+    StyledTitle,
+    StyledDescription,
+    Wrapper,
+    StyledLi,
+    BulletPoint,
+    StyledUl, StyledLabel, RightWrapper, DateRangeLabel, ControlsAndChartWrapper, StyledControlButton
+} from "./styles";
+import {Skeleton, Box, Button} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import StackedBarChart from "@Components/StackedBarChart";
-import {mapDataToChartData} from "@Components/StackedBarChartWrapper/helper";
+import {fancyDateFromISOString, mapDataToChartData} from "@Components/StackedBarChartWrapper/helper";
 import React from "react";
 import {LocalDate, LocalDateTime} from "@js-joda/core";
 import {useDataStreamsSummary} from "@Utils/queries/dataStreams";
 import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-dk/client";
+import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 
 export interface StackedBarChartWrapperProps {
     studyId: string;
@@ -131,16 +140,32 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
                 {props.subtitle}
             </StyledDescription>
             <Box sx={{m: 1.5}}/>
-            <span>From: {data.from}</span>
-            <span>To: {data.to}</span>
-            <WrapperForControlsAndChart>
-                <button onClick={() => handleLeftButtonClick()}>-</button>
-                <StackedBarChart
-                    data={mappedData}
-                    series={series}
-                />
-                <button onClick={() => handleRightButtonClick()}>+</button>
-            </WrapperForControlsAndChart>
+            <Wrapper>
+                <StyledUl>
+                    {series.map((task => (
+                        <StyledLi key={task.label}>
+                            <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>
+                            <StyledLabel>{task.label}</StyledLabel>
+                        </StyledLi>
+                    )))}
+                </StyledUl>
+
+                <RightWrapper>
+                    <DateRangeLabel>{fancyDateFromISOString(data.from)} - {fancyDateFromISOString(data.to)}</DateRangeLabel>
+                    <ControlsAndChartWrapper>
+                        <StyledControlButton onClick={() => handleLeftButtonClick()}>
+                            <ChevronLeft></ChevronLeft>
+                        </StyledControlButton>
+                        <StackedBarChart
+                            data={mappedData}
+                            series={series}
+                        />
+                        <StyledControlButton onClick={() => handleRightButtonClick()}>
+                            <ChevronRight></ChevronRight>
+                        </StyledControlButton>
+                    </ControlsAndChartWrapper>
+                </RightWrapper>
+            </Wrapper>
         </StyledCard>
     );
 };
