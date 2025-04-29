@@ -38,6 +38,13 @@ const StackedBarChart = ({
             dataset={data}
             series={series}
             colors={colors}
+            sx={{
+                ['svg']: {
+                    backgroundColor: 'white',
+                    borderRadius: '25px',
+                    filter: 'drop-shadow(1px 1px 6px black)'
+                }
+            }}
             slotProps={{
                 legend: {
                     direction: 'vertical',
@@ -62,13 +69,19 @@ const StackedBarChart = ({
                         whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis'
                     }
-                }
+                },
+                axisLine: {
+                    visibility: 'hidden'
+                },
+                axisTick: {
+                    visibility: 'hidden',
+                },
             }}
-            slots={
-                {
-                    // axisLine: CustomAxisLine,
-                }
-            }
+            // slots={
+            //     {
+            //         // axisLine: CustomAxisLine,
+            //     }
+            // }
             xAxis={[
                 {
                     scaleType: 'band',
