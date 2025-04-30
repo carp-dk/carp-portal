@@ -4,6 +4,8 @@ import {useParams} from "react-router-dom";
 import StackedBarChartWrapper, {StackedBarChartWrapperProps} from "@Components/StackedBarChartWrapper";
 import {Box} from '@mui/system';
 
+//TODO: filter beforehand the available types
+
 const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
     {
         title: "Survey",

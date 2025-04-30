@@ -1,5 +1,14 @@
 import {DataStreamSummary} from "../../../../carp-client-ts/src";
-import { parseISO, getISOWeek, getISODay, getISOWeekYear } from 'date-fns';
+import {LocalDateTime} from "@js-joda/core";
+
+export const taskLabelColors = {
+    "Survey": "#3A82F7",
+    "Cognitive": "#B25FEA",
+    "Health": "#EB4B62",
+    "Audio": "#67CE67",
+    "Image": "#228B89",
+    "Video": "#81CFFA"
+}
 
 export const colors = [
     "#8A9251", // Olive green
@@ -11,6 +20,18 @@ export const colors = [
     "#1C314E", // Deep indigo
     "#131D37"  // Midnight blue
 ];
+
+export function toUTCDate(localDateTime: LocalDateTime): Date {
+    return new Date(Date.UTC(
+        localDateTime.year(),
+        localDateTime.monthValue() - 1,
+        localDateTime.dayOfMonth(),
+        localDateTime.hour(),
+        localDateTime.minute(),
+        localDateTime.second(),
+        Math.floor(localDateTime.nano() / 1_000_000)
+    ));
+}
 
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map(item => item.task)));
@@ -51,7 +72,17 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
         color: colors[index % colors.length], // 🎨 assign color cyclically
     }));
 
-    return {series, mappedData}
+    const mappedDataWithFancyDates = mappedData.map((item) => {
+        //example of date now 2024-01-01
+        const month = item.date.substring(5, 7);
+        const day = item.date.substring(8, 10);
+        return {
+            ...item,
+            date: `${day}/${month}`,
+        }
+    })
+
+    return {series, mappedData: mappedDataWithFancyDates}
 }
 
 function generateDateRange(startISO: string, endISO: string): string[] {

@@ -1,5 +1,6 @@
 import {styled} from "@Utils/theme";
 import {Button, Card, Typography} from "@mui/material";
+import {ChevronLeft} from "@mui/icons-material";
 
 export const StyledCard = styled(Card)({
     display: "flex",
@@ -8,6 +9,26 @@ export const StyledCard = styled(Card)({
     borderRadius: 16,
     width: "100%",
 });
+
+export const NotExpandedStyledCard = styled(StyledCard)({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+})
+
+export const ChevronDown = styled(ChevronLeft)({
+    transform: "rotate(-90deg)",
+})
+
+export const FlexRowBetween = styled("div")({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+})
+
+export const ChevronUp = styled(ChevronLeft)({
+    transform: "rotate(90deg)",
+})
 
 interface StyledTitleProps {
     customcolor?: string;
@@ -29,6 +50,7 @@ export const Wrapper = styled("div")({
     height: 300,
     display: "flex",
     flexDirection: "row",
+    gap: '72px'
 });
 
 export const RightWrapper = styled(Card)({

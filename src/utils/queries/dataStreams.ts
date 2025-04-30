@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, UseQueryOptions} from "@tanstack/react-query";
 import carpApi from "@Utils/api/api";
 import {
     CarpServiceError,
@@ -6,10 +6,13 @@ import {
     DataStreamSummaryRequest,
 } from "@carp-dk/client";
 
-export const useDataStreamsSummary = (request: DataStreamSummaryRequest) => {
+export const useDataStreamsSummary = (
+    request: DataStreamSummaryRequest,
+    options?: UseQueryOptions
+) => {
     return useQuery<DataStreamSummary, CarpServiceError>({
         queryFn: () => carpApi.dataStreams.getDataStreamSummary(request),
         queryKey: ["dataStreamSummary", {...request}],
+        enabled: options?.enabled ?? true,
     });
 };
-//todo fix imports

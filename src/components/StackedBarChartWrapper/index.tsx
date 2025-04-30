@@ -5,14 +5,25 @@ import {
     Wrapper,
     StyledLi,
     BulletPoint,
-    StyledUl, StyledLabel, RightWrapper, DateRangeLabel, ControlsAndChartWrapper, StyledControlButton
+    StyledUl,
+    StyledLabel,
+    RightWrapper,
+    DateRangeLabel,
+    ControlsAndChartWrapper,
+    StyledControlButton,
+    NotExpandedStyledCard, ChevronDown, FlexRowBetween, ChevronUp
 } from "./styles";
-import {Skeleton, Box, Button} from "@mui/material";
+import {Skeleton, Box} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import StackedBarChart from "@Components/StackedBarChart";
-import {fancyDateFromISOString, mapDataToChartData} from "@Components/StackedBarChartWrapper/helper";
+import {
+    fancyDateFromISOString,
+    mapDataToChartData,
+    taskLabelColors,
+    toUTCDate
+} from "@Components/StackedBarChartWrapper/helper";
 import React from "react";
-import {LocalDate, LocalDateTime} from "@js-joda/core";
+import {LocalDate} from "@js-joda/core";
 import {useDataStreamsSummary} from "@Utils/queries/dataStreams";
 import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-dk/client";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
@@ -28,31 +39,10 @@ export interface StackedBarChartWrapperProps {
     headingColor: string;
 }
 
-const taskColors = {
-    "Survey": "#3A82F7",
-    "Cognitive": "#B25FEA",
-    "Health": "#EB4B62",
-    "Audio": "#67CE67",
-    "Image": "#228B89",
-    "Video": "#81CFFA"
-}
-
 const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
     const [toDate, setToDate] = React.useState(LocalDate.now());
     const fromDate = toDate.minusDays(14)
     const [expanded, setExpanded] = React.useState(false);
-
-    function toUTCDate(localDateTime: LocalDateTime): Date {
-        return new Date(Date.UTC(
-            localDateTime.year(),
-            localDateTime.monthValue() - 1,
-            localDateTime.dayOfMonth(),
-            localDateTime.hour(),
-            localDateTime.minute(),
-            localDateTime.second(),
-            Math.floor(localDateTime.nano() / 1_000_000)
-        ));
-    }
 
     const dataStreamSummaryRequest: DataStreamSummaryRequest = {
         study_id: props.studyId,
@@ -68,24 +58,7 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
         setExpanded(prev => !prev);
     }
 
-    // if (!expanded) {
-    //     return (
-    //         <StyledCard>
-    //             <StyledTitle variant="h2" customcolor={taskColors[props.title]}>
-    //                 {props.title}
-    //             </StyledTitle>
-    //             <button onClick={() => toggleExpanded()}>
-    //                 s
-    //             </button>
-    //         </StyledCard>
-    //     )
-    // }
-
-    const {
-        data,
-        isLoading,
-        error,
-    } = useDataStreamsSummary(dataStreamSummaryRequest);
+    const {data, isLoading, error,} = useDataStreamsSummary(dataStreamSummaryRequest, {enabled: expanded});
 
     const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
@@ -96,14 +69,27 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
     function handleRightButtonClick() {
         if (isToDateSetToTheCurrentDay) return;
 
-        if (isToDateSetToTheCurrentDay) return;
-
         const newToDate = toDate.plusDays(14);
         const today = LocalDate.now();
 
         // Don't go beyond today
         setToDate(newToDate.isAfter(today) ? today : newToDate);
     }
+
+    if (!expanded) {
+        return (
+            <NotExpandedStyledCard>
+                <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
+                    {props.title}
+                </StyledTitle>
+
+                <StyledControlButton onClick={() => toggleExpanded()}>
+                    <ChevronDown></ChevronDown>
+                </StyledControlButton>
+            </NotExpandedStyledCard>
+        )
+    }
+
 
     if (error) {
         return (
@@ -117,14 +103,19 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
     if (isLoading) {
         return (
             <StyledCard>
-                <StyledTitle variant="h2" customcolor={taskColors[props.title]}>
-                    {props.title}
-                </StyledTitle>
+                <FlexRowBetween>
+                    <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
+                        {props.title}
+                    </StyledTitle>
+                    <StyledControlButton>
+                        <ChevronUp></ChevronUp>
+                    </StyledControlButton>
+                </FlexRowBetween>
                 <StyledDescription variant="h6">
                     {props.subtitle}
                 </StyledDescription>
                 <Box sx={{m: 1.5}}/>
-                <Skeleton variant="rectangular" height={'100px'} animation="wave"/>
+                <Skeleton variant="rectangular" height={'300px'} animation="wave"/>
             </StyledCard>
         );
     }
@@ -133,22 +124,29 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
 
     return (
         <StyledCard>
-            <StyledTitle variant="h2" customcolor={taskColors[props.title]}>
-                {props.title}
-            </StyledTitle>
+            <FlexRowBetween>
+                <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
+                    {props.title}
+                </StyledTitle>
+                <StyledControlButton onClick={() => toggleExpanded()}>
+                    <ChevronUp></ChevronUp>
+                </StyledControlButton>
+            </FlexRowBetween>
             <StyledDescription variant="h6">
                 {props.subtitle}
             </StyledDescription>
             <Box sx={{m: 1.5}}/>
             <Wrapper>
-                <StyledUl>
-                    {series.map((task => (
-                        <StyledLi key={task.label}>
-                            <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>
-                            <StyledLabel>{task.label}</StyledLabel>
-                        </StyledLi>
-                    )))}
-                </StyledUl>
+                {series.length != 0 && (
+                    <StyledUl>
+                        {series.map((task => (
+                            <StyledLi key={task.label}>
+                                <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>
+                                <StyledLabel>{task.label}</StyledLabel>
+                            </StyledLi>
+                        )))}
+                    </StyledUl>
+                )}
 
                 <RightWrapper>
                     <DateRangeLabel>{fancyDateFromISOString(data.from)} - {fancyDateFromISOString(data.to)}</DateRangeLabel>
