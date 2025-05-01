@@ -1,5 +1,8 @@
 import {DataStreamSummary} from "../../../../carp-client-ts/src";
 import {LocalDateTime} from "@js-joda/core";
+import {StackedBarChartWrapperProps} from "@Components/StackedBarChartWrapper/index";
+import {DataStreamType} from "../../../../carp-client-ts/src/shared/models/dataStream";
+import {StudyProtocolSnapshot} from "@carp-dk/client";
 
 export const taskLabelColors = {
     "Survey": "#3A82F7",
@@ -21,6 +24,45 @@ export const colors = [
     "#131D37"  // Midnight blue
 ];
 
+export const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
+    {
+        title: "Survey",
+        subtitle: "Number of Survey tasks done by this participant.",
+        type: "survey",
+        headingColor: '#3A82F7'
+    },
+    {
+        title: "Cognitive",
+        subtitle: "Number of Cognitive tasks done by this participant.",
+        type: "cognition",
+        headingColor: '#B25FEA'
+    },
+    {
+        title: "Health",
+        subtitle: "Number of Health tasks done by this participant.",
+        type: "health",
+        headingColor: '#EB4B62'
+    },
+    {
+        title: "Audio",
+        subtitle: "Number of Audio tasks done by this participant.",
+        type: "audio",
+        headingColor: '#67CE67'
+    },
+    {
+        title: "Image/Video",
+        subtitle: "Number of Image/Video tasks done by this participant.",
+        type: "image",
+        headingColor: '#228B89'
+    },
+    {
+        title: "Sensing",
+        subtitle: "Number of Sensing tasks done by this participant.",
+        type: "sensing",
+        headingColor: '#186537'
+    },
+]
+
 export function toUTCDate(localDateTime: LocalDateTime): Date {
     return new Date(Date.UTC(
         localDateTime.year(),
@@ -31,6 +73,28 @@ export function toUTCDate(localDateTime: LocalDateTime): Date {
         localDateTime.second(),
         Math.floor(localDateTime.nano() / 1_000_000)
     ));
+}
+
+export function fancyDateFromISOString(isoString: string): string {
+    const year = isoString.substring(0, 4);
+    const month = isoString.substring(5, 7);
+    const day = isoString.substring(8, 10);
+
+    return `${day}/${month}/${year}`;
+}
+
+function generateDateRange(startISO: string, endISO: string): string[] {
+    const dates: string[] = [];
+
+    const current = new Date(startISO);
+    const end = new Date(endISO);
+
+    while (current <= end) {
+        dates.push(current.toISOString().split('T')[0]);
+        current.setDate(current.getDate() + 1);
+    }
+
+    return dates;
 }
 
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
@@ -85,24 +149,26 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     return {series, mappedData: mappedDataWithFancyDates}
 }
 
-function generateDateRange(startISO: string, endISO: string): string[] {
-    const dates: string[] = [];
-
-    const current = new Date(startISO);
-    const end = new Date(endISO);
-
-    while (current <= end) {
-        dates.push(current.toISOString().split('T')[0]);
-        current.setDate(current.getDate() + 1);
-    }
-
-    return dates;
+export function getListOfTasksFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): Object[] {
+    return protocolSnapshot.tasks['g4_1']['h4_1'].filter(x => x?.['u21_1'] != null).map(x => JSON.parse(x['u21_1']));
 }
 
-export function fancyDateFromISOString(isoString: string): string {
-    const year = isoString.substring(0, 4);
-    const month = isoString.substring(5, 7);
-    const day = isoString.substring(8, 10);
+export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): string[] {
+    let tasks = getListOfTasksFromProtocolSnapshot(protocolSnapshot);
+    let uniqueTaskTypes = new Set<string>(tasks.map((task: any) => task.type));
 
-    return `${day}/${month}/${year}`;
+    return Array.from(uniqueTaskTypes);
 }
+
+export function getLegend(type: DataStreamType, tasks: Object[]): { label: string, color: string }[] {
+    let tasksOfType = tasks.filter((task: any) => task.type === type);
+    return tasksOfType.map((task: any, index) => {
+        return {
+            label: task.title,
+            color: colors[index % colors.length], // 🎨 assign color cyclically
+        }
+    });
+}
+
+
+

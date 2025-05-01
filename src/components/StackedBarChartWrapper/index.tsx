@@ -29,20 +29,22 @@ import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-d
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 
 export interface StackedBarChartWrapperProps {
-    studyId: string;
     deploymentId?: string;
-    participantId?: string;
-    title: string;
-    subtitle: string;
-    type: DataStreamType;
-    scope: DataStreamScope;
     headingColor: string;
+    initiallyExtended: boolean;
+    participantId?: string;
+    scope: DataStreamScope;
+    studyId: string;
+    subtitle: string;
+    title: string;
+    type: DataStreamType;
+    legend: Object[];
 }
 
 const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
     const [toDate, setToDate] = React.useState(LocalDate.now());
     const fromDate = toDate.minusDays(14)
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = React.useState(props.initiallyExtended);
 
     const dataStreamSummaryRequest: DataStreamSummaryRequest = {
         study_id: props.studyId,
@@ -137,16 +139,20 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
             </StyledDescription>
             <Box sx={{m: 1.5}}/>
             <Wrapper>
-                {series.length != 0 && (
-                    <StyledUl>
-                        {series.map((task => (
-                            <StyledLi key={task.label}>
-                                <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>
-                                <StyledLabel>{task.label}</StyledLabel>
-                            </StyledLi>
-                        )))}
-                    </StyledUl>
-                )}
+                <StyledUl>
+                    {/*{series.map((task => (*/}
+                    {/*    <StyledLi key={task.label}>*/}
+                    {/*        <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>*/}
+                    {/*        <StyledLabel>{task.label}</StyledLabel>*/}
+                    {/*    </StyledLi>*/}
+                    {/*)))}*/}
+                    {props.legend.map((i => (
+                        <StyledLi key={i.label}>
+                            <BulletPoint style={{backgroundColor: i.color}}></BulletPoint>
+                            <StyledLabel>{i.label}</StyledLabel>
+                        </StyledLi>
+                    )))}
+                </StyledUl>
 
                 <RightWrapper>
                     <DateRangeLabel>{fancyDateFromISOString(data.from)} - {fancyDateFromISOString(data.to)}</DateRangeLabel>
