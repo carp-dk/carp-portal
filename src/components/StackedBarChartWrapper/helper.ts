@@ -98,6 +98,8 @@ function generateDateRange(startISO: string, endISO: string): string[] {
 }
 
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
+    let isThereAnyData = false;
+
     const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map(item => item.task)));
 
     const groupedData = dataStreamSummary.data.reduce((acc, {date, task, quantity}) => {
@@ -119,6 +121,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
 
     const mappedData = dates.map(day => {
         if (groupedData[day]) {
+            isThereAnyData = true;
             return groupedData[day];
         }
 
@@ -126,15 +129,6 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
         uniqueTasks.forEach(task => empty[task] = 0);
         return empty;
     });
-
-
-    let series = Array.from(uniqueTasks).map((task, index) => ({
-        label: task,
-        dataKey: task,
-        stack: 'stack',
-        labelMarkType: 'circle',
-        color: colors[index % colors.length], // 🎨 assign color cyclically
-    }));
 
     const mappedDataWithFancyDates = mappedData.map((item) => {
         //example of date now 2024-01-01
@@ -146,7 +140,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
         }
     })
 
-    return {series, mappedData: mappedDataWithFancyDates}
+    return {mappedData: mappedDataWithFancyDates, isThereAnyData};
 }
 
 export function getListOfTasksFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): Object[] {
@@ -166,6 +160,9 @@ export function getLegend(type: DataStreamType, tasks: Object[]): { label: strin
         return {
             label: task.title,
             color: colors[index % colors.length], // 🎨 assign color cyclically
+            stack: 'stack',
+            labelMarkType: 'circle',
+            dataKey: task.title,
         }
     });
 }

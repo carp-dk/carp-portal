@@ -1,50 +1,60 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyledContainer, StyledTitle} from "./styles";
 import {useParams} from "react-router-dom";
-import StackedBarChartWrapper, {StackedBarChartWrapperProps} from "@Components/StackedBarChartWrapper";
+import StackedBarChartWrapper from "@Components/StackedBarChartWrapper";
 import {Box} from '@mui/system';
-
-const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
-    {
-        title: "Survey",
-        subtitle: "Number of Survey tasks done by this participant.",
-        type: "survey",
-        headingColor: '#3A82F7'
-    },
-    {
-        title: "Cognitive",
-        subtitle: "Number of Cognitive tasks done by this participant.",
-        type: "cognition",
-        headingColor: '#B25FEA'
-    },
-    {
-        title: "Health",
-        subtitle: "Number of Health tasks done by this participant.",
-        type: "health",
-        headingColor: '#EB4B62'
-    },
-    {
-        title: "Audio",
-        subtitle: "Number of Audio tasks done by this participant.",
-        type: "audio",
-        headingColor: '#67CE67'
-    },
-    {
-        title: "Image/Video",
-        subtitle: "Number of Image/Video tasks done by this participant.",
-        type: "image",
-        headingColor: '#228B89'
-    },
-    {
-        title: "Sensing",
-        subtitle: "Number of Sensing tasks done by this participant.",
-        type: "sensing",
-        headingColor: '#186537'
-    },
-]
+import {useStudyDetails} from "@Utils/queries/studies";
+import {
+    chartConfigs as configs, getLegend, getListOfTasksFromProtocolSnapshot,
+    getUniqueTaskTypesFromProtocolSnapshot
+} from "@Components/StackedBarChartWrapper/helper";
+import {Skeleton} from "@mui/material";
+import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 
 const DataVisualizationForDeployment = () => {
     const {id: studyId, deploymentId} = useParams();
+
+    const {
+        data: studyDetails,
+        isLoading: studyDetailsIsLoading,
+        error: studyDetailsError,
+    } = useStudyDetails(studyId);
+
+    const [chartConfigs, setChartConfigs] = React.useState(configs);
+
+    useEffect(() => {
+        if (studyDetails) {
+            const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
+            const newChartConfigs = configs.filter(cfg => listOfTaskTypes.includes(cfg.type));
+
+            setChartConfigs(newChartConfigs);
+        }
+    }, [studyDetails]);
+
+    if (studyDetailsIsLoading) return (
+        <StyledContainer>
+            <StyledTitle variant="h2">
+                Tasks
+            </StyledTitle>
+            <Skeleton variant="rectangular" height={100} animation="wave"/>
+        </StyledContainer>
+    )
+
+    if (studyDetailsError) {
+        return (
+            <StyledContainer>
+                <StyledTitle variant="h2">
+                    Tasks
+                </StyledTitle>
+                <CarpErrorCardComponent
+                    message={"An error occurred while loading tasks"}
+                    error={studyDetailsError}
+                />
+            </StyledContainer>
+        );
+    }
+
+    const listOfTasksFromProtocol = getListOfTasksFromProtocolSnapshot(studyDetails.protocolSnapshot);
 
     return (
         <StyledContainer>
@@ -55,6 +65,7 @@ const DataVisualizationForDeployment = () => {
                 (cfg, index) => (
                     <React.Fragment key={cfg.type}>
                         <StackedBarChartWrapper
+                            legend={getLegend(cfg.type, listOfTasksFromProtocol)}
                             studyId={studyId}
                             deploymentId={deploymentId}
                             type={cfg.type}
@@ -62,7 +73,7 @@ const DataVisualizationForDeployment = () => {
                             subtitle={cfg.subtitle}
                             headingColor={cfg.headingColor}
                             scope={'deployment'}
-                        />
+                            initiallyExtended={true}/>
                         <Box sx={{p: 2.5}}/>
                     </React.Fragment>
                 ))

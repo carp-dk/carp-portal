@@ -41,6 +41,13 @@ export const StyledTitle = styled(Typography)<StyledTitleProps>(({theme, customc
     gap: 8,
 }));
 
+export const UpperDiv = styled("div")({
+    display: "flex",
+    flexDirection: "row",
+    paddingLeft: '46%',
+    justifyContent: "space-between",
+});
+
 export const StyledDescription = styled(Typography)(({theme}) => ({
     color: theme.palette.text.secondary,
     marginTop: 8,
@@ -72,7 +79,13 @@ export const StyledControlButton = styled(Button)({
 export const DateRangeLabel = styled("span")({
     fontSize: 12,
     fontWeight: 700,
-    alignSelf: "flex-end",
+});
+
+export const NoDataLabel = styled("span")({
+    fontSize: 12,
+    fontWeight: 700,
+    position: "relative",
+    top: "142px",
 });
 
 export const ControlsAndChartWrapper = styled("div")({

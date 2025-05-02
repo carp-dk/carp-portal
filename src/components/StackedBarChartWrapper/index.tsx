@@ -11,7 +11,7 @@ import {
     DateRangeLabel,
     ControlsAndChartWrapper,
     StyledControlButton,
-    NotExpandedStyledCard, ChevronDown, FlexRowBetween, ChevronUp
+    NotExpandedStyledCard, ChevronDown, FlexRowBetween, ChevronUp, UpperDiv, NoDataLabel
 } from "./styles";
 import {Skeleton, Box} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
@@ -68,6 +68,7 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
         setToDate(prev => prev.minusDays(14));
     }
 
+
     function handleRightButtonClick() {
         if (isToDateSetToTheCurrentDay) return;
 
@@ -122,7 +123,7 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
         );
     }
 
-    const {series, mappedData} = mapDataToChartData(data);
+    const {mappedData, isThereAnyData} = mapDataToChartData(data);
 
     return (
         <StyledCard>
@@ -140,12 +141,6 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
             <Box sx={{m: 1.5}}/>
             <Wrapper>
                 <StyledUl>
-                    {/*{series.map((task => (*/}
-                    {/*    <StyledLi key={task.label}>*/}
-                    {/*        <BulletPoint style={{backgroundColor: task.color}}></BulletPoint>*/}
-                    {/*        <StyledLabel>{task.label}</StyledLabel>*/}
-                    {/*    </StyledLi>*/}
-                    {/*)))}*/}
                     {props.legend.map((i => (
                         <StyledLi key={i.label}>
                             <BulletPoint style={{backgroundColor: i.color}}></BulletPoint>
@@ -155,16 +150,20 @@ const StackedBarChartWrapper = (props: StackedBarChartWrapperProps) => {
                 </StyledUl>
 
                 <RightWrapper>
-                    <DateRangeLabel>{fancyDateFromISOString(data.from)} - {fancyDateFromISOString(data.to)}</DateRangeLabel>
+                    <UpperDiv>
+                        <NoDataLabel style={{visibility: !isThereAnyData ? 'visible' : 'hidden'}}>No data</NoDataLabel>
+                        <DateRangeLabel>{fancyDateFromISOString(data.from)} - {fancyDateFromISOString(data.to)}</DateRangeLabel>
+                    </UpperDiv>
                     <ControlsAndChartWrapper>
                         <StyledControlButton onClick={() => handleLeftButtonClick()}>
                             <ChevronLeft></ChevronLeft>
                         </StyledControlButton>
                         <StackedBarChart
                             data={mappedData}
-                            series={series}
+                            series={props.legend}
                         />
-                        <StyledControlButton onClick={() => handleRightButtonClick()}>
+                        <StyledControlButton disabled={isToDateSetToTheCurrentDay}
+                                             onClick={() => handleRightButtonClick()}>
                             <ChevronRight></ChevronRight>
                         </StyledControlButton>
                     </ControlsAndChartWrapper>
