@@ -1,4 +1,4 @@
-import {useQuery, UseQueryOptions} from "@tanstack/react-query";
+import {useQueries, useQuery, UseQueryOptions} from "@tanstack/react-query";
 import carpApi from "@Utils/api/api";
 import {
     CarpServiceError,
@@ -14,5 +14,18 @@ export const useDataStreamsSummary = (
         queryFn: () => carpApi.dataStreams.getDataStreamSummary(request),
         queryKey: ["dataStreamSummary", {...request}],
         enabled: options?.enabled ?? true,
+    });
+};
+
+export const useDataStreamsSummaries = (
+    requests: DataStreamSummaryRequest[],
+    options?: UseQueryOptions
+) => {
+    return useQueries({
+        queries: requests.map((request) => ({
+            queryKey: ['dataStreamSummary', { ...request }],
+            queryFn: () => carpApi.dataStreams.getDataStreamSummary(request),
+            enabled: options?.enabled ?? true,
+        })),
     });
 };
