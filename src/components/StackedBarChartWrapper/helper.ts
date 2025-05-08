@@ -150,7 +150,7 @@ export function getListOfTasksFromProtocolSnapshot(protocolSnapshot: StudyProtoc
 export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): string[] {
     let tasks = getListOfTasksFromProtocolSnapshot(protocolSnapshot);
     let uniqueTaskTypes = new Set<string>(tasks.map((task: any) => task.type));
-    // Remove "one_time_sensing" from the list of unique task types
+
     uniqueTaskTypes.delete("one_time_sensing");
     uniqueTaskTypes.delete("informed_consent");
     uniqueTaskTypes.delete("video");

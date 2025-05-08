@@ -91,7 +91,6 @@ export const NoDataLabel = styled("span")({
 export const ControlsAndChartWrapper = styled("div")({
     display: "flex",
     flexDirection: "row",
-    // alignItems: "center",
     flexGrow: 1,
 });
 

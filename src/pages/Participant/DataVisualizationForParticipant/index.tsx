@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyledContainer, StyledTitle} from "./styles";
 import {useParams} from "react-router-dom";
-import StackedBarChartWrapper, {StackedBarChartWrapperProps} from "@Components/StackedBarChartWrapper";
+import StackedBarChartWrapper from "@Components/StackedBarChartWrapper";
 import {Box} from '@mui/system';
 import {useStudyDetails} from "@Utils/queries/studies";
 import {
