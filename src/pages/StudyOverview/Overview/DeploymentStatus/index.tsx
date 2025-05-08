@@ -100,7 +100,7 @@ const DeploymentStatus = () => {
           <StyledTooltip
             title={TooltipContent()}
             placement="right-start"
-            componentsProps={{
+            slotProps={{
               tooltip: {
                 sx: {
                   color: "text.primary",
@@ -138,12 +138,12 @@ const DeploymentStatus = () => {
                 endAngle: -180,
               },
             ]}
+            hideLegend
             slotProps={{
-              legend: {
+              tooltip: {
                 hidden: true,
               },
             }}
-            tooltip={{ trigger: "none" }}
           >
             <PieCenterLabel>{participantStatus.size()}</PieCenterLabel>
           </PieChart>
