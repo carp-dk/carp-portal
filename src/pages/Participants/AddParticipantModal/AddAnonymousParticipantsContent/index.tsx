@@ -2,7 +2,7 @@ import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
 import { FormLabel, Grid, MenuItem, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enGB } from "date-fns/locale/en-GB";
 import { useFormik } from "formik";
 import { FormEvent, useEffect } from "react";
@@ -130,7 +130,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       <ModalContent>
         <form onSubmit={handleFormSubmit}>
           <Grid container spacing={4} align-item="center">
-            <Grid item xs={6}>
+            <Grid size={{ xs: 7 }}>
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField
                 autoFocus
@@ -144,16 +144,21 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 value={
                   addAnonymousParticipantFormik.values.numberOfParticipants
                 }
-                onChange={addAnonymousParticipantFormik.handleChange}
+                onChange={(event) => {
+                  const eventClone = event;
+                  if (parseInt(event.target.value, 10) < 1) {
+                    eventClone.target.value = "1";
+                  }
+                  addAnonymousParticipantFormik.handleChange(eventClone);
+                }}
                 helperText={
                   addAnonymousParticipantFormik.touched.numberOfParticipants &&
                   addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
-                inputProps={{ min: 1 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 5 }}>
               <FormLabel required>Role</FormLabel>
               <TextField
                 select
@@ -181,7 +186,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   ))}
               </TextField>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormLabel required>Expiry date</FormLabel>
               <DatePicker
                 defaultValue={addAnonymousParticipantFormik.values.expiryDate}
@@ -205,7 +210,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 disablePast
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormLabel required>Redirect URI</FormLabel>
               <TextField
                 sx={{ width: "100%" }}
@@ -220,7 +225,6 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   addAnonymousParticipantFormik.errors.redirectUri
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
-                inputProps={{ min: 1 }}
               />
             </Grid>
           </Grid>
