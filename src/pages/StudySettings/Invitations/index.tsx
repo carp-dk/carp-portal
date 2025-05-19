@@ -38,10 +38,26 @@ const Invitations = () => {
     },
     validationSchema: studyInvitationValidationSchema,
     onSubmit: (values) => {
+      try {
+        var parsedApplicaitonData = JSON.parse(
+          studyDetails?.invitation.applicationData
+        );
+      } catch (e) {
+        setStudyInvitation.mutate({
+          studyId,
+          invitationName: values.invitationName,
+          invitationDescription: values.invitationDescription,
+          applicationData: {
+            studyId: studyDetails?.invitation.applicationData,
+          },
+        });
+        return;
+      }
       setStudyInvitation.mutate({
         studyId,
         invitationName: values.invitationName,
         invitationDescription: values.invitationDescription,
+        applicationData: parsedApplicaitonData,
       });
     },
   });

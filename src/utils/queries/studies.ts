@@ -228,11 +228,16 @@ export const useSetStudyInvitation = () => {
       studyId: string;
       invitationName: string;
       invitationDescription: string;
+      applicationData?: {
+        studyId: string;
+        [key: string]: string;
+      } | null;
     }) => {
       return carpApi.study.setInvitation({
         studyId: data.studyId,
         title: data.invitationName,
         description: data.invitationDescription,
+        applicationData: data.applicationData,
       });
     },
     onSuccess: (_, data) => {
