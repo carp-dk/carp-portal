@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
 import {StyledContainer, StyledTitle} from "./styles";
 import {useParams} from "react-router-dom";
-import StackedBarChartWrapper from "@Components/StackedBarChartWrapper";
+import DataVisualizationTableWrapper from "src/components/DataVisualizationTableWrapper";
 import {Box} from '@mui/system';
 import {useStudyDetails} from "@Utils/queries/studies";
 import {
     chartConfigs as configs, getLegend, getListOfTasksFromProtocolSnapshot,
     getUniqueTaskTypesFromProtocolSnapshot
-} from "@Components/StackedBarChartWrapper/helper";
+} from "@Components/DataVisualizationTable/helper";
 import {Skeleton} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 
@@ -64,7 +64,7 @@ const DataVisualizationForParticipant = () => {
             {chartConfigs.map(
                 (cfg, index) => (
                     <React.Fragment key={cfg.type}>
-                        <StackedBarChartWrapper
+                        <DataVisualizationTableWrapper
                             legend={getLegend(cfg.type, listOfTasksFromProtocol)}
                             studyId={studyId}
                             deploymentId={deploymentId}

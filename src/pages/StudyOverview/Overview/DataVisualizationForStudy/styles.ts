@@ -1,5 +1,5 @@
 import { styled } from "@Utils/theme";
-import {Typography} from "@mui/material";
+import {Card, Typography} from "@mui/material";
 
 export const StyledContainer = styled("div")({
     display: "flex",
@@ -14,3 +14,12 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
     marginTop: -8,
     marginBottom: 32,
 }));
+
+export const StyledCard = styled(Card)({
+    display: "flex",
+    flexDirection: "column",
+    padding: 24,
+    paddingBottom: 56,
+    borderRadius: 16,
+    width: "100%",
+});

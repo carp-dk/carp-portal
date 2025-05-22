@@ -1,24 +1,16 @@
 import React, {useEffect} from 'react';
-import {StyledContainer, StyledTitle} from "./styles";
+import {StyledContainer, StyledTitle, StyledCard} from "./styles";
 import {useParams} from "react-router-dom";
 import {useStudyDetails} from "@Utils/queries/studies";
 import {
-    colors, fancyDateFromISOString, getUniqueTaskTypesFromProtocolSnapshot, mapDataToChartData, toUTCDate
-} from "@Components/StackedBarChartWrapper/helper";
+    colors, getUniqueTaskTypesFromProtocolSnapshot, mapDataToChartData, toUTCDate
+} from "@Components/DataVisualizationTable/helper";
 import {Skeleton} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import {LocalDate} from "@js-joda/core";
 import {useDataStreamsSummaries} from "@Utils/queries/dataStreams";
 import {DataStreamSummaryRequest} from "@carp-dk/client";
-import {
-    BulletPoint,
-    ControlsAndChartWrapper, DateRangeLabel, NoDataLabel,
-    RightWrapper, StyledCard,
-    StyledControlButton,
-    StyledLabel, StyledLi, StyledUl, UpperDiv, Wrapper
-} from "@Components/StackedBarChartWrapper/styles";
-import {ChevronLeft, ChevronRight} from "@mui/icons-material";
-import StackedBarChart from "@Components/StackedBarChart";
+import DataVisualizationTable from "@Components/DataVisualizationTable";
 
 const DataVisualizationForStudy = () => {
     const {id: studyId} = useParams();
@@ -110,19 +102,16 @@ const DataVisualizationForStudy = () => {
     }));
 
     let summedGroups = [];
-    let isThereAnyData = false;
 
     for (let i = 0; i < summaries.length; i++) {
         let summary = summaries[i].data;
         const {mappedData} = mapDataToChartData(summary);
 
         const output = mappedData.map(entry => {
-            const {date, ...rest} = entry;
+            const {date, dayOfWeek, ...rest} = entry;
             const quantity = Object.values(rest).reduce((sum, value) => sum + value, 0);
 
-            if (quantity > 0)
-                isThereAnyData = true;
-            return {date, [summary.type]: quantity};
+            return {date, [summary.type]: quantity, dayOfWeek};
         });
 
         summedGroups.push(output);
@@ -137,47 +126,18 @@ const DataVisualizationForStudy = () => {
         }
     }
 
-    const fancyDateFrom = fancyDateFromISOString(summaries[0].data.from);
-    const fancyDateTo = fancyDateFromISOString(summaries[0].data.to);
-
     return (
         <StyledContainer>
             <StyledTitle variant="h2">
                 Tasks
             </StyledTitle>
-
             <StyledCard>
-                <Wrapper>
-                    <StyledUl>
-                        {legend.map((i => (
-                            <StyledLi key={i.label}>
-                                <BulletPoint style={{backgroundColor: i.color}}></BulletPoint>
-                                <StyledLabel>{i.label}</StyledLabel>
-                            </StyledLi>
-                        )))}
-                    </StyledUl>
-
-                    <RightWrapper>
-                        <UpperDiv>
-                            <NoDataLabel style={{visibility: !isThereAnyData ? 'visible' : 'hidden'}}>No
-                                data</NoDataLabel>
-                            <DateRangeLabel>{fancyDateFrom} - {fancyDateTo}</DateRangeLabel>
-                        </UpperDiv>
-                        <ControlsAndChartWrapper>
-                            <StyledControlButton onClick={() => handleLeftButtonClick()}>
-                                <ChevronLeft></ChevronLeft>
-                            </StyledControlButton>
-                            <StackedBarChart
-                                data={data}
-                                series={legend}
-                            />
-                            <StyledControlButton disabled={isToDateSetToTheCurrentDay}
-                                                 onClick={() => handleRightButtonClick()}>
-                                <ChevronRight></ChevronRight>
-                            </StyledControlButton>
-                        </ControlsAndChartWrapper>
-                    </RightWrapper>
-                </Wrapper>
+                <DataVisualizationTable data={data}
+                                        handleLeftButtonClick={handleLeftButtonClick}
+                                        handleRightButtonClick={handleRightButtonClick}
+                                        legend={legend}
+                                        isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
+                />
             </StyledCard>
         </StyledContainer>
     );

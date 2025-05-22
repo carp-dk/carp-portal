@@ -1,6 +1,6 @@
 import {DataStreamSummary} from "../../../../carp-client-ts/src";
 import {LocalDateTime} from "@js-joda/core";
-import {StackedBarChartWrapperProps} from "@Components/StackedBarChartWrapper/index";
+import {StackedBarChartWrapperProps} from "@Components/DataVisualizationTableWrapper";
 import {DataStreamType} from "../../../../carp-client-ts/src/shared/models/dataStream";
 import {StudyProtocolSnapshot} from "@carp-dk/client";
 
@@ -137,6 +137,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
         return {
             ...item,
             date: `${day}/${month}`,
+            dayOfWeek: new Date(item.date).toLocaleString('en-US', {weekday: 'short'}),
         }
     })
 
