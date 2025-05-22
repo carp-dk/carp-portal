@@ -23,7 +23,7 @@ const Deployment = () => {
       <BasicInfo />
       <Participants />
       <Devices />
-      {/*<InformedConsentCard />*/}
+      <InformedConsentCard />
       <DataVisualizationForDeployment />
     </StudyPageLayout>
   );
