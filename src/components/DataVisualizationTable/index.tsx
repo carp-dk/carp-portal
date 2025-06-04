@@ -51,8 +51,8 @@ const DataVisualizationTable = ({
                 </TableHeadRightmostCell>
             </TableHead>
             <TableBody>
-                {legend.map(((i, idx) => (
-                    <TableBodyRow key={idx}>
+                {legend.map(((i) => (
+                    <TableBodyRow key={i.label}>
                         <TableBodyLeftMostCell>
                             <BulletPoint style={{backgroundColor: i.color}}></BulletPoint>
                             <StyledLabel>{i.label}</StyledLabel>

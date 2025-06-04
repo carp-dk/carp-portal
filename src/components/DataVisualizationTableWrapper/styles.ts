@@ -25,6 +25,7 @@ export const StyledTitle = styled(Typography)<StyledTitleProps>(({theme, customc
 export const StyledDescription = styled(Typography)(({theme}) => ({
     color: theme.palette.text.secondary,
     marginTop: 4,
+    marginBottom: 16,
 }));
 
 export const StyledControlButton = styled(Button)({

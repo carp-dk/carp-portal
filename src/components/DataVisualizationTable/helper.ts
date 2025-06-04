@@ -1,8 +1,6 @@
-import {DataStreamSummary} from "../../../../carp-client-ts/src";
 import {LocalDateTime} from "@js-joda/core";
 import {StackedBarChartWrapperProps} from "@Components/DataVisualizationTableWrapper";
-import {DataStreamType} from "../../../../carp-client-ts/src/shared/models/dataStream";
-import {StudyProtocolSnapshot} from "@carp-dk/client";
+import {DataStreamSummary, DataStreamType, StudyProtocolSnapshot} from "@carp-dk/client";
 
 export const taskLabelColors = {
     "Survey": "#3A82F7",
@@ -29,42 +27,42 @@ export const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
         title: "Survey",
         subtitle: "Number of Survey tasks done by this participant.",
         type: "survey",
-        headingColor: '#3A82F7'
+        headingColor: taskLabelColors["Survey"]
     },
     {
         title: "Cognitive",
         subtitle: "Number of Cognitive tasks done by this participant.",
         type: "cognition",
-        headingColor: '#B25FEA'
+        headingColor: taskLabelColors["Cognitive"]
     },
     {
         title: "Health",
         subtitle: "Number of Health tasks done by this participant.",
         type: "health",
-        headingColor: '#EB4B62'
+        headingColor: taskLabelColors["Health"]
     },
     {
         title: "Audio",
         subtitle: "Number of Audio tasks done by this participant.",
         type: "audio",
-        headingColor: '#67CE67'
+        headingColor: taskLabelColors["Audio"]
     },
     {
         title: "Image/Video",
         subtitle: "Number of Image/Video tasks done by this participant.",
         type: "image",
-        headingColor: '#228B89'
+        headingColor: taskLabelColors["Image"]
     },
     {
         title: "Sensing",
         subtitle: "Number of Sensing tasks done by this participant.",
         type: "sensing",
-        headingColor: '#186537'
+        headingColor: taskLabelColors["Video"]
     },
 ]
 
 export function toUTCDate(localDateTime: LocalDateTime): Date {
-    return new Date(Date.UTC(
+    let a = new Date(Date.UTC(
         localDateTime.year(),
         localDateTime.monthValue() - 1,
         localDateTime.dayOfMonth(),
@@ -73,14 +71,11 @@ export function toUTCDate(localDateTime: LocalDateTime): Date {
         localDateTime.second(),
         Math.floor(localDateTime.nano() / 1_000_000)
     ));
-}
 
-export function fancyDateFromISOString(isoString: string): string {
-    const year = isoString.substring(0, 4);
-    const month = isoString.substring(5, 7);
-    const day = isoString.substring(8, 10);
+    console.log("manual\n", a)
+    console.log("auto\n", new Date(localDateTime.toString()))
 
-    return `${day}/${month}/${year}`;
+    return a
 }
 
 function generateDateRange(startISO: string, endISO: string): string[] {

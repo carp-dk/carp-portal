@@ -85,7 +85,6 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
                 <StyledDescription variant="h6">
                     {props.subtitle}
                 </StyledDescription>
-                <Box sx={{m: 1.5}}/>
                 <Skeleton variant="rectangular" height={'200px'} animation="wave"/>
             </StyledCard>
         );
@@ -101,7 +100,6 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
             <StyledDescription variant="h6">
                 {props.subtitle}
             </StyledDescription>
-            <Box sx={{m: 1.5}}/>
 
             <DataVisualizationTable data={mappedData}
                                     handleLeftButtonClick={handleLeftButtonClick}

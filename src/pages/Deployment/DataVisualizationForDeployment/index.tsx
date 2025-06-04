@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyledContainer, StyledTitle} from "./styles";
 import {useParams} from "react-router-dom";
-import DataVisualizationTableWrapper from "src/components/DataVisualizationTableWrapper";
+import DataVisualizationTableWrapper from "@Components/DataVisualizationTableWrapper";
 import {Box} from '@mui/system';
 import {useStudyDetails} from "@Utils/queries/studies";
 import {
