@@ -1,15 +1,6 @@
 import {customPalette, styled} from "@Utils/theme";
-import {Button, Card} from "@mui/material";
+import {Button} from "@mui/material";
 import {Clear} from "@mui/icons-material";
-
-export const StyledCard = styled(Card)({
-    display: "flex",
-    flexDirection: "column",
-    padding: 24,
-    paddingBottom: 56,
-    borderRadius: 16,
-    width: "100%",
-});
 
 export const Table = styled("div")({
     display: "flex",
@@ -97,6 +88,14 @@ export const StyledLabel = styled("span")({
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
+    lineHeight: "20px",
+    color: customPalette.primary.dark,
+});
+
+export const StyledLabelVariant = styled("span")({
+    width: 15,
+    fontSize: 14,
+    fontWeight: 700,
     lineHeight: "20px",
     color: customPalette.primary.dark,
 });

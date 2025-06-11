@@ -62,7 +62,7 @@ export const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
 ]
 
 export function toUTCDate(localDateTime: LocalDateTime): Date {
-    let a = new Date(Date.UTC(
+    return new Date(Date.UTC(
         localDateTime.year(),
         localDateTime.monthValue() - 1,
         localDateTime.dayOfMonth(),
@@ -70,12 +70,7 @@ export function toUTCDate(localDateTime: LocalDateTime): Date {
         localDateTime.minute(),
         localDateTime.second(),
         Math.floor(localDateTime.nano() / 1_000_000)
-    ));
-
-    console.log("manual\n", a)
-    console.log("auto\n", new Date(localDateTime.toString()))
-
-    return a
+    ))
 }
 
 function generateDateRange(startISO: string, endISO: string): string[] {
@@ -150,6 +145,8 @@ export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyPr
     uniqueTaskTypes.delete("one_time_sensing");
     uniqueTaskTypes.delete("informed_consent");
     uniqueTaskTypes.delete("video");
+    uniqueTaskTypes.delete(undefined);
+    uniqueTaskTypes.delete(null);
 
     return Array.from(uniqueTaskTypes);
 }
