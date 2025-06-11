@@ -35,6 +35,7 @@ const DataVisualizationForStudy = () => {
     }
 
     const [requests, setRequests] = React.useState([]);
+    const [displayBlank, setDisplayBlank] = React.useState(false);
 
     const {
         data: studyDetails,
@@ -46,13 +47,20 @@ const DataVisualizationForStudy = () => {
 
     useEffect(() => {
         if (studyDetails) {
-            updateRequestsForQuery();
+            if (studyDetails.protocolSnapshot == null) {
+                setDisplayBlank(true);
+            } else {
+                updateRequestsForQuery();
+            }
         }
     }, [studyDetails, toDate]);
 
     function updateRequestsForQuery() {
         const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
-
+        if (listOfTaskTypes.length === 0) {
+            setDisplayBlank(true);
+            return;
+        }
         const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map(type => ({
             study_id: studyId,
             scope: 'study',
@@ -65,6 +73,10 @@ const DataVisualizationForStudy = () => {
 
     const summariesError = summaries.find(summary => summary.isError);
     const error = studyDetailsError || summariesError;
+
+    if (displayBlank) {
+        return null;
+    }
 
     if (error) {
         return (

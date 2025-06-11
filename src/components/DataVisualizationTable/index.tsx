@@ -2,7 +2,9 @@ import * as React from 'react';
 import {
     BulletPoint, StyledClearIcon,
     StyledControlButton,
-    StyledLabel, Table,
+    StyledLabel,
+    StyledLabelVariant,
+    Table,
     TableBody,
     TableBodyCell,
     TableBodyCenterCellsWrapper,
@@ -60,7 +62,7 @@ const DataVisualizationTable = ({
                         <TableBodyCenterCellsWrapper>
                             {data.map((item, index) => (
                                 <TableBodyCell key={index}>
-                                    {item[i.label] ? <StyledLabel>{item[i.label]}</StyledLabel> :
+                                    {item[i.label] ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
                                         <StyledClearIcon/>}
                                 </TableBodyCell>
                             ))}
