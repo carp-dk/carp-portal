@@ -15,6 +15,7 @@ import {
   ParticipantGroupStatus,
   StudyDeploymentStatus,
   ArrayList,
+  PaginatedParticipantAccounts,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -235,7 +236,7 @@ export const useParticipantsInfo = (studyId: string) => {
 };
 
 export const useParticipantsAccounts = (studyId: string) => {
-  return useQuery<ParticipantAccount[], CarpServiceError>({
+  return useQuery<ParticipantAccount[] | PaginatedParticipantAccounts, CarpServiceError>({
     queryFn: () =>
       carpApi.study.recruitment.getParticipantAccounts({ studyId }),
     queryKey: ["participantsAccounts", studyId],
