@@ -38,6 +38,11 @@ export const TableHeadCell = styled("div")({
     lineHeight: "20px",
     color: customPalette.primary.dark,
     textAlign: "center",
+    letterSpacing: -0.5,
+});
+
+export const ExtraBoldText = styled("span")({
+   fontWeight: 900,
 });
 
 export const TableHeadRightmostCell = styled("div")({

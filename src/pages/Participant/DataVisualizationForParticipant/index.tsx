@@ -56,6 +56,10 @@ const DataVisualizationForParticipant = () => {
 
     const listOfTasksFromProtocol = getListOfTasksFromProtocolSnapshot(studyDetails.protocolSnapshot);
 
+    if (listOfTasksFromProtocol.length === 0) {
+        return null;
+    }
+
     return (
         <StyledContainer>
             <StyledTitle variant="h2">
