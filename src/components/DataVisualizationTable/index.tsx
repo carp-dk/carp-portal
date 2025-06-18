@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {
-    BulletPoint, StyledClearIcon,
+    BulletPoint,
+    ExtraBoldText,
+    StyledClearIcon,
     StyledControlButton,
     StyledLabel,
     StyledLabelVariant,
@@ -41,7 +43,15 @@ const DataVisualizationTable = ({
                 <TableHeadCenterCellsWrapper>
                     {data.map((item, index) => (
                         <TableHeadCell key={index}>
-                            {item.dayOfWeek} <br/> {item.date}
+                            {isToDateSetToTheCurrentDay && index === data.length - 1 ? (
+                                <ExtraBoldText>
+                                    {item.dayOfWeek} <br /> {item.date}
+                                </ExtraBoldText>
+                            ) : (
+                                <>
+                                    {item.dayOfWeek} <br /> {item.date}
+                                </>
+                            )}
                         </TableHeadCell>
                     ))}
                 </TableHeadCenterCellsWrapper>
