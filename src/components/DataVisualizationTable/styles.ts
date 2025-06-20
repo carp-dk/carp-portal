@@ -41,8 +41,8 @@ export const TableHeadCell = styled("div")({
     letterSpacing: -0.5,
 });
 
-export const ExtraBoldText = styled("span")({
-   fontWeight: 900,
+export const EnlargedText = styled("span")({
+    transform: 'scale(1.13)'
 });
 
 export const TableHeadRightmostCell = styled("div")({
@@ -78,6 +78,10 @@ export const TableBodyCell = styled("div")({
     display: "flex",
     alignItems: "center",
     textAlign: "center",
+});
+
+export const EnlargedTableBodyCell = styled(TableBodyCell)({
+   transform: 'scale(1.15)',
 });
 
 export const StyledControlButton = styled(Button)({

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
     BulletPoint,
-    ExtraBoldText,
+    EnlargedTableBodyCell,
+    EnlargedText,
     StyledClearIcon,
     StyledControlButton,
     StyledLabel,
@@ -10,7 +11,8 @@ import {
     TableBody,
     TableBodyCell,
     TableBodyCenterCellsWrapper,
-    TableBodyLeftMostCell, TableBodyRightmostCell,
+    TableBodyLeftMostCell,
+    TableBodyRightmostCell,
     TableBodyRow,
     TableHead,
     TableHeadCell,
@@ -44,9 +46,9 @@ const DataVisualizationTable = ({
                     {data.map((item, index) => (
                         <TableHeadCell key={index}>
                             {isToDateSetToTheCurrentDay && index === data.length - 1 ? (
-                                <ExtraBoldText>
+                                <EnlargedText>
                                     {item.dayOfWeek} <br /> {item.date}
-                                </ExtraBoldText>
+                                </EnlargedText>
                             ) : (
                                 <>
                                     {item.dayOfWeek} <br /> {item.date}
@@ -70,12 +72,23 @@ const DataVisualizationTable = ({
                             <StyledLabel>{i.label}</StyledLabel>
                         </TableBodyLeftMostCell>
                         <TableBodyCenterCellsWrapper>
-                            {data.map((item, index) => (
-                                <TableBodyCell key={index}>
-                                    {item[i.label] ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
-                                        <StyledClearIcon/>}
-                                </TableBodyCell>
-                            ))}
+                            {data.map((item, index) => {
+                                if (isToDateSetToTheCurrentDay && index === data.length - 1) {
+                                    return (
+                                        <EnlargedTableBodyCell key={index}>
+                                            {item[i.label] ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
+                                                <StyledClearIcon/>}
+                                        </EnlargedTableBodyCell>
+                                    )
+                                } else {
+                                    return (
+                                        <TableBodyCell key={index}>
+                                            {item[i.label] ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
+                                                <StyledClearIcon/>}
+                                        </TableBodyCell>
+                                    )
+                                }
+                            })}
                         </TableBodyCenterCellsWrapper>
                         <TableBodyRightmostCell/>
                     </TableBodyRow>
