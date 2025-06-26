@@ -47,7 +47,7 @@ const Participants = () => {
   }
 
   return (
-    <CarpAccordion title={t("deployment:participants_card.title")}>
+    <CarpAccordion isExpanded={true} title={t("deployment:participants_card.title")}>
       <Stack spacing="8px">
         {group &&
           group.participants.map((p) => (

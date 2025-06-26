@@ -1,12 +1,4 @@
-import {
-    StyledCard,
-    StyledTitle,
-    StyledDescription,
-    StyledControlButton,
-    FlexRowBetween,
-    ChevronUp,
-} from "./styles";
-import {Skeleton, Box} from "@mui/material";
+import {Skeleton} from "@mui/material";
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import {
     mapDataToChartData,
@@ -18,6 +10,7 @@ import {LocalDate} from "@js-joda/core";
 import {useDataStreamsSummary} from "@Utils/queries/dataStreams";
 import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-dk/client";
 import DataVisualizationTable from "@Components/DataVisualizationTable";
+import CarpAccordion from "@Components/CarpAccordion";
 
 export interface StackedBarChartWrapperProps {
     deploymentId?: string;
@@ -33,7 +26,8 @@ export interface StackedBarChartWrapperProps {
 
 const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
     const [toDate, setToDate] = React.useState(LocalDate.now());
-    const fromDate = toDate.minusDays(14)
+    const [expanded, setExpanded] = React.useState(true);
+    const fromDate = toDate.minusDays(13)
 
     const dataStreamSummaryRequest: DataStreamSummaryRequest = {
         study_id: props.studyId,
@@ -71,45 +65,30 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
         )
     }
 
+    const heightOfLoadingSkeleton = 70 + 16 + (props.legend.length * 40);
+
     if (isLoading) {
         return (
-            <StyledCard>
-                <FlexRowBetween>
-                    <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
-                        {props.title}
-                    </StyledTitle>
-                    <StyledControlButton>
-                        <ChevronUp></ChevronUp>
-                    </StyledControlButton>
-                </FlexRowBetween>
-                <StyledDescription variant="h6">
-                    {props.subtitle}
-                </StyledDescription>
-                <Skeleton variant="rectangular" height={'200px'} animation="wave"/>
-            </StyledCard>
+            <CarpAccordion titleColor={taskLabelColors[props.title]} title={props.title} description={props.subtitle}
+                           isExpanded={expanded}>
+                <Skeleton sx={{borderRadius: '10px'}} variant="rectangular" height={heightOfLoadingSkeleton}
+                          animation="wave"/>
+            </CarpAccordion>
         );
     }
 
     const {mappedData} = mapDataToChartData(data);
 
     return (
-        <StyledCard>
-            <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
-                {props.title}
-            </StyledTitle>
-            <StyledDescription variant="h6">
-                {props.subtitle}
-            </StyledDescription>
-
+        <CarpAccordion titleColor={taskLabelColors[props.title]} title={props.title} description={props.subtitle}
+                       isExpanded={expanded}>
             <DataVisualizationTable data={mappedData}
                                     handleLeftButtonClick={handleLeftButtonClick}
                                     handleRightButtonClick={handleRightButtonClick}
                                     legend={props.legend}
                                     isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
             />
-
-
-        </StyledCard>
+        </CarpAccordion>
     );
 };
 

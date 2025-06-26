@@ -12,10 +12,12 @@ type Props = {
   title: string;
   description?: string | null;
   children: ReactNode;
+  isExpanded?: boolean;
+  titleColor?: string;
 };
 
-const CarpAccordion = ({ title, description, children }: Props) => {
-  const [expanded, setExpanded] = useState(false);
+const CarpAccordion = ({ title, description, children, isExpanded, titleColor }: Props) => {
+  const [expanded, setExpanded] = useState(isExpanded || false);
   const handleChange = () => {
     setExpanded((prev) => !prev);
   };
@@ -33,7 +35,7 @@ const CarpAccordion = ({ title, description, children }: Props) => {
         }
       >
         <Stack direction="column" gap="10px">
-          <Title variant="h3">{title}</Title>
+          <Title sx={{ color: titleColor }} variant="h3">{title}</Title>
           {description && expanded && (
             <StyledTypography variant="h5">{description}</StyledTypography>
           )}

@@ -140,6 +140,7 @@ const Devices = () => {
 
   return (
     <CarpAccordion
+      isExpanded={true}
       title={t("deployment:devices_card.title")}
       description={t("deployment:devices_card.description")}
     >
