@@ -128,13 +128,15 @@ const ParticipantsTable = ({
         },
         id: "fullName",
         header: "Full name",
+        enableSorting: false,
       },
       {
         accessorFn: (row) => {
           return row?.id !== null ? "Yes" : "No";
         },
         id: "user_id",
-        header: "Invited",
+        header: "Registered",
+        enableSorting: false,
       },
       {
         id: "invitedOn",
