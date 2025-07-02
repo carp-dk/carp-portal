@@ -79,6 +79,7 @@ const ProtocolCards = () => {
       />
     );
   }
+  
   return (
     <StyledContainer>
       <StyledNameCard elevation={2}>
@@ -138,6 +139,20 @@ const ProtocolCards = () => {
                   </li>
                 );
               })}
+          </ul>
+        </StyledCard>
+      )}
+      {protocol.snapshot.tasks.size() > 0 && (
+        <StyledCard elevation={2}>
+          <CardTitle variant="h2">Tasks</CardTitle>
+          <ul>
+            {protocol.snapshot.tasks.toArray().map((task) => {
+              return (
+                <li key={uuidv4()}>
+                  <Typography variant="h4">{task.name}</Typography>
+                </li>
+              );
+            })}
           </ul>
         </StyledCard>
       )}
