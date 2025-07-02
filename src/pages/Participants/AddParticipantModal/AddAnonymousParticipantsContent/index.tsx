@@ -1,6 +1,12 @@
 import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
-import { FormLabel, Grid, MenuItem, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  FormLabel,
+  Grid,
+  MenuItem,
+  TextField,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { enGB } from "date-fns/locale/en-GB";
@@ -18,6 +24,8 @@ import {
   SecondaryCellText,
   Spinner,
 } from "../styles";
+import { useRedirectURIs } from "@Utils/queries/auth";
+import { startOfDay } from "date-fns";
 
 type Props = {
   open: boolean;
@@ -34,8 +42,8 @@ const validationSchema = yup.object({
     .date()
     .required("Expiry date is required")
     .min(
-      new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
-      "Expiry date should be in the future",
+      new Date(startOfDay(new Date()).getTime() + 1000 * 60 * 60 * 24),
+      "Expiry date should be in the future"
     ),
   role: yup.string().required("Role is required"),
   redirectUri: yup
@@ -58,21 +66,32 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
 
   const { data: studyDetails, isLoading: isStudyDetailsLoading } =
     useStudyDetails(studyId);
+  const { data: redirectURIs, isLoading: isRedirectURIsLoading } =
+    useRedirectURIs();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
       numberOfParticipants: 0,
-      expiryDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+      expiryDate: new Date(
+        startOfDay(new Date()).getTime() + 1000 * 60 * 60 * 24
+      ),
       role: "",
       redirectUri: "",
     },
     validationSchema,
     onSubmit: (values) => {
+      if (!redirectURIs.some((uri) => values.redirectUri.includes(uri))) {
+        addAnonymousParticipantFormik.setFieldError(
+          "redirectUri",
+          "Redirect URI must contain one of the predefined URIs"
+        );
+        return;
+      }
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
-          (values.expiryDate.getTime() - new Date().getTime()) / 1000,
+          (values.expiryDate.getTime() - new Date().getTime()) / 1000
         ),
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
@@ -98,7 +117,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     }
   }, [generateAnonymousAccounts.isSuccess]);
 
-  if (isStudyDetailsLoading) return null;
+  if (isStudyDetailsLoading || isRedirectURIsLoading) return null;
 
   if (!studyDetails.protocolSnapshot) {
     return (
@@ -195,7 +214,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onChange={(value) =>
                   addAnonymousParticipantFormik.setFieldValue(
                     "expiryDate",
-                    value,
+                    value
                   )
                 }
                 slotProps={{
@@ -212,19 +231,48 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
             </Grid>
             <Grid size={{ xs: 6 }}>
               <FormLabel required>Redirect URI</FormLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                error={!!addAnonymousParticipantFormik.errors.redirectUri}
-                variant="outlined"
-                name="redirectUri"
-                type="url"
-                value={addAnonymousParticipantFormik.values.redirectUri}
-                onChange={addAnonymousParticipantFormik.handleChange}
-                helperText={
-                  addAnonymousParticipantFormik.touched.redirectUri &&
-                  addAnonymousParticipantFormik.errors.redirectUri
-                }
+              <Autocomplete
+                id="redirect-uri-autocomplete"
+                options={redirectURIs}
+                value={addAnonymousParticipantFormik.values.redirectUri || null}
+                onChange={(_, newValue) => {
+                  addAnonymousParticipantFormik.setFieldValue(
+                    "redirectUri",
+                    newValue
+                  );
+                }}
+                filterOptions={(options, params) => {
+                  return options.filter((option) =>
+                    option.includes(params.inputValue.toLowerCase())
+                  );
+                }}
                 onBlur={addAnonymousParticipantFormik.handleBlur}
+                fullWidth
+                renderOption={(props, option) => {
+                  const { key, ...optionProps } = props;
+                  return (
+                    <MenuItem key={option} {...optionProps}>
+                      {option}
+                    </MenuItem>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select or enter redirect URI"
+                    error={!!addAnonymousParticipantFormik.errors.redirectUri}
+                    helperText={
+                      addAnonymousParticipantFormik.touched.redirectUri &&
+                      addAnonymousParticipantFormik.errors.redirectUri
+                    }
+                    variant="outlined"
+                    name="redirectUri"
+                    type="url"
+                    value={addAnonymousParticipantFormik.values.redirectUri}
+                    onChange={addAnonymousParticipantFormik.handleChange}
+                    onBlur={addAnonymousParticipantFormik.handleBlur}
+                  ></TextField>
+                )}
               />
             </Grid>
           </Grid>
