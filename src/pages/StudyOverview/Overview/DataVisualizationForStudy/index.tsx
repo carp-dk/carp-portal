@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {StyledContainer, StyledTitle, StyledCard} from "./styles";
 import {useParams} from "react-router-dom";
 import {useStudyDetails} from "@Utils/queries/studies";
 import {
@@ -11,12 +10,14 @@ import {LocalDate} from "@js-joda/core";
 import {useDataStreamsSummaries} from "@Utils/queries/dataStreams";
 import {DataStreamSummaryRequest} from "@carp-dk/client";
 import DataVisualizationTable from "@Components/DataVisualizationTable";
+import CarpAccordion from "@Components/CarpAccordion";
 
 const DataVisualizationForStudy = () => {
     const {id: studyId} = useParams();
 
     const [toDate, setToDate] = React.useState(LocalDate.now());
-    const fromDate = toDate.minusDays(14)
+    const fromDate = toDate.minusDays(13)
+    const [isExpanded, setIsExpanded] = React.useState(true);
 
     const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
@@ -80,27 +81,21 @@ const DataVisualizationForStudy = () => {
 
     if (error) {
         return (
-            <StyledContainer>
-                <StyledTitle variant="h2">
-                    Tasks
-                </StyledTitle>
-                <CarpErrorCardComponent
-                    message={"An error occurred while loading tasks"}
-                    error={studyDetailsError}
-                />
-            </StyledContainer>
-        );
+            <CarpErrorCardComponent
+                message={"An error occurred while loading tasks"}
+                error={studyDetailsError}
+            />
+        )
     }
 
     const loading = studyDetailsIsLoading || (summaries.some(summary => summary.isLoading)) || requests.length === 0;
+    const loadingSkeletonHeight = 70 + 16 + (requests?.length * 40);
 
     if (loading) return (
-        <StyledContainer>
-            <StyledTitle variant="h2">
-                Tasks
-            </StyledTitle>
-            <Skeleton variant="rectangular" height={348} animation="wave"/>
-        </StyledContainer>
+        <CarpAccordion title={'Tasks'} isExpanded={isExpanded}>
+            <Skeleton sx={{borderRadius: '10px'}} variant="rectangular" height={loadingSkeletonHeight}
+                      animation="wave"/>
+        </CarpAccordion>
     )
 
     const listOfTaskTypesFromProtocol = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
@@ -139,19 +134,14 @@ const DataVisualizationForStudy = () => {
     }
 
     return (
-        <StyledContainer>
-            <StyledTitle variant="h2">
-                Tasks
-            </StyledTitle>
-            <StyledCard>
-                <DataVisualizationTable data={data}
-                                        handleLeftButtonClick={handleLeftButtonClick}
-                                        handleRightButtonClick={handleRightButtonClick}
-                                        legend={legend}
-                                        isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
-                />
-            </StyledCard>
-        </StyledContainer>
+        <CarpAccordion title={'Tasks'} isExpanded={isExpanded}>
+            <DataVisualizationTable data={data}
+                                    handleLeftButtonClick={handleLeftButtonClick}
+                                    handleRightButtonClick={handleRightButtonClick}
+                                    legend={legend}
+                                    isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
+            />
+        </CarpAccordion>
     );
 }
 

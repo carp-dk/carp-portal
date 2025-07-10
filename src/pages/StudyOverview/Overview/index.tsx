@@ -12,7 +12,9 @@ const Overview = () => {
       <DeploymentStatus />
       <DeploymentsInProgress />
       <InactiveDeployments />
-      <DataVisualizationForStudy />
+        <div style={{gridColumn: '1 / -1'}}>
+            <DataVisualizationForStudy/>
+        </div>
     </StyledContainer>
   );
 };

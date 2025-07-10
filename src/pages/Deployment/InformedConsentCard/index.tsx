@@ -142,7 +142,7 @@ const InformedConsentCard = () => {
   if (!consents) return null;
 
   return (
-    <CarpAccordion title={t("deployment:informed_consents_card.title")}>
+    <CarpAccordion isExpanded={true} title={t("deployment:informed_consents_card.title")}>
       <Stack gap="16px">
         {consents.map(({ participant, consent, consentFile }) => {
           return (
