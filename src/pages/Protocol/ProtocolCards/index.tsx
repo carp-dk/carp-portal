@@ -17,8 +17,8 @@ import {
   StyledNameCard,
 } from './styles';
 
-type ParticipantRole
-  = carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
+type ParticipantRole =
+  carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
 
 const ProtocolNameCardSkeleton: React.FC = () => {
   return (
@@ -89,8 +89,8 @@ const ProtocolCards = () => {
           {protocol.snapshot.description}
         </ProtocolDescription>
       </StyledNameCard>
-      {protocol.snapshot.primaryDevices.size() > 0
-        && protocol.snapshot.connections.size() > 0 && (
+      {protocol.snapshot.primaryDevices.size() > 0 &&
+        protocol.snapshot.connections.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Devices</CardTitle>
           {protocol.snapshot.primaryDevices.toArray().map((device) => {

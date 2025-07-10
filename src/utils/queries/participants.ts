@@ -262,8 +262,8 @@ export const useParticipantGroupsAccountsAndStatus = (studyId: string) => {
 };
 
 export const useStatistics = (studyId: string) => {
-  const { data: participantsStatus, isLoading: participantsStatusLoading }
-    = useParticipantsStatus(studyId);
+  const { data: participantsStatus, isLoading: participantsStatusLoading } =
+    useParticipantsStatus(studyId);
 
   const deploymentIds: string[] = [];
   if (participantsStatus) {
@@ -366,8 +366,8 @@ export const useDeviceDeployed = (studyId: string) => {
     { studyDeploymentId: string; roleName: string }
   >({
     mutationFn: async ({ studyDeploymentId, roleName }) => {
-      const deviceDeployment
-        = await carpApi.study.deployments.getDeviceDeploymentFor({
+      const deviceDeployment =
+        await carpApi.study.deployments.getDeviceDeploymentFor({
           studyDeploymentId,
           primaryDeviceRoleName: roleName,
         });

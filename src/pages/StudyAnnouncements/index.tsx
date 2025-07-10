@@ -52,9 +52,9 @@ const StudyAnnouncements = () => {
         description="View announcements created by researchers for this study"
       />
       <AnnouncementsContainer>
-        {isLoading
-          ? [1, 2, 3].map(() => <StudyAnnouncmentSkeleton key={uuidv4()} />)
-          : announcements?.documents.map(announcement => (
+        {isLoading ?
+            [1, 2, 3].map(() => <StudyAnnouncmentSkeleton key={uuidv4()} />) :
+            announcements?.documents.map((announcement) => (
               <StudyAnnouncement
                 announcement={announcement.data as MessageData}
                 announcementId={announcement.id}

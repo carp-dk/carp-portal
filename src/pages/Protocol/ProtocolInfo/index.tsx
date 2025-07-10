@@ -61,8 +61,8 @@ const ProtocolInfoSkeleton: React.FC = () => {
 const ProtocolInfo = () => {
   const isDownMd = useMediaQuery('(max-width:1250px)');
   const { id: protocolId } = useParams();
-  const { data: protocol, isLoading: protocolLoading }
-    = useLatestProtocol(protocolId);
+  const { data: protocol, isLoading: protocolLoading } =
+    useLatestProtocol(protocolId);
   const [modalOpen, setModalOpen] = useState(false);
   if (protocolLoading) return <ProtocolInfoSkeleton />;
   return (

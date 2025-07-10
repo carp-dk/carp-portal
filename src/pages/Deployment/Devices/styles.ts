@@ -3,7 +3,7 @@ import { styled } from '@Utils/theme';
 import { getDeviceStatusColor } from '@Utils/utility';
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 8,
   height: 8,

@@ -83,7 +83,7 @@ const InformedConsentCard = () => {
   useEffect(() => {
     if (statuses && participantData) {
       const participantGroup = statuses.groups.find(
-        s => s.participantGroupId === deploymentId,
+        (s) => s.participantGroupId === deploymentId,
       );
       const commonConsent = participantData.common[
         InformedConsentType.type
@@ -96,7 +96,7 @@ const InformedConsentCard = () => {
       );
 
       const participantsWithConsent = participantGroup.participants.map((p) => {
-        const consent = roleConsents.find(rc =>
+        const consent = roleConsents.find((rc) =>
           p.role.localeCompare(rc.role),
         );
         if (consent)
@@ -114,9 +114,9 @@ const InformedConsentCard = () => {
         });
         participantsWithConsent.forEach((p, i) => {
           const file = sortedFiles.find(
-            f =>
-              f.metadata['participant-id'] === p.participant.participantId
-              && f.metadata['document-type'] === 'informed_consent',
+            (f) =>
+              f.metadata['participant-id'] === p.participant.participantId &&
+              f.metadata['document-type'] === 'informed_consent',
           );
           participantsWithConsent[i].consentFile = file;
         });

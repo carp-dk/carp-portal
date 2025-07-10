@@ -49,12 +49,12 @@ const DragAndDrop = ({
       fileTypes={fileTypes}
     >
       <UploadFileBox>
-        {uploading
-          ? (
+        {uploading ?
+            (
               <CircularProgress />
-            )
-          : formik.errors[name] && fileTouched
-            ? (
+            ) :
+          formik.errors[name] && fileTouched ?
+              (
                 <>
                   <UploadEllipse error>
                     <ClearRoundedIcon />
@@ -64,15 +64,15 @@ const DragAndDrop = ({
                     {formik.errors[name]}
                   </UploadFileText>
                 </>
-              )
-            : !formik.values[name]
-                ? (
+              ) :
+              !formik.values[name] ?
+                  (
                     <>
-                      {name === 'image'
-                        ? (
+                      {name === 'image' ?
+                          (
                             <ImageIcon fontSize="large" />
-                          )
-                        : (
+                          ) :
+                          (
                             <UploadFileRoundedIcon fontSize="large" />
                           )}
                       <EmptyFileWrapper>
@@ -88,8 +88,8 @@ const DragAndDrop = ({
                         </UploadFileBrowseWrapper>
                       </EmptyFileWrapper>
                     </>
-                  )
-                : (
+                  ) :
+                  (
                     <>
                       <UploadEllipse>
                         <DoneRoundedIcon />

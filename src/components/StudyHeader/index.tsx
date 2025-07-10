@@ -31,11 +31,11 @@ const StudyHeader = ({ description, path }: Props) => {
   return (
     <StudyHeaderContainer>
       <Breadcrumbs separator={<NavigateNext />}>
-        {isLoading
-          ? (
+        {isLoading ?
+            (
               <Skeleton height="32px" width="220px" animation="wave" />
-            )
-          : (
+            ) :
+            (
               <Path variant="h2">{studyDetails.name}</Path>
             )}
         {path.map((p) => {

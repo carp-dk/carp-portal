@@ -4,13 +4,17 @@ import { styled } from '@Utils/theme';
 export const StyledAccordion = styled(Accordion)(({ expanded }) => ({
   'padding': '10px 24px',
   'marginBottom': 32,
-  'borderRadius': expanded ? 16 : 8,
+  'borderRadius': expanded ?
+    16 :
+    8,
   'transition': 'border-radius 0.2s ease-in-out',
   '::before': {
     display: 'none',
   },
   ':last-of-type': {
-    borderRadius: expanded ? 16 : 8,
+    borderRadius: expanded ?
+      16 :
+      8,
   },
 }));
 

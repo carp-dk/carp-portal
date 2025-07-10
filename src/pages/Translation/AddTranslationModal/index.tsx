@@ -47,9 +47,7 @@ const validationSchema = yup.object({
       try {
         JSON.parse(text);
         return true;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      catch (e) {
+      } catch {
         return false;
       }
     }),
@@ -141,7 +139,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                 formik.setFieldValue('language', newValue);
               }}
               filterOptions={(options, params) => {
-                return options.filter(option =>
+                return options.filter((option) =>
                   languageLabels[option].primary
                     .toLowerCase()
                     .includes(params.inputValue.toLowerCase()),
@@ -149,7 +147,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
               }}
               onBlur={formik.handleBlur}
               fullWidth
-              getOptionLabel={option =>
+              getOptionLabel={(option) =>
                 `${languageLabels[option].primary} ${
                   languageLabels[option].secondary
                 }`}
@@ -163,14 +161,13 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                     />
                   );
                 }
-                const countryCode
-                  = formik.values.language[0].toUpperCase()
-                    + formik.values.language[1].toLowerCase();
+                const countryCode =
+                  formik.values.language[0].toUpperCase() +
+                  formik.values.language[1].toLowerCase();
                 let CountryFlag;
                 if (countryCode in flags) {
                   CountryFlag = flags[countryCode];
-                }
-                else {
+                } else {
                   CountryFlag = 'div';
                 }
                 return (
@@ -200,13 +197,12 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
               }}
               renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
-                const countryCode
-                  = option[0].toUpperCase() + option[1].toLowerCase();
+                const countryCode =
+                  option[0].toUpperCase() + option[1].toLowerCase();
                 let CountryFlag;
                 if (countryCode in flags) {
                   CountryFlag = flags[countryCode];
-                }
-                else {
+                } else {
                   CountryFlag = 'div';
                 }
                 return (

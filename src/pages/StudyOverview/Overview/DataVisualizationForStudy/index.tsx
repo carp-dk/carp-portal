@@ -22,7 +22,7 @@ const DataVisualizationForStudy = () => {
   const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
   function handleLeftButtonClick() {
-    setToDate(prev => prev.minusDays(14));
+    setToDate((prev) => prev.minusDays(14));
   }
 
   function handleRightButtonClick() {
@@ -32,7 +32,9 @@ const DataVisualizationForStudy = () => {
     const today = LocalDate.now();
 
     // Don't go beyond today
-    setToDate(newToDate.isAfter(today) ? today : newToDate);
+    setToDate(newToDate.isAfter(today) ?
+      today :
+      newToDate);
   }
 
   const [requests, setRequests] = React.useState([]);
@@ -44,14 +46,16 @@ const DataVisualizationForStudy = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const summaries = useDataStreamsSummaries(requests, { enabled: requests.length > 0 });
+  const summaries = useDataStreamsSummaries(requests, {
+    enabled: requests.length > 0,
+    queryKey: [],
+  });
 
   useEffect(() => {
     if (studyDetails) {
       if (studyDetails.protocolSnapshot == null) {
         setDisplayBlank(true);
-      }
-      else {
+      } else {
         updateRequestsForQuery();
       }
     }
@@ -79,8 +83,7 @@ const DataVisualizationForStudy = () => {
       if (studyDetails) {
         if (studyDetails.protocolSnapshot == null) {
           setDisplayBlank(true);
-        }
-        else {
+        } else {
           updateRequestsForQuery();
         }
       }
@@ -92,7 +95,7 @@ const DataVisualizationForStudy = () => {
         setDisplayBlank(true);
         return;
       }
-      const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map(type => ({
+      const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map((type) => ({
         study_id: studyId,
         scope: 'study',
         type: type,
@@ -102,7 +105,7 @@ const DataVisualizationForStudy = () => {
       setRequests(requests);
     }
 
-    const summariesError = summaries.find(summary => summary.isError);
+    const summariesError = summaries.find((summary) => summary.isError);
     const error = studyDetailsError || summariesError;
 
     if (displayBlank) {
@@ -118,7 +121,7 @@ const DataVisualizationForStudy = () => {
       );
     }
 
-    const loading = studyDetailsIsLoading || (summaries.some(summary => summary.isLoading)) || requests.length === 0;
+    const loading = studyDetailsIsLoading || (summaries.some((summary) => summary.isLoading)) || requests.length === 0;
     const loadingSkeletonHeight = 70 + 16 + (requests?.length * 40);
 
     if (loading) return (
@@ -144,7 +147,7 @@ const DataVisualizationForStudy = () => {
     setRequests(requests);
   }
 
-  const summariesError = summaries.find(summary => summary.isError);
+  const summariesError = summaries.find((summary) => summary.isError);
   const error = studyDetailsError || summariesError;
 
   if (displayBlank) {
@@ -165,7 +168,7 @@ const DataVisualizationForStudy = () => {
     );
   }
 
-  const loading = studyDetailsIsLoading || (summaries.some(summary => summary.isLoading)) || requests.length === 0;
+  const loading = studyDetailsIsLoading || (summaries.some((summary) => summary.isLoading)) || requests.length === 0;
 
   if (loading) return (
     <StyledContainer>
@@ -188,17 +191,18 @@ const DataVisualizationForStudy = () => {
 
   const summedGroups = [];
 
-  for (let i = 0; i < summaries.length; i++) {
-    const summary = summaries[i].data;
+  for (const element of summaries) {
+    const summary = element.data;
     const { mappedData } = mapDataToChartData(summary);
 
     const output = mappedData.map((entry) => {
+      console.log('entry', entry);
       const { date, dayOfWeek, ...rest } = entry;
       const quantity = Object.values(rest).reduce((sum, value) => sum + value, 0);
 
       return { date, [summary.type]: quantity, dayOfWeek };
     });
-
+    console.log('output', output);
     summedGroups.push(output);
   }
 

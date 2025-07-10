@@ -72,8 +72,8 @@ const AddResearcherModal = ({ open, onClose }: Props) => {
             onChange={addResearcherFormik.handleChange}
             fullWidth
             helperText={
-              addResearcherFormik.touched.email
-              && addResearcherFormik.errors.email
+              addResearcherFormik.touched.email &&
+              addResearcherFormik.errors.email
             }
             onBlur={addResearcherFormik.handleBlur}
           />

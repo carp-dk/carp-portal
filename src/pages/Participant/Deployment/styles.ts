@@ -114,7 +114,7 @@ export const ActivityDataContainer = styled('div')({
 });
 
 export const StyledDeploymentStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 12,
   height: 12,
@@ -141,7 +141,7 @@ export const Initials = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledDeviceStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 8,
   height: 8,

@@ -8,30 +8,30 @@ isoCountries.registerLocale(en);
 type Flags = typeof flags;
 type FlagKey = keyof Flags;
 
-type LanguageLabelCountries
-  = | 'BG'
-    | 'HR'
-    | 'CZ'
-    | 'DK'
-    | 'NL'
-    | 'GB'
-    | 'EE'
-    | 'FI'
-    | 'FR'
-    | 'DE'
-    | 'GR'
-    | 'HU'
-    | 'IE'
-    | 'IT'
-    | 'LV'
-    | 'MT'
-    | 'PL'
-    | 'PT'
-    | 'RO'
-    | 'SK'
-    | 'SI'
-    | 'ES'
-    | 'SE';
+type LanguageLabelCountries =
+  | 'BG' |
+  'HR' |
+  'CZ' |
+  'DK' |
+  'NL' |
+  'GB' |
+  'EE' |
+  'FI' |
+  'FR' |
+  'DE' |
+  'GR' |
+  'HU' |
+  'IE' |
+  'IT' |
+  'LV' |
+  'MT' |
+  'PL' |
+  'PT' |
+  'RO' |
+  'SK' |
+  'SI' |
+  'ES' |
+  'SE';
 type LanguageLabelsMapping = {
   [key in LanguageLabelCountries]: { primary: string; secondary: string };
 };
@@ -68,7 +68,7 @@ export const countryCodeToPascalCase = (countryCode: string): string => {
 
 export const getFlag = (key: string): Flags[FlagKey] => {
   const countryCode = Object.keys(languageLabels).find(
-    code => languageLabels[code].secondary === (key as FlagKey),
+    (code) => languageLabels[code].secondary === (key as FlagKey),
   );
 
   if (countryCode) {
@@ -86,7 +86,7 @@ export const getFlag = (key: string): Flags[FlagKey] => {
 
 export const getCountry = (key: string): string => {
   const countryCode = Object.keys(languageLabels).find(
-    code => languageLabels[code].secondary === (key as FlagKey),
+    (code) => languageLabels[code].secondary === (key as FlagKey),
   );
 
   if (countryCode) {

@@ -22,15 +22,15 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
             fullWidth
             required
             error={
-              getIn(formik.touched, 'diagnosis.icd11Code')
-              && !!getIn(formik.errors, 'diagnosis.icd11Code')
+              getIn(formik.touched, 'diagnosis.icd11Code') &&
+              !!getIn(formik.errors, 'diagnosis.icd11Code')
             }
             value={formik.values.diagnosis.icd11Code}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             helperText={
-              getIn(formik.touched, 'diagnosis.icd11Code')
-              && getIn(formik.errors, 'diagnosis.icd11Code')
+              getIn(formik.touched, 'diagnosis.icd11Code') &&
+              getIn(formik.errors, 'diagnosis.icd11Code')
             }
           />
           <DatePicker
@@ -38,11 +38,11 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
             label="Effective date"
             name="diagnosis.effectiveDate"
             value={
-              formik.values.diagnosis.effectiveDate
-                ? new Date(formik.values.diagnosis.effectiveDate)
-                : null
+              formik.values.diagnosis.effectiveDate ?
+                new Date(formik.values.diagnosis.effectiveDate) :
+                null
             }
-            onChange={value =>
+            onChange={(value) =>
               formik.setFieldValue('diagnosis.effectiveDate', value)}
             slotProps={{
               actionBar: {
@@ -51,11 +51,11 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
               textField: {
                 name: 'effectiveDateText',
                 error:
-                  getIn(formik.touched, 'diagnosis.effectiveDate')
-                  && !!getIn(formik.errors, 'diagnosis.effectiveDate'),
+                  getIn(formik.touched, 'diagnosis.effectiveDate') &&
+                  !!getIn(formik.errors, 'diagnosis.effectiveDate'),
                 helperText:
-                  getIn(formik.touched, 'diagnosis.effectiveDate')
-                  && getIn(formik.errors, 'diagnosis.effectiveDate'),
+                  getIn(formik.touched, 'diagnosis.effectiveDate') &&
+                  getIn(formik.errors, 'diagnosis.effectiveDate'),
                 onBlur: formik.handleBlur,
                 fullWidth: true,
               },
@@ -68,15 +68,15 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
           name="diagnosis.diagnosis"
           label="Diagnosis"
           error={
-            getIn(formik.touched, 'diagnosis.diagnosis')
-            && !!getIn(formik.errors, 'diagnosis.diagnosis')
+            getIn(formik.touched, 'diagnosis.diagnosis') &&
+            !!getIn(formik.errors, 'diagnosis.diagnosis')
           }
           value={formik.values.diagnosis.diagnosis}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           helperText={
-            getIn(formik.touched, 'diagnosis.diagnosis')
-            && getIn(formik.errors, 'diagnosis.diagnosis')
+            getIn(formik.touched, 'diagnosis.diagnosis') &&
+            getIn(formik.errors, 'diagnosis.diagnosis')
           }
         />
         <TextField
@@ -87,15 +87,15 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
           multiline
           rows={6}
           error={
-            getIn(formik.touched, 'diagnosis.conclusion')
-            && !!getIn(formik.errors, 'diagnosis.conclusion')
+            getIn(formik.touched, 'diagnosis.conclusion') &&
+            !!getIn(formik.errors, 'diagnosis.conclusion')
           }
           value={formik.values.diagnosis.conclusion}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           helperText={
-            getIn(formik.touched, 'diagnosis.conclusion')
-            && getIn(formik.errors, 'diagnosis.conclusion')
+            getIn(formik.touched, 'diagnosis.conclusion') &&
+            getIn(formik.errors, 'diagnosis.conclusion')
           }
         />
       </Stack>

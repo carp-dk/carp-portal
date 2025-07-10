@@ -40,12 +40,10 @@ const Status = () => {
   if (studyStatus instanceof StudyStatus.Configuring) {
     if (studyStatus.canGoLive) {
       currentStudyStatus = 'Ready';
-    }
-    else {
+    } else {
       currentStudyStatus = 'Draft';
     }
-  }
-  else {
+  } else {
     currentStudyStatus = 'Live';
   }
 

@@ -21,7 +21,9 @@ const Toolbar = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
     searchDeployments(event.target.value);
-    setShowClearIcon(event.target.value === '' ? 'none' : 'flex');
+    setShowClearIcon(event.target.value === '' ?
+      'none' :
+      'flex');
   };
 
   const handleClear = (): void => {

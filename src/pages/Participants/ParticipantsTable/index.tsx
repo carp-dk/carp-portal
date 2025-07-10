@@ -52,8 +52,8 @@ const ParticipantsTable = ({
     isLoading: participantsAccountsLoading,
     isError: isParticipantsAccountsError,
   } = useParticipantsAccounts(studyId);
-  const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading }
-    = useParticipantsStatus(studyId);
+  const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
+    useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [columns, setColumns] = useState<MRT_ColumnDef<ParticipantAccount>[]>(
     [],
@@ -65,24 +65,23 @@ const ParticipantsTable = ({
       if (!isDeploymentsStatusLoading) {
         const deployment = deploymentsStatus.toArray().find(
           (pg): pg is ParticipantGroupStatus.InDeployment =>
-            pg instanceof ParticipantGroupStatus.InDeployment
-            && pg.participants.toArray().some((participant) => {
+            pg instanceof ParticipantGroupStatus.InDeployment &&
+            pg.participants.toArray().some((participant) => {
               switch (participant.accountIdentity.constructor) {
                 case EmailAccountIdentity:
                   return (
                     (
                       participant.accountIdentity as EmailAccountIdentity
-                    ).emailAddress.address.toLowerCase()
-                    === cell.row.original.email?.toLowerCase()
+                    ).emailAddress.address.toLowerCase() ===
+                    cell.row.original.email?.toLowerCase()
                   );
                 case UsernameAccountIdentity:
                   return (
                     (
                       participant.accountIdentity as UsernameAccountIdentity
-                    ).username.name.toLowerCase()
-                    === cell.row.original.username?.toLowerCase()
+                    ).username.name.toLowerCase() ===
+                    cell.row.original.username?.toLowerCase()
                   );
-                // TODO: Add case for other account identities
                 default:
                   console.error('Unknown account identity type');
                   return false;
@@ -115,7 +114,7 @@ const ParticipantsTable = ({
   useEffect(() => {
     setColumns([
       {
-        accessorFn: row => row.email ?? row.username,
+        accessorFn: (row) => row.email ?? row.username,
         header: 'Identity',
       },
       {
@@ -133,7 +132,9 @@ const ParticipantsTable = ({
       },
       {
         accessorFn: (row) => {
-          return row?.id !== null ? 'Yes' : 'No';
+          return row?.id !== null ?
+            'Yes' :
+            'No';
         },
         id: 'user_id',
         header: 'Invited',
@@ -153,7 +154,7 @@ const ParticipantsTable = ({
     }
     const participantsIdentifiers = Object.keys(rowSelection);
     setParticipantsToAdd(
-      participantsAccounts.filter(participant =>
+      participantsAccounts.filter((participant) =>
         participantsIdentifiers.includes(
           participant.email ?? participant.username,
         ),
@@ -175,7 +176,7 @@ const ParticipantsTable = ({
       rowSelection,
       showSkeletons: participantsAccountsLoading || isDeploymentsStatusLoading,
     },
-    getRowId: row => row.email ?? row.username,
+    getRowId: (row) => row.email ?? row.username,
     muiSearchTextFieldProps: {
       variant: 'outlined',
       placeholder: '',
@@ -210,12 +211,12 @@ const ParticipantsTable = ({
     enableHiding: false,
     enableColumnActions: false,
     enableSorting: true,
-    muiToolbarAlertBannerProps: isParticipantsAccountsError
-      ? {
+    muiToolbarAlertBannerProps: isParticipantsAccountsError ?
+        {
           color: 'error',
           children: 'Error loading data',
-        }
-      : undefined,
+        } :
+      undefined,
   });
 
   return (

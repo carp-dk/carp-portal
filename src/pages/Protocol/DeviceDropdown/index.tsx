@@ -36,9 +36,9 @@ const DeviceDropdown = ({ device, connections, connectedDevices }: Props) => {
       </DropdownBar>
       <ConnectedDevicesContainer>
         {connections.map((connection) => {
-          const deviceType
+          const deviceType =
             // TODO: CORE missing js type for i20_1, so for now we will go with the HACK
-            = (
+            (
               connectedDevices.find((connectedDevice) => {
                 return connectedDevice.roleName === connection.roleName;
               }) as any

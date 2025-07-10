@@ -63,21 +63,27 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
       <Title variant="h2">Your CARP studies</Title>
       <CardsContainer>
         <StudyActionCard
-          actionText={isAdmin ? 'Invite Researcher' : 'Add study'}
-          onClick={isAdmin ? inviteResearcherHandler : openCreateStudyModal}
+          actionText={isAdmin ?
+            'Invite Researcher' :
+            'Add study'}
+          onClick={isAdmin ?
+            inviteResearcherHandler :
+            openCreateStudyModal}
         />
-        {studiesLoading
-          ? (
+        {studiesLoading ?
+            (
               <>
                 <SkeletonCard />
                 <SkeletonCard />
                 <SkeletonCard />
               </>
-            )
-          : (
+            ) :
+            (
+              studies &&
               studies
-              && studies
-                .sort((a, b) => (a.createdOn < b.createdOn ? 1 : -1))
+                .sort((a, b) => (a.createdOn < b.createdOn ?
+                  1 :
+                    -1))
                 .map((study: StudyOverview) => {
                   return (
                     <StudyCard

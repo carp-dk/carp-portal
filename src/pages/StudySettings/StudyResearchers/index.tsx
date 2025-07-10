@@ -59,14 +59,14 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
         </div>
       </Top>
       <ResearchersContainer>
-        {researchersLoading || studyDetailsLoading || userLoading
-          ? [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
-          : researchers?.map(researcher => (
+        {researchersLoading || studyDetailsLoading || userLoading ?
+            [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />) :
+            researchers?.map((researcher) => (
               <ResearcherItem
                 disabled={
-                  researcher.id === studyDetails.ownerId.stringRepresentation
+                  researcher.id === studyDetails.ownerId.stringRepresentation ||
                   // CARP core type defines accountId it as UUID, after serialization it will be string
-                  || researcher.id === (user.accountId as unknown as string)
+                  researcher.id === (user.accountId as unknown as string)
                 }
                 key={uuidv4()}
                 researcher={researcher}

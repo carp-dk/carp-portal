@@ -48,8 +48,8 @@ const Resources = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const closeAddModal = () => setOpenAdd(false);
   const openAddModal = () => setOpenAdd(true);
-  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal]
-    = useState(false);
+  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+    useState(false);
 
   const [resourceToDelete, setResourceToDelete] = useState<CarpDocument>(null);
   const deleteResource = useDeleteResource();
@@ -118,8 +118,8 @@ const Resources = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {resourcesLoading
-                ? [1, 2, 3].map(() => (
+              {resourcesLoading ?
+                  [1, 2, 3].map(() => (
                     <StyledTableRow key={uuidv4()}>
                       <TableCell>
                         <Skeleton
@@ -142,17 +142,17 @@ const Resources = () => {
                         </IconButton>
                       </TableCell>
                     </StyledTableRow>
-                  ))
-                : resources?.documents.map((resource: CarpDocument) => (
+                  )) :
+                  resources?.documents.map((resource: CarpDocument) => (
                     <StyledTableRow key={resource.id}>
                       <TableCell>{resource.name}</TableCell>
                       <TableCell>
-                        {formatDateTime(resource.created_at)
-                          + (resource.updated_at !== resource.created_at
-                            ? ` (updated ${formatDateTime(
+                        {formatDateTime(resource.created_at) +
+                          (resource.updated_at !== resource.created_at ?
+                            ` (updated ${formatDateTime(
                               resource.updated_at,
-                            )})`
-                            : '')}
+                            )})` :
+                            '')}
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Delete">

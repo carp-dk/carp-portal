@@ -173,8 +173,8 @@ const getParticipantDataFormik = (
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
       if (data.attribute.inputDataType.name === 'informed_consent') return;
-      initialValues[data.attribute.inputDataType.name].__type
-        = `${data.attribute.inputDataType.namespace}.${data.attribute.inputDataType.name}`;
+      initialValues[data.attribute.inputDataType.name].__type =
+        `${data.attribute.inputDataType.namespace}.${data.attribute.inputDataType.name}`;
 
       switch (data.attribute.inputDataType.name) {
         case 'sex':
@@ -220,8 +220,7 @@ const getParticipantDataFormik = (
         if (value.__type && value.__type !== '') {
           if (Object.entries(value).every(([k, v]) => k === '__type' || !v)) {
             newParticipantData[(value as any).__type] = null;
-          }
-          else {
+          } else {
             newParticipantData[(value as any).__type] = value;
           }
         }

@@ -21,8 +21,7 @@ const CopyButton = ({ textToCopy, idType, disabled }: Props) => {
         snackbarMessage: message,
       });
       navigator.clipboard.writeText(textToCopy);
-    }
-    else {
+    } else {
       setSnackbarState({
         snackbarOpen: true,
         snackbarType: 'success',
@@ -35,13 +34,13 @@ const CopyButton = ({ textToCopy, idType, disabled }: Props) => {
   return (
     <StyledButton
       disabled={disabled}
-      onClick={event => copyTextToClipboard(event)}
+      onClick={(event) => copyTextToClipboard(event)}
     >
-      {disabled
-        ? (
+      {disabled ?
+          (
             <ContentCopyRoundedIcon color="disabled" fontSize="small" />
-          )
-        : (
+          ) :
+          (
             <ContentCopyRoundedIcon fontSize="small" />
           )}
     </StyledButton>

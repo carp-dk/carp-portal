@@ -2,7 +2,7 @@ import { Alert, Chip, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const StyledAlert = styled(Alert, {
-  shouldForwardProp: prop => prop !== 'isSkeleton',
+  shouldForwardProp: (prop) => prop !== 'isSkeleton',
 })<{ isSkeleton?: boolean }>(({ isSkeleton, theme }) => ({
   'border': 'none',
   'padding': '12px 24px 12px',
@@ -14,9 +14,9 @@ export const StyledAlert = styled(Alert, {
   '& .MuiAlert-icon': {
     marginRight: 12,
     paddingTop: 8,
-    color: isSkeleton
-      ? theme.palette.background.default
-      : theme.palette.primary.main,
+    color: isSkeleton ?
+      theme.palette.background.default :
+      theme.palette.primary.main,
   },
   '& img': {
     width: '100%',

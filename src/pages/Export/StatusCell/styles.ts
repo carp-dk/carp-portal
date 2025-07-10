@@ -9,7 +9,7 @@ export const StyledContainer = styled('div')({
 });
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'statusColor',
+  shouldForwardProp: (prop) => prop !== 'statusColor',
 })<{ statusColor?: string }>(({ statusColor }) => ({
   width: 8,
   height: 8,

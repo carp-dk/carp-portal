@@ -44,9 +44,9 @@ const DeploymentCard = ({
   const handleCardToggle = (event) => {
     event.stopPropagation();
     setIsCardOpen((prevIsCardOpen) => {
-      const newOpenCardCount = prevIsCardOpen
-        ? openCardCount - 1
-        : openCardCount + 1;
+      const newOpenCardCount = prevIsCardOpen ?
+        openCardCount - 1 :
+        openCardCount + 1;
       setOpenCardCount(newOpenCardCount);
       return !prevIsCardOpen;
     });
@@ -55,10 +55,10 @@ const DeploymentCard = ({
   let names = useMemo(
     () =>
       deployment.participants
-        .map(participant =>
-          participant.firstName
-            ? `${participant.firstName} ${participant.lastName}`
-            : '',
+        .map((participant) =>
+          participant.firstName ?
+            `${participant.firstName} ${participant.lastName}` :
+            '',
         )
         .join(', '),
     [deployment.participants],
@@ -77,11 +77,11 @@ const DeploymentCard = ({
               `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
             )}
         >
-          {!deployment.participants.every(p => p.email == null)
-            ? (
+          {!deployment.participants.every((p) => p.email == null) ?
+              (
                 names
-              )
-            : (
+              ) :
+              (
                 <i>Generated deployment</i>
               )}
         </Names>
@@ -100,12 +100,12 @@ const DeploymentCard = ({
           <DateTooltip
             invitedAt={deployment.deploymentStatus.createdOn}
             startedAt={
+              deployment.deploymentStatus.startedOn &&
               deployment.deploymentStatus.startedOn
-              && deployment.deploymentStatus.startedOn
             }
             stoppedAt={
+              deployment.deploymentStatus.stoppedOn &&
               deployment.deploymentStatus.stoppedOn
-              && deployment.deploymentStatus.stoppedOn
             }
           />
         </HorizontalStatusContainer>
@@ -122,26 +122,28 @@ const DeploymentCard = ({
         </IdContainer>
         <MinimizeButton
           disableRipple
-          onClick={event => handleCardToggle(event)}
+          onClick={(event) => handleCardToggle(event)}
           open={isCardOpen}
         >
           <KeyboardArrowDownRoundedIcon
             sx={{
-              transform: isCardOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+              transform: isCardOpen ?
+                'rotate(0deg)' :
+                'rotate(-90deg)',
               transition: 'transform 0.3s ease',
             }}
           />
         </MinimizeButton>
       </TopContainer>
       <ParticipantsContainer>
-        {isCardOpen
-          && deployment.participants.map(participant => (
+        {isCardOpen &&
+          deployment.participants.map((participant) => (
             <ParticipantRecord
               key={participant.participantId}
               deploymentId={deployment.participantGroupId}
               participantData={participant}
               participantStatus={deployment.deploymentStatus.participantStatusList.find(
-                status => status.participantId === participant.participantId,
+                (status) => status.participantId === participant.participantId,
               )}
               deviceStatusList={deployment.deploymentStatus.deviceStatusList}
             />

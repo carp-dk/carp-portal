@@ -16,8 +16,8 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
   return (
     <>
       {children}
-      {process.env.NODE_ENV === 'development'
-        && import.meta.env.VITE_GIT_COMMIT && <CommitHash />}
+      {process.env.NODE_ENV === 'development' &&
+        import.meta.env.VITE_GIT_COMMIT && <CommitHash />}
     </>
   );
 };

@@ -19,9 +19,11 @@ export const UploadFileBox = styled('div')(({ theme }) => ({
 }));
 
 export const UploadFileText = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'error',
+  shouldForwardProp: (prop) => prop !== 'error',
 })<{ error?: boolean }>(({ error, theme }) => ({
-  color: error ? theme.palette.error.main : theme.palette.text.primary,
+  color: error ?
+    theme.palette.error.main :
+    theme.palette.text.primary,
 }));
 
 export const UploadFileBrowseWrapper = styled('div')({
@@ -49,7 +51,7 @@ export const UploadFileBoxHover = styled('div')({
 });
 
 export const UploadEllipse = styled('div', {
-  shouldForwardProp: prop => prop !== 'error',
+  shouldForwardProp: (prop) => prop !== 'error',
 })<{ error?: boolean }>(({ error, theme }) => ({
   'display': 'flex',
   'alignItems': 'center',
@@ -60,12 +62,16 @@ export const UploadEllipse = styled('div', {
   'height': 170,
   'borderRadius': '50%',
   'border': `10px solid ${
-    error ? theme.palette.error.main : theme.palette.primary.light
+    error ?
+      theme.palette.error.main :
+      theme.palette.primary.light
   }`,
   'marginBottom': 8,
   '& > svg': {
     fontSize: 36,
-    color: error ? theme.palette.error.main : theme.palette.success.main,
+    color: error ?
+      theme.palette.error.main :
+      theme.palette.success.main,
   },
 }));
 

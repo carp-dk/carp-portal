@@ -33,7 +33,7 @@ const Participants = () => {
   useEffect(() => {
     if (statuses) {
       setGroup(
-        statuses.groups.find(s => s.participantGroupId === deploymentId),
+        statuses.groups.find((s) => s.participantGroupId === deploymentId),
       );
     }
   }, [statuses, deploymentId]);
@@ -49,8 +49,8 @@ const Participants = () => {
   return (
     <CarpAccordion isExpanded={true} title={t('deployment:participants_card.title')}>
       <Stack spacing="8px">
-        {group
-          && group.participants.map(p => (
+        {group &&
+          group.participants.map((p) => (
             <ParticipantRow
               key={p.participantId}
               direction="row"
@@ -62,9 +62,9 @@ const Participants = () => {
               <Stack gap="15px" direction="row">
                 <AccountIcon>
                   <Initials variant="h4">
-                    {!p.firstName
-                      ? p.role[0]
-                      : `${p.firstName[0]}${p.lastName[0]}`}
+                    {!p.firstName ?
+                      p.role[0] :
+                      `${p.firstName[0]}${p.lastName[0]}`}
                   </Initials>
                 </AccountIcon>
                 <Typography variant="h5" alignContent="center" noWrap>
@@ -90,7 +90,7 @@ const Participants = () => {
                 >
                   {
                     group.deploymentStatus.participantStatusList.find(
-                      ps => ps.participantId === p.participantId,
+                      (ps) => ps.participantId === p.participantId,
                     ).assignedParticipantRoles.roleNames[0]
                   }
                 </Typography>

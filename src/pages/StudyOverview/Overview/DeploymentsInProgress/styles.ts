@@ -64,7 +64,7 @@ export const StatusContainer = styled('div')({
 });
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 8,
   height: 8,

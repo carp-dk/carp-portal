@@ -74,25 +74,25 @@ const Deployment = () => {
   };
 
   useEffect(() => {
-    if (!deploymentIsLoading && deployment && deployment.groups) {
+    if (!deploymentIsLoading && deployment?.groups) {
       const deploymentStatus = deployment.groupStatuses.find(
-        gs => gs.id === deploymentId,
+        (gs) => gs.id === deploymentId,
       );
       const group = deployment.groups.find(
-        g => g.participantGroupId === deploymentId,
+        (g) => g.participantGroupId === deploymentId,
       );
       const participants = group.participants.map(
         (p) => {
-          const participantStatus
-            = group.deploymentStatus.participantStatusList.find(
-              psl => psl.participantId === p.participantId,
+          const participantStatus =
+            group.deploymentStatus.participantStatusList.find(
+              (psl) => psl.participantId === p.participantId,
             );
-          const roleName
-            = participantStatus.assignedParticipantRoles.roleNames[0];
-          const deviceRole
-            = participantStatus.assignedPrimaryDeviceRoleNames[0];
+          const roleName =
+            participantStatus.assignedParticipantRoles.roleNames[0];
+          const deviceRole =
+            participantStatus.assignedPrimaryDeviceRoleNames[0];
           const device = group.deploymentStatus.deviceStatusList.find(
-            d => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
+            (d) => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
           );
           // TODO: Fix this type assertion in client
           const lastUpload = lastDataUpload(
@@ -124,12 +124,14 @@ const Deployment = () => {
 
   const getParticipantInitials = (participant: ParticipantDataInput) => {
     if (
-      participant.firstName === ''
-      || participant.lastName === ''
-      || !participant.firstName
-      || !participant.lastName
+      participant.firstName === '' ||
+      participant.lastName === '' ||
+      !participant.firstName ||
+      !participant.lastName
     ) {
-      return participant.role ? participant.role[0] : '?';
+      return participant.role ?
+        participant.role[0] :
+        '?';
     }
     return `${participant.firstName[0]}${participant.lastName[0]}`;
   };
@@ -183,7 +185,7 @@ const Deployment = () => {
         </Right>
       </TopContainer>
       <ParticipantsContainer>
-        {deploymentInformation.participants?.map(p => (
+        {deploymentInformation.participants?.map((p) => (
           <StyledContainer
             to={`/studies/${studyId}/deployments/${deploymentId}/participants/${p.participant.participantId}`}
             key={p.participant.participantId}

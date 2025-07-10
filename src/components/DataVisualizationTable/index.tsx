@@ -45,8 +45,8 @@ const DataVisualizationTable = ({
         <TableHeadCenterCellsWrapper>
           {data.map((item, index) => (
             <TableHeadCell key={index}>
-              {isToDateSetToTheCurrentDay && index === data.length - 1
-                ? (
+              {isToDateSetToTheCurrentDay && index === data.length - 1 ?
+                  (
                     <EnlargedText>
                       {item.dayOfWeek}
                       {' '}
@@ -54,8 +54,8 @@ const DataVisualizationTable = ({
                       {' '}
                       {item.date}
                     </EnlargedText>
-                  )
-                : (
+                  ) :
+                  (
                     <>
                       {item.dayOfWeek}
                       {' '}
@@ -77,7 +77,7 @@ const DataVisualizationTable = ({
         </TableHeadRightmostCell>
       </TableHead>
       <TableBody>
-        {legend.map(i => (
+        {legend.map((i) => (
           <TableBodyRow key={i.label}>
             <TableBodyLeftMostCell>
               <BulletPoint style={{ backgroundColor: i.color }}></BulletPoint>
@@ -88,18 +88,17 @@ const DataVisualizationTable = ({
                 if (isToDateSetToTheCurrentDay && index === data.length - 1) {
                   return (
                     <EnlargedTableBodyCell key={index}>
-                      {item[i.label]
-                        ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
-                        : <StyledClearIcon />}
+                      {item[i.label] ?
+                          <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
+                          <StyledClearIcon />}
                     </EnlargedTableBodyCell>
                   );
-                }
-                else {
+                } else {
                   return (
                     <TableBodyCell key={index}>
-                      {item[i.label]
-                        ? <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
-                        : <StyledClearIcon />}
+                      {item[i.label] ?
+                          <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
+                          <StyledClearIcon />}
                     </TableBodyCell>
                   );
                 }

@@ -62,15 +62,19 @@ export const ParticipantsContainer = styled('div')({
 });
 
 export const StyledCard = styled(Card, {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ open, theme }) => ({
   margin: '32px 0',
   backgroundColor: theme.palette.common.white,
   borderRadius: 16,
   position: 'relative',
   paddingLeft: 16,
-  paddingBottom: open ? 16 : 0,
-  height: open ? 'auto' : 52,
+  paddingBottom: open ?
+    16 :
+    0,
+  height: open ?
+    'auto' :
+    52,
   overflow: 'initial',
 }));
 
@@ -99,7 +103,7 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
 }));
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 12,
   height: 12,
@@ -110,7 +114,7 @@ export const StyledStatusDot = styled('div', {
 }));
 
 export const MinimizeButton = styled(Button, {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ theme, open }) => ({
   'minWidth': 36,
   'color': theme.palette.grey[700],
@@ -119,7 +123,9 @@ export const MinimizeButton = styled(Button, {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  'transform': open ? 'rotateX(180deg)' : 'rotateX(0deg)',
+  'transform': open ?
+    'rotateX(180deg)' :
+    'rotateX(0deg)',
   '& svg': {
     fontSize: 36,
   },

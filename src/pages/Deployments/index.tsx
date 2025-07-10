@@ -27,15 +27,15 @@ const Deployments = () => {
     error: deploymentsError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: studyStatus, isLoading: isStudyStatusLoading }
-    = useStudyStatus(studyId);
+  const { data: studyStatus, isLoading: isStudyStatusLoading } =
+    useStudyStatus(studyId);
   const [openCardCount, setOpenCardCount] = useState(0);
 
   const toggleAllCards = () => {
-    setOpenCardCount(prevOpenCardCount =>
-      prevOpenCardCount === paginatedDeployments.length
-        ? 0
-        : paginatedDeployments.length,
+    setOpenCardCount((prevOpenCardCount) =>
+      prevOpenCardCount === paginatedDeployments.length ?
+        0 :
+        paginatedDeployments.length,
     );
   };
 
@@ -46,9 +46,9 @@ const Deployments = () => {
   useEffect(() => {
     setOpenCardCount(0);
     if (
-      studyStatus instanceof StudyStatus.Live
-      && deploymentsData?.groups !== undefined
-      && deploymentsData?.groups.length !== 0
+      studyStatus instanceof StudyStatus.Live &&
+      deploymentsData?.groups !== undefined &&
+      deploymentsData?.groups.length !== 0
     ) {
       if (searchText === '') {
         setDeployments(deploymentsData?.groups);
@@ -58,20 +58,19 @@ const Deployments = () => {
             currentPage * PageSize,
           ),
         );
-      }
-      else {
+      } else {
         const newDeployments = deploymentsData?.groups.filter(
-          deployment =>
-            deployment?.participantGroupId.includes(searchText)
-            || deployment?.participants?.some(
-              participant =>
-                (participant.firstName
-                  && participant.lastName
-                  && `${participant.firstName} ${participant.lastName}`
+          (deployment) =>
+            deployment?.participantGroupId.includes(searchText) ||
+            deployment?.participants?.some(
+              (participant) =>
+                (participant.firstName &&
+                  participant.lastName &&
+                  `${participant.firstName} ${participant.lastName}`
                     .toLowerCase()
-                    .includes(searchText))
-                  || (participant.email
-                    && participant.email.toLowerCase().includes(searchText)),
+                    .includes(searchText)) ||
+                    (participant.email &&
+                      participant.email.toLowerCase().includes(searchText)),
             ),
         );
         setDeployments(newDeployments);
@@ -89,8 +88,8 @@ const Deployments = () => {
     name: 'Deployments',
     uri: getUri(PageType.DEPLOYMENTS),
   };
-  const description
-    = 'See all the deployments, expand them for more information.';
+  const description =
+    'See all the deployments, expand them for more information.';
   const siteUnavailableDescription = [
     'In order to overview Deployments page, it is necessary to start your study first.',
     'To begin, please navigate to the study settings page.',
@@ -156,14 +155,14 @@ const Deployments = () => {
     <StudyPageLayout>
       <StudyHeader path={[sectionName]} description={description} />
       <Toolbar
-        searchDeployments={text => setSearchText(text)}
+        searchDeployments={(text) => setSearchText(text)}
         toggleAllCards={toggleAllCards}
         isAllCardsOpen={
-          openCardCount === paginatedDeployments.length
-          && paginatedDeployments.length !== 0
+          openCardCount === paginatedDeployments.length &&
+          paginatedDeployments.length !== 0
         } // error here: length of undefined
       />
-      {paginatedDeployments.map(deployment => (
+      {paginatedDeployments.map((deployment) => (
         <DeploymentCard
           deployment={deployment}
           openCardCount={openCardCount}
@@ -176,7 +175,7 @@ const Deployments = () => {
         currentPage={currentPage}
         totalCount={deployments.length}
         pageSize={PageSize}
-        onPageChange={page => setCurrentPage(page)}
+        onPageChange={(page) => setCurrentPage(page)}
       />
     </StudyPageLayout>
   );

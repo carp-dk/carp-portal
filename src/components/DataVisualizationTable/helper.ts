@@ -91,14 +91,14 @@ function generateDateRange(startISO: string, endISO: string): string[] {
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
   let isThereAnyData = false;
 
-  const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map(item => item.task)));
+  const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map((item) => item.task)));
 
   const groupedData = dataStreamSummary.data.reduce((acc, { date, task, quantity }) => {
     const day = date.split('T')[0];
 
     if (!acc[day]) {
       acc[day] = { date: day };
-      uniqueTasks.forEach(t => acc[day][t] = 0); // initialize all tasks with 0
+      uniqueTasks.forEach((t) => acc[day][t] = 0); // initialize all tasks with 0
     }
 
     acc[day][task] = quantity;
@@ -117,7 +117,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     }
 
     const empty = { date: day };
-    uniqueTasks.forEach(task => empty[task] = 0);
+    uniqueTasks.forEach((task) => empty[task] = 0);
     return empty;
   });
 
@@ -136,7 +136,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
 }
 
 export function getListOfTasksFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): object[] {
-  return protocolSnapshot.tasks['g4_1']['h4_1'].filter(x => x?.['u21_1'] != null).map(x => JSON.parse(x['u21_1']));
+  return protocolSnapshot.tasks['g4_1']['h4_1'].filter((x) => x?.['u21_1'] != null).map((x) => JSON.parse(x['u21_1']));
 }
 
 export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): string[] {

@@ -37,8 +37,7 @@ const NavigationBar = () => {
     if (currentWidth >= breakpoint && lastChangedWidth < breakpoint) {
       setOpen(true);
       lastChangedWidth = currentWidth;
-    }
-    else if (currentWidth < breakpoint && lastChangedWidth >= breakpoint) {
+    } else if (currentWidth < breakpoint && lastChangedWidth >= breakpoint) {
       setOpen(false);
       lastChangedWidth = currentWidth;
     }

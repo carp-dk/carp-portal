@@ -12,9 +12,9 @@ const Studies = () => {
     return <LoadingLandingPage />;
   }
 
-  const isAdmin
-    = currentUser.role.includes('SYSTEM_ADMIN')
-      || currentUser.role.includes('CARP_ADMIN');
+  const isAdmin =
+    currentUser.role.includes('SYSTEM_ADMIN') ||
+    currentUser.role.includes('CARP_ADMIN');
 
   return (
     <PrivatePageLayout>

@@ -32,8 +32,8 @@ const SSNInput = ({ formik, editing }: Props) => {
             required
             name="ssn.country"
             error={
-              getIn(formik.touched, 'ssn.country')
-              && !!getIn(formik.errors, 'ssn.country')
+              getIn(formik.touched, 'ssn.country') &&
+              !!getIn(formik.errors, 'ssn.country')
             }
             value={formik.values.ssn.country}
             onChange={formik.handleChange}
@@ -72,14 +72,13 @@ const SSNInput = ({ formik, editing }: Props) => {
             </MenuItem>
             <Divider />
             {countryInfos.map((country) => {
-              const countryCode
-                = country.isoCode[0].toUpperCase()
-                  + country.isoCode[1].toLowerCase();
+              const countryCode =
+                country.isoCode[0].toUpperCase() +
+                country.isoCode[1].toLowerCase();
               let CountryFlag;
               if (countryCode in flags) {
                 CountryFlag = flags[countryCode];
-              }
-              else {
+              } else {
                 CountryFlag = 'div';
               }
               return (
@@ -114,8 +113,8 @@ const SSNInput = ({ formik, editing }: Props) => {
             })}
           </Select>
           <FormHelperText error sx={{ width: '200px' }}>
-            {getIn(formik.touched, 'ssn.country')
-              && getIn(formik.errors, 'ssn.country')}
+            {getIn(formik.touched, 'ssn.country') &&
+              getIn(formik.errors, 'ssn.country')}
           </FormHelperText>
         </div>
         <TextField
@@ -126,15 +125,15 @@ const SSNInput = ({ formik, editing }: Props) => {
           required
           fullWidth
           error={
-            getIn(formik.touched, 'ssn.socialSecurityNumber')
-            && !!getIn(formik.errors, 'ssn.socialSecurityNumber')
+            getIn(formik.touched, 'ssn.socialSecurityNumber') &&
+            !!getIn(formik.errors, 'ssn.socialSecurityNumber')
           }
           value={formik.values.ssn.socialSecurityNumber}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           helperText={
-            getIn(formik.touched, 'ssn.socialSecurityNumber')
-            && getIn(formik.errors, 'ssn.socialSecurityNumber')
+            getIn(formik.touched, 'ssn.socialSecurityNumber') &&
+            getIn(formik.errors, 'ssn.socialSecurityNumber')
           }
         />
       </Stack>

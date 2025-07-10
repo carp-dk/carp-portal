@@ -19,11 +19,11 @@ const DownloadButton = ({ cell }: ButtonCellProps) => {
 
   return (
     <Button disabled={status !== 'AVAILABLE'} onClick={handleDownload}>
-      {status !== 'AVAILABLE' && status !== 'ERROR'
-        ? (
+      {status !== 'AVAILABLE' && status !== 'ERROR' ?
+          (
             <CircularProgress size={12} />
-          )
-        : (
+          ) :
+          (
             <DownloadIcon />
           )}
     </Button>

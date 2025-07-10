@@ -43,8 +43,7 @@ const validationSchema = yup.object({
     .test('is-url', 'Redirect URI must be a valid URL', (value) => {
       try {
         new URL(value);
-      }
-      catch {
+      } catch {
         return false;
       }
       return true;
@@ -56,8 +55,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
-  const { data: studyDetails, isLoading: isStudyDetailsLoading }
-    = useStudyDetails(studyId);
+  const { data: studyDetails, isLoading: isStudyDetailsLoading } =
+    useStudyDetails(studyId);
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
   const addAnonymousParticipantFormik = useFormik({
@@ -152,8 +151,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   addAnonymousParticipantFormik.handleChange(eventClone);
                 }}
                 helperText={
-                  addAnonymousParticipantFormik.touched.numberOfParticipants
-                  && addAnonymousParticipantFormik.errors.numberOfParticipants
+                  addAnonymousParticipantFormik.touched.numberOfParticipants &&
+                  addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -174,7 +173,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               >
                 {studyDetails.protocolSnapshot.participantRoles
                   .toArray()
-                  .map(participantRole => (
+                  .map((participantRole) => (
                     <MenuItem
                       key={participantRole.role}
                       value={participantRole.role}
@@ -192,7 +191,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 defaultValue={addAnonymousParticipantFormik.values.expiryDate}
                 name="expiryDate"
                 value={addAnonymousParticipantFormik.values.expiryDate}
-                onChange={value =>
+                onChange={(value) =>
                   addAnonymousParticipantFormik.setFieldValue(
                     'expiryDate',
                     value,
@@ -220,8 +219,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 value={addAnonymousParticipantFormik.values.redirectUri}
                 onChange={addAnonymousParticipantFormik.handleChange}
                 helperText={
-                  addAnonymousParticipantFormik.touched.redirectUri
-                  && addAnonymousParticipantFormik.errors.redirectUri
+                  addAnonymousParticipantFormik.touched.redirectUri &&
+                  addAnonymousParticipantFormik.errors.redirectUri
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -233,17 +232,17 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <CancelButton variant="text" onClick={onClose}>
           Cancel
         </CancelButton>
-        {generateAnonymousAccounts.isPending
-          ? (
+        {generateAnonymousAccounts.isPending ?
+            (
               <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
                 <Spinner size={20} />
               </DoneButton>
-            )
-          : (
+            ) :
+            (
               <DoneButton
                 disabled={
-                  !addAnonymousParticipantFormik.dirty
-                  || !addAnonymousParticipantFormik.isValid
+                  !addAnonymousParticipantFormik.dirty ||
+                  !addAnonymousParticipantFormik.isValid
                 }
                 variant="contained"
                 sx={{ elevation: 0 }}

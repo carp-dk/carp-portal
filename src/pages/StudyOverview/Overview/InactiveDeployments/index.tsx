@@ -76,7 +76,7 @@ const InactiveDeployments = () => {
           }}
           renderValue={() => {
             const selectedItem = menuItems.find(
-              item => item.value === lastUpdateTime,
+              (item) => item.value === lastUpdateTime,
             );
             return <Typography variant="h5">{selectedItem.label}</Typography>;
           }}
@@ -84,7 +84,7 @@ const InactiveDeployments = () => {
             setLastUpdateTime(e.target.value as unknown as number);
           }}
         >
-          {menuItems.map(item => (
+          {menuItems.map((item) => (
             <MenuItem key={item.value} value={item.value}>
               <Typography variant="h5">{item.label}</Typography>
             </MenuItem>
@@ -113,7 +113,7 @@ const InactiveDeployments = () => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {inactiveDeployments.map(participant => (
+            {inactiveDeployments.map((participant) => (
               <StyledTableRow
                 onClick={() =>
                   navigate(

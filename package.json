@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development vite serve src --config vite.config.ts",
+    "scan": "npx react-scan@latest localhost:3000",
     "build": "cross-env NODE_ENV=production vite build src --config vite.config.ts",
     "preview": "cross-env NODE_ENV=production vite preview src --config vite.config.ts",
     "serve": "cross-env NODE_ENV=production serve -s build",
@@ -40,6 +41,8 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "jwt-decode": "^4.0.0",
     "prettier-plugin-organize-imports": "^4.1.0",
+    "react-scan": "^0.4.3",
+    "rollup-plugin-visualizer": "^6.0.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.0",
@@ -92,6 +95,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "esbuild"
     ]
   }

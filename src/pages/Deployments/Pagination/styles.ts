@@ -9,9 +9,11 @@ export const StyledContainer = styled('div')({
 });
 
 export const PaginationButton = styled(Button, {
-  shouldForwardProp: prop => prop !== 'active',
+  shouldForwardProp: (prop) => prop !== 'active',
 })<{ active?: boolean }>(({ active, theme }) => ({
-  'color': active ? theme.palette.primary.main : theme.palette.grey[500],
+  'color': active ?
+    theme.palette.primary.main :
+    theme.palette.grey[500],
   'borderRadius': 32,
   'minWidth': 32,
   'width': 32,

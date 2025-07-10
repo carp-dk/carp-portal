@@ -10,8 +10,8 @@ import ExportsTable from './ExportsTable';
 
 const Export: React.FC = () => {
   const sectionName = { name: 'Exports', uri: getUri(PageType.EXPORTS) };
-  const description
-    = 'In order to export study data, click on the New Export button.';
+  const description =
+    'In order to export study data, click on the New Export button.';
   const { id: studyId } = useParams();
   const queryClient = useQueryClient();
   const {
@@ -25,8 +25,8 @@ const Export: React.FC = () => {
 
     const checkAndUpdateQuery = () => {
       if (
-        !exportsLoading
-        && exports.some(summary => summary.status === 'IN_PROGRESS')
+        !exportsLoading &&
+        exports.some((summary) => summary.status === 'IN_PROGRESS')
       ) {
         timeoutId = setTimeout(() => {
           queryClient.invalidateQueries({ queryKey: ['exports', studyId] });

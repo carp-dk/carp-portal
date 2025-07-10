@@ -75,8 +75,8 @@ const AddParticipantContent = ({ open, onClose }: Props) => {
             onChange={addParticipantFormik.handleChange}
             fullWidth
             helperText={
-              addParticipantFormik.touched.email
-              && addParticipantFormik.errors.email
+              addParticipantFormik.touched.email &&
+              addParticipantFormik.errors.email
             }
             onBlur={addParticipantFormik.handleBlur}
           />

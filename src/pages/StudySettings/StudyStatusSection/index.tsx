@@ -82,10 +82,10 @@ const StudyStatusSectionSkeleton: React.FC = () => {
 };
 
 const StudyStatusSection: React.FC = () => {
-  const draftStudyStatusDescription
-    = 'In order to go live study you need to fill out all the required data and invitation.';
-  const readyStudyStatusDescription
-    = 'Once the study is live you will not be able to change the study settings.';
+  const draftStudyStatusDescription =
+    'In order to go live study you need to fill out all the required data and invitation.';
+  const readyStudyStatusDescription =
+    'Once the study is live you will not be able to change the study settings.';
   const liveStudyStatusDescription = '';
   let currentStudyStatus: 'Draft' | 'Ready' | 'Live' = 'Draft';
   let currentStudyStatusDescription = '';
@@ -105,10 +105,10 @@ const StudyStatusSection: React.FC = () => {
   } = useStudyDetails(studyId);
   const setStudyLive = useSetStudyLive();
   const deleteStudy = useDeleteStudy();
-  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal]
-    = useState(false);
-  const [openStartStudyConfirmationModal, setOpenStartStudyConfirmationModal]
-    = useState(false);
+  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+    useState(false);
+  const [openStartStudyConfirmationModal, setOpenStartStudyConfirmationModal] =
+    useState(false);
 
   useEffect(() => {
     if (deleteStudy.isSuccess) {
@@ -133,13 +133,11 @@ const StudyStatusSection: React.FC = () => {
     if (studyStatus.canGoLive) {
       currentStudyStatus = 'Ready';
       currentStudyStatusDescription = readyStudyStatusDescription;
-    }
-    else {
+    } else {
       currentStudyStatus = 'Draft';
       currentStudyStatusDescription = draftStudyStatusDescription;
     }
-  }
-  else {
+  } else {
     currentStudyStatus = 'Live';
     currentStudyStatusDescription = liveStudyStatusDescription;
   }

@@ -74,14 +74,14 @@ const StudyData = () => {
 
   const studyProtocolFormik = useFormik({
     initialValues: {
-      protocolId: studyDetails?.protocolSnapshot
-        ? studyDetails.protocolSnapshot.id
-        : '',
+      protocolId: studyDetails?.protocolSnapshot ?
+        studyDetails.protocolSnapshot.id :
+        '',
     },
     validationSchema: studyProtocolValidationSchema,
     onSubmit: (values) => {
       const currentProtocol = protocols.find(
-        protocol => protocol.id.stringRepresentation === values.protocolId,
+        (protocol) => protocol.id.stringRepresentation === values.protocolId,
       );
       setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
     },
@@ -139,8 +139,8 @@ const StudyData = () => {
         value={studyDetailsFormik.values.description}
         onChange={studyDetailsFormik.handleChange}
         helperText={
-          studyDetailsFormik.touched.description
-          && studyDetailsFormik.errors.description
+          studyDetailsFormik.touched.description &&
+          studyDetailsFormik.errors.description
         }
         onBlur={handleDetailsBlur}
       />
@@ -171,7 +171,7 @@ const StudyData = () => {
         value={studyProtocolFormik.values.protocolId}
         onChange={handleProtocolChange}
       >
-        {protocols?.map(protocol => (
+        {protocols?.map((protocol) => (
           <MenuItem
             key={protocol.id.stringRepresentation}
             value={protocol.id.stringRepresentation}

@@ -47,9 +47,7 @@ const validationSchema = yup.object({
       try {
         JSON.parse(text);
         return true;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      catch (e) {
+      } catch {
         return false;
       }
     })
@@ -62,9 +60,7 @@ const validationSchema = yup.object({
         const serializer = getSerializer(StudyProtocolSnapshot);
         json.decodeFromString(serializer, text);
         return true;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      catch (e) {
+      } catch {
         return false;
       }
     }),
@@ -134,8 +130,7 @@ const AddProtocolVersionModal = ({
             if (parsed.name) {
               await addProtocolFormik.setFieldTouched('name', true);
               await addProtocolFormik.setFieldValue('name', parsed.name);
-            }
-            else {
+            } else {
               nameRef.current.focus();
             }
           }
@@ -198,8 +193,8 @@ const AddProtocolVersionModal = ({
               onChange={addProtocolFormik.handleChange}
               fullWidth
               helperText={
-                addProtocolFormik.touched.versionTag
-                && addProtocolFormik.errors.versionTag
+                addProtocolFormik.touched.versionTag &&
+                addProtocolFormik.errors.versionTag
               }
               onBlur={addProtocolFormik.handleBlur}
               inputRef={versionTagRef}

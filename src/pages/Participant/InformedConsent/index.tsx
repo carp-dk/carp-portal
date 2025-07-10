@@ -83,8 +83,8 @@ const InformedConsent = () => {
         })
         .find((f) => {
           return (
-            f.metadata['document-type'] === 'informed_consent'
-            && f.metadata['participant-id'] === participantId
+            f.metadata['document-type'] === 'informed_consent' &&
+            f.metadata['participant-id'] === participantId
           );
         });
       if (c) {
@@ -96,19 +96,19 @@ const InformedConsent = () => {
   useEffect(() => {
     if (!isLoading && !participantGroupStatusLoading) {
       const participant = participantGroupStatus.groups
-        .find(g => g.participantGroupId === deploymentId)
+        .find((g) => g.participantGroupId === deploymentId)
         .deploymentStatus.participantStatusList.find(
-          p => p.participantId === participantId,
+          (p) => p.participantId === participantId,
         );
 
       if (participantData.common.keys) {
-        const consentData
-          = participantData.common.values[InformedConsentType.type];
+        const consentData =
+          participantData.common.values[InformedConsentType.type];
         setConsent(consentData);
       }
 
-      const participantRoleData
-        = participantData.roles[
+      const participantRoleData =
+        participantData.roles[
           participant.assignedParticipantRoles.roleNames[0]
         ];
       if (participantRoleData) {

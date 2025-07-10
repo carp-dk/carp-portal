@@ -71,8 +71,8 @@ const Devices = () => {
       })
       .catch((err) => {
         if (
-          (err as CarpServiceError).message
-          !== 'The passed device is already registered.'
+          (err as CarpServiceError).message !==
+          'The passed device is already registered.'
         ) {
           throw err;
         }
@@ -97,9 +97,9 @@ const Devices = () => {
             })
             .map((connection) => {
               const deviceStatus = participantGroupsAndStatuses.groups
-                .find(s => s.participantGroupId === deploymentId)
+                .find((s) => s.participantGroupId === deploymentId)
                 ?.deploymentStatus.deviceStatusList.find(
-                  d => d.device.roleName === connection.roleName,
+                  (d) => d.device.roleName === connection.roleName,
                 );
               return {
                 name: connection.roleName,
@@ -108,9 +108,9 @@ const Devices = () => {
               };
             });
           const deviceStatus = participantGroupsAndStatuses.groups
-            .find(s => s.participantGroupId === deploymentId)
+            .find((s) => s.participantGroupId === deploymentId)
             ?.deploymentStatus.deviceStatusList.find(
-              d => d.device.roleName === device.roleName,
+              (d) => d.device.roleName === device.roleName,
             );
           return {
             primaryDevice: {
@@ -187,8 +187,8 @@ const Devices = () => {
       </Modal>
 
       <Stack spacing="16px" direction="row">
-        {devices
-          && devices.map(({ primaryDevice, connections }) => (
+        {devices &&
+          devices.map(({ primaryDevice, connections }) => (
             <DeviceCard key={primaryDevice.name}>
               <DeviceRow
                 direction="row"

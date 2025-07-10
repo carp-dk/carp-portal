@@ -83,13 +83,19 @@ export const IDsContainer = styled('div')({
 });
 
 export const StyledDivider = styled(Divider, {
-  shouldForwardProp: prop => prop !== 'isHorizontal',
+  shouldForwardProp: (prop) => prop !== 'isHorizontal',
 })<{ isHorizontal?: boolean }>(({ isHorizontal, theme }) => ({
   color: theme.palette.grey[300],
   borderWidth: 1,
-  orientation: isHorizontal ? 'horizontal' : 'vertical',
-  width: isHorizontal ? '94%' : 1,
-  margin: isHorizontal ? '0 auto' : '0',
+  orientation: isHorizontal ?
+    'horizontal' :
+    'vertical',
+  width: isHorizontal ?
+    '94%' :
+    1,
+  margin: isHorizontal ?
+    '0 auto' :
+    '0',
 }));
 
 export const IDContainer = styled('div')(({ theme }) => ({

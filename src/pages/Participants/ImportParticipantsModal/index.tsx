@@ -49,9 +49,7 @@ const validationSchema = yup.object({
           // const serializer = StudyProtocolSnapshot.Companion.serializer();
           // json.decodeFromString_awif5v$(serializer, text);
           return true;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        catch (e) {
+        } catch {
           return false;
         }
       },
@@ -156,8 +154,7 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
               for (const email of newEmails) {
                 if (emailRegex.test(email)) {
                   newValidEmails.push(email);
-                }
-                else {
+                } else {
                   newInvalidEmails.push(email);
                 }
               }
@@ -205,7 +202,7 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
           <ModalContent>
             <Typography variant="h4">Invalid emails:</Typography>
             <InvalidEmails>
-              {invalidEmails.map(email => (
+              {invalidEmails.map((email) => (
                 <InvalidEmail key={uuidv4()} variant="h5">
                   {email}
                 </InvalidEmail>
