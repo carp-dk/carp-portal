@@ -1,13 +1,13 @@
-import { styled } from "@Utils/theme";
+import { styled } from '@Utils/theme';
 
-export const Pill = styled("span")(({ theme }) => ({
-  display: "inline-block",
-  padding: "0.25rem 0.75rem",
-  borderRadius: "1rem",
-  textTransform: "uppercase",
+export const Pill = styled('span')(({ theme }) => ({
+  display: 'inline-block',
+  padding: '0.25rem 0.75rem',
+  borderRadius: '1rem',
+  textTransform: 'uppercase',
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.common.white,
-  boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
 }));
 
 export const ErrorPill = styled(Pill)(({ theme }) => ({

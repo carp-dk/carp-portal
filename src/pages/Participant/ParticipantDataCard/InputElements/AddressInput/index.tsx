@@ -1,4 +1,4 @@
-import { countryInfos } from "@Assets/languageMap";
+import { countryInfos } from '@Assets/languageMap';
 import {
   Divider,
   FormControl,
@@ -7,9 +7,9 @@ import {
   Select,
   Stack,
   TextField,
-} from "@mui/material";
-import { getIn, useFormik } from "formik";
-import * as flags from "react-flags-select";
+} from '@mui/material';
+import { getIn, useFormik } from 'formik';
+import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -93,8 +93,8 @@ const AddressInput = ({ formik, editing }: Props) => {
           disabled={!editing}
           name="address.country"
           error={
-            getIn(formik.touched, "address.country") &&
-            !!getIn(formik.errors, "address.country")
+            getIn(formik.touched, 'address.country')
+            && !!getIn(formik.errors, 'address.country')
           }
           value={formik.values.address.country}
           onChange={formik.handleChange}
@@ -103,10 +103,10 @@ const AddressInput = ({ formik, editing }: Props) => {
           labelId="countryCodeLabel"
           fullWidth
           sx={{
-            height: "56px",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
+            height: '56px',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
           }}
         >
           <MenuItem id="None" key="None" value="">
@@ -119,27 +119,29 @@ const AddressInput = ({ formik, editing }: Props) => {
               alignItems="center"
               justifyContent="start"
               sx={{
-                display: "grid",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
+                display: 'grid',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
               }}
               gridTemplateColumns="30px auto"
             >
-              <DanishFlag name="Denmark" onSelect={undefined} width={30} />{" "}
+              <DanishFlag name="Denmark" onSelect={undefined} width={30} />
+              {' '}
               Denmark
             </Stack>
           </MenuItem>
           <Divider />
           {countryInfos.map((country) => {
-            const countryCode =
-              country.isoCode[0].toUpperCase() +
-              country.isoCode[1].toLowerCase();
+            const countryCode
+              = country.isoCode[0].toUpperCase()
+                + country.isoCode[1].toLowerCase();
             let CountryFlag;
             if (countryCode in flags) {
               CountryFlag = flags[countryCode];
-            } else {
-              CountryFlag = "div";
+            }
+            else {
+              CountryFlag = 'div';
             }
             return (
               <MenuItem
@@ -153,10 +155,10 @@ const AddressInput = ({ formik, editing }: Props) => {
                   alignItems="center"
                   justifyContent="start"
                   sx={{
-                    display: "grid",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
+                    display: 'grid',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
                   }}
                   gridTemplateColumns="30px auto"
                 >

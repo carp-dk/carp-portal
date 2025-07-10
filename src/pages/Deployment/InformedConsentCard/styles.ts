@@ -5,42 +5,42 @@ import {
   AccordionSummary,
   Stack,
   Button,
-} from "@mui/material";
-import { styled } from "@Utils/theme";
+} from '@mui/material';
+import { styled } from '@Utils/theme';
 
 export const StyledAccordion = styled(Accordion)(({ expanded }) => ({
-  padding: "10px 24px",
-  marginBottom: 32,
-  borderRadius: expanded ? 16 : 8,
-  transition: "border-radius 0.2s ease-in-out",
-  "::before": {
-    display: "none",
+  'padding': '10px 24px',
+  'marginBottom': 32,
+  'borderRadius': expanded ? 16 : 8,
+  'transition': 'border-radius 0.2s ease-in-out',
+  '::before': {
+    display: 'none',
   },
-  ":last-of-type": {
+  ':last-of-type': {
     borderRadius: expanded ? 16 : 8,
   },
 }));
 
 export const SyledAccordionSummary = styled(AccordionSummary)({
-  padding: "0",
+  padding: '0',
   borderRadius: 16,
 });
 
 export const StyledStack = styled(Stack)({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "0px 24px",
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '0px 24px',
 });
 
 export const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-export const Right = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  gap: "24px",
+export const Right = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '24px',
 });
 
 export const StyledDivider = styled(Divider)(({ theme }) => ({
@@ -52,32 +52,32 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
   height: 20,
 }));
 
-export const AccountIcon = styled("div")(({ theme }) => ({
+export const AccountIcon = styled('div')(({ theme }) => ({
   width: 28,
   height: 28,
   backgroundColor: theme.palette.company.isotype,
-  borderRadius: "50%",
-  position: "relative",
+  borderRadius: '50%',
+  position: 'relative',
 }));
 
-export const NameContainer = styled("div")({
-  display: "flex",
-  alignItems: "center",
+export const NameContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
   gap: 6,
 });
 
 export const DownloadButton = styled(Button)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  height: "72px",
+  display: 'flex',
+  alignItems: 'center',
+  height: '72px',
   color: theme.palette.primary.main,
-  backgroundColor: "transparent",
-  border: "1px solid",
+  backgroundColor: 'transparent',
+  border: '1px solid',
   borderColor: theme.palette.grey[700],
   borderRadius: 16,
-  cursor: "pointer",
-  textTransform: "none",
-  padding: "8px 16px",
+  cursor: 'pointer',
+  textTransform: 'none',
+  padding: '8px 16px',
   gap: 8,
 }));
 

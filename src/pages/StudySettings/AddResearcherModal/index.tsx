@@ -1,9 +1,9 @@
-import { FormLabel, Modal, TextField } from "@mui/material";
-import { useAddResearcherToStudy } from "@Utils/queries/studies";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import * as yup from "yup";
+import { FormLabel, Modal, TextField } from '@mui/material';
+import { useAddResearcherToStudy } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -12,7 +12,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  email: yup.string().required("Email is required"),
+  email: yup.string().required('Email is required'),
 });
 
 const AddResearcherModal = ({ open, onClose }: Props) => {
@@ -29,7 +29,7 @@ const AddResearcherModal = ({ open, onClose }: Props) => {
 
   const addResearcherFormik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -72,8 +72,8 @@ const AddResearcherModal = ({ open, onClose }: Props) => {
             onChange={addResearcherFormik.handleChange}
             fullWidth
             helperText={
-              addResearcherFormik.touched.email &&
-              addResearcherFormik.errors.email
+              addResearcherFormik.touched.email
+              && addResearcherFormik.errors.email
             }
             onBlur={addResearcherFormik.handleBlur}
           />

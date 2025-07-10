@@ -1,14 +1,14 @@
-import { Link } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
-import { MouseEvent, useState } from "react";
-import { useAuth } from "react-oidc-context";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
+import { MouseEvent, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AccountIcon,
   StyledIconButton,
   StyledMenu,
   StyledMenuItem,
-} from "./styles";
+} from './styles';
 
 const BannerAccountButton = () => {
   const queryClient = useQueryClient();
@@ -26,7 +26,7 @@ const BannerAccountButton = () => {
   const handleLogOut = () => {
     queryClient.clear();
     auth.signoutSilent({ silentRequestTimeoutInSeconds: 1 });
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -40,12 +40,12 @@ const BannerAccountButton = () => {
       </StyledIconButton>
       <StyledMenu
         anchorOrigin={{
-          horizontal: "center",
-          vertical: "bottom",
+          horizontal: 'center',
+          vertical: 'bottom',
         }}
         transformOrigin={{
-          horizontal: "center",
-          vertical: "top",
+          horizontal: 'center',
+          vertical: 'top',
         }}
         elevation={2}
         anchorEl={anchorEl}

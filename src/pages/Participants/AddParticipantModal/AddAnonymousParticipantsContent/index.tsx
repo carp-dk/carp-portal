@@ -1,13 +1,13 @@
-import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { FormLabel, Grid, MenuItem, TextField } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { enGB } from "date-fns/locale/en-GB";
-import { useFormik } from "formik";
-import { FormEvent, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
+import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { FormLabel, Grid, MenuItem, TextField } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { enGB } from 'date-fns/locale/en-GB';
+import { useFormik } from 'formik';
+import { FormEvent, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -17,7 +17,7 @@ import {
   ModalTitle,
   SecondaryCellText,
   Spinner,
-} from "../styles";
+} from '../styles';
 
 type Props = {
   open: boolean;
@@ -27,45 +27,45 @@ type Props = {
 const validationSchema = yup.object({
   numberOfParticipants: yup
     .number()
-    .required("Number of participants is required")
-    .min(1, "Number of participants must be at least 1")
-    .max(2500, "Number of participants must be at most 2500"),
+    .required('Number of participants is required')
+    .min(1, 'Number of participants must be at least 1')
+    .max(2500, 'Number of participants must be at most 2500'),
   expiryDate: yup
     .date()
-    .required("Expiry date is required")
+    .required('Expiry date is required')
     .min(
       new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
-      "Expiry date should be in the future",
+      'Expiry date should be in the future',
     ),
-  role: yup.string().required("Role is required"),
+  role: yup.string().required('Role is required'),
   redirectUri: yup
     .string()
-    .test("is-url", "Redirect URI must be a valid URL", (value) => {
+    .test('is-url', 'Redirect URI must be a valid URL', (value) => {
       try {
-        // eslint-disable-next-line no-new
         new URL(value);
-      } catch {
+      }
+      catch {
         return false;
       }
       return true;
     })
-    .required("Redirect URI is required"),
+    .required('Redirect URI is required'),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
-  const { data: studyDetails, isLoading: isStudyDetailsLoading } =
-    useStudyDetails(studyId);
+  const { data: studyDetails, isLoading: isStudyDetailsLoading }
+    = useStudyDetails(studyId);
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
       numberOfParticipants: 0,
       expiryDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
-      role: "",
-      redirectUri: "",
+      role: '',
+      redirectUri: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -134,7 +134,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField
                 autoFocus
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={
                   !!addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
@@ -147,13 +147,13 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onChange={(event) => {
                   const eventClone = event;
                   if (parseInt(event.target.value, 10) < 1) {
-                    eventClone.target.value = "1";
+                    eventClone.target.value = '1';
                   }
                   addAnonymousParticipantFormik.handleChange(eventClone);
                 }}
                 helperText={
-                  addAnonymousParticipantFormik.touched.numberOfParticipants &&
-                  addAnonymousParticipantFormik.errors.numberOfParticipants
+                  addAnonymousParticipantFormik.touched.numberOfParticipants
+                  && addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -162,7 +162,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               <FormLabel required>Role</FormLabel>
               <TextField
                 select
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 variant="outlined"
                 id="role-select"
                 name="role"
@@ -174,7 +174,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               >
                 {studyDetails.protocolSnapshot.participantRoles
                   .toArray()
-                  .map((participantRole) => (
+                  .map(participantRole => (
                     <MenuItem
                       key={participantRole.role}
                       value={participantRole.role}
@@ -192,12 +192,11 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 defaultValue={addAnonymousParticipantFormik.values.expiryDate}
                 name="expiryDate"
                 value={addAnonymousParticipantFormik.values.expiryDate}
-                onChange={(value) =>
+                onChange={value =>
                   addAnonymousParticipantFormik.setFieldValue(
-                    "expiryDate",
+                    'expiryDate',
                     value,
-                  )
-                }
+                  )}
                 slotProps={{
                   textField: {
                     error: !!addAnonymousParticipantFormik.errors.expiryDate,
@@ -213,7 +212,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
             <Grid size={{ xs: 6 }}>
               <FormLabel required>Redirect URI</FormLabel>
               <TextField
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={!!addAnonymousParticipantFormik.errors.redirectUri}
                 variant="outlined"
                 name="redirectUri"
@@ -221,8 +220,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 value={addAnonymousParticipantFormik.values.redirectUri}
                 onChange={addAnonymousParticipantFormik.handleChange}
                 helperText={
-                  addAnonymousParticipantFormik.touched.redirectUri &&
-                  addAnonymousParticipantFormik.errors.redirectUri
+                  addAnonymousParticipantFormik.touched.redirectUri
+                  && addAnonymousParticipantFormik.errors.redirectUri
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -234,24 +233,26 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <CancelButton variant="text" onClick={onClose}>
           Cancel
         </CancelButton>
-        {generateAnonymousAccounts.isPending ? (
-          <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
-            <Spinner size={20} />
-          </DoneButton>
-        ) : (
-          <DoneButton
-            disabled={
-              !addAnonymousParticipantFormik.dirty ||
-              !addAnonymousParticipantFormik.isValid
-            }
-            variant="contained"
-            sx={{ elevation: 0 }}
-            type="submit"
-            onClick={() => addAnonymousParticipantFormik.handleSubmit()}
-          >
-            Add
-          </DoneButton>
-        )}
+        {generateAnonymousAccounts.isPending
+          ? (
+              <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
+                <Spinner size={20} />
+              </DoneButton>
+            )
+          : (
+              <DoneButton
+                disabled={
+                  !addAnonymousParticipantFormik.dirty
+                  || !addAnonymousParticipantFormik.isValid
+                }
+                variant="contained"
+                sx={{ elevation: 0 }}
+                type="submit"
+                onClick={() => addAnonymousParticipantFormik.handleSubmit()}
+              >
+                Add
+              </DoneButton>
+            )}
       </ModalActions>
     </LocalizationProvider>
   );

@@ -1,8 +1,8 @@
-import usePagination from "@Utils/pagination";
-import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { Typography } from "@mui/material";
-import { PaginationButton, StyledContainer } from "./styles";
+import usePagination from '@Utils/pagination';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import { Typography } from '@mui/material';
+import { PaginationButton, StyledContainer } from './styles';
 
 type Props = {
   onPageChange: (page: number) => void;
@@ -49,7 +49,7 @@ const Pagination = ({
         onClick={onPrevious}
       />
       {paginationRange.map((pageNumber) => {
-        if (pageNumber === "...") {
+        if (pageNumber === '...') {
           return (
             <Typography key={pageNumber} variant="h4">
               &#8230;

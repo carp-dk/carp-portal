@@ -1,5 +1,5 @@
-import defaultAccoutIcon from "@Assets/images/default-account-icon.png";
-import { Initials, StyledContainer } from "./styles";
+import defaultAccoutIcon from '@Assets/images/default-account-icon.png';
+import { Initials, StyledContainer } from './styles';
 
 type Props = {
   firstName: string;

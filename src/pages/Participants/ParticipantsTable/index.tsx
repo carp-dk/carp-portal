@@ -1,34 +1,35 @@
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import {
   useParticipantsAccounts,
   useParticipantsStatus,
-} from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { formatDateTime } from "@Utils/utility";
+} from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { formatDateTime } from '@Utils/utility';
 import {
   EmailAccountIdentity,
   ParticipantAccount,
   ParticipantGroupStatus,
   UsernameAccountIdentity,
-} from "@carp-dk/client";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
-import { Typography } from "@mui/material";
+} from '@carp-dk/client';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
+import { Typography } from '@mui/material';
 import {
   MRT_ColumnDef,
   MRT_RowSelectionState,
   MaterialReactTable,
   useMaterialReactTable,
-} from "material-react-table";
-import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+} from 'material-react-table';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   AddUserButton,
   CustomTopToolbar,
   StyledContainer,
   TopToolbarButton,
-} from "./styles";
+} from './styles';
 
 interface Props {
   openNewDeploymentModal: () => void;
@@ -51,8 +52,8 @@ const ParticipantsTable = ({
     isLoading: participantsAccountsLoading,
     isError: isParticipantsAccountsError,
   } = useParticipantsAccounts(studyId);
-  const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
-    useParticipantsStatus(studyId);
+  const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading }
+    = useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [columns, setColumns] = useState<MRT_ColumnDef<ParticipantAccount>[]>(
     [],
@@ -64,26 +65,26 @@ const ParticipantsTable = ({
       if (!isDeploymentsStatusLoading) {
         const deployment = deploymentsStatus.toArray().find(
           (pg): pg is ParticipantGroupStatus.InDeployment =>
-            pg instanceof ParticipantGroupStatus.InDeployment &&
-            pg.participants.toArray().some((participant) => {
+            pg instanceof ParticipantGroupStatus.InDeployment
+            && pg.participants.toArray().some((participant) => {
               switch (participant.accountIdentity.constructor) {
                 case EmailAccountIdentity:
                   return (
                     (
                       participant.accountIdentity as EmailAccountIdentity
-                    ).emailAddress.address.toLowerCase() ===
-                    cell.row.original.email?.toLowerCase()
+                    ).emailAddress.address.toLowerCase()
+                    === cell.row.original.email?.toLowerCase()
                   );
                 case UsernameAccountIdentity:
                   return (
                     (
                       participant.accountIdentity as UsernameAccountIdentity
-                    ).username.name.toLowerCase() ===
-                    cell.row.original.username?.toLowerCase()
+                    ).username.name.toLowerCase()
+                    === cell.row.original.username?.toLowerCase()
                   );
                 // TODO: Add case for other account identities
                 default:
-                  console.error("Unknown account identity type");
+                  console.error('Unknown account identity type');
                   return false;
               }
             }),
@@ -93,9 +94,9 @@ const ParticipantsTable = ({
           return (
             <Typography variant="h5">
               {formatDateTime(deployment.invitedOn.toEpochMilliseconds(), {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
               })}
             </Typography>
           );
@@ -110,11 +111,12 @@ const ParticipantsTable = ({
   useEffect(() => {
     setRowSelection({});
   }, [participantsAccounts, deploymentsStatus]);
+
   useEffect(() => {
     setColumns([
       {
-        accessorFn: (row) => row.email ?? row.username,
-        header: "Identity",
+        accessorFn: row => row.email ?? row.username,
+        header: 'Identity',
       },
       {
         accessorFn: (row) => {
@@ -124,21 +126,21 @@ const ParticipantsTable = ({
             return generatedAccountLabel();
           }
 
-          return "—";
+          return '—';
         },
-        id: "fullName",
-        header: "Full name",
+        id: 'fullName',
+        header: 'Full name',
       },
       {
         accessorFn: (row) => {
-          return row?.id !== null ? "Yes" : "No";
+          return row?.id !== null ? 'Yes' : 'No';
         },
-        id: "user_id",
-        header: "Invited",
+        id: 'user_id',
+        header: 'Invited',
       },
       {
-        id: "invitedOn",
-        header: "Invited On",
+        id: 'invitedOn',
+        header: 'Invited On',
         Cell: ({ cell }) => InvitedOnColumn(cell),
       },
     ]);
@@ -151,7 +153,7 @@ const ParticipantsTable = ({
     }
     const participantsIdentifiers = Object.keys(rowSelection);
     setParticipantsToAdd(
-      participantsAccounts.filter((participant) =>
+      participantsAccounts.filter(participant =>
         participantsIdentifiers.includes(
           participant.email ?? participant.username,
         ),
@@ -173,11 +175,11 @@ const ParticipantsTable = ({
       rowSelection,
       showSkeletons: participantsAccountsLoading || isDeploymentsStatusLoading,
     },
-    getRowId: (row) => row.email ?? row.username,
+    getRowId: row => row.email ?? row.username,
     muiSearchTextFieldProps: {
-      variant: "outlined",
-      placeholder: "",
-      label: "Search",
+      variant: 'outlined',
+      placeholder: '',
+      label: 'Search',
       InputLabelProps: { shrink: true },
     },
     renderTopToolbarCustomActions: () => {
@@ -200,7 +202,7 @@ const ParticipantsTable = ({
     initialState: {
       showGlobalFilter: true,
     },
-    positionGlobalFilter: "left",
+    positionGlobalFilter: 'left',
     enableFullScreenToggle: false,
     enableDensityToggle: false,
     enableColumnFilters: false,
@@ -210,8 +212,8 @@ const ParticipantsTable = ({
     enableSorting: true,
     muiToolbarAlertBannerProps: isParticipantsAccountsError
       ? {
-          color: "error",
-          children: "Error loading data",
+          color: 'error',
+          children: 'Error loading data',
         }
       : undefined,
   });

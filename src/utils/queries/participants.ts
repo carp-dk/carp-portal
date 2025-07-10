@@ -1,5 +1,5 @@
-import carpApi from "@Utils/api/api";
-import { useSnackbar } from "@Utils/snackbar";
+import carpApi from '@Utils/api/api';
+import { useSnackbar } from '@Utils/snackbar';
 import {
   CarpServiceError,
   ParticipantAccount,
@@ -16,13 +16,13 @@ import {
   StudyDeploymentStatus,
   ArrayList,
   PaginatedParticipantAccounts,
-} from "@carp-dk/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+} from '@carp-dk/client';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useParticipants = (studyId: string) => {
-  return useQuery<Participant[], CarpServiceError, Participant[], any>({
+  return useQuery<Participant[], CarpServiceError>({
     queryFn: () => carpApi.study.recruitment.getParticipants({ studyId }),
-    queryKey: ["participantsData", studyId],
+    queryKey: ['participantsData', studyId],
   });
 };
 
@@ -37,20 +37,20 @@ export const useStopParticipantGroup = (studyId: string) => {
         studyDeploymentId: deploymentId,
       }),
     onSuccess: () => {
-      setSnackbarSuccess("Deployment stopped successfuly");
+      setSnackbarSuccess('Deployment stopped successfuly');
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantsData", studyId],
+        queryKey: ['participantsData', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsInfo", studyId],
+        queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsStatus", studyId],
+        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["deployments", studyId],
+        queryKey: ['deployments', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -63,7 +63,7 @@ export const useInactiveDeployments = (studyId: string, lastUpdate: number) => {
   return useQuery<InactiveDeployment[], CarpServiceError>({
     queryFn: () =>
       carpApi.study.recruitment.getInactiveDeployments({ studyId, lastUpdate }),
-    queryKey: ["inactiveDeployments", { studyId, lastUpdate }],
+    queryKey: ['inactiveDeployments', { studyId, lastUpdate }],
   });
 };
 
@@ -79,17 +79,17 @@ export const useInviteParticipants = (studyId: string) => {
       });
     },
     onSuccess: () => {
-      setSnackbarSuccess("Participants deployed successfuly");
+      setSnackbarSuccess('Participants deployed successfuly');
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantsData", studyId],
+        queryKey: ['participantsData', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsInfo", studyId],
+        queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsStatus", studyId],
+        queryKey: ['participantsStatus', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -106,7 +106,7 @@ export const usePostEmailSendGeneric = () => {
       return carpApi.email.sendEmail(genericEmailRequest);
     },
     onSuccess: () => {
-      setSnackbarSuccess("Email has been sent!");
+      setSnackbarSuccess('Email has been sent!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -122,20 +122,20 @@ export const useAddParticipantByEmail = (studyId: string) => {
     mutationFn: (email: string) =>
       carpApi.study.recruitment.addOneByEmail({ studyId, email }),
     onSuccess: () => {
-      setSnackbarSuccess("Participant added successfuly");
+      setSnackbarSuccess('Participant added successfuly');
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantsData", studyId],
+        queryKey: ['participantsData', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsInfo", studyId],
+        queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsStatus", studyId],
+        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsAccounts", studyId],
+        queryKey: ['participantsAccounts', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -172,24 +172,24 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
     },
     onSuccess: () => {
       setSnackbarSuccess(
-        "Generation started, file will be available in Export page",
+        'Generation started, file will be available in Export page',
       );
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantsData", studyId],
+        queryKey: ['participantsData', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsInfo", studyId],
+        queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsStatus", studyId],
+        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsAccounts", studyId],
+        queryKey: ['participantsAccounts', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["exports", studyId],
+        queryKey: ['exports', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -206,20 +206,20 @@ export const useAddParticipants = (studyId: string) => {
     mutationFn: (emails: string[]) =>
       carpApi.study.recruitment.addMultipleByEmail({ studyId, emails }),
     onSuccess: () => {
-      setSnackbarSuccess("Participant added successfuly");
+      setSnackbarSuccess('Participant added successfuly');
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantsData", studyId],
+        queryKey: ['participantsData', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsInfo", studyId],
+        queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsStatus", studyId],
+        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["participantsAccounts", studyId],
+        queryKey: ['participantsAccounts', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -231,7 +231,7 @@ export const useAddParticipants = (studyId: string) => {
 export const useParticipantsInfo = (studyId: string) => {
   return useQuery<ParticipantInfo[], CarpServiceError>({
     queryFn: () => carpApi.study.recruitment.getParticipantInfo({ studyId }),
-    queryKey: ["participantsInfo", studyId],
+    queryKey: ['participantsInfo', studyId],
   });
 };
 
@@ -239,7 +239,7 @@ export const useParticipantsAccounts = (studyId: string) => {
   return useQuery<ParticipantAccount[] | PaginatedParticipantAccounts, CarpServiceError>({
     queryFn: () =>
       carpApi.study.recruitment.getParticipantAccounts({ studyId }),
-    queryKey: ["participantsAccounts", studyId],
+    queryKey: ['participantsAccounts', studyId],
   });
 };
 
@@ -247,7 +247,7 @@ export const useParticipantsStatus = (studyId: string) => {
   return useQuery<ArrayList<ParticipantGroupStatus>, CarpServiceError>({
     queryFn: async () =>
       carpApi.study.recruitment.getParticipantGroupStatusList({ studyId }),
-    queryKey: ["participantsStatus", studyId],
+    queryKey: ['participantsStatus', studyId],
   });
 };
 
@@ -257,13 +257,13 @@ export const useParticipantGroupsAccountsAndStatus = (studyId: string) => {
       carpApi.study.recruitment.getParticipantGroupAccountsAndStatus({
         studyId,
       }),
-    queryKey: ["deployments", studyId],
+    queryKey: ['deployments', studyId],
   });
 };
 
 export const useStatistics = (studyId: string) => {
-  const { data: participantsStatus, isLoading: participantsStatusLoading } =
-    useParticipantsStatus(studyId);
+  const { data: participantsStatus, isLoading: participantsStatusLoading }
+    = useParticipantsStatus(studyId);
 
   const deploymentIds: string[] = [];
   if (participantsStatus) {
@@ -272,8 +272,8 @@ export const useStatistics = (studyId: string) => {
     });
   }
 
-  return useQuery<Statistics[], CarpServiceError, Statistics[], any>({
-    queryKey: ["statistics", deploymentIds],
+  return useQuery<Statistics[], CarpServiceError>({
+    queryKey: ['statistics', deploymentIds],
     queryFn: async () => {
       if (deploymentIds.length === 0) {
         return [];
@@ -288,7 +288,7 @@ export const useStatistics = (studyId: string) => {
 
 export const useGetParticipantData = (studyDeploymentId: string) => {
   return useQuery<ExpectedParticipantData, CarpServiceError>({
-    queryKey: ["participantData", studyDeploymentId],
+    queryKey: ['participantData', studyDeploymentId],
     queryFn: async () => {
       return carpApi.participation.getParticipantData({
         studyDeploymentId,
@@ -313,11 +313,11 @@ export const useSetParticipantData = (deploymentId: string) => {
       });
     },
     onSuccess: () => {
-      setSnackbarSuccess("Participant data updated successfuly");
+      setSnackbarSuccess('Participant data updated successfuly');
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["participantData", deploymentId],
+        queryKey: ['participantData', deploymentId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -343,13 +343,13 @@ export const useRegisterDevice = (studyId: string) => {
       });
     },
     onError: (error: CarpServiceError) => {
-      if (error.message !== "The passed device is already registered.") {
+      if (error.message !== 'The passed device is already registered.') {
         setSnackbarError(error.message);
       }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["deployments", studyId],
+        queryKey: ['deployments', studyId],
       });
     },
     retry: queryClient.defaultMutationOptions().retry,
@@ -366,12 +366,12 @@ export const useDeviceDeployed = (studyId: string) => {
     { studyDeploymentId: string; roleName: string }
   >({
     mutationFn: async ({ studyDeploymentId, roleName }) => {
-      const deviceDeployment =
-        await carpApi.study.deployments.getDeviceDeploymentFor({
+      const deviceDeployment
+        = await carpApi.study.deployments.getDeviceDeploymentFor({
           studyDeploymentId,
           primaryDeviceRoleName: roleName,
         });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+
       return carpApi.study.deployments.updateDeviceRegistration({
         studyDeploymentId,
         primaryDeviceRoleName: roleName,
@@ -380,7 +380,7 @@ export const useDeviceDeployed = (studyId: string) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ["deployments", studyId],
+        queryKey: ['deployments', studyId],
       });
     },
     onError: (error: CarpServiceError) => {

@@ -1,7 +1,7 @@
-import SortingButton from "@Components/SortingButton";
-import { useProtocols } from "@Utils/queries/protocols";
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SortingButton from '@Components/SortingButton';
+import { useProtocols } from '@Utils/queries/protocols';
+import { formatDateTime, getRandomNumber } from '@Utils/utility';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {
   Skeleton,
   Table,
@@ -9,9 +9,9 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AddProtocolButton,
   HeaderCellContainer,
@@ -22,7 +22,7 @@ import {
   StyledCard,
   StyledTableRow,
   TertiaryCellText,
-} from "./styles";
+} from './styles';
 
 const SkeletonTableRow = () => {
   return (
@@ -50,27 +50,27 @@ const ProtocolsTable = ({ openModal }: Props) => {
 
   // State for sorting
   const [sortOrder, setSortOrder] = useState<{
-    field: "name" | "createdOn";
+    field: 'name' | 'createdOn';
     ascending: boolean;
-  }>({ field: "createdOn", ascending: false });
+  }>({ field: 'createdOn', ascending: false });
 
-  const toggleSortOrder = (field: "name" | "createdOn") => {
-    setSortOrder((prevSortOrder) => ({
+  const toggleSortOrder = (field: 'name' | 'createdOn') => {
+    setSortOrder(prevSortOrder => ({
       field,
       ascending:
         prevSortOrder.field === field ? !prevSortOrder.ascending : true,
     }));
   };
 
-  const sortedProtocols =
-    protocolsLoading || !protocols
+  const sortedProtocols
+    = protocolsLoading || !protocols
       ? []
       : protocols.sort((a, b) => {
-          const compareResult =
-            sortOrder.field === "name"
+          const compareResult
+            = sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
-              : a.createdOn.toEpochMilliseconds() -
-                b.createdOn.toEpochMilliseconds();
+              : a.createdOn.toEpochMilliseconds()
+                - b.createdOn.toEpochMilliseconds();
 
           return sortOrder.ascending ? compareResult : -compareResult;
         });
@@ -89,9 +89,9 @@ const ProtocolsTable = ({ openModal }: Props) => {
   if (!protocols) return null;
   return (
     <StyledCard>
-      <TableContainer sx={{ paddingX: "32px", height: "70vh" }}>
+      <TableContainer sx={{ paddingX: '32px', height: '70vh' }}>
         <Table
-          style={{ tableLayout: "fixed" }}
+          style={{ tableLayout: 'fixed' }}
           stickyHeader
           aria-label="sticky table"
         >
@@ -123,40 +123,41 @@ const ProtocolsTable = ({ openModal }: Props) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {protocolsLoading ? (
-              <>
-                <SkeletonTableRow />
-                <SkeletonTableRow />
-                <SkeletonTableRow />
-              </>
-            ) : (
-              sortedProtocols.map((protocol) => (
-                <StyledTableRow
-                  key={protocol.id.stringRepresentation}
-                  onClick={() =>
-                    selectProtocolHandler(protocol.id.stringRepresentation)
-                  }
-                >
-                  <TableCell>
-                    <PrimaryCellText variant="h4">
-                      {protocol.name}
-                    </PrimaryCellText>
-                  </TableCell>
-                  <TableCell>
-                    <SecondaryCellText variant="h5">
-                      {protocol.description
-                        ? formatDescription(protocol.description)
-                        : "—"}
-                    </SecondaryCellText>
-                  </TableCell>
-                  <TableCell>
-                    <TertiaryCellText variant="h5">
-                      {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-                    </TertiaryCellText>
-                  </TableCell>
-                </StyledTableRow>
-              ))
-            )}
+            {protocolsLoading
+              ? (
+                  <>
+                    <SkeletonTableRow />
+                    <SkeletonTableRow />
+                    <SkeletonTableRow />
+                  </>
+                )
+              : (
+                  sortedProtocols.map(protocol => (
+                    <StyledTableRow
+                      key={protocol.id.stringRepresentation}
+                      onClick={() =>
+                        selectProtocolHandler(protocol.id.stringRepresentation)}
+                    >
+                      <TableCell>
+                        <PrimaryCellText variant="h4">
+                          {protocol.name}
+                        </PrimaryCellText>
+                      </TableCell>
+                      <TableCell>
+                        <SecondaryCellText variant="h5">
+                          {protocol.description
+                            ? formatDescription(protocol.description)
+                            : '—'}
+                        </SecondaryCellText>
+                      </TableCell>
+                      <TableCell>
+                        <TertiaryCellText variant="h5">
+                          {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                        </TertiaryCellText>
+                      </TableCell>
+                    </StyledTableRow>
+                  ))
+                )}
           </TableBody>
         </Table>
       </TableContainer>

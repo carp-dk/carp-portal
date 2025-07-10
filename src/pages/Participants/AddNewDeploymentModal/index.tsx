@@ -1,16 +1,16 @@
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import {
   useInviteParticipants,
   useParticipants,
-} from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { getRandomNumber } from "@Utils/utility";
+} from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { getRandomNumber } from '@Utils/utility';
 import {
   EmailAccountIdentity,
   ParticipantAccount,
   ParticipantWithRoles,
   UsernameAccountIdentity,
-} from "@carp-dk/client";
+} from '@carp-dk/client';
 import {
   FormControl,
   MenuItem,
@@ -21,10 +21,10 @@ import {
   TableBody,
   TableCell,
   TableHead,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import {
   CancelButton,
   DoneButton,
@@ -43,7 +43,7 @@ import {
   StyledSelect,
   StyledTableContainer,
   StyledTableRow,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -54,16 +54,16 @@ type Props = {
 const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
   const { id: studyId } = useParams();
   const inviteParticipants = useInviteParticipants(studyId);
-  const { data: participants, isLoading: isParticipantsLoading } =
-    useParticipants(studyId);
-  const { data: studyDetails, isLoading: isStudyDetailsLoading } =
-    useStudyDetails(studyId);
+  const { data: participants, isLoading: isParticipantsLoading }
+    = useParticipants(studyId);
+  const { data: studyDetails, isLoading: isStudyDetailsLoading }
+    = useStudyDetails(studyId);
   const [participantDeviceRoleNames, setParticipantDeviceRoleNames] = useState(
     {},
   );
 
   const handleRoleChange = (participantId: string, assignedRoles: string[]) => {
-    setParticipantDeviceRoleNames((prevState) => ({
+    setParticipantDeviceRoleNames(prevState => ({
       ...prevState,
       [participantId]: assignedRoles,
     }));
@@ -78,25 +78,25 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
   }, [open]);
   const createNewGroupHandler = () => {
     const participantIdentifiers = participantsToAdd.map(
-      (participant) =>
+      participant =>
         participant.email.toLowerCase() ?? participant.username.toLowerCase(),
     );
-    const participantsToAddRows = participants.filter((participant) =>
+    const participantsToAddRows = participants.filter(participant =>
       participantIdentifiers.includes(
-        (participant.accountIdentity instanceof EmailAccountIdentity &&
-          (
+        (participant.accountIdentity instanceof EmailAccountIdentity
+          && (
             participant.accountIdentity as EmailAccountIdentity
-          ).emailAddress.address.toLowerCase()) ||
-          (participant.accountIdentity instanceof UsernameAccountIdentity &&
-            (
+          ).emailAddress.address.toLowerCase())
+          || (participant.accountIdentity instanceof UsernameAccountIdentity
+            && (
               participant.accountIdentity as UsernameAccountIdentity
             ).username.name.toLowerCase()),
       ),
     );
-    const participantsWithRoles: ParticipantWithRoles[] =
-      participantsToAddRows.map((participant) => {
-        const identity =
-          participant.accountIdentity instanceof EmailAccountIdentity
+    const participantsWithRoles: ParticipantWithRoles[]
+      = participantsToAddRows.map((participant) => {
+        const identity
+          = participant.accountIdentity instanceof EmailAccountIdentity
             ? (
                 participant.accountIdentity as EmailAccountIdentity
               ).emailAddress.address.toLowerCase()
@@ -140,7 +140,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
           <ModalContent>
             <StyledTableContainer>
               <Table
-                style={{ tableLayout: "fixed" }}
+                style={{ tableLayout: 'fixed' }}
                 stickyHeader
                 aria-label="sticky table"
               >
@@ -188,14 +188,16 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                             </TableCell>
                             <TableCell>
                               <PrimaryCellText variant="h5">
-                                {participant.email ? (
-                                  `${participant.firstName ?? ""} ${participant.lastName ?? ""}`
-                                ) : (
-                                  <GeneratedAccountLabel />
-                                )}
+                                {participant.email
+                                  ? (
+                                      `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
+                                    )
+                                  : (
+                                      <GeneratedAccountLabel />
+                                    )}
                               </PrimaryCellText>
                             </TableCell>
-                            <TableCell sx={{ position: "relative" }}>
+                            <TableCell sx={{ position: 'relative' }}>
                               <FormControl fullWidth>
                                 <StyledSelect
                                   labelId="role-select-label"
@@ -203,18 +205,17 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                                   value={
                                     participantDeviceRoleNames[
                                       participant.email ?? participant.username
-                                    ] || ""
+                                    ] || ''
                                   }
                                   onChange={(event: SelectChangeEvent) =>
                                     handleRoleChange(
                                       participant.email ?? participant.username,
                                       [event.target.value],
-                                    )
-                                  }
+                                    )}
                                 >
                                   {studyDetails.protocolSnapshot.participantRoles
                                     .toArray()
-                                    .map((participantRole) => (
+                                    .map(participantRole => (
                                       <MenuItem
                                         key={participantRole.role}
                                         value={participantRole.role}
@@ -248,8 +249,8 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
               sx={{ elevation: 0 }}
               onClick={createNewGroupHandler}
               disabled={
-                Object.keys(participantDeviceRoleNames).length <
-                participantsToAdd.length
+                Object.keys(participantDeviceRoleNames).length
+                < participantsToAdd.length
               }
             >
               New deployment

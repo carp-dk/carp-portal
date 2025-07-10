@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import { formatDate } from "@Utils/utility";
+import { Button } from '@mui/material';
+import { formatDate } from '@Utils/utility';
 import {
   AnnouncementDate,
   AnnouncementHeader,
@@ -8,7 +8,7 @@ import {
   AnnouncementSubtitle,
   AnnouncementTitle,
   AnnouncementType,
-} from "./styles";
+} from './styles';
 
 type Props = {
   type: string;
@@ -22,8 +22,10 @@ type Props = {
 const extractHostname = (url: string) => {
   try {
     return new URL(url).hostname;
-  } catch (e) {
-    return "";
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  catch (e) {
+    return '';
   }
 };
 
@@ -47,11 +49,13 @@ const StudyAnnouncementPreview = ({
           size="small"
         />
       </AnnouncementHeader>
-      {file != null && file instanceof File ? (
-        <img src={URL.createObjectURL(file)} alt="Announcement" />
-      ) : (
-        <img src={file as string} alt="Announcement" />
-      )}
+      {file != null && file instanceof File
+        ? (
+            <img src={URL.createObjectURL(file)} alt="Announcement" />
+          )
+        : (
+            <img src={file as string} alt="Announcement" />
+          )}
       <AnnouncementTitle variant="h2">
         {!title ? <i>No title yet</i> : title.trim()}
       </AnnouncementTitle>
@@ -64,7 +68,11 @@ const StudyAnnouncementPreview = ({
         {!message ? <i>No message yet</i> : message.trim()}
       </AnnouncementMessage>
       {url && extractHostname(url) && (
-        <Button>View more ({extractHostname(url)})</Button>
+        <Button>
+          View more (
+          {extractHostname(url)}
+          )
+        </Button>
       )}
     </AnnouncementLeft>
   );

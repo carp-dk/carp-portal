@@ -35,5 +35,5 @@
     "src",
     "eslint.config.mjs",
   ],
-  "exclude": ["**/node_modules", "**/.*/", "build"]
+  "exclude": ["**/node_modules", "**/.*/", "build", "**/non_npm_dependencies"]
 }

@@ -1,26 +1,26 @@
-import ecgHeartIcon from "@Assets/images/ecg_heart.png";
-import ecgHeartIconBlue from "@Assets/images/ecg_heart_blue.png";
-import { Day, Record } from "@Components/RecentDataChart";
-import { customPalette as palette } from "@Utils/theme";
+import ecgHeartIcon from '@Assets/images/ecg_heart.png';
+import ecgHeartIconBlue from '@Assets/images/ecg_heart_blue.png';
+import { Day, Record } from '@Components/RecentDataChart';
+import { customPalette as palette } from '@Utils/theme';
 import {
   DefaultSerializer,
   getSerializer,
   Json,
   StudyProtocolSnapshot,
-} from "@carp-dk/client";
-import AirRoundedIcon from "@mui/icons-material/AirRounded";
-import CloudIcon from "@mui/icons-material/Cloud";
-import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
-import DeviceHubIcon from "@mui/icons-material/DeviceHub";
-import HealthAndSafetyRoundedIcon from "@mui/icons-material/HealthAndSafetyRounded";
-import HearingRoundedIcon from "@mui/icons-material/HearingRounded";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MonitorHeartOutlinedIcon from "@mui/icons-material/MonitorHeartOutlined";
-import PublicIcon from "@mui/icons-material/Public";
-import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
-import WatchRoundedIcon from "@mui/icons-material/WatchRounded";
+} from '@carp-dk/client';
+import AirRoundedIcon from '@mui/icons-material/AirRounded';
+import CloudIcon from '@mui/icons-material/Cloud';
+import ComputerRoundedIcon from '@mui/icons-material/ComputerRounded';
+import DeviceHubIcon from '@mui/icons-material/DeviceHub';
+import HealthAndSafetyRoundedIcon from '@mui/icons-material/HealthAndSafetyRounded';
+import HearingRoundedIcon from '@mui/icons-material/HearingRounded';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
+import PublicIcon from '@mui/icons-material/Public';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import SmartphoneIcon from '@mui/icons-material/Smartphone';
+import TimelineRoundedIcon from '@mui/icons-material/TimelineRounded';
+import WatchRoundedIcon from '@mui/icons-material/WatchRounded';
 import {
   Document,
   Page,
@@ -28,22 +28,22 @@ import {
   StyleSheet,
   Image as PdfImage,
   Font,
-} from "@react-pdf/renderer";
-import { useParams } from "react-router";
-import TimesItalics from "src/assets/fonts/Times-Italic Regular.ttf";
+} from '@react-pdf/renderer';
+import { useParams } from 'react-router';
+import TimesItalics from 'src/assets/fonts/Times-Italic Regular.ttf';
 
 const dataLegendColors = {
-  activity: "#245B78",
-  airquality: "#B26101",
-  ambientlight: "#374953",
-  batterystate: "#BA1A1A",
-  coverage: "#D6E8F4",
-  deviceinformation: "#67587A",
-  freememory: "#76777A",
-  location: "#D61D41",
-  screenevent: "#A61A41",
-  stepcount: "#A7517A",
-  triggeredtask: "#1A111A",
+  activity: '#245B78',
+  airquality: '#B26101',
+  ambientlight: '#374953',
+  batterystate: '#BA1A1A',
+  coverage: '#D6E8F4',
+  deviceinformation: '#67587A',
+  freememory: '#76777A',
+  location: '#D61D41',
+  screenevent: '#A61A41',
+  stepcount: '#A7517A',
+  triggeredtask: '#1A111A',
 };
 
 export const calculateDaysPassedFromDate = (dateString: string) => {
@@ -57,25 +57,25 @@ export const calculateDaysPassedFromDate = (dateString: string) => {
 export const formatDateTime = (
   dateString: number | string,
   options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   },
 ) => {
   const date = new Date(dateString);
-  return `${date.toLocaleString("en-US", options)}`;
+  return `${date.toLocaleString('en-US', options)}`;
 };
 
 export const formatDate = (dateString: number | string) => {
   const date = new Date(dateString);
-  let formattedDate = date.toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
+  let formattedDate = date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
   });
   if (date.getFullYear() !== new Date().getFullYear()) {
-    const year = date.toLocaleString("en-US", { year: "numeric" });
+    const year = date.toLocaleString('en-US', { year: 'numeric' });
     formattedDate += ` ${year}`;
   }
   return formattedDate;
@@ -89,94 +89,96 @@ export const getRandomNumber = (min: number, max: number) => {
 
 export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
   switch (deviceType) {
-    case "dk.cachet.carp.common.application.devices.Button":
+    case 'dk.cachet.carp.common.application.devices.Button':
       return (
         <RadioButtonCheckedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.EmbracePlus":
+    case 'dk.cachet.carp.common.application.devices.EmbracePlus':
       return (
         <WatchRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.Sens":
+    case 'dk.cachet.carp.common.application.devices.Sens':
       return (
         <TimelineRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.HealthService":
+    case 'dk.cachet.carp.common.application.devices.HealthService':
       return (
         <HealthAndSafetyRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.MovesenseDevice":
-      return isBlue ? (
-        <img
-          src={ecgHeartIconBlue}
-          width="20px"
-          height="20px"
-          alt="heart icon"
-        />
-      ) : (
-        <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
-      );
-    case "dk.cachet.carp.common.application.devices.Smartphone":
+    case 'dk.cachet.carp.common.application.devices.MovesenseDevice':
+      return isBlue
+        ? (
+            <img
+              src={ecgHeartIconBlue}
+              width="20px"
+              height="20px"
+              alt="heart icon"
+            />
+          )
+        : (
+            <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
+          );
+    case 'dk.cachet.carp.common.application.devices.Smartphone':
       return <SmartphoneIcon color="inherit" fontSize="small" />;
-    case "dk.cachet.carp.common.application.devices.PersonalComputer":
+    case 'dk.cachet.carp.common.application.devices.PersonalComputer':
       return (
         <ComputerRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.LocationService":
+    case 'dk.cachet.carp.common.application.devices.LocationService':
       return (
         <LocationOnIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.WeatherService":
+    case 'dk.cachet.carp.common.application.devices.WeatherService':
       return (
-        <CloudIcon color={isBlue ? "primary" : "inherit"} fontSize="small" />
+        <CloudIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
       );
-    case "dk.cachet.carp.common.application.devices.AirQualityService":
+    case 'dk.cachet.carp.common.application.devices.AirQualityService':
       return (
         <AirRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.ESenseDevice":
+    case 'dk.cachet.carp.common.application.devices.ESenseDevice':
       return (
         <HearingRoundedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.PolarDevice":
+    case 'dk.cachet.carp.common.application.devices.PolarDevice':
       return (
         <MonitorHeartOutlinedIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
-    case "dk.cachet.carp.common.application.devices.WebBrowser":
+    case 'dk.cachet.carp.common.application.devices.WebBrowser':
       return (
-        <PublicIcon color={isBlue ? "primary" : "inherit"} fontSize="small" />
+        <PublicIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
       );
     default:
       return (
         <DeviceHubIcon
-          color={isBlue ? "primary" : "inherit"}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
@@ -185,93 +187,93 @@ export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
 
 export const getDataColor = (dataType: string) => {
   switch (dataType) {
-    case "activity":
+    case 'activity':
       return dataLegendColors.activity;
-    case "airquality":
+    case 'airquality':
       return dataLegendColors.airquality;
-    case "ambientlight":
+    case 'ambientlight':
       return dataLegendColors.ambientlight;
-    case "batterystate":
+    case 'batterystate':
       return dataLegendColors.batterystate;
-    case "coverage":
+    case 'coverage':
       return dataLegendColors.coverage;
-    case "deviceinformation":
+    case 'deviceinformation':
       return dataLegendColors.deviceinformation;
-    case "freememory":
+    case 'freememory':
       return dataLegendColors.freememory;
-    case "location":
+    case 'location':
       return dataLegendColors.location;
-    case "screenevent":
+    case 'screenevent':
       return dataLegendColors.screenevent;
-    case "stepcount":
+    case 'stepcount':
       return dataLegendColors.stepcount;
-    case "triggeredtask":
+    case 'triggeredtask':
       return dataLegendColors.triggeredtask;
     default:
-      return "#000000";
+      return '#000000';
   }
 };
 
 export const getDeviceStatusColor = (deviceStatus: string) => {
   switch (deviceStatus) {
-    case "Registered":
+    case 'Registered':
       return palette.status.yellow;
-    case "Unregistered":
+    case 'Unregistered':
       return palette.status.purple;
-    case "Deployed":
+    case 'Deployed':
       return palette.status.green;
-    case "NeedsRedeployment":
+    case 'NeedsRedeployment':
       return palette.status.red;
     default:
-      return "#000000";
+      return '#000000';
   }
 };
 
 export const getDeploymentStatusColor = (deploymentStatus: string) => {
   switch (deploymentStatus) {
-    case "Invited":
+    case 'Invited':
       return palette.status.yellow;
-    case "Running":
+    case 'Running':
       return palette.status.green;
-    case "Stopped":
+    case 'Stopped':
       return palette.status.grey;
-    case "DeployingDevices":
+    case 'DeployingDevices':
       return palette.status.blue;
     default:
-      return "#000000";
+      return '#000000';
   }
 };
 
 export const getSummaryStatusColor = (deploymentStatus: string) => {
   switch (deploymentStatus) {
-    case "AVAILABLE":
+    case 'AVAILABLE':
       return palette.status.green;
-    case "IN_PROGRESS":
+    case 'IN_PROGRESS':
       return palette.status.yellow;
-    case "ERROR":
+    case 'ERROR':
       return palette.status.red;
     default:
-      return "#000000";
+      return '#000000';
   }
 };
 
 export const getStudyStatusColor = (studyStatus: string) => {
   switch (studyStatus) {
-    case "Ready":
+    case 'Ready':
       return palette.status.yellow;
-    case "Live":
+    case 'Live':
       return palette.status.green;
-    case "Draft":
+    case 'Draft':
       return palette.status.purple;
     default:
-      return "#000000";
+      return '#000000';
   }
 };
 
 export const getMaxDatapoints = (days?: Day[]): number => {
   if (!days) return 0;
   return Math.max(
-    ...days.map((day) =>
+    ...days.map(day =>
       day.data.reduce((a: number, b: Record) => a + b.numberOfDatapoints, 0),
     ),
   );
@@ -282,9 +284,9 @@ export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   const serializer = getSerializer(StudyProtocolSnapshot);
   const jsonToDownload = json.encodeToString(serializer, protocol);
   const file = new Blob([jsonToDownload], {
-    type: "application/json",
+    type: 'application/json',
   });
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(file);
   link.download = `${protocol.name}.json`;
   document.body.appendChild(link);
@@ -294,20 +296,20 @@ export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
 
 export const getParticipantDataName = (dataType: string) => {
   switch (dataType) {
-    case "dk.cachet.carp.input.sex":
-      return "Biological sex";
-    case "dk.cachet.carp.input.consent":
-      return "Informed Consent";
-    case "dk.cachet.carp.input.name":
-      return "Full name";
-    case "dk.cachet.carp.input.address":
-      return "Full address";
-    case "dk.cachet.carp.input.diagnosis":
-      return "Diagnosis (ICD-11)";
-    case "dk.cachet.carp.input.ssn":
-      return "Social Security Number";
+    case 'dk.cachet.carp.input.sex':
+      return 'Biological sex';
+    case 'dk.cachet.carp.input.consent':
+      return 'Informed Consent';
+    case 'dk.cachet.carp.input.name':
+      return 'Full name';
+    case 'dk.cachet.carp.input.address':
+      return 'Full address';
+    case 'dk.cachet.carp.input.diagnosis':
+      return 'Diagnosis (ICD-11)';
+    case 'dk.cachet.carp.input.ssn':
+      return 'Social Security Number';
     default:
-      return "";
+      return '';
   }
 };
 
@@ -356,7 +358,7 @@ interface Section {
 }
 
 Font.register({
-  family: "Times-Italic",
+  family: 'Times-Italic',
   src: TimesItalics,
 });
 
@@ -368,65 +370,65 @@ const styles = StyleSheet.create({
   },
   h1: {
     fontSize: 24,
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 700,
     margin: 12,
   },
   h2: {
     fontSize: 18,
     fontWeight: 500,
-    margin: "12 12 0 12",
+    margin: '12 12 0 12',
   },
   h3: {
     fontSize: 14,
     fontWeight: 400,
-    margin: "12 12 0 12",
+    margin: '12 12 0 12',
   },
   text: {
-    margin: "0 12 12 12",
+    margin: '0 12 12 12',
     fontSize: 12,
-    textAlign: "justify",
+    textAlign: 'justify',
     fontWeight: 300,
   },
   italics: {
-    textAlign: "justify",
-    margin: "12 12 0 12",
+    textAlign: 'justify',
+    margin: '12 12 0 12',
     fontSize: 12,
-    fontFamily: "Times-Italic",
+    fontFamily: 'Times-Italic',
   },
   date: {
-    margin: "0 12 12 12",
+    margin: '0 12 12 12',
     fontSize: 12,
-    textAlign: "justify",
+    textAlign: 'justify',
     fontWeight: 300,
   },
   signatureName: {
-    margin: "6 12 6 12",
+    margin: '6 12 6 12',
     fontSize: 12,
-    textAlign: "justify",
+    textAlign: 'justify',
     fontWeight: 300,
   },
   pageNumber: {
-    position: "absolute",
+    position: 'absolute',
     fontSize: 12,
     bottom: 30,
     left: 0,
     right: 0,
-    textAlign: "center",
-    color: "grey",
+    textAlign: 'center',
+    color: 'grey',
   },
 });
 
 export const convertByteArrayToImage = async (byteArray: number[]) => {
   const imageByteArray = new Uint8Array(byteArray);
-  const imageBlob = new Blob([imageByteArray], { type: "image/png" });
+  const imageBlob = new Blob([imageByteArray], { type: 'image/png' });
   const imageBitmap = await createImageBitmap(imageBlob);
 
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = imageBitmap.width;
   canvas.height = imageBitmap.height;
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
   ctx.drawImage(imageBitmap, 0, 0);
 
@@ -440,7 +442,7 @@ export const convertByteArrayToImage = async (byteArray: number[]) => {
   }
   ctx.putImageData(imageData, 0, 0);
 
-  return canvas.toDataURL("image/png");
+  return canvas.toDataURL('image/png');
 };
 
 export const convertICToReactPdf = async (consent: ConsentObject) => {
@@ -453,11 +455,11 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
             <div key={section.type}>
               <Text style={styles.h2}>{section.title}</Text>
               <Text style={styles.italics}>
-                {section.summary.replaceAll("\n", " ")}
+                {section.summary.replaceAll('\n', ' ')}
               </Text>
               <Text style={styles.text}>{section.content}</Text>
-              {section.dataTypes &&
-                section.dataTypes.map((dataType) => {
+              {section.dataTypes
+                && section.dataTypes.map((dataType) => {
                   return (
                     <div key={dataType.dataName}>
                       <Text style={styles.h3}>{dataType.dataName}</Text>
@@ -478,19 +480,20 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
         />
         <Text
           style={styles.signatureName}
-        >{`${consent.signature.firstName} ${consent.signature.lastName}`}</Text>
+        >
+          {`${consent.signature.firstName} ${consent.signature.lastName}`}
+        </Text>
         <Text style={styles.date}>
           {formatDateTime(consent.endDate, {
-            year: "numeric",
-            month: "long",
-            day: "2-digit",
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
           })}
         </Text>
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
+            `${pageNumber} / ${totalPages}`}
           fixed
         />
       </Page>
@@ -542,8 +545,8 @@ export const getUri = (pageType: PageType) => {
     case PageType.EXPORTS:
       return `/studies/${studyId}/exports`;
     default:
-      // eslint-disable-next-line no-console
-      console.error("Unknown page type");
-      return "/";
+
+      console.error('Unknown page type');
+      return '/';
   }
 };

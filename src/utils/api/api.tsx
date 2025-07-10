@@ -1,4 +1,4 @@
-import { CarpClient, Config } from "@carp-dk/client";
+import { CarpClient, Config } from '@carp-dk/client';
 
 // Carp adapter
 const carpConfig: Config = {

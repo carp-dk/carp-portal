@@ -1,6 +1,6 @@
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import { Checkbox, FormControlLabel, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { Checkbox, FormControlLabel, Modal, Typography } from '@mui/material';
+import { useState } from 'react';
 import {
   ActionButton,
   Bottom,
@@ -10,7 +10,7 @@ import {
   DescriptionContainer,
   ModalBox,
   Title,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -43,17 +43,17 @@ const StartStudyConfirmationModal = ({ open, onConfirm, onClose }: Props) => {
         </DescriptionContainer>
         <Bottom>
           <FormControlLabel
-            control={
+            control={(
               <Checkbox
                 onChange={() => setChecked(!checked)}
                 checked={checked}
               />
-            }
-            label={
+            )}
+            label={(
               <Typography variant="h5">
                 I&apos;m sure I want to &apos;Go live&apos;
               </Typography>
-            }
+            )}
           />
           <ButtonsContainer>
             <CancelButton onClick={handleClose}>Cancel</CancelButton>

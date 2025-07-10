@@ -1,7 +1,7 @@
-import Alert, { AlertColor } from "@mui/material/Alert";
-import { useSnackbar } from "@Utils/snackbar";
-import { SyntheticEvent } from "react";
-import StyledSnackbar from "./styles";
+import Alert, { AlertColor } from '@mui/material/Alert';
+import { useSnackbar } from '@Utils/snackbar';
+import { SyntheticEvent } from 'react';
+import StyledSnackbar from './styles';
 
 export interface SnackbarType {
   snackbarOpen: boolean;
@@ -12,7 +12,7 @@ export interface SnackbarType {
 const CustomizedSnackbar = () => {
   const { snackbarState, setSnackbarState } = useSnackbar();
   const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     setSnackbarState({
@@ -26,7 +26,7 @@ const CustomizedSnackbar = () => {
       open={snackbarState.snackbarOpen}
       autoHideDuration={3000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
     >
       <Alert
         elevation={6}

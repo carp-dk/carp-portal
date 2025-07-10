@@ -1,19 +1,18 @@
-/* eslint-disable no-underscore-dangle */
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
   useDeviceDeployed,
   useParticipantGroupsAccountsAndStatus,
   useRegisterDevice,
-} from "@Utils/queries/participants";
-import { Checkbox, Modal, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import CarpAccordion from "@Components/CarpAccordion";
-import { useTranslation } from "react-i18next";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { getDeviceIcon } from "@Utils/utility";
-import { CarpServiceError } from "@carp-dk/client";
-import { v4 } from "uuid";
+} from '@Utils/queries/participants';
+import { Checkbox, Modal, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import CarpAccordion from '@Components/CarpAccordion';
+import { useTranslation } from 'react-i18next';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { getDeviceIcon } from '@Utils/utility';
+import { CarpServiceError } from '@carp-dk/client';
+import { v4 } from 'uuid';
 import {
   ActionButton,
   Bottom,
@@ -27,8 +26,8 @@ import {
   StyledStatusDot,
   SubDeviceRow,
   Title,
-} from "./styles";
-import LoadingSkeleton from "../LoadingSkeleton";
+} from './styles';
+import LoadingSkeleton from '../LoadingSkeleton';
 
 const Devices = () => {
   const { id: studyId, deploymentId } = useParams();
@@ -60,7 +59,7 @@ const Devices = () => {
     open: boolean;
     roleName: string;
     deviceId: string;
-  }>({ open: false, roleName: "", deviceId: "" });
+  }>({ open: false, roleName: '', deviceId: '' });
   const [allowDeploy, setAllowDeploy] = useState(false);
 
   const onConfirm = async () => {
@@ -72,8 +71,8 @@ const Devices = () => {
       })
       .catch((err) => {
         if (
-          (err as CarpServiceError).message !==
-          "The passed device is already registered."
+          (err as CarpServiceError).message
+          !== 'The passed device is already registered.'
         ) {
           throw err;
         }
@@ -83,7 +82,7 @@ const Devices = () => {
       roleName: modalState.roleName,
     });
 
-    setModalState({ open: false, roleName: "", deviceId: "" });
+    setModalState({ open: false, roleName: '', deviceId: '' });
   };
 
   useEffect(() => {
@@ -98,26 +97,26 @@ const Devices = () => {
             })
             .map((connection) => {
               const deviceStatus = participantGroupsAndStatuses.groups
-                .find((s) => s.participantGroupId === deploymentId)
+                .find(s => s.participantGroupId === deploymentId)
                 ?.deploymentStatus.deviceStatusList.find(
-                  (d) => d.device.roleName === connection.roleName,
+                  d => d.device.roleName === connection.roleName,
                 );
               return {
                 name: connection.roleName,
                 type: deviceStatus?.device.__type,
-                status: deviceStatus?.__type.split(".").pop(),
+                status: deviceStatus?.__type.split('.').pop(),
               };
             });
           const deviceStatus = participantGroupsAndStatuses.groups
-            .find((s) => s.participantGroupId === deploymentId)
+            .find(s => s.participantGroupId === deploymentId)
             ?.deploymentStatus.deviceStatusList.find(
-              (d) => d.device.roleName === device.roleName,
+              d => d.device.roleName === device.roleName,
             );
           return {
             primaryDevice: {
               name: device.roleName,
               type: deviceStatus?.device.__type,
-              status: deviceStatus?.__type.split(".").pop(),
+              status: deviceStatus?.__type.split('.').pop(),
             },
             connections,
           };
@@ -141,8 +140,8 @@ const Devices = () => {
   return (
     <CarpAccordion
       isExpanded={true}
-      title={t("deployment:devices_card.title")}
-      description={t("deployment:devices_card.description")}
+      title={t('deployment:devices_card.title')}
+      description={t('deployment:devices_card.description')}
     >
       <Modal
         open={modalState.open}
@@ -151,28 +150,28 @@ const Devices = () => {
       >
         <ModalBox sx={{ boxShadow: 24 }}>
           <Title variant="h2">
-            {t("deployment:devices_card.device_deployment.title")}
+            {t('deployment:devices_card.device_deployment.title')}
           </Title>
           <DescriptionContainer>
             <Description variant="h4">
-              {t("deployment:devices_card.device_deployment.description")}
+              {t('deployment:devices_card.device_deployment.description')}
             </Description>
           </DescriptionContainer>
           <Bottom>
             <Stack direction="row" alignItems="center" gap="8px">
               <Checkbox onClick={() => setAllowDeploy(!allowDeploy)} />
               <Typography variant="h5">
-                {t("deployment:devices_card.device_deployment.submit")}
+                {t('deployment:devices_card.device_deployment.submit')}
               </Typography>
             </Stack>
             <Stack direction="row" gap="8px">
               <CancelButton
                 onClick={() => {
-                  setModalState({ open: false, roleName: "", deviceId: "" });
+                  setModalState({ open: false, roleName: '', deviceId: '' });
                   setAllowDeploy(false);
                 }}
               >
-                {t("common:cancel")}
+                {t('common:cancel')}
               </CancelButton>
               <ActionButton
                 variant="contained"
@@ -180,7 +179,7 @@ const Devices = () => {
                 onClick={() => onConfirm()}
                 disabled={!allowDeploy}
               >
-                {t("common:deploy")}
+                {t('common:deploy')}
               </ActionButton>
             </Stack>
           </Bottom>
@@ -188,13 +187,13 @@ const Devices = () => {
       </Modal>
 
       <Stack spacing="16px" direction="row">
-        {devices &&
-          devices.map(({ primaryDevice, connections }) => (
+        {devices
+          && devices.map(({ primaryDevice, connections }) => (
             <DeviceCard key={primaryDevice.name}>
               <DeviceRow
                 direction="row"
                 onClick={() => {
-                  if (primaryDevice.status === "Deployed") return;
+                  if (primaryDevice.status === 'Deployed') return;
                   setModalState({
                     open: true,
                     roleName: primaryDevice.name,
@@ -202,11 +201,11 @@ const Devices = () => {
                   });
                 }}
                 sx={
-                  primaryDevice.status !== "Deployed" && {
-                    "&:hover": {
-                      backgroundColor: "#ededed",
-                      borderRadius: "100px",
-                      cursor: "pointer",
+                  primaryDevice.status !== 'Deployed' && {
+                    '&:hover': {
+                      backgroundColor: '#ededed',
+                      borderRadius: '100px',
+                      cursor: 'pointer',
                     },
                   }
                 }

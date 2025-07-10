@@ -1,9 +1,9 @@
-import { useAddParticipantByEmail } from "@Utils/queries/participants";
-import { FormLabel, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import * as yup from "yup";
+import { useAddParticipantByEmail } from '@Utils/queries/participants';
+import { FormLabel, TextField } from '@mui/material';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -11,7 +11,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "../styles";
+} from '../styles';
 
 type Props = {
   open: boolean;
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  email: yup.string().required("Email is required"),
+  email: yup.string().required('Email is required'),
 });
 
 const AddParticipantContent = ({ open, onClose }: Props) => {
@@ -29,7 +29,7 @@ const AddParticipantContent = ({ open, onClose }: Props) => {
 
   const addParticipantFormik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema,
     onSubmit: (values) => {
@@ -75,8 +75,8 @@ const AddParticipantContent = ({ open, onClose }: Props) => {
             onChange={addParticipantFormik.handleChange}
             fullWidth
             helperText={
-              addParticipantFormik.touched.email &&
-              addParticipantFormik.errors.email
+              addParticipantFormik.touched.email
+              && addParticipantFormik.errors.email
             }
             onBlur={addParticipantFormik.handleBlur}
           />

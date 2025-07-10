@@ -1,12 +1,12 @@
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import KeyboardArrowUpRoundedIcon from "@mui/icons-material/KeyboardArrowUpRounded";
-import StyledButton from "./styles";
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowUpRoundedIcon from '@mui/icons-material/KeyboardArrowUpRounded';
+import StyledButton from './styles';
 
 interface Props {
-  columnName: "name" | "createdOn";
-  toggleSortOrder: (field: "name" | "createdOn") => void;
+  columnName: 'name' | 'createdOn';
+  toggleSortOrder: (field: 'name' | 'createdOn') => void;
   sortOrder: {
-    field: "name" | "createdOn";
+    field: 'name' | 'createdOn';
     ascending: boolean;
   };
 }
@@ -20,8 +20,8 @@ const SortingButton = ({ columnName, toggleSortOrder, sortOrder }: Props) => {
         sx={{
           opacity:
             sortOrder.field === columnName && sortOrder.ascending
-              ? "100%"
-              : "20%",
+              ? '100%'
+              : '20%',
         }}
       />
       <KeyboardArrowDownRoundedIcon
@@ -30,8 +30,8 @@ const SortingButton = ({ columnName, toggleSortOrder, sortOrder }: Props) => {
         sx={{
           opacity:
             sortOrder.field === columnName && !sortOrder.ascending
-              ? "100%"
-              : "20%",
+              ? '100%'
+              : '20%',
         }}
       />
     </StyledButton>

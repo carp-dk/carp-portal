@@ -1,23 +1,23 @@
-import { Card, Typography } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Card, Typography } from '@mui/material';
+import { styled } from '@Utils/theme';
 
-export const StyledContainer = styled("div")({
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
+export const StyledContainer = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
   gap: 56,
 });
 
 export const StyledCard = styled(Card)({
-  display: "flex",
-  flexDirection: "column",
+  display: 'flex',
+  flexDirection: 'column',
   padding: 24,
   borderRadius: 10,
 });
 
 export const StyledNameCard = styled(Card)({
-  display: "grid",
-  gridTemplateColumns: "2fr 5fr",
-  gridTemplateRows: "auto auto 1fr",
+  display: 'grid',
+  gridTemplateColumns: '2fr 5fr',
+  gridTemplateRows: 'auto auto 1fr',
   padding: 24,
   borderRadius: 10,
   rowGap: 18,

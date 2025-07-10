@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material";
-import { Stack } from "@mui/system";
-import StyledStatusDot from "./styles";
+import { Typography } from '@mui/material';
+import { Stack } from '@mui/system';
+import StyledStatusDot from './styles';
 
 const TooltipContent = () => {
   return (
