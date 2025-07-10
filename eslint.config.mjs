@@ -49,6 +49,7 @@ export default tseslint.config(
     // Custom rule overrides (modify rule levels or disable rules)
     rules: {
       "@eslint-react/no-missing-key": "error",
+      "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": "off",
       "@stylistic/operator-linebreak": ["error", "after"],
       "@stylistic/multiline-ternary": ["error", "always"],
     },
