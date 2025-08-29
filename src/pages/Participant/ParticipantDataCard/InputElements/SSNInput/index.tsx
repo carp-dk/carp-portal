@@ -51,7 +51,7 @@ const SSNInput = ({ formik, editing }: Props) => {
             <MenuItem id="None" key="None" value="">
               Clear
             </MenuItem>
-            <MenuItem id="Denmark" key="Denmark" value="Denmark">
+            <MenuItem id="Denmark" key="Denmark" value="DK">
               <Stack
                 gap={1}
                 direction="row"
@@ -84,7 +84,7 @@ const SSNInput = ({ formik, editing }: Props) => {
                 <MenuItem
                   id={country.isoCode}
                   key={country.isoCode}
-                  value={country.name}
+                  value={country.isoCode}
                 >
                   <Stack
                     gap={1}
