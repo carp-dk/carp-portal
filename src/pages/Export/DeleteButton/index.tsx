@@ -1,11 +1,11 @@
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
-import { Export } from "@carp-dk/client";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import { Button } from "@mui/material";
-import { useDeleteExport } from "@Utils/queries/studies";
-import { MRT_Cell } from "material-react-table";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { Export } from '@carp-dk/client';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import { Button } from '@mui/material';
+import { useDeleteExport } from '@Utils/queries/studies';
+import { MRT_Cell } from 'material-react-table';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 type ButtonCellProps = {
   cell: MRT_Cell<Export, unknown>;
@@ -26,7 +26,7 @@ const DeleteButton = ({ cell }: ButtonCellProps) => {
   return (
     <>
       <Button
-        disabled={status === "IN_PROGRESS"}
+        disabled={status === 'IN_PROGRESS'}
         color="error"
         onClick={() => setOpen(true)}
       >

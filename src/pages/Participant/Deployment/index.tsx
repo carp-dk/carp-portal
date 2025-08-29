@@ -1,18 +1,18 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
-import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
-import { useCreateSummary } from "@Utils/queries/studies";
-import { calculateDaysPassedFromDate, getDeviceIcon } from "@Utils/utility";
-import { ParticipantDataInput } from "@carp-dk/client";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import PersonIcon from "@mui/icons-material/Person";
-import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import DateTooltip from "../../Deployments/DateTooltip";
-import LoadingSkeleton from "../LoadingSkeleton";
+import CopyButton from '@Components/Buttons/CopyButton';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import { useCreateSummary } from '@Utils/queries/studies';
+import { calculateDaysPassedFromDate, getDeviceIcon } from '@Utils/utility';
+import { ParticipantDataInput } from '@carp-dk/client';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import PersonIcon from '@mui/icons-material/Person';
+import { Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import DateTooltip from '../../Deployments/DateTooltip';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   AccountIcon,
   DeploymentIdContainer,
@@ -32,7 +32,7 @@ import {
   StyledDeviceStatusDot,
   StyledDivider,
   TopContainer,
-} from "./styles";
+} from './styles';
 
 const Deployment = () => {
   const { id: studyId, deploymentId } = useParams();
@@ -45,6 +45,7 @@ const Deployment = () => {
   const createSummary = useCreateSummary();
   const [deploymentInformation, setDeploymentInformation] = useState<{
     groupStatus: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deploymentStatus: any;
     participants: {
       participant: ParticipantDataInput & { lastUpload: string };
@@ -64,16 +65,16 @@ const Deployment = () => {
 
   const lastDataUpload = (lastData: Date) => {
     if (!lastData) {
-      return "";
+      return '';
     }
     if (calculateDaysPassedFromDate(lastData.toString()) === 0) {
-      return "Last data: Today";
+      return 'Last data: Today';
     }
     return `Last data: ${calculateDaysPassedFromDate(lastData.toString())} days ago`;
   };
 
   useEffect(() => {
-    if (!deploymentIsLoading && deployment && deployment.groups) {
+    if (!deploymentIsLoading && deployment?.groups) {
       const deploymentStatus = deployment.groupStatuses.find(
         (gs) => gs.id === deploymentId,
       );
@@ -101,10 +102,10 @@ const Deployment = () => {
             participant: { ...p, lastUpload },
             roleName,
             deviceInfo: {
-              // eslint-disable-next-line no-underscore-dangle
-              deviceStatus: device.__type.split(".").pop(),
+
+              deviceStatus: device.__type.split('.').pop(),
               deviceRole,
-              // eslint-disable-next-line no-underscore-dangle
+
               deviceType: device.device.__type,
             },
           };
@@ -113,8 +114,8 @@ const Deployment = () => {
       );
 
       setDeploymentInformation({
-        // eslint-disable-next-line no-underscore-dangle
-        groupStatus: group.deploymentStatus.__type.split(".").pop(),
+
+        groupStatus: group.deploymentStatus.__type.split('.').pop(),
         deploymentStatus,
         participants,
       });
@@ -123,12 +124,14 @@ const Deployment = () => {
 
   const getParticipantInitials = (participant: ParticipantDataInput) => {
     if (
-      participant.firstName === "" ||
-      participant.lastName === "" ||
+      participant.firstName === '' ||
+      participant.lastName === '' ||
       !participant.firstName ||
       !participant.lastName
     ) {
-      return participant.role ? participant.role[0] : "?";
+      return participant.role ?
+        participant.role[0] :
+        '?';
     }
     return `${participant.firstName[0]}${participant.lastName[0]}`;
   };
@@ -157,7 +160,7 @@ const Deployment = () => {
             <SecondaryText variant="h6">
               {deploymentInformation.groupStatus.replace(
                 /([a-z])([A-Z])/g,
-                "$1 $2",
+                '$1 $2',
               )}
             </SecondaryText>
             <DateTooltip
@@ -168,7 +171,9 @@ const Deployment = () => {
           </DeploymentStatusContainer>
           <DeploymentIdContainer>
             <SecondaryText variant="h6">
-              Deployment ID: {deploymentId}
+              Deployment ID:
+              {' '}
+              {deploymentId}
             </SecondaryText>
             <CopyButton textToCopy={deploymentId} idType="Deployment" />
           </DeploymentIdContainer>
@@ -198,7 +203,9 @@ const Deployment = () => {
                 <>
                   <PersonIcon fontSize="small" />
                   <Typography variant="h6">
-                    {p.participant.firstName} {p.participant.lastName}
+                    {p.participant.firstName}
+                    {' '}
+                    {p.participant.lastName}
                   </Typography>
                 </>
               )}

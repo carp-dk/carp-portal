@@ -1,15 +1,15 @@
-import BannerAccountButton from "@Components/Buttons/BannerAccountButton";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { useSnackbar } from "@Utils/snackbar";
-import { ReactNode, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import NavigationBar from "./NavigationBar";
+import BannerAccountButton from '@Components/Buttons/BannerAccountButton';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { useSnackbar } from '@Utils/snackbar';
+import { ReactNode, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import NavigationBar from './NavigationBar';
 import {
   ContentWrapper,
   CustomContainer,
   PageWrapper,
   StudyPageBanner,
-} from "./styles";
+} from './styles';
 
 interface Props {
   children: ReactNode;
@@ -24,8 +24,8 @@ const StudyPageLayout = ({ children }: Props) => {
   useEffect(() => {
     // TODO: 404 check?
     if (error) {
-      navigate("/studies", { replace: true });
-      setSnackbarError("Study was not found!");
+      navigate('/studies', { replace: true });
+      setSnackbarError('Study was not found!');
     }
   }, [isError, error]);
 

@@ -1,11 +1,11 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import { useLatestProtocol } from "@Utils/queries/protocols";
-import { downloadProtocolAsJSONFile, formatDateTime } from "@Utils/utility";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { Skeleton, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import AddProtocolVersionModal from "../AddProtocolVersionModal";
+import CopyButton from '@Components/Buttons/CopyButton';
+import { useLatestProtocol } from '@Utils/queries/protocols';
+import { downloadProtocolAsJSONFile, formatDateTime } from '@Utils/utility';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { Skeleton, Typography, useMediaQuery } from '@mui/material';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import AddProtocolVersionModal from '../AddProtocolVersionModal';
 import {
   AddVersionButton,
   CreationInfoContainer,
@@ -20,10 +20,10 @@ import {
   StyledContainer,
   StyledDivider,
   VersionContainer,
-} from "./styles";
+} from './styles';
 
 const ProtocolInfoSkeleton: React.FC = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   return (
     <StyledContainer>
       <Left>
@@ -59,7 +59,7 @@ const ProtocolInfoSkeleton: React.FC = () => {
 };
 
 const ProtocolInfo = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   const { id: protocolId } = useParams();
   const { data: protocol, isLoading: protocolLoading } =
     useLatestProtocol(protocolId);
@@ -90,7 +90,9 @@ const ProtocolInfo = () => {
           </AddVersionButton>
           <VersionContainer>
             <ProtocolVersion variant="h4">
-              Current version: {protocol.versionTag}
+              Current version:
+              {' '}
+              {protocol.versionTag}
             </ProtocolVersion>
             <Typography variant="h6">
               Update the Protocol data by adding a new version

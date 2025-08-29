@@ -8,10 +8,10 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import { useFormik, getIn } from "formik";
-import { countryInfos } from "@Assets/languageMap";
-import * as flags from "react-flags-select";
+} from '@mui/material';
+import { useFormik, getIn } from 'formik';
+import { countryInfos } from '@Assets/languageMap';
+import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -33,15 +33,15 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
             required
             name="phone_number.isoCode"
             error={
-              getIn(formik.touched, "phone_number.countryCode") &&
-              !!getIn(formik.errors, "phone_number.countryCode")
+              getIn(formik.touched, 'phone_number.countryCode') &&
+              !!getIn(formik.errors, 'phone_number.countryCode')
             }
             value={formik.values.phone_number.isoCode}
             onChange={(e) => {
               formik.setFieldValue(
-                "phone_number.countryCode",
+                'phone_number.countryCode',
                 countryInfos.find((ci) => ci.isoCode === e.target.value)
-                  ?.dialCode ?? "",
+                  ?.dialCode ?? '',
               );
               formik.handleChange(e);
             }}
@@ -49,11 +49,11 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
             label="Country"
             labelId="countryCodeLabel"
             sx={{
-              width: "300px",
-              height: "56px",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
+              width: '300px',
+              height: '56px',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
             }}
           >
             <MenuItem id="None" key="None" value="">
@@ -65,14 +65,15 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                 direction="row"
                 alignItems="center"
                 sx={{
-                  display: "grid",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
+                  display: 'grid',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
                 }}
                 gridTemplateColumns="30px 50px auto"
               >
-                <DanishFlag onSelect={undefined} width={30} />{" "}
+                <DanishFlag onSelect={undefined} width={30} />
+                {' '}
                 <Typography>+45</Typography>
                 <Typography>Denmark</Typography>
               </Stack>
@@ -86,7 +87,7 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
               if (countryCode in flags) {
                 CountryFlag = flags[countryCode];
               } else {
-                CountryFlag = "div";
+                CountryFlag = 'div';
               }
               return (
                 <MenuItem
@@ -99,10 +100,10 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                     direction="row"
                     alignItems="center"
                     sx={{
-                      display: "grid",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
+                      display: 'grid',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
                     }}
                     gridTemplateColumns="30px 50px auto"
                   >
@@ -114,9 +115,9 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
               );
             })}
           </Select>
-          <FormHelperText error sx={{ width: "110px" }}>
-            {getIn(formik.touched, "phone_number.countryCode") &&
-              getIn(formik.errors, "phone_number.countryCode")}
+          <FormHelperText error sx={{ width: '110px' }}>
+            {getIn(formik.touched, 'phone_number.countryCode') &&
+              getIn(formik.errors, 'phone_number.countryCode')}
           </FormHelperText>
         </div>
         <TextField
@@ -127,15 +128,15 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
           label="Phone Number"
           fullWidth
           error={
-            getIn(formik.touched, "phone_number.number") &&
-            !!getIn(formik.errors, "phone_number.number")
+            getIn(formik.touched, 'phone_number.number') &&
+            !!getIn(formik.errors, 'phone_number.number')
           }
           value={formik.values.phone_number.number}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           helperText={
-            getIn(formik.touched, "phone_number.number") &&
-            getIn(formik.errors, "phone_number.number")
+            getIn(formik.touched, 'phone_number.number') &&
+            getIn(formik.errors, 'phone_number.number')
           }
         />
       </Stack>

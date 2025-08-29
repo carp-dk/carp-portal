@@ -1,9 +1,9 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import LinkIcon from "@mui/icons-material/Link";
-import { Skeleton, Typography, useMediaQuery } from "@mui/material";
-import { useProtocolDetails } from "@Utils/queries/protocols";
-import { downloadProtocolAsJSONFile, formatDateTime } from "@Utils/utility";
+import CopyButton from '@Components/Buttons/CopyButton';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import LinkIcon from '@mui/icons-material/Link';
+import { Skeleton, Typography, useMediaQuery } from '@mui/material';
+import { useProtocolDetails } from '@Utils/queries/protocols';
+import { downloadProtocolAsJSONFile, formatDateTime } from '@Utils/utility';
 import {
   CreationInfoContainer,
   DownloadButton,
@@ -18,10 +18,10 @@ import {
   StyledDivider,
   StyledLink,
   Subtitle,
-} from "./styles";
+} from './styles';
 
 const ProtocolInfoSkeleton = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   return (
     <StyledContainer>
       <Left>
@@ -61,7 +61,7 @@ type Props = {
 };
 
 const ProtocolInfo = ({ protocolId }: Props) => {
-  const isDownMd = useMediaQuery("(max-width:1725px)");
+  const isDownMd = useMediaQuery('(max-width:1725px)');
   const { data: protocol, isLoading: protocolLoading } =
     useProtocolDetails(protocolId);
   if (protocolLoading) return <ProtocolInfoSkeleton />;
@@ -87,7 +87,8 @@ const ProtocolInfo = ({ protocolId }: Props) => {
             {/* Study protocol v{protocol.version} */}
           </ProtocolVersion>
           <Subtitle variant="h6">
-            Update the Protocol by adding a new version in{" "}
+            Update the Protocol by adding a new version in
+            {' '}
             <StyledLink to={`/protocols/${protocolId}`}>
               Protocol&#39;s main page
             </StyledLink>

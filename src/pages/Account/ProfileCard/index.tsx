@@ -1,13 +1,13 @@
-import { Skeleton, TextField, Typography } from "@mui/material";
-import { useCurrentUser } from "@Utils/queries/auth";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import { Skeleton, TextField, Typography } from '@mui/material';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import {
   InputContainer,
   StyledCard,
   StyledFormControl,
   StyledHeader,
-} from "./styles";
+} from './styles';
 
 const profileValidationSchema = yup.object({
   phoneNumber: yup.string(),
@@ -98,10 +98,10 @@ const ProfileCard = () => {
     useCurrentUser();
   const profileFormik = useFormik({
     initialValues: {
-      phone: "+45 12345678",
-      affiliation: "Technical University of Denmark",
-      address: "Ørsteds Pl. 345C, 2800 Kongens Lyngby",
-      website: "https://carp.cachet.dk/",
+      phone: '+45 12345678',
+      affiliation: 'Technical University of Denmark',
+      address: 'Ørsteds Pl. 345C, 2800 Kongens Lyngby',
+      website: 'https://carp.cachet.dk/',
     },
     validationSchema: profileValidationSchema,
     onSubmit: (values) => {
@@ -126,7 +126,7 @@ const ProfileCard = () => {
           <TextField
             type="text"
             name="role"
-            value={currentUser?.role || ""}
+            value={currentUser?.role || ''}
             disabled
           />
         </InputContainer>
@@ -151,7 +151,7 @@ const ProfileCard = () => {
           <TextField
             type="text"
             name="email"
-            value={currentUser?.email || ""}
+            value={currentUser?.email || ''}
             disabled
           />
         </InputContainer>

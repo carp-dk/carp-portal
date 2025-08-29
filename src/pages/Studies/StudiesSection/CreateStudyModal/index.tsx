@@ -1,8 +1,8 @@
-import { FormLabel, Modal, TextField } from "@mui/material";
-import { useCreateStudy } from "@Utils/queries/studies";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import * as yup from "yup";
+import { FormLabel, Modal, TextField } from '@mui/material';
+import { useCreateStudy } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -11,7 +11,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
+  name: yup.string().required('Name is required'),
   description: yup.string(),
 });
 
@@ -27,8 +27,8 @@ const CreateStudyModal = ({ open, onClose }: Props) => {
   const createStudy = useCreateStudy();
   const createStudyFormik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     },
     validationSchema,
     onSubmit: (values) => {

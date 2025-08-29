@@ -1,12 +1,12 @@
-import { Box, Button, Typography } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Box, Button, Typography } from '@mui/material';
+import { styled } from '@Utils/theme';
 
 export const ModalBox = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "70%",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '70%',
   backgroundColor: theme.palette.common.white,
   borderRadius: 16,
   padding: 36,
@@ -23,34 +23,36 @@ export const ModalDescription = styled(Typography)(({ theme }) => ({
   marginBottom: 36,
 }));
 
-export const ModalContainer = styled("div")({
-  display: "flex",
-  flexDirection: "row",
+export const ModalContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
   gap: 36,
 });
 
-export const Container = styled("div")({
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
+export const Container = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
   gap: 24,
 });
 
-export const ModalContent = styled("div", {
-  shouldForwardProp: (prop) => prop !== "fixHeight",
+export const ModalContent = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'fixHeight',
 })<{ fixHeight?: boolean }>(({ fixHeight }) => ({
-  flexGrow: 1,
-  gap: 8,
-  display: "flex",
-  flexDirection: "column",
-  "& > *:last-child": {
-    flex: "1 0",
+  'flexGrow': 1,
+  'gap': 8,
+  'display': 'flex',
+  'flexDirection': 'column',
+  '& > *:last-child': {
+    flex: '1 0',
   },
-  "& > *:last-child > div": {
-    height: fixHeight ? "100%" : 272,
+  '& > *:last-child > div': {
+    height: fixHeight ?
+      '100%' :
+      272,
   },
 }));
 
-export const TextFieldLabel = styled("label")(({ theme }) => ({
+export const TextFieldLabel = styled('label')(({ theme }) => ({
   marginTop: 12,
   color: theme.palette.secondary.dark,
   fontSize: theme.typography.h4.fontSize,
@@ -58,27 +60,27 @@ export const TextFieldLabel = styled("label")(({ theme }) => ({
   lineHeight: theme.typography.h4.lineHeight,
 }));
 
-export const ModalActions = styled("div")({
-  display: "flex",
-  flexDirection: "row",
+export const ModalActions = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
   gap: 8,
   marginTop: 24,
-  width: "100%",
-  justifyContent: "flex-end",
+  width: '100%',
+  justifyContent: 'flex-end',
 });
 
 export const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.main,
-  textTransform: "none",
-  padding: "8px 24px",
+  textTransform: 'none',
+  padding: '8px 24px',
   borderRadius: 16,
 }));
 
 export const DoneButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.common.white,
-  textTransform: "none",
-  padding: "8px 24px",
+  textTransform: 'none',
+  padding: '8px 24px',
   borderRadius: 16,
 }));
 
@@ -87,7 +89,7 @@ export const InvalidEmail = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
 }));
 
-export const InvalidEmails = styled("div")({
-  overflowY: "auto",
+export const InvalidEmails = styled('div')({
+  overflowY: 'auto',
   maxHeight: 272,
 });

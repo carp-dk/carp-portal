@@ -1,8 +1,8 @@
-import ClearIcon from "@mui/icons-material/Clear";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { FormControlLabel, InputAdornment, Switch } from "@mui/material";
-import { useState } from "react";
-import { StyledContainer, StyledTextField } from "./styles";
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { FormControlLabel, InputAdornment, Switch } from '@mui/material';
+import { useState } from 'react';
+import { StyledContainer, StyledTextField } from './styles';
 
 type Props = {
   searchDeployments: (searchText: string) => void;
@@ -15,18 +15,20 @@ const Toolbar = ({
   toggleAllCards,
   isAllCardsOpen,
 }: Props) => {
-  const [searchText, setSearchText] = useState("");
-  const [showClearIcon, setShowClearIcon] = useState("none");
+  const [searchText, setSearchText] = useState('');
+  const [showClearIcon, setShowClearIcon] = useState('none');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
     searchDeployments(event.target.value);
-    setShowClearIcon(event.target.value === "" ? "none" : "flex");
+    setShowClearIcon(event.target.value === '' ?
+      'none' :
+      'flex');
   };
 
   const handleClear = (): void => {
-    searchDeployments("");
-    setSearchText("");
+    searchDeployments('');
+    setSearchText('');
   };
 
   return (

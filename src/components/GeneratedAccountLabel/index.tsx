@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 
 const GeneratedAccountLabel = memo(() => {
   return <i>Generated account</i>;

@@ -1,12 +1,12 @@
-import DragAndDrop from "@Components/DragAndDrop";
-import { useAddParticipants } from "@Utils/queries/participants";
-import { Modal, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import Papa from "papaparse";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import * as yup from "yup";
+import DragAndDrop from '@Components/DragAndDrop';
+import { useAddParticipants } from '@Utils/queries/participants';
+import { Modal, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import Papa from 'papaparse';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -18,7 +18,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -26,20 +26,20 @@ type Props = {
 };
 const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
-const fileTypes = ["text/csv"];
+const fileTypes = ['text/csv'];
 
 const validationSchema = yup.object({
   file: yup
     .mixed()
-    .required("File is required")
+    .required('File is required')
     .test(
-      "fileFormat",
-      "File must be a CSV file",
+      'fileFormat',
+      'File must be a CSV file',
       (value: File) => value && fileTypes.includes(value.type),
     )
     .test(
-      "validParticipantList",
-      "Invalid participant list format",
+      'validParticipantList',
+      'Invalid participant list format',
       async (value: File) => {
         if (!value) return false;
         // const text = await value.text();
@@ -49,7 +49,7 @@ const validationSchema = yup.object({
           // const serializer = StudyProtocolSnapshot.Companion.serializer();
           // json.decodeFromString_awif5v$(serializer, text);
           return true;
-        } catch (e) {
+        } catch {
           return false;
         }
       },
@@ -59,7 +59,7 @@ const validationSchema = yup.object({
 const ImportParticipantsModal = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const [uploading, setUploading] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [invalidEmails, setInvalidEmails] = useState<string[]>([]);
   const [validEmails, setValidEmails] = useState<string[]>([]);
   const addParticipants = useAddParticipants(studyId);
@@ -136,12 +136,12 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
     validationSchema.fields.file
       .validate(theFile)
       .then(async () => {
-        await importEmailsFormik.setFieldTouched("file", true);
-        await importEmailsFormik.setFieldValue("file", theFile);
+        await importEmailsFormik.setFieldTouched('file', true);
+        await importEmailsFormik.setFieldValue('file', theFile);
         setFileName(theFile.name);
         theFile.text().then(async (text: string) => {
-          await importEmailsFormik.setFieldTouched("emails", true);
-          importEmailsFormik.setFieldValue("emails", text);
+          await importEmailsFormik.setFieldTouched('emails', true);
+          importEmailsFormik.setFieldValue('emails', text);
           const newEmails: string[] = [];
           Papa.parse(text, {
             header: false,
@@ -165,7 +165,7 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
         });
       })
       .catch((err: yup.ValidationError) => {
-        importEmailsFormik.setFieldError("file", err.message);
+        importEmailsFormik.setFieldError('file', err.message);
       })
       .finally(() => {
         setUploading(false);

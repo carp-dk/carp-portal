@@ -1,11 +1,11 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useProtocols } from "@Utils/queries/protocols";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useProtocols } from '@Utils/queries/protocols';
 import {
   useSetStudyDetails,
   useSetStudyProtocol,
   useStudyDetails,
   useStudyStatus,
-} from "@Utils/queries/studies";
+} from '@Utils/queries/studies';
 import {
   FormLabel,
   MenuItem,
@@ -13,22 +13,22 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import LinkIcon from "@mui/icons-material/Link";
-import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router";
-import * as yup from "yup";
-import { formatDateTime } from "@Utils/utility";
-import StudySetupSkeleton from "../StudySetupSkeleton";
+} from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
+import { useFormik } from 'formik';
+import { useNavigate, useParams } from 'react-router';
+import * as yup from 'yup';
+import { formatDateTime } from '@Utils/utility';
+import StudySetupSkeleton from '../StudySetupSkeleton';
 import {
   Heading,
   ProtocolInformation,
   StyledCard,
   Subheading,
-} from "../styles";
+} from '../styles';
 
 const studyDetailsValidationSchema = yup.object({
-  name: yup.string().required("Name is required"),
+  name: yup.string().required('Name is required'),
   description: yup.string(),
 });
 
@@ -59,8 +59,8 @@ const StudyData = () => {
 
   const studyDetailsFormik = useFormik({
     initialValues: {
-      name: studyDetails?.name ?? "",
-      description: studyDetails?.description ?? "",
+      name: studyDetails?.name ?? '',
+      description: studyDetails?.description ?? '',
     },
     validationSchema: studyDetailsValidationSchema,
     onSubmit: (values) => {
@@ -74,9 +74,9 @@ const StudyData = () => {
 
   const studyProtocolFormik = useFormik({
     initialValues: {
-      protocolId: studyDetails?.protocolSnapshot
-        ? studyDetails.protocolSnapshot.id
-        : "",
+      protocolId: studyDetails?.protocolSnapshot ?
+        studyDetails.protocolSnapshot.id :
+        '',
     },
     validationSchema: studyProtocolValidationSchema,
     onSubmit: (values) => {

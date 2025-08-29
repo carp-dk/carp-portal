@@ -1,17 +1,17 @@
-import DragAndDrop from "@Components/DragAndDrop";
-import { useCurrentUser } from "@Utils/queries/auth";
-import { useCreateProtocol } from "@Utils/queries/protocols";
-import { FormLabel, Modal, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useEffect, useRef, useState } from "react";
-import * as yup from "yup";
+import DragAndDrop from '@Components/DragAndDrop';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { useCreateProtocol } from '@Utils/queries/protocols';
+import { FormLabel, Modal, TextField } from '@mui/material';
+import { useFormik } from 'formik';
+import { useEffect, useRef, useState } from 'react';
+import * as yup from 'yup';
 import {
   DefaultSerializer,
   getSerializer,
   Json,
   StudyProtocol,
   StudyProtocolSnapshot,
-} from "@carp-dk/client";
+} from '@carp-dk/client';
 import {
   CancelButton,
   DoneButton,
@@ -21,52 +21,52 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 interface Props {
   open: boolean;
   onClose: () => void;
 }
 
-const fileTypes = ["application/json"];
+const fileTypes = ['application/json'];
 
 const AddProtocolModal = ({ open, onClose }: Props) => {
   const nameRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
 
   const createProtocol = useCreateProtocol();
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const { data: user } = useCurrentUser();
 
   const validationSchema = yup.object({
-    name: yup.string().required("Name is required"),
+    name: yup.string().required('Name is required'),
     description: yup.string(),
     file: yup
       .mixed()
-      .required("File is required")
+      .required('File is required')
       .test(
-        "fileFormat",
-        "File must be a JSON file",
+        'fileFormat',
+        'File must be a JSON file',
         (value: File) => value && fileTypes.includes(value.type),
       )
-      .test("validJson", "Invalid JSON format", async (value: File) => {
+      .test('validJson', 'Invalid JSON format', async (value: File) => {
         if (!value) return false;
         const text = await value.text();
         try {
           JSON.parse(text);
           return true;
-        } catch (e) {
+        } catch {
           return false;
         }
       })
-      .test("validProtocol", "Invalid protocol format", async (value: File) => {
+      .test('validProtocol', 'Invalid protocol format', async (value: File) => {
         if (!value) return false;
         const text = await value.text();
         try {
           const json: Json = DefaultSerializer;
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
           const serializer = getSerializer(StudyProtocolSnapshot);
           const parsedJson = JSON.parse(text);
 
@@ -76,15 +76,15 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
           const modifiedText = JSON.stringify(parsedJson);
           json.decodeFromString(serializer, modifiedText);
           return true;
-        } catch (e) {
+        } catch {
           return false;
         }
       }),
   });
   const addProtocolFormik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       file: null,
     },
     validationSchema,
@@ -100,7 +100,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
           ...protocol,
           ownerId: user.id,
         },
-        version: "1.0",
+        version: '1.0',
       });
     },
   });
@@ -123,27 +123,27 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
     validationSchema.fields.file
       .validate(theFile)
       .then(async () => {
-        await addProtocolFormik.setFieldTouched("file", true);
-        await addProtocolFormik.setFieldValue("file", theFile);
+        await addProtocolFormik.setFieldTouched('file', true);
+        await addProtocolFormik.setFieldValue('file', theFile);
         theFile.text().then(async (text: string) => {
-          await addProtocolFormik.setFieldTouched("protocol", true);
-          addProtocolFormik.setFieldValue("protocol", text);
+          await addProtocolFormik.setFieldTouched('protocol', true);
+          addProtocolFormik.setFieldValue('protocol', text);
           // automatically populate the ``name`` field from the uploaded protocol if it's empty
           const parsed = JSON.parse(text) as StudyProtocol;
           setFileName(theFile.name);
-          if (addProtocolFormik.values.name === "") {
+          if (addProtocolFormik.values.name === '') {
             if (parsed.name) {
-              await addProtocolFormik.setFieldTouched("name", true);
-              await addProtocolFormik.setFieldValue("name", parsed.name);
+              await addProtocolFormik.setFieldTouched('name', true);
+              await addProtocolFormik.setFieldValue('name', parsed.name);
             } else {
               nameRef.current.focus();
             }
           }
-          if (addProtocolFormik.values.description === "") {
+          if (addProtocolFormik.values.description === '') {
             if (parsed.description) {
-              await addProtocolFormik.setFieldTouched("descrption", true);
+              await addProtocolFormik.setFieldTouched('descrption', true);
               await addProtocolFormik.setFieldValue(
-                "description",
+                'description',
                 parsed.description,
               );
             }
@@ -151,7 +151,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
         });
       })
       .catch((err: yup.ValidationError) => {
-        addProtocolFormik.setFieldError("file", err.message);
+        addProtocolFormik.setFieldError('file', err.message);
       })
       .finally(() => {
         setUploading(false);

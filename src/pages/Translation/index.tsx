@@ -1,24 +1,24 @@
-import { getCountry, getFlag } from "@Assets/languageMap";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import StudyHeader from "@Components/StudyHeader";
-import { CarpDocument } from "@carp-dk/client";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { v4 as uuidv4 } from "uuid";
+import { getCountry, getFlag } from '@Assets/languageMap';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import StudyHeader from '@Components/StudyHeader';
+import { CarpDocument } from '@carp-dk/client';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { v4 as uuidv4 } from 'uuid';
 
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
 import {
   useDeleteTranslation,
   useStudyTranslations,
-} from "@Utils/queries/studies";
+} from '@Utils/queries/studies';
 import {
   formatDateTime,
   getRandomNumber,
   getUri,
   PageType,
-} from "@Utils/utility";
-import EditIcon from "@mui/icons-material/Edit";
+} from '@Utils/utility';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   IconButton,
   Skeleton,
@@ -28,11 +28,11 @@ import {
   TableContainer,
   TableHead,
   Tooltip,
-} from "@mui/material";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import AddTranslationModal from "./AddTranslationModal";
-import EditTranslationModal from "./EditTranslationModal";
+} from '@mui/material';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import AddTranslationModal from './AddTranslationModal';
+import EditTranslationModal from './EditTranslationModal';
 import {
   AddTranslationButton,
   CountryFlagIcon,
@@ -42,12 +42,12 @@ import {
   LanguageWrapper,
   StyledCard,
   StyledTableRow,
-} from "./styles";
+} from './styles';
 
 const Translations = () => {
   const { id: studyId } = useParams();
   const sectionName = {
-    name: "Translations",
+    name: 'Translations',
     uri: getUri(PageType.TRANSLATION),
   };
   const {
@@ -84,12 +84,12 @@ const Translations = () => {
     open: openDeleteConfirmationModal,
     onClose: () => setOpenDeleteConfirmationModal(false),
     onConfirm: handleDeleteTranslation,
-    title: "Delete translation",
+    title: 'Delete translation',
     description:
-      "The translation will be permanently deleted and will no longer appear on your Translations page.",
-    boldText: "You can not undo this action.",
-    checkboxLabel: "I'm sure I want to delete it",
-    actionButtonLabel: "Delete",
+      'The translation will be permanently deleted and will no longer appear on your Translations page.',
+    boldText: 'You can not undo this action.',
+    checkboxLabel: 'I\'m sure I want to delete it',
+    actionButtonLabel: 'Delete',
   };
 
   if (translationsError && translationsError.code !== 404) {
@@ -114,9 +114,9 @@ const Translations = () => {
         description="View this study's localization files"
       />
       <StyledCard>
-        <TableContainer sx={{ paddingX: "32px", height: "70vh" }}>
+        <TableContainer sx={{ paddingX: '32px', height: '70vh' }}>
           <Table
-            style={{ tableLayout: "fixed" }}
+            style={{ tableLayout: 'fixed' }}
             stickyHeader
             aria-label="sticky table"
           >
@@ -134,8 +134,8 @@ const Translations = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {translationsLoading
-                ? [1, 2, 3].map(() => {
+              {translationsLoading ?
+                  [1, 2, 3].map(() => {
                     return (
                       <StyledTableRow key={uuidv4()}>
                         <TableCell>
@@ -165,9 +165,8 @@ const Translations = () => {
                         </TableCell>
                       </StyledTableRow>
                     );
-                  })
-                : translations?.documents.map((translation: CarpDocument) => {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  }) :
+                  translations?.documents.map((translation: CarpDocument) => {
                     const CountryFlag = getFlag(translation.name);
                     return (
                       <StyledTableRow key={translation.id}>
@@ -176,7 +175,7 @@ const Translations = () => {
                             <CountryFlagIcon>
                               <CountryFlag selected="" onSelect={undefined} />
                             </CountryFlagIcon>
-                            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-call */}
+                            { }
                             <CountryLanguage>
                               {getCountry(translation.name)}
                             </CountryLanguage>
@@ -184,11 +183,11 @@ const Translations = () => {
                         </TableCell>
                         <TableCell>
                           {formatDateTime(translation.created_at) +
-                            (translation.updated_at !== translation.created_at
-                              ? ` (updated ${formatDateTime(
-                                  translation.updated_at,
-                                )})`
-                              : "")}
+                            (translation.updated_at !== translation.created_at ?
+                              ` (updated ${formatDateTime(
+                                translation.updated_at,
+                              )})` :
+                              '')}
                         </TableCell>
                         <TableCell>
                           <Tooltip title="Delete">

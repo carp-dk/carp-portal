@@ -1,5 +1,5 @@
-import { Divider } from "@mui/material";
-import StyledContainer from "./styles";
+import { Divider } from '@mui/material';
+import StyledContainer from './styles';
 
 const StyledDivider = () => {
   return (

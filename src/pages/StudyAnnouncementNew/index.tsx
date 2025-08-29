@@ -1,7 +1,7 @@
-import DragAndDrop from "@Components/DragAndDrop";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import StudyHeader from "@Components/StudyHeader";
-import { useCreateAnnouncement } from "@Utils/queries/studies";
+import DragAndDrop from '@Components/DragAndDrop';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import StudyHeader from '@Components/StudyHeader';
+import { useCreateAnnouncement } from '@Utils/queries/studies';
 import {
   CircularProgress,
   FormControl,
@@ -10,37 +10,36 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import { useFormik } from "formik";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
-import { MessageData, UUID } from "@carp-dk/client";
-import { getUri, PageType } from "@Utils/utility";
-import StudyAnnouncementPreview from "../../components/StudyAnnouncementPreview";
-import { StyledContainer } from "../Studies/StudiesSection/styles";
-import { ContainerRight, StyledButton, StyledCard } from "./styles";
+} from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
+import { MessageData, UUID } from '@carp-dk/client';
+import { getUri, PageType } from '@Utils/utility';
+import StudyAnnouncementPreview from '../../components/StudyAnnouncementPreview';
+import { StyledContainer } from '../Studies/StudiesSection/styles';
+import { ContainerRight, StyledButton, StyledCard } from './styles';
 
 const fileTypes = [
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "image/svg+xml",
-  "image/webp",
-  "image/bmp",
+  'image/png',
+  'image/jpeg',
+  'image/jpg',
+  'image/svg+xml',
+  'image/webp',
+  'image/bmp',
 ];
 
 const validationSchema = yup.object().shape({
-  title: yup.string().required("Title is required"),
+  title: yup.string().required('Title is required'),
   subTitle: yup.string(),
-  message: yup.string().required("Message is required"),
-  type: yup.string().required("Type is required"),
-  url: yup.string().test("is-url-valid", "URL is not valid", (value) => {
+  message: yup.string().required('Message is required'),
+  type: yup.string().required('Type is required'),
+  url: yup.string().test('is-url-valid', 'URL is not valid', (value) => {
     try {
       if (!value) return true;
 
-      // eslint-disable-next-line no-new
       new URL(value);
       return true;
     } catch {
@@ -51,11 +50,11 @@ const validationSchema = yup.object().shape({
     .mixed()
     .nullable()
     .test(
-      "fileFormat",
-      "File must be an image file",
+      'fileFormat',
+      'File must be an image file',
       (value: File) => !value || fileTypes.includes(value.type),
     )
-    .test("fileSize", "File must be smaller than 8MB", (value: File) => {
+    .test('fileSize', 'File must be smaller than 8MB', (value: File) => {
       if (!value) return true;
       const size = value.size / 1024 / 1024;
       return size < 8;
@@ -67,15 +66,15 @@ const StudyAnnouncementNew = () => {
   const createAnnouncement = useCreateAnnouncement();
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      subTitle: "",
-      message: "",
-      type: "",
-      url: "",
+      title: '',
+      subTitle: '',
+      message: '',
+      type: '',
+      url: '',
       image: null,
     },
     validationSchema,
@@ -87,7 +86,7 @@ const StudyAnnouncementNew = () => {
           title: values.title.trim(),
           sub_title: values.subTitle.trim(),
           message: values.message.trim(),
-          type: values.type as "announcement" | "article" | "news",
+          type: values.type as 'announcement' | 'article' | 'news',
           timestamp: new Date().toISOString(),
           image: values.image,
           url: values.url.trim(),
@@ -99,11 +98,11 @@ const StudyAnnouncementNew = () => {
 
   const handleChange = (theFile: File) => {
     if (!theFile) {
-      formik.setFieldValue("image", null);
+      formik.setFieldValue('image', null);
       return;
     }
     setUploading(true);
-    formik.setFieldValue("image", theFile);
+    formik.setFieldValue('image', theFile);
     setFileName(theFile.name);
     setUploading(false);
   };
@@ -119,15 +118,15 @@ const StudyAnnouncementNew = () => {
     <StudyPageLayout>
       <StudyHeader
         path={[
-          { name: "Announcement", uri: getUri(PageType.ANNOUNCEMENTS) },
+          { name: 'Announcement', uri: getUri(PageType.ANNOUNCEMENTS) },
           {
-            name: "New announcement",
+            name: 'New announcement',
             uri: getUri(PageType.EDIT_ANNOUNCEMENT),
           },
         ]}
         description="Create an announcement for this study"
       />
-      <StyledContainer sx={{ flexDirection: "row" }}>
+      <StyledContainer sx={{ flexDirection: 'row' }}>
         <StyledCard elevation={2} sx={{ flex: 0.66 }}>
           <form onSubmit={formik.handleSubmit}>
             <FormControl
@@ -213,16 +212,18 @@ const StudyAnnouncementNew = () => {
               onClick={() => formik.handleSubmit()}
               disabled={createAnnouncement.isPending}
             >
-              {createAnnouncement.isPending ? (
-                <CircularProgress size={16} />
-              ) : (
-                "Create announcement"
-              )}
+              {createAnnouncement.isPending ?
+                  (
+                    <CircularProgress size={16} />
+                  ) :
+                  (
+                    'Create announcement'
+                  )}
             </StyledButton>
           </form>
         </StyledCard>
         <ContainerRight>
-          <Typography variant="h2" mb={2} sx={{ textAlign: "center" }}>
+          <Typography variant="h2" mb={2} sx={{ textAlign: 'center' }}>
             Preview
           </Typography>
           <StyledCard elevation={2}>

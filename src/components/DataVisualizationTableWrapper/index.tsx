@@ -1,95 +1,110 @@
-import {Skeleton} from "@mui/material";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
+import { Skeleton } from '@mui/material';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
-    mapDataToChartData,
-    taskLabelColors,
-    toUTCDate
-} from "@Components/DataVisualizationTable/helper";
-import React from "react";
-import {LocalDate} from "@js-joda/core";
-import {useDataStreamsSummary} from "@Utils/queries/dataStreams";
-import {DataStreamScope, DataStreamSummaryRequest, DataStreamType} from "@carp-dk/client";
-import DataVisualizationTable from "@Components/DataVisualizationTable";
-import CarpAccordion from "@Components/CarpAccordion";
+  mapDataToChartData,
+  taskLabelColors,
+  toUTCDate,
+} from '@Components/DataVisualizationTable/helper';
+import React from 'react';
+import { LocalDate } from '@js-joda/core';
+import { useDataStreamsSummary } from '@Utils/queries/dataStreams';
+import { DataStreamScope, DataStreamSummaryRequest, DataStreamType } from '@carp-dk/client';
+import DataVisualizationTable from '@Components/DataVisualizationTable';
+import CarpAccordion from '@Components/CarpAccordion';
 
 export interface StackedBarChartWrapperProps {
-    deploymentId?: string;
-    headingColor: string;
-    participantId?: string;
-    scope: DataStreamScope;
-    studyId: string;
-    subtitle: string;
-    title: string;
-    type: DataStreamType;
-    legend: Object[];
+  deploymentId?: string;
+  headingColor: string;
+  participantId?: string;
+  scope: DataStreamScope;
+  studyId: string;
+  subtitle: string;
+  title: string;
+  type: DataStreamType;
+  legend: object[];
 }
 
 const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
-    const [toDate, setToDate] = React.useState(LocalDate.now());
-    const [expanded, setExpanded] = React.useState(true);
-    const fromDate = toDate.minusDays(13)
+  const [toDate, setToDate] = React.useState(LocalDate.now());
+  const [expanded, setExpanded] = React.useState(true);
+  const fromDate = toDate.minusDays(13);
 
-    const dataStreamSummaryRequest: DataStreamSummaryRequest = {
-        study_id: props.studyId,
-        deployment_id: props.deploymentId,
-        participant_id: props.participantId,
-        scope: props.scope,
-        type: props.type,
-        from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
-        to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
-    }
+  const dataStreamSummaryRequest: DataStreamSummaryRequest = {
+    study_id: props.studyId,
+    deployment_id: props.deploymentId,
+    participant_id: props.participantId,
+    scope: props.scope,
+    type: props.type,
+    from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
+    to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
+  };
 
-    const {data, isLoading, error,} = useDataStreamsSummary(dataStreamSummaryRequest);
+  const { data, isLoading, error } = useDataStreamsSummary(dataStreamSummaryRequest);
 
-    const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
+  const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
-    function handleLeftButtonClick() {
-        setToDate(prev => prev.minusDays(14));
-    }
+  function handleLeftButtonClick() {
+    setToDate((prev) => prev.minusDays(14));
+  }
 
-    function handleRightButtonClick() {
-        if (isToDateSetToTheCurrentDay) return;
+  function handleRightButtonClick() {
+    if (isToDateSetToTheCurrentDay) return;
 
-        const newToDate = toDate.plusDays(14);
-        const today = LocalDate.now();
+    const newToDate = toDate.plusDays(14);
+    const today = LocalDate.now();
 
-        setToDate(newToDate.isAfter(today) ? today : newToDate);
-    }
+    setToDate(newToDate.isAfter(today) ?
+      today :
+      newToDate);
+  }
 
-    if (error) {
-        return (
-            <CarpErrorCardComponent
-                message={"An error occurred while loading " + props.title + " tasks"}
-                error={error}
-            />
-        )
-    }
-
-    const heightOfLoadingSkeleton = 70 + 16 + (props.legend.length * 40);
-
-    if (isLoading) {
-        return (
-            <CarpAccordion titleColor={taskLabelColors[props.title]} title={props.title} description={props.subtitle}
-                           isExpanded={expanded}>
-                <Skeleton sx={{borderRadius: '10px'}} variant="rectangular" height={heightOfLoadingSkeleton}
-                          animation="wave"/>
-            </CarpAccordion>
-        );
-    }
-
-    const {mappedData} = mapDataToChartData(data);
-
+  if (error) {
     return (
-        <CarpAccordion titleColor={taskLabelColors[props.title]} title={props.title} description={props.subtitle}
-                       isExpanded={expanded}>
-            <DataVisualizationTable data={mappedData}
-                                    handleLeftButtonClick={handleLeftButtonClick}
-                                    handleRightButtonClick={handleRightButtonClick}
-                                    legend={props.legend}
-                                    isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
-            />
-        </CarpAccordion>
+      <CarpErrorCardComponent
+        message={'An error occurred while loading ' + props.title + ' tasks'}
+        error={error}
+      />
     );
+  }
+
+  const heightOfLoadingSkeleton = 70 + 16 + (props.legend.length * 40);
+
+  if (isLoading) {
+    return (
+      <CarpAccordion
+        titleColor={taskLabelColors[props.title]}
+        title={props.title}
+        description={props.subtitle}
+        isExpanded={expanded}
+      >
+        <Skeleton
+          sx={{ borderRadius: '10px' }}
+          variant="rectangular"
+          height={heightOfLoadingSkeleton}
+          animation="wave"
+        />
+      </CarpAccordion>
+    );
+  }
+
+  const { mappedData } = mapDataToChartData(data);
+
+  return (
+    <CarpAccordion
+      titleColor={taskLabelColors[props.title]}
+      title={props.title}
+      description={props.subtitle}
+      isExpanded={expanded}
+    >
+      <DataVisualizationTable
+        data={mappedData}
+        handleLeftButtonClick={handleLeftButtonClick}
+        handleRightButtonClick={handleRightButtonClick}
+        legend={props.legend}
+        isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
+      />
+    </CarpAccordion>
+  );
 };
 
 export default DataVisualizationTableWrapper;

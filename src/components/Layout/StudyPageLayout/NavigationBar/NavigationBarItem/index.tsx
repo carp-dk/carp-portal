@@ -1,7 +1,7 @@
-import { ListItem, ListItemText, Tooltip } from "@mui/material";
-import { ReactNode } from "react";
-import { useLocation } from "react-router-dom";
-import { StyledIcon, StyledListItemButton, StyledNavLink } from "./styles";
+import { ListItem, ListItemText, Tooltip } from '@mui/material';
+import { ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
+import { StyledIcon, StyledListItemButton, StyledNavLink } from './styles';
 
 type NavigationBarItemProps = {
   text: string;
@@ -20,13 +20,13 @@ const NavigationBarItem = ({
 }: NavigationBarItemProps) => {
   const location = useLocation();
   const children = (
-    <StyledNavLink to={path || ""}>
+    <StyledNavLink to={path || ''}>
       <ListItem disablePadding>
         <StyledListItemButton
           active={
-            exact
-              ? location.pathname === path
-              : location.pathname.startsWith(path)
+            exact ?
+              location.pathname === path :
+                location.pathname.startsWith(path)
           }
         >
           <StyledIcon>{icon}</StyledIcon>
@@ -36,13 +36,15 @@ const NavigationBarItem = ({
     </StyledNavLink>
   );
 
-  return showTooltip ? (
-    <Tooltip title={text} placement="right">
-      {children}
-    </Tooltip>
-  ) : (
-    children
-  );
+  return showTooltip ?
+      (
+        <Tooltip title={text} placement="right">
+          {children}
+        </Tooltip>
+      ) :
+      (
+        children
+      );
 };
 
 export default NavigationBarItem;

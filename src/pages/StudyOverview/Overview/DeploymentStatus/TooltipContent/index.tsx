@@ -1,32 +1,32 @@
-import { getDeploymentStatusColor } from "@Utils/utility";
-import { Typography } from "@mui/material";
-import { Stack } from "@mui/system";
+import { getDeploymentStatusColor } from '@Utils/utility';
+import { Typography } from '@mui/material';
+import { Stack } from '@mui/system';
 
 const TooltipContent = () => {
   return (
     <Stack direction="column" spacing="8px">
       <Typography variant="h5">
-        <span style={{ color: getDeploymentStatusColor("Invited") }}>
+        <span style={{ color: getDeploymentStatusColor('Invited') }}>
           Invited
         </span>
         : Indicates that the invited participants have not yet acted on the
         invitation.
       </Typography>
       <Typography variant="h5">
-        <span style={{ color: getDeploymentStatusColor("DeployingDevices") }}>
+        <span style={{ color: getDeploymentStatusColor('DeployingDevices') }}>
           Deploying
         </span>
         : Participants have started registering devices, but are remaining
         devices.
       </Typography>
       <Typography variant="h5">
-        <span style={{ color: getDeploymentStatusColor("Running") }}>
+        <span style={{ color: getDeploymentStatusColor('Running') }}>
           Running
         </span>
         : All the devices have been deployed and started the data collection.
       </Typography>
       <Typography variant="h5">
-        <span style={{ color: getDeploymentStatusColor("Stopped") }}>
+        <span style={{ color: getDeploymentStatusColor('Stopped') }}>
           Stopped
         </span>
         : The study deployment has been stopped and no more data will be

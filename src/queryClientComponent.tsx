@@ -1,11 +1,11 @@
-import carpApi from "@Utils/api/api";
-import { useSnackbar } from "@Utils/snackbar";
-import { getUser } from "@carp-dk/authentication-react";
-import { CarpServiceError } from "@carp-dk/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router";
+import carpApi from '@Utils/api/api';
+import { useSnackbar } from '@Utils/snackbar';
+import { getUser } from '@carp-dk/authentication-react';
+import { CarpServiceError } from '@carp-dk/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate } from 'react-router';
 
 let hasOngoingRefreshRequest = false;
 
@@ -30,7 +30,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
               failureCount === 0 &&
               ((error as unknown as CarpServiceError).code === 403 ||
                 (error as unknown as CarpServiceError).code === 401) &&
-              !hasOngoingRefreshRequest
+                !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;
 
@@ -41,19 +41,19 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                   if (!getUser()) {
                     queryClient.clear();
                     auth.signoutSilent();
-                    navigate("/", { replace: true });
+                    navigate('/', { replace: true });
 
                     return false;
                   }
                   carpApi.setAuthToken(getUser()?.access_token);
-                  queryClient.invalidateQueries({ refetchType: "active" });
+                  queryClient.invalidateQueries({ refetchType: 'active' });
                   return true;
                 })
                 .catch(() => {
                   // could not refresh token for some reason
                   queryClient.clear();
                   auth.signoutSilent();
-                  navigate("/", { replace: true });
+                  navigate('/', { replace: true });
 
                   return false;
                 })
@@ -66,17 +66,17 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             ) {
               // we already tried refreshing the token. the user really shouldn't be able to access this
               // throw them back to the homepage
-              setSnackbarError("You do not have access to this resource.");
-              navigate("/", { replace: true });
+              setSnackbarError('You do not have access to this resource.');
+              navigate('/', { replace: true });
             }
             if (
               failureCount === 1 &&
               (error as unknown as CarpServiceError).code === 401
             ) {
               setSnackbarError(
-                "You are not authorized to access this resource.",
+                'You are not authorized to access this resource.',
               );
-              navigate("/", { replace: true });
+              navigate('/', { replace: true });
             }
             return failureCount < 3;
           },

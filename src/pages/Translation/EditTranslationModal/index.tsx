@@ -1,12 +1,12 @@
-import { getCountry } from "@Assets/languageMap";
-import DragAndDrop from "@Components/DragAndDrop";
-import { ResourceData } from "@carp-dk/client";
-import { FormLabel, Modal } from "@mui/material";
-import { useUpdateTranslation } from "@Utils/queries/studies";
-import { useFormik } from "formik";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import * as yup from "yup";
+import { getCountry } from '@Assets/languageMap';
+import DragAndDrop from '@Components/DragAndDrop';
+import { ResourceData } from '@carp-dk/client';
+import { FormLabel, Modal } from '@mui/material';
+import { useUpdateTranslation } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -16,7 +16,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 interface Props {
   open: boolean;
@@ -27,30 +27,30 @@ interface Props {
 const validationSchema = yup.object({
   file: yup
     .mixed()
-    .required("File is required")
-    .test("fileSize", "File must be smaller than 8MB", (value: File) => {
+    .required('File is required')
+    .test('fileSize', 'File must be smaller than 8MB', (value: File) => {
       if (!value) return true;
       const size = value.size / 1024 / 1024;
       return size < 8;
     })
-    .test("validJson", "Invalid JSON format", async (value: File) => {
+    .test('validJson', 'Invalid JSON format', async (value: File) => {
       if (!value) return false;
       const text = await value.text();
       try {
         JSON.parse(text);
         return true;
-      } catch (e) {
+      } catch {
         return false;
       }
     }),
 });
 
-const fileTypes = ["application/json"];
+const fileTypes = ['application/json'];
 
 const EditTranslationModal = ({ open, onClose, translation }: Props) => {
   const { id: studyId } = useParams();
   const updateTranslation = useUpdateTranslation();
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const formik = useFormik({
@@ -61,7 +61,7 @@ const EditTranslationModal = ({ open, onClose, translation }: Props) => {
     onSubmit: async (values) => {
       const translationString = JSON.parse(
         await (values.file as File).text(),
-      ) as { [key: string]: any };
+      ) as { [key: string]: unknown };
       updateTranslation.mutate({
         studyId,
         translationId: translation.id as string,
@@ -91,12 +91,12 @@ const EditTranslationModal = ({ open, onClose, translation }: Props) => {
     validationSchema.fields.file
       .validate(theFile)
       .then(async () => {
-        await formik.setFieldTouched("file", true);
-        await formik.setFieldValue("file", theFile);
+        await formik.setFieldTouched('file', true);
+        await formik.setFieldValue('file', theFile);
         setFileName(theFile.name);
       })
       .catch((err: yup.ValidationError) => {
-        formik.setFieldError("file", err.message);
+        formik.setFieldError('file', err.message);
       })
       .finally(() => {
         setUploading(false);
@@ -114,8 +114,11 @@ const EditTranslationModal = ({ open, onClose, translation }: Props) => {
           Update Translation
         </ModalTitle>
         <ModalDescription variant="h5" id="modal-modal-description">
-          Provide a file to overwrite the{" "}
-          {getCountry(translation.name as string)} translation. The file must be
+          Provide a file to overwrite the
+          {' '}
+          {getCountry(translation.name as string)}
+          {' '}
+          translation. The file must be
           a JSON file.
         </ModalDescription>
         <ModalContainer>

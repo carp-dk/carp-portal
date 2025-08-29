@@ -1,4 +1,4 @@
-import { Tooltip } from "@mui/material";
+import { Tooltip } from '@mui/material';
 
 type Props = {
   title: string;

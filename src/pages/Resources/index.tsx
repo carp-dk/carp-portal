@@ -1,18 +1,18 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import StudyHeader from "@Components/StudyHeader";
-import { useDeleteResource, useStudyResources } from "@Utils/queries/studies";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import StudyHeader from '@Components/StudyHeader';
+import { useDeleteResource, useStudyResources } from '@Utils/queries/studies';
 import {
   formatDateTime,
   getRandomNumber,
   getUri,
   PageType,
-} from "@Utils/utility";
-import { CarpDocument } from "@carp-dk/client";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+} from '@Utils/utility';
+import { CarpDocument } from '@carp-dk/client';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   IconButton,
   Skeleton,
@@ -22,23 +22,23 @@ import {
   TableContainer,
   TableHead,
   Tooltip,
-} from "@mui/material";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import AddResourceModal from "./AddResourceModal";
-import EditResourceModal from "./EditResourceModal";
+} from '@mui/material';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import AddResourceModal from './AddResourceModal';
+import EditResourceModal from './EditResourceModal';
 import {
   AddResourceButton,
   HeaderTableCell,
   HeaderText,
   StyledCard,
   StyledTableRow,
-} from "./styles";
+} from './styles';
 
 const Resources = () => {
   const { id: studyId } = useParams();
-  const sectionNames = [{ name: "Resources", uri: getUri(PageType.RESOURCES) }];
+  const sectionNames = [{ name: 'Resources', uri: getUri(PageType.RESOURCES) }];
   const {
     data: resources,
     isLoading: resourcesLoading,
@@ -68,12 +68,12 @@ const Resources = () => {
     open: openDeleteConfirmationModal,
     onClose: () => setOpenDeleteConfirmationModal(false),
     onConfirm: handleDeleteResource,
-    title: "Delete resource",
+    title: 'Delete resource',
     description:
-      "The resource will be permanently deleted and will no longer appear on your Resources page.",
-    boldText: "You can not undo this action.",
-    checkboxLabel: "I'm sure I want to delete it",
-    actionButtonLabel: "Delete",
+      'The resource will be permanently deleted and will no longer appear on your Resources page.',
+    boldText: 'You can not undo this action.',
+    checkboxLabel: 'I\'m sure I want to delete it',
+    actionButtonLabel: 'Delete',
   };
 
   if (resourcesError && resourcesError.code !== 404) {
@@ -98,9 +98,9 @@ const Resources = () => {
         description="View files related to this study"
       />
       <StyledCard>
-        <TableContainer sx={{ paddingX: "32px", height: "70vh" }}>
+        <TableContainer sx={{ paddingX: '32px', height: '70vh' }}>
           <Table
-            style={{ tableLayout: "fixed" }}
+            style={{ tableLayout: 'fixed' }}
             stickyHeader
             aria-label="sticky table"
           >
@@ -118,8 +118,8 @@ const Resources = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {resourcesLoading
-                ? [1, 2, 3].map(() => (
+              {resourcesLoading ?
+                  [1, 2, 3].map(() => (
                     <StyledTableRow key={uuidv4()}>
                       <TableCell>
                         <Skeleton
@@ -142,17 +142,17 @@ const Resources = () => {
                         </IconButton>
                       </TableCell>
                     </StyledTableRow>
-                  ))
-                : resources?.documents.map((resource: CarpDocument) => (
+                  )) :
+                  resources?.documents.map((resource: CarpDocument) => (
                     <StyledTableRow key={resource.id}>
                       <TableCell>{resource.name}</TableCell>
                       <TableCell>
                         {formatDateTime(resource.created_at) +
-                          (resource.updated_at !== resource.created_at
-                            ? ` (updated ${formatDateTime(
-                                resource.updated_at,
-                              )})`
-                            : "")}
+                          (resource.updated_at !== resource.created_at ?
+                            ` (updated ${formatDateTime(
+                              resource.updated_at,
+                            )})` :
+                            '')}
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Delete">

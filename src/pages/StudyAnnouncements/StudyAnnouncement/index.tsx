@@ -1,15 +1,15 @@
-import StyledTooltip from "@Components/StyledTooltip";
-import { useDeleteStudyAnnouncement } from "@Utils/queries/studies";
-import { formatDate, getRandomNumber } from "@Utils/utility";
-import { MessageData } from "@carp-dk/client";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button, Collapse, IconButton, Skeleton } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DeletionPrompt from "../../../components/Dialogs/DeletionPrompt";
+import StyledTooltip from '@Components/StyledTooltip';
+import { useDeleteStudyAnnouncement } from '@Utils/queries/studies';
+import { formatDate, getRandomNumber } from '@Utils/utility';
+import { MessageData } from '@carp-dk/client';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Button, Collapse, IconButton, Skeleton } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DeletionPrompt from '../../../components/Dialogs/DeletionPrompt';
 import {
   AnnouncementActions,
   AnnouncementDate,
@@ -21,7 +21,7 @@ import {
   AnnouncementType,
   CollapseWrapper,
   StyledAlert,
-} from "./styles";
+} from './styles';
 
 type Props = {
   studyId: string;
@@ -78,8 +78,7 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
                 onClick={() =>
                   navigate(
                     `/studies/${studyId}/announcements/${announcementId}/edit`,
-                  )
-                }
+                  )}
               >
                 <EditIcon />
               </IconButton>
@@ -100,27 +99,37 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
             {announcement.sub_title}
           </AnnouncementSubtitle>
         )}
-        {announcement.message.length > 200 ? (
-          <CollapseWrapper>
-            <Collapse in={expanded} collapsedSize={186}>
+        {announcement.message.length > 200 ?
+            (
+              <CollapseWrapper>
+                <Collapse in={expanded} collapsedSize={186}>
+                  <AnnouncementMessage variant="body1">
+                    {announcement.message}
+                  </AnnouncementMessage>
+                </Collapse>
+                <Button
+                  onClick={handleExpandClick}
+                  startIcon={expanded ?
+                      <ExpandLessIcon /> :
+                      <ExpandMoreIcon />}
+                >
+                  {expanded ?
+                    'Show less' :
+                    'Show more'}
+                </Button>
+              </CollapseWrapper>
+            ) :
+            (
               <AnnouncementMessage variant="body1">
                 {announcement.message}
               </AnnouncementMessage>
-            </Collapse>
-            <Button
-              onClick={handleExpandClick}
-              startIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            >
-              {expanded ? "Show less" : "Show more"}
-            </Button>
-          </CollapseWrapper>
-        ) : (
-          <AnnouncementMessage variant="body1">
-            {announcement.message}
-          </AnnouncementMessage>
-        )}
+            )}
         {announcement.url && (
-          <Button>View more ({new URL(announcement.url).hostname})</Button>
+          <Button>
+            View more (
+            {new URL(announcement.url).hostname}
+            )
+          </Button>
         )}
       </AnnouncementLeft>
       <DeletionPrompt

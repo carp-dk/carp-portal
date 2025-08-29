@@ -1,6 +1,6 @@
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
-import { StudyOverview } from "@carp-dk/client";
-import { Grow, Skeleton } from "@mui/material";
+import { formatDateTime, getRandomNumber } from '@Utils/utility';
+import { StudyOverview } from '@carp-dk/client';
+import { Grow, Skeleton } from '@mui/material';
 import {
   Bottom,
   CardDescription,
@@ -11,12 +11,12 @@ import {
   StatusDotContainer,
   StyledCard,
   StyledStatusDot,
-} from "./styles";
+} from './styles';
 
 interface Props {
   onClick: () => void;
   study?: StudyOverview;
-  status?: "Live" | "Ready" | "Draft";
+  status?: 'Live' | 'Ready' | 'Draft';
   description?: string;
 }
 

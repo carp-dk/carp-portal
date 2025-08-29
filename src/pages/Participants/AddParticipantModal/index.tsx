@@ -1,9 +1,9 @@
-import { TabContext, TabPanel } from "@mui/lab";
-import { Modal, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
-import AddAnonymousParticipantsContent from "./AddAnonymousParticipantsContent";
-import AddParticipantContent from "./AddParticipantContent";
-import { ModalBox } from "./styles";
+import { TabContext, TabPanel } from '@mui/lab';
+import { Modal, Tab, Tabs } from '@mui/material';
+import { useState } from 'react';
+import AddAnonymousParticipantsContent from './AddAnonymousParticipantsContent';
+import AddParticipantContent from './AddParticipantContent';
+import { ModalBox } from './styles';
 
 type Props = {
   open: boolean;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const AddParticipantModal = ({ open, onClose }: Props) => {
-  const [value, setValue] = useState("Participant");
+  const [value, setValue] = useState('Participant');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);

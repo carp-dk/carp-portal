@@ -1,7 +1,7 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import { Skeleton } from "@mui/material";
-import { useCurrentUser } from "@Utils/queries/auth";
-import { getRandomNumber } from "@Utils/utility";
+import CopyButton from '@Components/Buttons/CopyButton';
+import { Skeleton } from '@mui/material';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { getRandomNumber } from '@Utils/utility';
 import {
   DataContainer,
   EmailText,
@@ -11,7 +11,7 @@ import {
   NameText,
   ProfilePicture,
   StyledContainer,
-} from "./styles";
+} from './styles';
 
 const BasicInfoSkeleton = () => {
   return (
@@ -49,9 +49,9 @@ const BasicInfo = () => {
     <StyledContainer>
       <ProfilePicture>
         <Initials>
-          {!currentUser.firstName || !currentUser.lastName
-            ? currentUser.role[0]
-            : `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
+          {!currentUser.firstName || !currentUser.lastName ?
+            currentUser.role[0] :
+            `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
         </Initials>
       </ProfilePicture>
       <DataContainer>

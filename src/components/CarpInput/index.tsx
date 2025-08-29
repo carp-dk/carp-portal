@@ -1,9 +1,9 @@
-import { InputLabelProps } from "@mui/material";
-import * as React from "react";
+import { InputLabelProps } from '@mui/material';
+import * as React from 'react';
 
-import { FormikProps } from "formik";
-import { useState } from "react";
-import StyledInput from "./styles";
+import { FormikProps } from 'formik';
+import { useState } from 'react';
+import StyledInput from './styles';
 
 interface FormikConfigProps {
   [key: string]: string;
@@ -17,7 +17,7 @@ interface Props {
   autoComplete?: string;
   formikConfig: FormikProps<FormikConfigProps>;
   rows?: number;
-  variant?: "standard" | "filled" | "outlined";
+  variant?: 'standard' | 'filled' | 'outlined';
   inputLabelProps?: InputLabelProps;
 }
 
@@ -37,10 +37,10 @@ const CarpInput = ({
   const handleAnimationStart = (
     event: React.AnimationEvent<HTMLInputElement>,
   ) => {
-    if (event.animationName === "mui-auto-fill") {
+    if (event.animationName === 'mui-auto-fill') {
       setIsAutoFilled(true);
-      const input = document.getElementById("myTextField");
-      if (input) input.dispatchEvent(new Event("blur"));
+      const input = document.getElementById('myTextField');
+      if (input) input.dispatchEvent(new Event('blur'));
     }
   };
   return (
@@ -48,8 +48,10 @@ const CarpInput = ({
       name={name as string}
       label={label}
       inputProps={{
-        "data-testid": rows ? "single-line-input" : "multi-line-input",
-        onAnimationStart: handleAnimationStart,
+        'data-testid': rows ?
+          'single-line-input' :
+          'multi-line-input',
+        'onAnimationStart': handleAnimationStart,
       }}
       id={name as string}
       placeholder={placeholder}
@@ -60,12 +62,12 @@ const CarpInput = ({
       fullWidth
       helperText={formikConfig.touched[name] && formikConfig.errors[name]}
       type={type}
-      variant={variant || "standard"}
+      variant={variant || 'standard'}
       autoComplete={autoComplete}
       rows={rows}
       multiline={!!rows}
       InputLabelProps={{
-        shrink: isAutoFilled || formikConfig.values[name] !== "",
+        shrink: isAutoFilled || formikConfig.values[name] !== '',
         ...inputLabelProps,
       }}
     />

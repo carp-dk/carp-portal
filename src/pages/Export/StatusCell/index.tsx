@@ -1,8 +1,8 @@
 // import { useParams } from "react-router-dom";
-import { Export } from "@carp-dk/client";
-import { Typography } from "@mui/material";
-import { MRT_Cell } from "material-react-table";
-import { StyledContainer, StyledStatusDot } from "./styles";
+import { Export } from '@carp-dk/client';
+import { Typography } from '@mui/material';
+import { MRT_Cell } from 'material-react-table';
+import { StyledContainer, StyledStatusDot } from './styles';
 
 type StatusCellProps = {
   cell: MRT_Cell<Export, unknown>;
@@ -10,19 +10,19 @@ type StatusCellProps = {
 
 const StatusCell = ({ cell }: StatusCellProps) => {
   const { status } = cell.row.original;
-  let statusText = "";
+  let statusText = '';
   switch (status) {
-    case "AVAILABLE":
-      statusText = "Created";
+    case 'AVAILABLE':
+      statusText = 'Created';
       break;
-    case "IN_PROGRESS":
-      statusText = "In progress";
+    case 'IN_PROGRESS':
+      statusText = 'In progress';
       break;
-    case "ERROR":
-      statusText = "Error";
+    case 'ERROR':
+      statusText = 'Error';
       break;
     default:
-      statusText = "Unknown";
+      statusText = 'Unknown';
   }
   return (
     <StyledContainer>

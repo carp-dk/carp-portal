@@ -4,11 +4,11 @@ import {
   opensans500,
   opensans700,
   opensans900,
-} from "@Assets/fonts";
-import { createTheme } from "@mui/material/styles";
-import { createStyled } from "@mui/system";
+} from '@Assets/fonts';
+import { createTheme } from '@mui/material/styles';
+import { createStyled } from '@mui/system';
 
-declare module "@mui/material/styles/createPalette" {
+declare module '@mui/material/styles/createPalette' {
   interface TypeText {
     primary: string;
     secondary: string;
@@ -56,7 +56,7 @@ declare module "@mui/material/styles/createPalette" {
   }
 }
 
-declare module "@mui/material/Typography" {
+declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {
     h1_web: true;
     h2_web: true;
@@ -66,7 +66,7 @@ declare module "@mui/material/Typography" {
   }
 }
 
-declare module "@mui/material/styles" {
+declare module '@mui/material/styles' {
   interface TypographyVariants {
     h1_web: React.CSSProperties;
     h2_web: React.CSSProperties;
@@ -86,58 +86,58 @@ declare module "@mui/material/styles" {
 
 export const customPalette = {
   primary: {
-    main: "#006398",
-    dark: "#003352",
-    light: "#CDE5FF",
+    main: '#006398',
+    dark: '#003352',
+    light: '#CDE5FF',
   },
   secondary: {
-    main: "#5E7F97",
-    dark: "#233240",
-    light: "#D6E8F4",
+    main: '#5E7F97',
+    dark: '#233240',
+    light: '#D6E8F4',
   },
   error: {
-    main: "#BA1A1A",
+    main: '#BA1A1A',
   },
   info: {
-    main: "#5E7F97",
+    main: '#5E7F97',
   },
   grey: {
-    100: "#FCFCFF",
-    200: "#E3E3E4",
-    300: "#AAABAE",
-    500: "#76777A",
-    700: "#45474A",
-    900: "#1A1C1E",
+    100: '#FCFCFF',
+    200: '#E3E3E4',
+    300: '#AAABAE',
+    500: '#76777A',
+    700: '#45474A',
+    900: '#1A1C1E',
   },
   text: {
-    heading: "#001D32",
-    primary: "#233240",
-    secondary: "#374953",
-    disabled: "#979799",
+    heading: '#001D32',
+    primary: '#233240',
+    secondary: '#374953',
+    disabled: '#979799',
   },
   background: {
-    default: "#FCFCFF",
+    default: '#FCFCFF',
   },
   success: {
-    main: "#00A300",
+    main: '#00A300',
   },
   warning: {
-    main: "#EE9926",
+    main: '#EE9926',
   },
   company: {
-    isotype: "#D61D41",
-    logotype: "#006398",
+    isotype: '#D61D41',
+    logotype: '#006398',
   },
   status: {
-    purple: "#67587A",
-    yellow: "#EE9926",
-    green: "#00A300",
-    red: "#BA1A1A",
-    grey: "#76777A",
-    blue: "#006398",
+    purple: '#67587A',
+    yellow: '#EE9926',
+    green: '#00A300',
+    red: '#BA1A1A',
+    grey: '#76777A',
+    blue: '#006398',
   },
   drawer: {
-    active: "#E7F2FF",
+    active: '#E7F2FF',
   },
 };
 
@@ -145,24 +145,24 @@ export const themeInstance = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        body: {
-          fontSize: "0.875rem",
-          lineHeight: "1.25rem",
+        'body': {
+          fontSize: '0.875rem',
+          lineHeight: '1.25rem',
           fontWeight: 300,
         },
-        "@font-face": opensans100,
-        fallbacks: [
+        '@font-face': opensans100,
+        'fallbacks': [
           {
-            "@font-face": opensans300,
+            '@font-face': opensans300,
           },
           {
-            "@font-face": opensans500,
+            '@font-face': opensans500,
           },
           {
-            "@font-face": opensans700,
+            '@font-face': opensans700,
           },
           {
-            "@font-face": opensans900,
+            '@font-face': opensans900,
           },
         ],
       },
@@ -170,13 +170,13 @@ export const themeInstance = createTheme({
     MuiListItemText: {
       styleOverrides: {
         root: {
-          color: "white",
+          color: 'white',
         },
       },
     },
     MuiLink: {
       defaultProps: {
-        underline: "hover",
+        underline: 'hover',
       },
     },
     MuiBackdrop: {
@@ -189,14 +189,14 @@ export const themeInstance = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          fontSize: "1rem",
-          lineHeight: "1.5rem",
-          fontWeight: 700,
-          marginTop: 26,
-          marginBottom: 8,
-          display: "block",
-          "&.Mui-disabled": {
-            opacity: "0.5",
+          'fontSize': '1rem',
+          'lineHeight': '1.5rem',
+          'fontWeight': 700,
+          'marginTop': 26,
+          'marginBottom': 8,
+          'display': 'block',
+          '&.Mui-disabled': {
+            opacity: '0.5',
           },
         },
       },
@@ -204,7 +204,7 @@ export const themeInstance = createTheme({
     MuiFormControlLabel: {
       styleOverrides: {
         root: {
-          "& > .MuiFormControlLabel-label": {
+          '& > .MuiFormControlLabel-label': {
             fontWeight: 300,
           },
         },
@@ -213,9 +213,9 @@ export const themeInstance = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          marginTop: "inherit",
-          marginBottom: "inherit",
-          display: "inherit",
+          marginTop: 'inherit',
+          marginBottom: 'inherit',
+          display: 'inherit',
           fontWeight: 300,
         },
       },
@@ -230,10 +230,10 @@ export const themeInstance = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          "&.MuiButtonBase-root": {
+          '&.MuiButtonBase-root': {
             backgroundColor: customPalette.grey[100],
           },
-          "& fieldset": {
+          '& fieldset': {
             borderRadius: 8,
           },
         },
@@ -243,88 +243,88 @@ export const themeInstance = createTheme({
       styleOverrides: {
         root: {
           borderColor: customPalette.grey[700],
-          backgroundColor: "#fff",
+          backgroundColor: '#fff',
         },
       },
     },
     MuiTypography: {
       defaultProps: {
         variantMapping: {
-          h1_web: "h1",
-          h2_web: "h2",
-          h3_web: "h3",
-          h4_web: "h4",
-          h5_web: "h5",
+          h1_web: 'h1',
+          h2_web: 'h2',
+          h3_web: 'h3',
+          h4_web: 'h4',
+          h5_web: 'h5',
         },
       },
     },
   },
   typography: {
-    fontFamily: "Open Sans",
+    fontFamily: 'Open Sans',
     h1: {
-      fontSize: "2.8125rem",
-      lineHeight: "3.25rem",
+      fontSize: '2.8125rem',
+      lineHeight: '3.25rem',
       fontWeight: 700,
     },
     h2: {
-      fontSize: "1.5rem",
-      lineHeight: "2rem",
+      fontSize: '1.5rem',
+      lineHeight: '2rem',
       fontWeight: 700,
     },
     h3: {
-      fontSize: "1.375rem",
-      lineHeight: "1.75rem",
+      fontSize: '1.375rem',
+      lineHeight: '1.75rem',
       fontWeight: 700,
     },
     h4: {
-      fontSize: "1rem",
-      lineHeight: "1.5rem",
+      fontSize: '1rem',
+      lineHeight: '1.5rem',
       fontWeight: 700,
     },
     h5: {
-      fontSize: "0.875rem",
-      lineHeight: "1.25rem",
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
       fontWeight: 700,
     },
     h6: {
-      fontSize: "0.75rem",
-      lineHeight: "1rem",
+      fontSize: '0.75rem',
+      lineHeight: '1rem',
       fontWeight: 700,
-      letterSpacing: "0.5px",
+      letterSpacing: '0.5px',
     },
     body2: {
-      fontSize: "0.875rem",
-      lineHeight: "1.25rem",
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
       fontWeight: 700,
     },
     button: {
-      fontSize: "0.875rem",
-      lineHeight: "1.25rem",
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
       fontWeight: 700,
     },
     h1_web: {
-      fontSize: "2.8125rem",
-      lineHeight: "3.25rem",
+      fontSize: '2.8125rem',
+      lineHeight: '3.25rem',
       fontWeight: 700,
     },
     h2_web: {
-      fontSize: "1.375rem",
-      lineHeight: "1.75rem",
+      fontSize: '1.375rem',
+      lineHeight: '1.75rem',
       fontWeight: 700,
     },
     h3_web: {
-      fontSize: "1.375rem",
-      lineHeight: "1.75rem",
+      fontSize: '1.375rem',
+      lineHeight: '1.75rem',
       fontWeight: 300,
     },
     h4_web: {
-      fontSize: "1rem",
-      lineHeight: "1.75rem",
+      fontSize: '1rem',
+      lineHeight: '1.75rem',
       fontWeight: 300,
     },
     h5_web: {
-      fontSize: "1rem",
-      lineHeight: "1.5rem",
+      fontSize: '1rem',
+      lineHeight: '1.5rem',
       fontWeight: 300,
     },
   },

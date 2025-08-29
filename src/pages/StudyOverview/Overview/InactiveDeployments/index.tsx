@@ -1,5 +1,5 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useInactiveDeployments } from "@Utils/queries/participants";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useInactiveDeployments } from '@Utils/queries/participants';
 import {
   MenuItem,
   Table,
@@ -7,12 +7,12 @@ import {
   TableContainer,
   TableHead,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Stack } from "@mui/system";
-import { formatDateTime } from "@Utils/utility";
-import LoadingSkeleton from "../LoadingSkeleton";
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Stack } from '@mui/system';
+import { formatDateTime } from '@Utils/utility';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   HeaderTableCell,
   HeaderText,
@@ -23,18 +23,18 @@ import {
   StyledTableCell,
   StyledTableRow,
   StyledTitle,
-} from "./styles";
+} from './styles';
 
 const InactiveDeployments = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
   const menuItems = [
-    { value: 24, label: "24 h" },
-    { value: 48, label: "48 h" },
-    { value: 168, label: "1 week" },
-    { value: 336, label: "2 weeks" },
-    { value: 730, label: "1 month" },
-    { value: 4380, label: "6 months" },
+    { value: 24, label: '24 h' },
+    { value: 48, label: '48 h' },
+    { value: 168, label: '1 week' },
+    { value: 336, label: '2 weeks' },
+    { value: 730, label: '1 month' },
+    { value: 4380, label: '6 months' },
   ];
 
   const [lastUpdateTime, setLastUpdateTime] = useState<number>(
@@ -69,8 +69,8 @@ const InactiveDeployments = () => {
           MenuProps={{
             PaperProps: {
               sx: {
-                width: "116px",
-                borderRadius: "16px",
+                width: '116px',
+                borderRadius: '16px',
               },
             },
           }}
@@ -96,9 +96,9 @@ const InactiveDeployments = () => {
         selected. Select the Deployments ID for further information or to send a
         reminder.
       </StyledDescription>
-      <TableContainer sx={{ paddingLeft: "4px", paddingRight: "16px" }}>
+      <TableContainer sx={{ paddingLeft: '4px', paddingRight: '16px' }}>
         <Table
-          style={{ tableLayout: "fixed" }}
+          style={{ tableLayout: 'fixed' }}
           stickyHeader
           aria-label="sticky table"
         >
@@ -118,8 +118,7 @@ const InactiveDeployments = () => {
                 onClick={() =>
                   navigate(
                     `/studies/${studyId}/deployments/${participant.deploymentId}`,
-                  )
-                }
+                  )}
                 key={participant.deploymentId as unknown as string}
               >
                 <StyledTableCell>
@@ -131,7 +130,7 @@ const InactiveDeployments = () => {
                   <SecondaryCellText variant="h5">
                     {formatDateTime(
                       participant.dateOfLastDataUpload.toString(),
-                      { year: "numeric", month: "numeric", day: "numeric" },
+                      { year: 'numeric', month: 'numeric', day: 'numeric' },
                     )}
                   </SecondaryCellText>
                 </StyledTableCell>

@@ -1,5 +1,5 @@
-import { CircularProgress } from "@mui/material";
-import StyledAuthActionButton from "./styles";
+import { CircularProgress } from '@mui/material';
+import StyledAuthActionButton from './styles';
 
 type Props = {
   text: string;
@@ -14,7 +14,9 @@ const AuthActionButton = ({ text, loading }: Props) => {
       disabled={loading}
       type="submit"
     >
-      {loading ? <CircularProgress size={24} /> : text}
+      {loading ?
+          <CircularProgress size={24} /> :
+        text}
     </StyledAuthActionButton>
   );
 };

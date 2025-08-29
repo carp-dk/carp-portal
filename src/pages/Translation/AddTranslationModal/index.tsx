@@ -1,6 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { languageLabels } from "@Assets/languageMap";
-import DragAndDrop from "@Components/DragAndDrop";
+import { languageLabels } from '@Assets/languageMap';
+import DragAndDrop from '@Components/DragAndDrop';
 import {
   Autocomplete,
   FormLabel,
@@ -9,13 +8,13 @@ import {
   Modal,
   Stack,
   TextField,
-} from "@mui/material";
-import { useCreateTranslation } from "@Utils/queries/studies";
-import { useFormik } from "formik";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import * as yup from "yup";
-import * as flags from "react-flags-select";
+} from '@mui/material';
+import { useCreateTranslation } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
+import * as flags from 'react-flags-select';
 import {
   CancelButton,
   DoneButton,
@@ -25,7 +24,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 interface Props {
   open: boolean;
@@ -33,51 +32,51 @@ interface Props {
 }
 
 const validationSchema = yup.object({
-  language: yup.string().required("Language is required"),
+  language: yup.string().required('Language is required'),
   file: yup
     .mixed()
-    .required("File is required")
-    .test("fileSize", "File must be smaller than 8MB", (value: File) => {
+    .required('File is required')
+    .test('fileSize', 'File must be smaller than 8MB', (value: File) => {
       if (!value) return true;
       const size = value.size / 1024 / 1024;
       return size < 8;
     })
-    .test("validJson", "Invalid JSON format", async (value: File) => {
+    .test('validJson', 'Invalid JSON format', async (value: File) => {
       if (!value) return false;
       const text = await value.text();
       try {
         JSON.parse(text);
         return true;
-      } catch (e) {
+      } catch {
         return false;
       }
     }),
 });
 
-const fileTypes = ["application/json"];
+const fileTypes = ['application/json'];
 
 const AddTranslationModal = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const createTranslation = useCreateTranslation();
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      language: "",
+      language: '',
       file: null,
     },
     validationSchema,
     onSubmit: async (values) => {
       const translationString = JSON.parse(
         await (values.file as File).text(),
-      ) as { [key: string]: any };
+      ) as { [key: string]: unknown };
       createTranslation.mutate({
         studyId,
         translation: {
           ...translationString,
         },
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+
         name: languageLabels[formik.values.language].secondary,
       });
     },
@@ -101,13 +100,13 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
     validationSchema.fields.file
       .validate(theFile)
       .then(async () => {
-        await formik.setFieldTouched("file", true);
-        await formik.setFieldValue("file", theFile);
+        await formik.setFieldTouched('file', true);
+        await formik.setFieldValue('file', theFile);
         setFileName(theFile.name);
-        await formik.setFieldTouched("language", true);
+        await formik.setFieldTouched('language', true);
       })
       .catch((err: yup.ValidationError) => {
-        formik.setFieldError("file", err.message);
+        formik.setFieldError('file', err.message);
       })
       .finally(() => {
         setUploading(false);
@@ -137,7 +136,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
               options={Object.keys(languageLabels)}
               value={formik.values.language || null}
               onChange={(_, newValue) => {
-                formik.setFieldValue("language", newValue);
+                formik.setFieldValue('language', newValue);
               }}
               filterOptions={(options, params) => {
                 return options.filter((option) =>
@@ -151,8 +150,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
               getOptionLabel={(option) =>
                 `${languageLabels[option].primary} ${
                   languageLabels[option].secondary
-                }`
-              }
+                }`}
               renderInput={(params) => {
                 if (!formik.values.language) {
                   return (
@@ -170,14 +168,13 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                 if (countryCode in flags) {
                   CountryFlag = flags[countryCode];
                 } else {
-                  CountryFlag = "div";
+                  CountryFlag = 'div';
                 }
                 return (
                   <TextField
                     {...params}
                     placeholder="Select Language"
                     size="small"
-                    // eslint-disable-next-line react/no-unstable-nested-components
                     InputProps={{
                       ...params.InputProps,
                       startAdornment: (
@@ -190,7 +187,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                             selected=""
                             onSelect={undefined}
                             width={25}
-                            style={{ marginLeft: "10px" }}
+                            style={{ marginLeft: '10px' }}
                           />
                         </InputAdornment>
                       ),
@@ -199,7 +196,6 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                 );
               }}
               renderOption={(props, option) => {
-                // eslint-disable-next-line react/prop-types
                 const { key, ...optionProps } = props;
                 const countryCode =
                   option[0].toUpperCase() + option[1].toLowerCase();
@@ -207,7 +203,7 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                 if (countryCode in flags) {
                   CountryFlag = flags[countryCode];
                 } else {
-                  CountryFlag = "div";
+                  CountryFlag = 'div';
                 }
                 return (
                   <MenuItem key={key} {...optionProps}>

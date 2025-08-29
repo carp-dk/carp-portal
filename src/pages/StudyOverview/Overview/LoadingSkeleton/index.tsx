@@ -1,6 +1,6 @@
-import { Skeleton, Typography } from "@mui/material";
-import { getRandomNumber } from "@Utils/utility";
-import { StyledCard, StyledDescription, Top } from "./styles";
+import { Skeleton, Typography } from '@mui/material';
+import { getRandomNumber } from '@Utils/utility';
+import { StyledCard, StyledDescription, Top } from './styles';
 
 const LoadingSkeleton = () => {
   return (

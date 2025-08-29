@@ -1,90 +1,90 @@
-import { Button, Typography } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Button, Typography } from '@mui/material';
+import { styled } from '@Utils/theme';
 
-export const StyledContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: 16,
-  "& label": {
+export const StyledContainer = styled('div')(({ theme }) => ({
+  'display': 'flex',
+  'flexDirection': 'column',
+  'gap': 16,
+  '& label': {
     color: theme.palette.text.primary,
     fontWeight: 600,
   },
-  "& table": {
-    borderSpacing: "0 4px",
+  '& table': {
+    borderSpacing: '0 4px',
   },
-  "& .MuiPaper-root": {
-    backgroundColor: "#fff",
+  '& .MuiPaper-root': {
+    backgroundColor: '#fff',
     borderRadius: 16,
   },
-  "& > .MuiPaper-root": {
-    padding: "20px 40px 0 40px",
+  '& > .MuiPaper-root': {
+    padding: '20px 40px 0 40px',
   },
-  "& .MuiTableContainer-root table": {
+  '& .MuiTableContainer-root table': {
     borderBottom: `1px solid ${theme.palette.grey[500]}`,
   },
-  "& td": {
-    border: "none",
-    backgroundColor: "#fff",
+  '& td': {
+    border: 'none',
+    backgroundColor: '#fff',
   },
-  "& MuiTableRow-root:hover td": {
-    backgroundColor: "#fff",
+  '& MuiTableRow-root:hover td': {
+    backgroundColor: '#fff',
   },
-  "& tr > td:first-of-type": {
+  '& tr > td:first-of-type': {
     color: theme.palette.primary.main,
   },
-  "& thead tr": {
-    boxShadow: "none",
+  '& thead tr': {
+    boxShadow: 'none',
   },
-  "& th": {
-    backgroundColor: "#fff",
-    verticalAlign: "middle",
+  '& th': {
+    backgroundColor: '#fff',
+    verticalAlign: 'middle',
   },
-  "& tfoot": {
-    outline: "none",
+  '& tfoot': {
+    outline: 'none',
   },
-  "& .MuiTableCell-head": {
+  '& .MuiTableCell-head': {
     borderBottom: `1px solid ${theme.palette.grey[500]}`,
   },
-  "& .MuiTableCell-root": {
+  '& .MuiTableCell-root': {
     padding: 0,
   },
-  "& tr.MuiTableRow-root": {
+  '& tr.MuiTableRow-root': {
     height: 40,
   },
-  "& .MuiBox-root": {
-    backgroundColor: "#fff",
-    boxShadow: "none",
+  '& .MuiBox-root': {
+    backgroundColor: '#fff',
+    boxShadow: 'none',
   },
-  "& .MuiPaper-root > div.MuiBox-root:last-of-type > div > div": {
-    width: "100%",
+  '& .MuiPaper-root > div.MuiBox-root:last-of-type > div > div': {
+    width: '100%',
     paddingLeft: 8,
-    flexDirection: "row-reverse",
+    flexDirection: 'row-reverse',
   },
-  "& table th:first-of-type": {
+  '& table th:first-of-type': {
     paddingLeft: 16,
   },
-  "& table td:first-of-type": {
+  '& table td:first-of-type': {
     paddingLeft: 16,
   },
-  "& th:last-of-type div": {
-    alignItems: "center",
-    justifyContent: "center",
+  '& th:last-of-type div': {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  "& th:nth-of-type(4) div": {
-    justifyContent: "center",
-    alignItems: "center",
+  '& th:nth-of-type(4) div': {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  "& td:last-of-type": {
-    textAlign: "center",
+  '& td:last-of-type': {
+    textAlign: 'center',
   },
-  "& td:nth-of-type(4)": {
-    textAlign: "center",
+  '& td:nth-of-type(4)': {
+    textAlign: 'center',
   },
 }));
 
 export const CreateSummaryButton = styled(Button)(({ theme }) => ({
-  alignSelf: "flex-end",
-  textTransform: "none",
+  alignSelf: 'flex-end',
+  textTransform: 'none',
   borderRadius: 16,
   height: 36,
   borderColor: theme.palette.grey[700],
@@ -92,5 +92,5 @@ export const CreateSummaryButton = styled(Button)(({ theme }) => ({
 
 export const DeletingWarning = styled(Typography)(({ theme }) => ({
   color: theme.palette.error.main,
-  alignSelf: "center",
+  alignSelf: 'center',
 }));

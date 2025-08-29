@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-import { StyledDescription, StyledLink } from "./styles";
+import { v4 as uuidv4 } from 'uuid';
+import { StyledDescription, StyledLink } from './styles';
 
 type Props = {
   siteUnavailableDescription: string[];

@@ -1,16 +1,16 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
-import SendReminderModal from "@Components/SendReminderModal";
-import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import NotificationsIcon from "@mui/icons-material/NotificationsSharp";
+import CopyButton from '@Components/Buttons/CopyButton';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
+import SendReminderModal from '@Components/SendReminderModal';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import NotificationsIcon from '@mui/icons-material/NotificationsSharp';
 
-import { getUser } from "@carp-dk/authentication-react";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { useTranslation } from "react-i18next";
-import { ParticipantDataInput } from "@carp-dk/client";
+import { getUser } from '@carp-dk/authentication-react';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { useTranslation } from 'react-i18next';
+import { ParticipantDataInput } from '@carp-dk/client';
 import {
   AccountIcon,
   Email,
@@ -23,8 +23,8 @@ import {
   SecondaryText,
   StyledCard,
   StyledDivider,
-} from "./styles";
-import LoadingSkeleton from "../LoadingSkeleton";
+} from './styles';
+import LoadingSkeleton from '../LoadingSkeleton';
 
 const BasicInfo = () => {
   const { t } = useTranslation();
@@ -64,18 +64,22 @@ const BasicInfo = () => {
     if (participant && participant.role) {
       return participant.role[0];
     }
-    return "?";
+    return '?';
   }, [participant]);
 
   const name = useMemo(() => {
-    if (!participant) return "";
-    return participant.email ? (
-      <Name variant="h3">
-        {participant.firstName ?? ""} {participant.lastName ?? ""}
-      </Name>
-    ) : (
-      <GeneratedAccountLabel />
-    );
+    if (!participant) return '';
+    return participant.email ?
+        (
+          <Name variant="h3">
+            {participant.firstName ?? ''}
+            {' '}
+            {participant.lastName ?? ''}
+          </Name>
+        ) :
+        (
+          <GeneratedAccountLabel />
+        );
   }, [participant]);
 
   const isGeneratedAccount = !participant?.email;
@@ -116,7 +120,7 @@ const BasicInfo = () => {
         {!isGeneratedAccount && (
           <RemindersContainer onClick={() => setOpen(true)}>
             <ReminderText variant="h6">
-              {t("participant:basic_info.send_reminder")}
+              {t('participant:basic_info.send_reminder')}
             </ReminderText>
             <NotificationsIcon fontSize="small" color="primary" />
           </RemindersContainer>
@@ -124,7 +128,7 @@ const BasicInfo = () => {
       </Left>
       <Right>
         <SecondaryText variant="h5">
-          {t("common:participant_id", { participantId })}
+          {t('common:participant_id', { participantId })}
         </SecondaryText>
         <CopyButton textToCopy={participantId} idType="Account" />
       </Right>
@@ -133,9 +137,9 @@ const BasicInfo = () => {
         open={open}
         to={participant.email}
         initials={initials}
-        researcherEmail={getUser()?.profile?.email || ""}
-        researcherName={getUser()?.profile?.name || ""}
-        studyName={studyDetailsData?.name || ""}
+        researcherEmail={getUser()?.profile?.email || ''}
+        researcherName={getUser()?.profile?.name || ''}
+        studyName={studyDetailsData?.name || ''}
       />
     </StyledCard>
   );

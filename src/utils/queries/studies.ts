@@ -1,5 +1,5 @@
-import carpApi from "@Utils/api/api";
-import { useSnackbar } from "@Utils/snackbar";
+import carpApi from '@Utils/api/api';
+import { useSnackbar } from '@Utils/snackbar';
 
 import {
   CarpServiceError,
@@ -13,17 +13,17 @@ import {
   StudyProtocolSnapshot,
   StudyDetails,
   StudyStatus,
-} from "@carp-dk/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCurrentUser } from "./auth";
+} from '@carp-dk/client';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCurrentUser } from './auth';
 
 export const useStudies = () => {
   const { data: currentUser, isLoading: isCurrentUserLoading } =
     useCurrentUser();
 
-  return useQuery<StudyOverview[], CarpServiceError, StudyOverview[], any>({
+  return useQuery<StudyOverview[], CarpServiceError>({
     queryFn: () => carpApi.studies.getOverview(),
-    queryKey: ["studies"],
+    queryKey: ['studies'],
     enabled: currentUser !== undefined && !isCurrentUserLoading,
   });
 };
@@ -54,32 +54,32 @@ export const useSetStudyDescription = (
     },
     onMutate: async (params) => {
       await queryClient.cancelQueries({
-        queryKey: ["studyDetails", params.studyId],
+        queryKey: ['studyDetails', params.studyId],
       });
       const previousValue: StudyDetails = queryClient.getQueryData([
-        "studyDetails",
+        'studyDetails',
         params.studyId,
       ]);
-      queryClient.setQueryData(["studyDetails", params.studyId], {
+      queryClient.setQueryData(['studyDetails', params.studyId], {
         ...previousValue,
         description: params.description,
       });
       return { previousValue };
     },
     onSuccess: (data) => {
-      setSnackbarSuccess("Study description updated");
+      setSnackbarSuccess('Study description updated');
       setDescription(data.description);
     },
     onSettled: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["studyDetails", data.studyId],
+        queryKey: ['studyDetails', data.studyId],
       });
       setInEdit(false);
     },
     onError: (error: CarpServiceError, params, context) => {
       setSnackbarError(error.message);
       queryClient.setQueryData(
-        ["studyDetails", params.studyId],
+        ['studyDetails', params.studyId],
         context.previousValue,
       );
       setDescription(context.previousValue.description);
@@ -121,12 +121,12 @@ export const useSetStudyDetails = () => {
         description: string;
       },
     ) => {
-      setSnackbarSuccess("Updated study details!");
+      setSnackbarSuccess('Updated study details!');
       queryClient.invalidateQueries({
-        queryKey: ["studyDetails", studyId],
+        queryKey: ['studyDetails', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["studyStatus", studyId],
+        queryKey: ['studyStatus', studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -155,10 +155,10 @@ export const useCreateStudy = () => {
       });
     },
     onSuccess: () => {
-      setSnackbarSuccess("Study created successfuly");
+      setSnackbarSuccess('Study created successfuly');
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["studies"] });
+      queryClient.invalidateQueries({ queryKey: ['studies'] });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -167,26 +167,26 @@ export const useCreateStudy = () => {
 };
 
 export const useStudyStatus = (studyId: string) => {
-  return useQuery<StudyStatus, CarpServiceError, StudyStatus, any>({
+  return useQuery<StudyStatus, CarpServiceError>({
     queryFn: () => carpApi.study.getStatus({ studyId }),
-    queryKey: ["studyStatus", studyId],
+    queryKey: ['studyStatus', studyId],
   });
 };
 
 export const useStudyDetails = (studyId: string) => {
-  return useQuery<StudyDetails, CarpServiceError, StudyDetails, any>({
+  return useQuery<StudyDetails, CarpServiceError>({
     queryFn: () => carpApi.study.getDetails({ studyId }),
-    queryKey: ["studyDetails", studyId],
+    queryKey: ['studyDetails', studyId],
     retry: 1,
   });
 };
 
 export const useResearchers = (studyId: string) => {
-  return useQuery<User[], CarpServiceError, User[], any>({
+  return useQuery<User[], CarpServiceError>({
     queryFn: async () => {
       return carpApi.study.researchers.getStudyResearchers({ studyId });
     },
-    queryKey: ["researchers", studyId],
+    queryKey: ['researchers', studyId],
   });
 };
 
@@ -205,12 +205,12 @@ export const useSetStudyProtocol = () => {
       });
     },
     onSuccess: (_, data) => {
-      setSnackbarSuccess("Updated protocol!");
+      setSnackbarSuccess('Updated protocol!');
       queryClient.invalidateQueries({
-        queryKey: ["studyDetails", data.studyId],
+        queryKey: ['studyDetails', data.studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["studyStatus", data.studyId],
+        queryKey: ['studyStatus', data.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -241,12 +241,12 @@ export const useSetStudyInvitation = () => {
       });
     },
     onSuccess: (_, data) => {
-      setSnackbarSuccess("Updated study invitation details!");
+      setSnackbarSuccess('Updated study invitation details!');
       queryClient.invalidateQueries({
-        queryKey: ["studyDetails", data.studyId],
+        queryKey: ['studyDetails', data.studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["studyStatus", data.studyId],
+        queryKey: ['studyStatus', data.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -264,8 +264,8 @@ export const useSetStudyLive = () => {
       return carpApi.study.goLive({ studyId });
     },
     onSuccess: (_, studyId) => {
-      queryClient.invalidateQueries({ queryKey: ["studyStatus", studyId] });
-      setSnackbarSuccess("Study is now live!");
+      queryClient.invalidateQueries({ queryKey: ['studyStatus', studyId] });
+      setSnackbarSuccess('Study is now live!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -281,18 +281,18 @@ export const useAddResearcherToStudy = (studyId: string) => {
     mutationFn: async (email: string) => {
       const isResearcher = await carpApi.accounts.isAccountOfRole({
         emailAddress: email,
-        role: "RESEARCHER",
+        role: 'RESEARCHER',
       });
 
       if (!isResearcher) {
-        setSnackbarError("Email does not belong to a researcher.");
+        setSnackbarError('Email does not belong to a researcher.');
         return null;
       }
       return carpApi.study.researchers.addResearcherToStudy({ studyId, email });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
-      setSnackbarSuccess("Added researcher to study!");
+      queryClient.invalidateQueries({ queryKey: ['researchers', studyId] });
+      setSnackbarSuccess('Added researcher to study!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -312,8 +312,8 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
-      setSnackbarSuccess("Removed researcher from study!");
+      queryClient.invalidateQueries({ queryKey: ['researchers', studyId] });
+      setSnackbarSuccess('Removed researcher from study!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -324,7 +324,7 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
 export const useDeleteStudy = () => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
-  let id = "";
+  let id = '';
 
   return useMutation({
     mutationFn: async (studyId: string) => {
@@ -332,11 +332,11 @@ export const useDeleteStudy = () => {
       return carpApi.study.delete({ studyId });
     },
     onSuccess: () => {
-      queryClient.setQueryData(["studies"], (old: StudyOverview[]) =>
+      queryClient.setQueryData(['studies'], (old: StudyOverview[]) =>
         old.filter((study) => study.studyId !== id),
       );
-      queryClient.invalidateQueries({ queryKey: ["studies"] });
-      setSnackbarSuccess("Study deleted!");
+      queryClient.invalidateQueries({ queryKey: ['studies'] });
+      setSnackbarSuccess('Study deleted!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -347,7 +347,7 @@ export const useDeleteStudy = () => {
 export const useExports = (studyId: string) => {
   return useQuery<Export[], CarpServiceError>({
     queryFn: () => carpApi.study.exports.getAll({ studyId }),
-    queryKey: ["exports", studyId],
+    queryKey: ['exports', studyId],
   });
 };
 
@@ -370,19 +370,19 @@ export const useCreateSummary = () => {
     },
     onSuccess: (response, variables) => {
       const { id } = response;
-      const existingSummary = (
-        queryClient.getQueryData(["exports", variables.studyId]) as Export[]
-      )?.find((summary) => summary.id === id);
+      const existingSummary = queryClient
+        .getQueryData<Export[]>(['exports', variables.studyId])
+        ?.find((summary) => summary.id === id);
 
       if (existingSummary) {
-        setSnackbarError("Wait until creating a new export");
+        setSnackbarError('Wait until creating a new export');
       } else {
-        setSnackbarSuccess("Export data initiated!");
+        setSnackbarSuccess('Export data initiated!');
       }
     },
     onSettled: (_, _2, params) => {
       queryClient.invalidateQueries({
-        queryKey: ["exports", params.studyId],
+        queryKey: ['exports', params.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -400,8 +400,8 @@ export const useDeleteExport = (studyId: string) => {
       return carpApi.study.exports.delete({ studyId, exportId });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["exports", studyId] });
-      setSnackbarSuccess("Export deleted!");
+      queryClient.invalidateQueries({ queryKey: ['exports', studyId] });
+      setSnackbarSuccess('Export deleted!');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -424,19 +424,18 @@ export const useDownloadSummary = () => {
         studyId,
         exportId,
       });
-      // @ts-ignore: idk
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const blob = new Blob([response.data], { type: "application/zip" });
+      // @ts-expect-error: response.data is a Blob
+      const blob = new Blob([response.data], { type: 'application/zip' });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      link.setAttribute("download", response.filename);
+
+      link.setAttribute('download', response.filename);
       document.body.appendChild(link);
       return link.click();
     },
     onSuccess: () => {
-      setSnackbarSuccess("Export will start shortly");
+      setSnackbarSuccess('Export will start shortly');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -450,16 +449,16 @@ const getCollectionFiles = async (collectionName: string, studyId: string) => {
       collectionName,
       studyId,
     });
-  } catch (error) {
+  } catch {
     return { documents: [] } as Collection;
   }
 };
 
 export const useStudyAnnouncements = (studyId: string) => {
-  return useQuery<Collection, CarpServiceError, Collection, any>({
-    queryFn: async () => getCollectionFiles("messages", studyId),
+  return useQuery<Collection, CarpServiceError>({
+    queryFn: async () => getCollectionFiles('messages', studyId),
     retry: 0,
-    queryKey: ["announcements", studyId],
+    queryKey: ['announcements', studyId],
   });
 };
 
@@ -475,9 +474,9 @@ export const useDeleteStudyAnnouncement = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Announcement deleted!");
+      setSnackbarSuccess('Announcement deleted!');
       queryClient.invalidateQueries({
-        queryKey: ["announcements", variables.studyId],
+        queryKey: ['announcements', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -506,20 +505,20 @@ export const useCreateAnnouncement = () => {
           const imageUrl = await uploadImageRequest(props.studyId, props.image);
           announcement = { ...announcement, image: imageUrl };
         } catch (error) {
-          setSnackbarError("Error uploading image");
+          setSnackbarError('Error uploading image');
           throw error;
         }
       }
       return carpApi.study.collections.createDocument({
-        collectionName: "messages",
+        collectionName: 'messages',
         studyId: props.studyId,
         document: announcement,
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Announcement created!");
+      setSnackbarSuccess('Announcement created!');
       queryClient.invalidateQueries({
-        queryKey: ["announcements", variables.studyId],
+        queryKey: ['announcements', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -537,7 +536,7 @@ export const useAnnouncement = (studyId: string, announcementId: string) => {
       });
       return response.data as MessageData;
     },
-    queryKey: ["announcements", studyId, announcementId],
+    queryKey: ['announcements', studyId, announcementId],
   });
 };
 
@@ -561,7 +560,7 @@ export const useUpdateAnnouncement = () => {
           );
           announcement = { ...announcement, image: imageUrl };
         } catch (error) {
-          setSnackbarError("Error uploading image");
+          setSnackbarError('Error uploading image');
           throw error;
         }
       }
@@ -573,14 +572,14 @@ export const useUpdateAnnouncement = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Announcement updated!");
+      setSnackbarSuccess('Announcement updated!');
       queryClient.invalidateQueries({
-        queryKey: ["announcements", variables.studyId],
+        queryKey: ['announcements', variables.studyId],
       });
 
       queryClient.invalidateQueries({
         queryKey: [
-          "announcements",
+          'announcements',
           variables.studyId,
           variables.announcementId,
         ],
@@ -594,9 +593,9 @@ export const useUpdateAnnouncement = () => {
 
 export const useStudyResources = (studyId: string) => {
   return useQuery<Collection, CarpServiceError>({
-    queryFn: async () => getCollectionFiles("resources", studyId),
+    queryFn: async () => getCollectionFiles('resources', studyId),
     retry: 0,
-    queryKey: ["resources", studyId],
+    queryKey: ['resources', studyId],
   });
 };
 
@@ -611,16 +610,16 @@ export const useCreateResource = () => {
       resource: ResourceData;
     }) => {
       return carpApi.study.collections.createDocument({
-        collectionName: "resources",
+        collectionName: 'resources',
         studyId: props.studyId,
         document: props.resource,
         fileName: props.name,
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Resource created!");
+      setSnackbarSuccess('Resource created!');
       queryClient.invalidateQueries({
-        queryKey: ["resources", variables.studyId],
+        queryKey: ['resources', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -641,9 +640,9 @@ export const useDeleteResource = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Resource deleted!");
+      setSnackbarSuccess('Resource deleted!');
       queryClient.invalidateQueries({
-        queryKey: ["resources", variables.studyId],
+        queryKey: ['resources', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -663,7 +662,6 @@ export const useUpdateResource = () => {
       resource: ResourceData;
       name: string;
     }) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return carpApi.study.collections.updateDocumentById({
         studyId: props.studyId,
         documentId: props.resourceId,
@@ -672,9 +670,9 @@ export const useUpdateResource = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Resource updated!");
+      setSnackbarSuccess('Resource updated!');
       queryClient.invalidateQueries({
-        queryKey: ["resources", variables.studyId],
+        queryKey: ['resources', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -685,9 +683,9 @@ export const useUpdateResource = () => {
 
 export const useStudyTranslations = (studyId: string) => {
   return useQuery<Collection, CarpServiceError>({
-    queryFn: async () => getCollectionFiles("localizations", studyId),
+    queryFn: async () => getCollectionFiles('localizations', studyId),
     retry: 0,
-    queryKey: ["translations", studyId],
+    queryKey: ['translations', studyId],
   });
 };
 
@@ -702,16 +700,16 @@ export const useCreateTranslation = () => {
       translation: ResourceData;
     }) => {
       return carpApi.study.collections.createDocument({
-        collectionName: "localizations",
+        collectionName: 'localizations',
         studyId: props.studyId,
         document: props.translation,
         fileName: props.name,
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Translation created!");
+      setSnackbarSuccess('Translation created!');
       queryClient.invalidateQueries({
-        queryKey: ["translations", variables.studyId],
+        queryKey: ['translations', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -730,7 +728,6 @@ export const useUpdateTranslation = () => {
       translationId: string;
       translation: ResourceData;
     }) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return carpApi.study.collections.updateDocumentById({
         studyId: props.studyId,
         documentId: props.translationId,
@@ -739,9 +736,9 @@ export const useUpdateTranslation = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Translation updated!");
+      setSnackbarSuccess('Translation updated!');
       queryClient.invalidateQueries({
-        queryKey: ["translations", variables.studyId],
+        queryKey: ['translations', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -761,9 +758,9 @@ export const useDeleteTranslation = () => {
       });
     },
     onSuccess: (_, variables) => {
-      setSnackbarSuccess("Translation deleted!");
+      setSnackbarSuccess('Translation deleted!');
       queryClient.invalidateQueries({
-        queryKey: ["translations", variables.studyId],
+        queryKey: ['translations', variables.studyId],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -784,8 +781,8 @@ export const useCreateFile = () => {
       });
     },
     onSuccess: () => {
-      setSnackbarSuccess("File uploaded!");
-      queryClient.invalidateQueries({ queryKey: ["files"] });
+      setSnackbarSuccess('File uploaded!');
+      queryClient.invalidateQueries({ queryKey: ['files'] });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -796,14 +793,14 @@ export const useCreateFile = () => {
 export const useGetFiles = (studyId: string) => {
   return useQuery<CarpFile[], CarpServiceError>({
     queryFn: async () => carpApi.study.files.getFiles({ studyId }),
-    queryKey: ["files"],
+    queryKey: ['files'],
   });
 };
 
 export const useGetOneFile = (studyId: string, fileId: number) => {
   return useQuery<CarpFile, CarpServiceError>({
     queryFn: async () => carpApi.study.files.getFile({ studyId, fileId }),
-    queryKey: ["file", fileId],
+    queryKey: ['file', fileId],
   });
 };
 
@@ -817,17 +814,17 @@ export const useDownloadFile = (studyId: string) => {
         fileId: file.id,
       });
       const blob = new Blob([response], {
-        type: file.metadata["content-type"],
+        type: file.metadata['content-type'],
       });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
-      link.setAttribute("download", file.original_name);
+      link.setAttribute('download', file.original_name);
       document.body.appendChild(link);
       return link.click();
     },
     onSuccess: () => {
-      setSnackbarSuccess("File will start downloading shortly");
+      setSnackbarSuccess('File will start downloading shortly');
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);

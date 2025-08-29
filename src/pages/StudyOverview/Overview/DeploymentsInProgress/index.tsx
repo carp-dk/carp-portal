@@ -1,18 +1,17 @@
-/* eslint-disable no-underscore-dangle */
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import {
   Table,
   TableBody,
   TableContainer,
   TableHead,
   Typography,
-} from "@mui/material";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Stack } from "@mui/system";
-import LoadingSkeleton from "../LoadingSkeleton";
+} from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Stack } from '@mui/system';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   HeaderTableCell,
   HeaderText,
@@ -24,8 +23,8 @@ import {
   StyledTableRow,
   StyledTitle,
   StyledTooltip,
-} from "./styles";
-import TooltipContent from "./TooltipContent";
+} from './styles';
+import TooltipContent from './TooltipContent';
 
 const DeploymentsInProgress = () => {
   const { id: studyId } = useParams();
@@ -38,6 +37,7 @@ const DeploymentsInProgress = () => {
   const [deploymentProgress, setDeploymentProgress] = useState<
     {
       deploymentId: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       devices: any[];
     }[]
   >([]);
@@ -48,7 +48,7 @@ const DeploymentsInProgress = () => {
       deploymentsAccountAndStatus?.groups.length !== 0
     ) {
       const deployments = deploymentsAccountAndStatus.groups
-        .filter((g) => !g.deploymentStatus.__type.includes("Stopped"))
+        .filter((g) => !g.deploymentStatus.__type.includes('Stopped'))
         .map((g) => {
           const devices = g.deploymentStatus.deviceStatusList.filter(
             (dl) => dl.device.isPrimaryDevice,
@@ -83,9 +83,9 @@ const DeploymentsInProgress = () => {
           componentsProps={{
             tooltip: {
               sx: {
-                color: "text.primary",
-                backgroundColor: "#FFF",
-                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.25)",
+                color: 'text.primary',
+                backgroundColor: '#FFF',
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
               },
             },
           }}
@@ -97,9 +97,9 @@ const DeploymentsInProgress = () => {
         The status of the master devices, for each Deployment. Select the
         Deployment ID for further information.
       </StyledDescription>
-      <TableContainer sx={{ paddingLeft: "4px", paddingRight: "16px" }}>
+      <TableContainer sx={{ paddingLeft: '4px', paddingRight: '16px' }}>
         <Table
-          style={{ tableLayout: "fixed" }}
+          style={{ tableLayout: 'fixed' }}
           stickyHeader
           aria-label="sticky table"
         >
@@ -122,14 +122,13 @@ const DeploymentsInProgress = () => {
                     onClick={() =>
                       navigate(
                         `/studies/${studyId}/deployments/${g.deploymentId}`,
-                      )
-                    }
+                      )}
                     sx={{
-                      "&:hover": {
-                        backgroundColor: "#EDEDED",
-                        transition: "background-color 0.2s ease-in-out",
-                        cursor: "pointer",
-                        borderRadius: "16px",
+                      '&:hover': {
+                        backgroundColor: '#EDEDED',
+                        transition: 'background-color 0.2s ease-in-out',
+                        cursor: 'pointer',
+                        borderRadius: '16px',
                       },
                     }}
                   >
@@ -139,15 +138,14 @@ const DeploymentsInProgress = () => {
                 <StyledTableCell>
                   <SecondaryCellText variant="h5" noWrap>
                     <Stack direction="row" spacing="16px">
-                      {g.devices.map((d, idx) => (
+                      {g.devices.map((d) => (
                         <Stack
                           direction="row"
                           spacing={0.5}
                           alignItems="center"
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={`${g.deploymentId}:${idx}`}
+                          key={`${g.deploymentId}:${d.device.roleName}`}
                         >
-                          <StyledStatusDot status={d.__type.split(".").pop()} />
+                          <StyledStatusDot status={d.__type.split('.').pop()} />
                           <Typography variant="h6">
                             {d.device.roleName}
                           </Typography>

@@ -1,9 +1,9 @@
-import { Card, Select, TableCell, TableRow, Typography } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Card, Select, TableCell, TableRow, Typography } from '@mui/material';
+import { styled } from '@Utils/theme';
 
 export const StyledCard = styled(Card)({
-  display: "flex",
-  flexDirection: "column",
+  display: 'flex',
+  flexDirection: 'column',
   padding: 24,
   height: 580,
   borderRadius: 16,
@@ -36,30 +36,30 @@ export const HeaderText = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledTableRow = styled(TableRow)({
-  paddingLeft: 0,
-  "&:hover": {
-    backgroundColor: "#EDEDED",
-    transition: "background-color 0.2s ease-in-out",
-    cursor: "pointer",
-    borderRadius: "16px",
+  'paddingLeft': 0,
+  '&:hover': {
+    backgroundColor: '#EDEDED',
+    transition: 'background-color 0.2s ease-in-out',
+    cursor: 'pointer',
+    borderRadius: '16px',
   },
 });
 
 export const StyledTableCell = styled(TableCell)({
   paddingLeft: 0,
-  paddingBottom: "8px",
-  paddingTop: "8px",
-  border: "none",
+  paddingBottom: '8px',
+  paddingTop: '8px',
+  border: 'none',
 });
 
 export const StyledSelect = styled(Select)({
-  height: "32px",
-  width: "116px",
-  borderRadius: "16px",
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderRadius: "16px",
+  'height': '32px',
+  'width': '116px',
+  'borderRadius': '16px',
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderRadius: '16px',
   },
-  "& .MuiSelect-select": {
-    borderRadius: "16px",
+  '& .MuiSelect-select': {
+    borderRadius: '16px',
   },
 });

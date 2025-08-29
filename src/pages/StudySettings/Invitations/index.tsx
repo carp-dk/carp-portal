@@ -1,16 +1,16 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
   useSetStudyInvitation,
   useStudyDetails,
   useStudyStatus,
-} from "@Utils/queries/studies";
-import { FormLabel, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { useParams } from "react-router";
-import * as yup from "yup";
-import { StudyStatus } from "@carp-dk/client";
-import StudySetupSkeleton from "../StudySetupSkeleton";
-import { Heading, StyledCard, Subheading } from "../styles";
+} from '@Utils/queries/studies';
+import { FormLabel, TextField } from '@mui/material';
+import { useFormik } from 'formik';
+import { useParams } from 'react-router';
+import * as yup from 'yup';
+import { StudyStatus } from '@carp-dk/client';
+import StudySetupSkeleton from '../StudySetupSkeleton';
+import { Heading, StyledCard, Subheading } from '../styles';
 
 const studyInvitationValidationSchema = yup.object({
   invitationName: yup.string(),
@@ -33,16 +33,17 @@ const Invitations = () => {
 
   const studyInvitationFormik = useFormik({
     initialValues: {
-      invitationName: studyDetails?.invitation.name ?? "",
-      invitationDescription: studyDetails?.invitation.description ?? "",
+      invitationName: studyDetails?.invitation.name ?? '',
+      invitationDescription: studyDetails?.invitation.description ?? '',
     },
     validationSchema: studyInvitationValidationSchema,
     onSubmit: (values) => {
+      let parsedApplicaitonData = null;
       try {
-        var parsedApplicaitonData = JSON.parse(
-          studyDetails?.invitation.applicationData
+        parsedApplicaitonData = JSON.parse(
+          studyDetails?.invitation.applicationData,
         );
-      } catch (e) {
+      } catch {
         setStudyInvitation.mutate({
           studyId,
           invitationName: values.invitationName,

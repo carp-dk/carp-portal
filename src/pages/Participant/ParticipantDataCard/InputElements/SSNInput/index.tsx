@@ -7,10 +7,10 @@ import {
   Select,
   Stack,
   TextField,
-} from "@mui/material";
-import { getIn, useFormik } from "formik";
-import { countryInfos } from "@Assets/languageMap";
-import * as flags from "react-flags-select";
+} from '@mui/material';
+import { getIn, useFormik } from 'formik';
+import { countryInfos } from '@Assets/languageMap';
+import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -32,8 +32,8 @@ const SSNInput = ({ formik, editing }: Props) => {
             required
             name="ssn.country"
             error={
-              getIn(formik.touched, "ssn.country") &&
-              !!getIn(formik.errors, "ssn.country")
+              getIn(formik.touched, 'ssn.country') &&
+              !!getIn(formik.errors, 'ssn.country')
             }
             value={formik.values.ssn.country}
             onChange={formik.handleChange}
@@ -42,10 +42,10 @@ const SSNInput = ({ formik, editing }: Props) => {
             labelId="countryCodeLabel"
             fullWidth
             sx={{
-              height: "56px",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
+              height: '56px',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
             }}
           >
             <MenuItem id="None" key="None" value="">
@@ -58,14 +58,15 @@ const SSNInput = ({ formik, editing }: Props) => {
                 alignItems="center"
                 justifyContent="start"
                 sx={{
-                  display: "grid",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
+                  display: 'grid',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
                 }}
                 gridTemplateColumns="30px auto"
               >
-                <DanishFlag name="Denmark" onSelect={undefined} width={30} />{" "}
+                <DanishFlag name="Denmark" onSelect={undefined} width={30} />
+                {' '}
                 Denmark
               </Stack>
             </MenuItem>
@@ -78,7 +79,7 @@ const SSNInput = ({ formik, editing }: Props) => {
               if (countryCode in flags) {
                 CountryFlag = flags[countryCode];
               } else {
-                CountryFlag = "div";
+                CountryFlag = 'div';
               }
               return (
                 <MenuItem
@@ -92,10 +93,10 @@ const SSNInput = ({ formik, editing }: Props) => {
                     alignItems="center"
                     justifyContent="start"
                     sx={{
-                      display: "grid",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
+                      display: 'grid',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
                     }}
                     gridTemplateColumns="30px auto"
                   >
@@ -111,9 +112,9 @@ const SSNInput = ({ formik, editing }: Props) => {
               );
             })}
           </Select>
-          <FormHelperText error sx={{ width: "200px" }}>
-            {getIn(formik.touched, "ssn.country") &&
-              getIn(formik.errors, "ssn.country")}
+          <FormHelperText error sx={{ width: '200px' }}>
+            {getIn(formik.touched, 'ssn.country') &&
+              getIn(formik.errors, 'ssn.country')}
           </FormHelperText>
         </div>
         <TextField
@@ -124,15 +125,15 @@ const SSNInput = ({ formik, editing }: Props) => {
           required
           fullWidth
           error={
-            getIn(formik.touched, "ssn.socialSecurityNumber") &&
-            !!getIn(formik.errors, "ssn.socialSecurityNumber")
+            getIn(formik.touched, 'ssn.socialSecurityNumber') &&
+            !!getIn(formik.errors, 'ssn.socialSecurityNumber')
           }
           value={formik.values.ssn.socialSecurityNumber}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           helperText={
-            getIn(formik.touched, "ssn.socialSecurityNumber") &&
-            getIn(formik.errors, "ssn.socialSecurityNumber")
+            getIn(formik.touched, 'ssn.socialSecurityNumber') &&
+            getIn(formik.errors, 'ssn.socialSecurityNumber')
           }
         />
       </Stack>
