@@ -79,7 +79,7 @@ const ProtocolCards = () => {
       />
     );
   }
-  
+
   return (
     <StyledContainer>
       <StyledNameCard elevation={2}>
@@ -116,7 +116,10 @@ const ProtocolCards = () => {
           <ul>
             {protocol.snapshot.expectedParticipantData.toArray().map((data) => {
               return (
-                <li key={data.inputDataType.toString()}>
+                <li
+                  key={data.inputDataType.toString()}
+                  style={{ marginBottom: 10 }}
+                >
                   <Typography variant="h4">
                     {getInputDataName(data.attribute.inputDataType.name)}
                   </Typography>
@@ -134,7 +137,7 @@ const ProtocolCards = () => {
               .toArray()
               .map((role: ParticipantRole) => {
                 return (
-                  <li key={role.role}>
+                  <li key={role.role} style={{ marginBottom: 10 }}>
                     <Typography variant="h4">{role.role}</Typography>
                   </li>
                 );
@@ -148,7 +151,7 @@ const ProtocolCards = () => {
           <ul>
             {protocol.snapshot.tasks.toArray().map((task) => {
               return (
-                <li key={task.name}>
+                <li key={task.name} style={{ marginBottom: 10 }}>
                   <Typography variant="h4">{task.name}</Typography>
                 </li>
               );
