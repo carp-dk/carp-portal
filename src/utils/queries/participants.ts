@@ -149,6 +149,7 @@ interface GenerateAnonymousAccountsParams {
   expirationSeconds: number;
   participantRoleName: string;
   redirectUri: string;
+  clientId: string;
 }
 
 export const useGenerateAnonymousAccounts = (studyId: string) => {
@@ -157,6 +158,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
 
   return useMutation({
     mutationFn: async ({
+      clientId,
       redirectUri,
       amountOfAccounts,
       expirationSeconds,
@@ -164,6 +166,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
     }: GenerateAnonymousAccountsParams) => {
       return carpApi.study.recruitment.generateAnonymousAccounts({
         studyId,
+        clientId,
         redirectUri,
         amountOfAccounts,
         expirationSeconds,

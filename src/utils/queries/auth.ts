@@ -37,14 +37,10 @@ export const useCurrentUser = () => {
 };
 
 export const useRedirectURIs = () => {
-  return useQuery<string[], CarpServiceError>({
+  return useQuery<{ [key: string]: string[] }, CarpServiceError>({
     queryKey: ["redirectURIs"],
     queryFn: async () => {
-      const uris = (await carpApi.accounts.getRedirectURIs()).data;
-      return uris.map((uri) => {
-        const cleanUri = uri.replace("*", "");
-        return cleanUri;
-      });
+      return (await carpApi.accounts.getRedirectURIs()).data;
     },
     retry: false,
   });
