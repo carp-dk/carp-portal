@@ -79,6 +79,7 @@ const ProtocolCards = () => {
       />
     );
   }
+
   return (
     <StyledContainer>
       <StyledNameCard elevation={2}>
@@ -102,7 +103,7 @@ const ProtocolCards = () => {
                     .filter((connection: Connection) => {
                       return connection.connectedToRoleName === device.roleName;
                     })}
-                  key={uuidv4()}
+                  key={device.roleName}
                   device={device}
                 />
               );
@@ -115,7 +116,10 @@ const ProtocolCards = () => {
           <ul>
             {protocol.snapshot.expectedParticipantData.toArray().map((data) => {
               return (
-                <li key={uuidv4()}>
+                <li
+                  key={data.inputDataType.toString()}
+                  style={{ marginBottom: 10 }}
+                >
                   <Typography variant="h4">
                     {getInputDataName(data.attribute.inputDataType.name)}
                   </Typography>
@@ -133,11 +137,25 @@ const ProtocolCards = () => {
               .toArray()
               .map((role: ParticipantRole) => {
                 return (
-                  <li key={uuidv4()}>
+                  <li key={role.role} style={{ marginBottom: 10 }}>
                     <Typography variant="h4">{role.role}</Typography>
                   </li>
                 );
               })}
+          </ul>
+        </StyledCard>
+      )}
+      {protocol.snapshot.tasks.size() > 0 && (
+        <StyledCard elevation={2}>
+          <CardTitle variant="h2">Tasks</CardTitle>
+          <ul>
+            {protocol.snapshot.tasks.toArray().map((task) => {
+              return (
+                <li key={task.name} style={{ marginBottom: 10 }}>
+                  <Typography variant="h4">{task.name}</Typography>
+                </li>
+              );
+            })}
           </ul>
         </StyledCard>
       )}

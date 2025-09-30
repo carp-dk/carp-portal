@@ -62,7 +62,7 @@ export const formatDateTime = (
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  },
+  }
 ) => {
   const date = new Date(dateString);
   return `${date.toLocaleString("en-US", options)}`;
@@ -272,8 +272,8 @@ export const getMaxDatapoints = (days?: Day[]): number => {
   if (!days) return 0;
   return Math.max(
     ...days.map((day) =>
-      day.data.reduce((a: number, b: Record) => a + b.numberOfDatapoints, 0),
-    ),
+      day.data.reduce((a: number, b: Record) => a + b.numberOfDatapoints, 0)
+    )
   );
 };
 
@@ -473,7 +473,7 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
         <PdfImage
           style={{ width: 150, marginLeft: 12, marginTop: 50 }}
           src={await convertByteArrayToImage(
-            JSON.parse(consent.signature.signatureImage),
+            JSON.parse(consent.signature.signatureImage)
           )}
         />
         <Text
@@ -546,4 +546,12 @@ export const getUri = (pageType: PageType) => {
       console.error("Unknown page type");
       return "/";
   }
+};
+
+export const patternToRegex = (pattern) => {
+  // escape regex special chars except *
+  const escaped = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, "\\$&");
+  // Keycloak-style *: one or more chars
+  const regexString = "^" + escaped.replace(/\*/g, ".+") + "$";
+  return new RegExp(regexString);
 };

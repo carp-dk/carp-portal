@@ -35,3 +35,13 @@ export const useCurrentUser = () => {
     enabled: !!auth.isAuthenticated || auth.isLoading,
   });
 };
+
+export const useRedirectURIs = () => {
+  return useQuery<{ [key: string]: string[] }, CarpServiceError>({
+    queryKey: ["redirectURIs"],
+    queryFn: async () => {
+      return (await carpApi.accounts.getRedirectURIs()).data;
+    },
+    retry: false,
+  });
+};

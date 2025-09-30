@@ -106,7 +106,7 @@ const ProtocolCards = ({ protocolId }: Props) => {
                     .filter((connection: DeviceConnection) => {
                       return connection.connectedToRoleName === device.roleName;
                     })}
-                  key={uuidv4()}
+                  key={device.roleName}
                   device={device}
                 />
               );
@@ -119,7 +119,7 @@ const ProtocolCards = ({ protocolId }: Props) => {
           <ul>
             {protocol.expectedParticipantData.toArray().map((data) => {
               return (
-                <li key={uuidv4()}>
+                <li key={data.inputDataType.toString()} style={{ marginBottom: 10 }}>
                   <Typography variant="h4">
                     {getInputDataName(data.attribute.inputDataType.name)}
                   </Typography>
@@ -137,11 +137,25 @@ const ProtocolCards = ({ protocolId }: Props) => {
               .toArray()
               .map((role: ParticipantRole) => {
                 return (
-                  <li key={uuidv4()}>
+                  <li key={role.role} style={{ marginBottom: 10 }}>
                     <Typography variant="h4">{role.role}</Typography>
                   </li>
                 );
               })}
+          </ul>
+        </StyledCard>
+      )}
+      {protocol.tasks.size() > 0 && (
+        <StyledCard elevation={2}>
+          <CardTitle variant="h2">Tasks</CardTitle>
+          <ul>
+            {protocol.tasks.toArray().map((task) => {
+              return (
+                <li key={task.name} style={{ marginBottom: 10 }}>
+                  <Typography variant="h4">{task.name}</Typography>
+                </li>
+              );
+            })}
           </ul>
         </StyledCard>
       )}
