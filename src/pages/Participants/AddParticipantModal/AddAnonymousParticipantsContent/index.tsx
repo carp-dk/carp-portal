@@ -1,7 +1,6 @@
 import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
 import { useStudyDetails } from "@Utils/queries/studies";
 import {
-  Autocomplete,
   FormHelperText,
   FormLabel,
   Grid,
@@ -61,7 +60,7 @@ const validationSchema = yup.object({
       return true;
     })
     .required("Redirect URI is required"),
-  clientId: yup.string().required("Client ID is required"),
+  clientId: yup.string().required("Application Type is required"),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
@@ -84,7 +83,11 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      if (!redirectURIs[values.clientId].some((uri) => patternToRegex(uri).test(values.redirectUri))) {
+      if (
+        !redirectURIs[values.clientId]?.some((uri) =>
+          patternToRegex(uri).test(values.redirectUri)
+        )
+      ) {
         addAnonymousParticipantFormik.setFieldError(
           "redirectUri",
           "Redirect URI must contain one of the predefined URIs"
@@ -234,7 +237,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               />
             </Grid>
             <Grid size={{ xs: 6 }}>
-              <FormLabel required>ClientId</FormLabel>
+              <FormLabel required>Application Type</FormLabel>
               <Select
                 sx={{ width: "100%" }}
                 error={!!addAnonymousParticipantFormik.errors.clientId}
