@@ -288,7 +288,7 @@ export const useAddResearcherToStudy = (studyId: string) => {
         setSnackbarError("Email does not belong to a researcher.");
         return null;
       }
-      return carpApi.study.researchers.addResearcherToStudy({ studyId, email });
+      return carpApi.study.researchers.addResearcherToStudy({ studyId, email, role: "RESEARCHER" });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
