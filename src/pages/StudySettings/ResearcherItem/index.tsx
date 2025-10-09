@@ -2,7 +2,7 @@ import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
 import { User } from "@carp-dk/client";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Skeleton, Typography } from "@mui/material";
-import { useRemoveResearcherFromStudy } from "@Utils/queries/studies";
+import { useRemoveResearcherAssistantFromStudy } from "@Utils/queries/studies";
 import { getRandomNumber } from "@Utils/utility";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -21,7 +21,7 @@ type Props = {
 
 const ResearcherItem = ({ researcher, disabled }: Props) => {
   const { id: studyId } = useParams();
-  const removeResearcher = useRemoveResearcherFromStudy(studyId);
+  const removeResearcher = useRemoveResearcherAssistantFromStudy(studyId);
   const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
     useState(false);
 
