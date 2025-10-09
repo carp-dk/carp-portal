@@ -190,6 +190,15 @@ export const useResearchers = (studyId: string) => {
   });
 };
 
+export const useResearcherAssistants = (studyId: string) => {
+  return useQuery<User[], CarpServiceError, User[], any>({
+    queryFn: async () => {
+      return carpApi.study.researchers.getStudyResearcherAssistants({ studyId });
+    },
+    queryKey: ["researcherAssistants", studyId],
+  });
+};
+
 export const useSetStudyProtocol = () => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
@@ -273,25 +282,17 @@ export const useSetStudyLive = () => {
   });
 };
 
-export const useAddResearcherToStudy = (studyId: string) => {
+export const useAddResearcherAssistantToStudy = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (email: string) => {
-      const isResearcher = await carpApi.accounts.isAccountOfRole({
-        emailAddress: email,
-        role: "RESEARCHER",
-      });
+     mutationFn: async (email: string) => {
 
-      if (!isResearcher) {
-        setSnackbarError("Email does not belong to a researcher.");
-        return null;
-      }
-      return carpApi.study.researchers.addResearcherToStudy({ studyId, email, role: "RESEARCHER" });
+      return carpApi.study.researchers.addResearcherAssistantToStudy({ studyId, email });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
+      queryClient.invalidateQueries({ queryKey: ["researcherAssistants", studyId] });
       setSnackbarSuccess("Added researcher to study!");
     },
     onError: (error: CarpServiceError) => {
@@ -300,19 +301,19 @@ export const useAddResearcherToStudy = (studyId: string) => {
   });
 };
 
-export const useRemoveResearcherFromStudy = (studyId: string) => {
+export const useRemoveResearcherAssistantFromStudy = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (email: string) => {
-      return carpApi.study.researchers.removeResearcherFromStudy({
+      return carpApi.study.researchers.removeResearcherAssistantFromStudy({
         studyId,
         email,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
+      queryClient.invalidateQueries({ queryKey: ["researcherAssistants", studyId] });
       setSnackbarSuccess("Removed researcher from study!");
     },
     onError: (error: CarpServiceError) => {

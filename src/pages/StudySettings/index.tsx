@@ -11,6 +11,7 @@ import StudyData from "./StudyData";
 import StudyResearchers from "./StudyResearchers";
 import StudyStatusSection from "./StudyStatusSection";
 import { StyledContainer } from "./styles";
+import StudyOwner from "./StudyOwner";
 
 const Studies: React.FC = () => {
   const sectionName = {
@@ -34,6 +35,7 @@ const Studies: React.FC = () => {
       <StyledContainer>
         <StudyData />
         <Invitations />
+        <StudyOwner />
         <StudyResearchers
           setOpenAddResearcherModal={() => setOpenAddResearcherModal(true)}
         />
