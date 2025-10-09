@@ -371,7 +371,7 @@ export const useCreateSummary = () => {
     onSuccess: (response, variables) => {
       const { id } = response;
       const existingSummary = (
-        queryClient.getQueryData(["exports", variables.studyId]) as Export[]
+        queryClient.getQueryData<Export[]>(["exports", variables.studyId])
       )?.find((summary) => summary.id === id);
 
       if (existingSummary) {
@@ -450,7 +450,7 @@ const getCollectionFiles = async (collectionName: string, studyId: string) => {
       collectionName,
       studyId,
     });
-  } catch (error) {
+  } catch {
     return { documents: [] } as Collection;
   }
 };

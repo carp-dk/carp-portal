@@ -62,10 +62,10 @@ const StudyProtocol = () => {
             description={description}
           />
           <ProtocolInfo
-            protocolId={study.protocolSnapshot.id.stringRepresentation}
+            protocol={study.protocolSnapshot as any}
           />
           <ProtocolCards
-            protocolId={study.protocolSnapshot.id.stringRepresentation}
+            protocol={study.protocolSnapshot as any}
           />
         </>
       )}

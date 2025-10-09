@@ -65,7 +65,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
   const sortedProtocols =
     protocolsLoading || !protocols
       ? []
-      : protocols.sort((a, b) => {
+      : protocols.toSorted((a, b) => {
           const compareResult =
             sortOrder.field === "name"
               ? a.name.localeCompare(b.name)

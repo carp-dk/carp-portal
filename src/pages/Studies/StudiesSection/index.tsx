@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StudyActionCard from "../StudyActionCard";
 import { CardsContainer, StyledContainer, Title } from "./styles";
-// import { Spinner } from '@Components/StudyHeader/styles';
 import StudyCard, { SkeletonCard } from "../StudyCard";
 
 import CreateStudyModal from "./CreateStudyModal";
@@ -73,9 +72,8 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
             <SkeletonCard />
           </>
         ) : (
-          studies &&
           studies
-            .sort((a, b) => (a.createdOn < b.createdOn ? 1 : -1))
+            ?.toSorted((a, b) => (a.createdOn < b.createdOn ? 1 : -1))
             .map((study: StudyOverview) => {
               return (
                 <StudyCard

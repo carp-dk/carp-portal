@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development vite serve src --config vite.config.ts",
+    "clean": "rm -rf node_modules dist build ./pnpm-lock.yaml",
     "build": "cross-env NODE_ENV=production vite build src --config vite.config.ts",
     "preview": "cross-env NODE_ENV=production vite preview src --config vite.config.ts",
     "serve": "cross-env NODE_ENV=production serve -s build",
