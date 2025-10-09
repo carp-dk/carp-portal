@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ResearcherItem, { ResearcherItemSkeleton } from "../ResearcherItem";
 import {
-  AddResearcherButton,
+  AddResearcherButton, EmptyText,
   ResearchersContainer,
   StyledCard,
   Subtitle,
@@ -65,9 +65,12 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
           )}
       </Top>
       <ResearchersContainer>
-        {researchersLoading || studyDetailsLoading || userLoading
-          ? [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
-          : researchers?.map((researcher) => (
+        {researchersLoading || studyDetailsLoading || userLoading ? (
+          [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
+        ) : researchers?.length === 0 ? (
+          <EmptyText>No researchers found</EmptyText>
+        ) : (
+          researchers.map((researcher) => (
               <ResearcherItem
                 disabled={
                   !isStudyOwner ||
@@ -78,7 +81,8 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
                 key={uuidv4()}
                 researcher={researcher}
               />
-            ))}
+          ))
+        )}
       </ResearchersContainer>
     </StyledCard>
   );
