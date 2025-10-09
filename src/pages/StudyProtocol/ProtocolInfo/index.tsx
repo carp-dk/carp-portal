@@ -2,7 +2,6 @@ import CopyButton from "@Components/Buttons/CopyButton";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import LinkIcon from "@mui/icons-material/Link";
 import { Skeleton, Typography, useMediaQuery } from "@mui/material";
-import { useProtocolDetails } from "@Utils/queries/protocols";
 import { downloadProtocolAsJSONFile, formatDateTime } from "@Utils/utility";
 import {
   CreationInfoContainer,
@@ -19,6 +18,7 @@ import {
   StyledLink,
   Subtitle,
 } from "./styles";
+import { StudyProtocolSnapshot } from "@carp-dk/client";
 
 const ProtocolInfoSkeleton = () => {
   const isDownMd = useMediaQuery("(max-width:1250px)");
@@ -57,14 +57,11 @@ const ProtocolInfoSkeleton = () => {
 };
 
 type Props = {
-  protocolId: string;
+  protocol: StudyProtocolSnapshot;
 };
 
-const ProtocolInfo = ({ protocolId }: Props) => {
+const ProtocolInfo = ({ protocol }: Props) => {
   const isDownMd = useMediaQuery("(max-width:1725px)");
-  const { data: protocol, isLoading: protocolLoading } =
-    useProtocolDetails(protocolId);
-  if (protocolLoading) return <ProtocolInfoSkeleton />;
 
   return (
     <>
@@ -88,7 +85,7 @@ const ProtocolInfo = ({ protocolId }: Props) => {
           </ProtocolVersion>
           <Subtitle variant="h6">
             Update the Protocol by adding a new version in{" "}
-            <StyledLink to={`/protocols/${protocolId}`}>
+            <StyledLink to={`/protocols/${protocol.id.stringRepresentation}`}>
               Protocol&#39;s main page
             </StyledLink>
             <LinkIcon fontSize="small" color="primary" />
@@ -100,13 +97,13 @@ const ProtocolInfo = ({ protocolId }: Props) => {
             <CreationInfoContainer>
               <Typography variant="h6">Created on</Typography>
               <Typography variant="h6">
-                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                {/*{formatDateTime(protocol.createdOn.toEpochMilliseconds())}*/}
               </Typography>
             </CreationInfoContainer>
             <CreationInfoContainer>
               <Typography variant="h6">Last version</Typography>
               <Typography variant="h6">
-                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                {/*{formatDateTime(protocol.createdOn.toEpochMilliseconds())}*/}
               </Typography>
             </CreationInfoContainer>
           </InnerLeftContainer>

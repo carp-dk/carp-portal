@@ -1,5 +1,3 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useProtocolDetails } from "@Utils/queries/protocols";
 import { getRandomNumber } from "@Utils/utility";
 import carpCommon from "@cachet/carp-common";
 import carpProtocols from "@cachet/carp-protocols-core";
@@ -16,6 +14,7 @@ import {
   StyledNameCard,
 } from "./styles";
 import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot.DeviceConnection;
+import { StudyProtocolSnapshot } from "@carp-dk/client";
 
 type ParticipantRole =
   carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
@@ -55,34 +54,10 @@ const ProtocolCardSkeleton: React.FC = () => {
 };
 
 type Props = {
-  protocolId: string;
+  protocol: StudyProtocolSnapshot;
 };
 
-const ProtocolCards = ({ protocolId }: Props) => {
-  const {
-    data: protocol,
-    isLoading: protocolLoading,
-    error: protocolError,
-  } = useProtocolDetails(protocolId);
-  if (protocolLoading)
-    return (
-      <StyledContainer>
-        <ProtocolNameCardSkeleton />
-        <ProtocolCardSkeleton />
-        <ProtocolCardSkeleton />
-        <ProtocolCardSkeleton />
-      </StyledContainer>
-    );
-
-  if (protocolError) {
-    return (
-      <CarpErrorCardComponent
-        message="An error occurred while loading protocol"
-        error={protocolError}
-      />
-    );
-  }
-
+const ProtocolCards = ({ protocol }: Props) => {
   return (
     <StyledContainer>
       <StyledNameCard elevation={2}>

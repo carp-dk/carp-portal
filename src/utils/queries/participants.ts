@@ -7,7 +7,6 @@ import {
   ParticipantInfo,
   ParticipantWithRoles,
   InactiveDeployment,
-  Statistics,
   InputDataType,
   GenericEmailRequest,
   ExpectedParticipantData,
@@ -261,31 +260,6 @@ export const useParticipantGroupsAccountsAndStatus = (studyId: string) => {
         studyId,
       }),
     queryKey: ["deployments", studyId],
-  });
-};
-
-export const useStatistics = (studyId: string) => {
-  const { data: participantsStatus, isLoading: participantsStatusLoading } =
-    useParticipantsStatus(studyId);
-
-  const deploymentIds: string[] = [];
-  if (participantsStatus) {
-    participantsStatus.toArray().forEach((ps: ParticipantGroupStatus) => {
-      deploymentIds.push(ps.id.stringRepresentation);
-    });
-  }
-
-  return useQuery<Statistics[], CarpServiceError, Statistics[], any>({
-    queryKey: ["statistics", deploymentIds],
-    queryFn: async () => {
-      if (deploymentIds.length === 0) {
-        return [];
-      }
-      return carpApi.study.deployments.getDeploymentStatistics({
-        deploymentIds,
-      });
-    },
-    enabled: !participantsStatusLoading && !!participantsStatus,
   });
 };
 

@@ -155,7 +155,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       </ModalDescription>
       <ModalContent>
         <form onSubmit={handleFormSubmit}>
-          <Grid container spacing={4} align-item="center">
+          <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField

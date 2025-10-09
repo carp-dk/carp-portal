@@ -13,6 +13,7 @@ import {
   StudyProtocolSnapshot,
   StudyDetails,
   StudyStatus,
+  Role,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "./auth";
@@ -30,7 +31,7 @@ export const useStudies = () => {
 
 export const useSetStudyDescription = (
   setDescription: (description: string) => void,
-  setInEdit: (inEdit: boolean) => void,
+  setInEdit: (inEdit: boolean) => void
 ) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
@@ -80,7 +81,7 @@ export const useSetStudyDescription = (
       setSnackbarError(error.message);
       queryClient.setQueryData(
         ["studyDetails", params.studyId],
-        context.previousValue,
+        context.previousValue
       );
       setDescription(context.previousValue.description);
     },
@@ -119,7 +120,7 @@ export const useSetStudyDetails = () => {
         studyId: string;
         name: string;
         description: string;
-      },
+      }
     ) => {
       setSnackbarSuccess("Updated study details!");
       queryClient.invalidateQueries({
@@ -187,6 +188,17 @@ export const useResearchers = (studyId: string) => {
       return carpApi.study.researchers.getStudyResearchers({ studyId });
     },
     queryKey: ["researchers", studyId],
+  });
+};
+
+export const useResearcherAssistants = (studyId: string) => {
+  return useQuery<User[], CarpServiceError, User[], any>({
+    queryFn: async () => {
+      return carpApi.study.researchers.getStudyResearchAssistants({
+        studyId,
+      });
+    },
+    queryKey: ["researcherAssistants", studyId],
   });
 };
 
@@ -273,25 +285,25 @@ export const useSetStudyLive = () => {
   });
 };
 
-export const useAddResearcherToStudy = (studyId: string) => {
+export const useAddUserWithRole = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (email: string) => {
-      const isResearcher = await carpApi.accounts.isAccountOfRole({
-        emailAddress: email,
-        role: "RESEARCHER",
+    mutationFn: async ({ email, role }: { email: string; role: Role }) => {
+      return carpApi.study.researchers.addResearcherToStudy({
+        studyId,
+        email,
+        role,
       });
-
-      if (!isResearcher) {
-        setSnackbarError("Email does not belong to a researcher.");
-        return null;
-      }
-      return carpApi.study.researchers.addResearcherToStudy({ studyId, email });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ["researchers", studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["researcherAssistants", studyId],
+      });
       setSnackbarSuccess("Added researcher to study!");
     },
     onError: (error: CarpServiceError) => {
@@ -312,7 +324,12 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researchers", studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ["researchers", studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["researcherAssistants", studyId],
+      });
       setSnackbarSuccess("Removed researcher from study!");
     },
     onError: (error: CarpServiceError) => {
@@ -333,7 +350,7 @@ export const useDeleteStudy = () => {
     },
     onSuccess: () => {
       queryClient.setQueryData(["studies"], (old: StudyOverview[]) =>
-        old.filter((study) => study.studyId !== id),
+        old.filter((study) => study.studyId !== id)
       );
       queryClient.invalidateQueries({ queryKey: ["studies"] });
       setSnackbarSuccess("Study deleted!");
@@ -371,7 +388,7 @@ export const useCreateSummary = () => {
     onSuccess: (response, variables) => {
       const { id } = response;
       const existingSummary = (
-        queryClient.getQueryData(["exports", variables.studyId]) as Export[]
+        queryClient.getQueryData<Export[]>(["exports", variables.studyId])
       )?.find((summary) => summary.id === id);
 
       if (existingSummary) {
@@ -450,7 +467,7 @@ const getCollectionFiles = async (collectionName: string, studyId: string) => {
       collectionName,
       studyId,
     });
-  } catch (error) {
+  } catch {
     return { documents: [] } as Collection;
   }
 };
@@ -557,7 +574,7 @@ export const useUpdateAnnouncement = () => {
         try {
           const imageUrl = await uploadImageRequest(
             props.studyId,
-            props.newImage,
+            props.newImage
           );
           announcement = { ...announcement, image: imageUrl };
         } catch (error) {

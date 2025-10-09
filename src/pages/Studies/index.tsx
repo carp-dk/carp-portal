@@ -19,7 +19,7 @@ const Studies = () => {
   return (
     <PrivatePageLayout>
       <WelcomeHeader />
-      <StudiesSection isAdmin={isAdmin} />
+      <StudiesSection/>
       <StyledDivider />
       <ProtocolsSection />
     </PrivatePageLayout>

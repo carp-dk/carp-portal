@@ -1,13 +1,13 @@
 import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
 import { useCurrentUser } from "@Utils/queries/auth";
-import { useResearchers, useStudyDetails } from "@Utils/queries/studies";
+import { useResearcherAssistants, useStudyDetails } from "@Utils/queries/studies";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import { Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ResearcherItem, { ResearcherItemSkeleton } from "../ResearcherItem";
 import {
-  AddResearcherButton,
+  AddResearcherButton, EmptyText,
   ResearchersContainer,
   StyledCard,
   Subtitle,
@@ -25,7 +25,7 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
     data: researchers,
     isLoading: researchersLoading,
     error: researchersError,
-  } = useResearchers(studyId);
+  } = useResearcherAssistants(studyId);
   const {
     data: studyDetails,
     isLoading: studyDetailsLoading,
@@ -42,6 +42,10 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
     );
   }
 
+  const isStudyOwner = studyDetails?.ownerId?.stringRepresentation
+      && user?.accountId?.stringRepresentation &&
+      studyDetails?.ownerId?.stringRepresentation == user?.accountId?.stringRepresentation
+
   return (
     <StyledCard elevation={2}>
       <Top>
@@ -51,19 +55,25 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
             See all the researchers that are part of the study.
           </Subtitle>
         </div>
-        <div>
-          <AddResearcherButton onClick={setOpenAddResearcherModal}>
-            <GroupAddRoundedIcon fontSize="small" />
-            <Typography variant="h5">Add researcher</Typography>
-          </AddResearcherButton>
-        </div>
+          {isStudyOwner && (
+              <div>
+                  <AddResearcherButton onClick={setOpenAddResearcherModal}>
+                      <GroupAddRoundedIcon fontSize="small"/>
+                      <Typography variant="h5">Add researcher</Typography>
+                  </AddResearcherButton>
+              </div>
+          )}
       </Top>
       <ResearchersContainer>
-        {researchersLoading || studyDetailsLoading || userLoading
-          ? [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
-          : researchers?.map((researcher) => (
+        {researchersLoading || studyDetailsLoading || userLoading ? (
+          [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
+        ) : researchers?.length === 0 ? (
+          <EmptyText>No researchers found</EmptyText>
+        ) : (
+          researchers.map((researcher) => (
               <ResearcherItem
                 disabled={
+                  !isStudyOwner ||
                   researcher.id === studyDetails.ownerId.stringRepresentation ||
                   // CARP core type defines accountId it as UUID, after serialization it will be string
                   researcher.id === (user.accountId as any as string)
@@ -71,7 +81,8 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
                 key={uuidv4()}
                 researcher={researcher}
               />
-            ))}
+          ))
+        )}
       </ResearchersContainer>
     </StyledCard>
   );

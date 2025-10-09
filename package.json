@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development vite serve src --config vite.config.ts",
+    "clean": "rm -rf node_modules dist build ./pnpm-lock.yaml",
     "build": "cross-env NODE_ENV=production vite build src --config vite.config.ts",
     "preview": "cross-env NODE_ENV=production vite preview src --config vite.config.ts",
     "serve": "cross-env NODE_ENV=production serve -s build",
@@ -47,7 +48,7 @@
     "@babel/plugin-transform-react-jsx-self": "^7.27.1",
     "@babel/plugin-transform-react-jsx-source": "^7.27.1",
     "@carp-dk/authentication-react": "^1.0.1",
-    "@carp-dk/client": "2.1.0-dev.6",
+    "@carp-dk/client": "2.1.0-dev.7",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@js-joda/core": "^5.6.5",
