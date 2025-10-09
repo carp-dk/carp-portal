@@ -1,5 +1,5 @@
 import { FormLabel, Modal, TextField } from "@mui/material";
-import { useAddResearcherAssistantToStudy } from "@Utils/queries/studies";
+import { useAddUserWithRole } from "@Utils/queries/studies";
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -25,7 +25,7 @@ const validationSchema = yup.object({
 
 const AddResearcherModal = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
-  const addResearcher = useAddResearcherAssistantToStudy(studyId);
+  const addResearcher = useAddUserWithRole(studyId);
 
   const addResearcherFormik = useFormik({
     initialValues: {
@@ -33,7 +33,7 @@ const AddResearcherModal = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      addResearcher.mutate(values.email);
+      addResearcher.mutate({ email: values.email, role: "RESEARCH_ASSISTANT"});
     },
   });
 

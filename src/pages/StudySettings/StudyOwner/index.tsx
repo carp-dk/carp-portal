@@ -36,7 +36,7 @@ const StudyOwner = () => {
     const studyOwner = researchers.find(researcher => researcher.id == studyDetails.ownerId.stringRepresentation);
 
     return (
-        <StyledCard elevation={2} sx={{gridColumn: "span 2"}}>
+        <StyledCard elevation={2} sx={{gridColumn: "span 2", paddingTop: "8px", paddingBottom: "8px", paddingLeft: "16px"}}>
             <Wrapper>
                 <AccountIcon>
                     <Initials variant="h3">

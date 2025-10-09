@@ -13,6 +13,7 @@ import {
   StudyProtocolSnapshot,
   StudyDetails,
   StudyStatus,
+  Role,
 } from "@carp-dk/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "./auth";
@@ -30,7 +31,7 @@ export const useStudies = () => {
 
 export const useSetStudyDescription = (
   setDescription: (description: string) => void,
-  setInEdit: (inEdit: boolean) => void,
+  setInEdit: (inEdit: boolean) => void
 ) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
@@ -80,7 +81,7 @@ export const useSetStudyDescription = (
       setSnackbarError(error.message);
       queryClient.setQueryData(
         ["studyDetails", params.studyId],
-        context.previousValue,
+        context.previousValue
       );
       setDescription(context.previousValue.description);
     },
@@ -119,7 +120,7 @@ export const useSetStudyDetails = () => {
         studyId: string;
         name: string;
         description: string;
-      },
+      }
     ) => {
       setSnackbarSuccess("Updated study details!");
       queryClient.invalidateQueries({
@@ -193,7 +194,9 @@ export const useResearchers = (studyId: string) => {
 export const useResearcherAssistants = (studyId: string) => {
   return useQuery<User[], CarpServiceError, User[], any>({
     queryFn: async () => {
-      return carpApi.study.researchers.getStudyResearcherAssistants({ studyId });
+      return carpApi.study.researchers.getStudyResearchAssistants({
+        studyId,
+      });
     },
     queryKey: ["researcherAssistants", studyId],
   });
@@ -282,17 +285,25 @@ export const useSetStudyLive = () => {
   });
 };
 
-export const useAddResearcherAssistantToStudy = (studyId: string) => {
+export const useAddUserWithRole = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
-     mutationFn: async (email: string) => {
-
-      return carpApi.study.researchers.addResearcherAssistantToStudy({ studyId, email });
+    mutationFn: async ({ email, role }: { email: string; role: Role }) => {
+      return carpApi.study.researchers.addResearcherToStudy({
+        studyId,
+        email,
+        role,
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researcherAssistants", studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ["researchers", studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["researcherAssistants", studyId],
+      });
       setSnackbarSuccess("Added researcher to study!");
     },
     onError: (error: CarpServiceError) => {
@@ -301,19 +312,24 @@ export const useAddResearcherAssistantToStudy = (studyId: string) => {
   });
 };
 
-export const useRemoveResearcherAssistantFromStudy = (studyId: string) => {
+export const useRemoveResearcherFromStudy = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (email: string) => {
-      return carpApi.study.researchers.removeResearcherAssistantFromStudy({
+      return carpApi.study.researchers.removeResearcherFromStudy({
         studyId,
         email,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["researcherAssistants", studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ["researchers", studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["researcherAssistants", studyId],
+      });
       setSnackbarSuccess("Removed researcher from study!");
     },
     onError: (error: CarpServiceError) => {
@@ -334,7 +350,7 @@ export const useDeleteStudy = () => {
     },
     onSuccess: () => {
       queryClient.setQueryData(["studies"], (old: StudyOverview[]) =>
-        old.filter((study) => study.studyId !== id),
+        old.filter((study) => study.studyId !== id)
       );
       queryClient.invalidateQueries({ queryKey: ["studies"] });
       setSnackbarSuccess("Study deleted!");
@@ -558,7 +574,7 @@ export const useUpdateAnnouncement = () => {
         try {
           const imageUrl = await uploadImageRequest(
             props.studyId,
-            props.newImage,
+            props.newImage
           );
           announcement = { ...announcement, image: imageUrl };
         } catch (error) {

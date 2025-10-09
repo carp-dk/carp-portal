@@ -36,7 +36,7 @@ export const EmptyText = styled(Typography)(({theme}) => ({
     opacity: 0.7,
     fontWeight: 900,
     textAlign: "center",
-    gridColumn: 'span 2',
+    gridColumn: '1 / -1',
     marginTop: 50,
     marginBottom: 20,
 }));
