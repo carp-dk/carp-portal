@@ -312,7 +312,7 @@ export const useAddUserWithRole = (studyId: string) => {
   });
 };
 
-export const useRemoveResearcherAssistantFromStudy = (studyId: string) => {
+export const useRemoveResearcherFromStudy = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
