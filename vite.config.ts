@@ -3,8 +3,9 @@ import { defineConfig, loadEnv } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 import pkg from "./package.json";
+import visualizer from "rollup-plugin-visualizer";
 
-const path = require("path");
+const path = require("node:path");
 const version = pkg.version;
 
 export default ({ mode }: { mode: string }) => {
@@ -63,8 +64,8 @@ export default ({ mode }: { mode: string }) => {
       port: 3000,
       proxy: {
         "/proxy": {
-          // target: "https://dev.carp.dk",
-          target: "http://localhost:8080",
+          target: "https://dev.carp.dk",
+          // target: "http://localhost:8080",
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/proxy/, ""),

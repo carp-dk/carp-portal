@@ -64,7 +64,7 @@ const DeploymentCard = ({
     [deployment.participants],
   );
 
-  if (names[0] === ',' || names === '') names = 'Names not available';
+  if (names.startsWith(',') || names === '') names = 'Names not available';
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
@@ -78,10 +78,10 @@ const DeploymentCard = ({
             )
           }
         >
-          {!deployment.participants.every((p) => p.email == null) ? (
-            names
-          ) : (
+          {deployment.participants.every((p) => p.email == null) ? (
             <i>Generated deployment</i>
+          ) : (
+            names
           )}
         </Names>
         <StyledDivider />
@@ -94,7 +94,7 @@ const DeploymentCard = ({
             {deployment.deploymentStatus.__type
               .split('.')
               .pop()
-              .replace(/([a-z])([A-Z])/g, '$1 $2')}
+              .replaceAll(/([a-z])([A-Z])/g, '$1 $2')}
           </Typography>
           <DateTooltip
             invitedAt={deployment.deploymentStatus.createdOn}

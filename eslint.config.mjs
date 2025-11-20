@@ -16,43 +16,24 @@ export default tseslint.config(
   {
     files: ['**/*.ts', '**/*.tsx'],
 
-    // Extend recommended rule sets from:
-    // 1. ESLint JS's recommended rules
-    // 2. TypeScript ESLint recommended rules
-    // 3. ESLint React's recommended-typescript rules
     extends: [
       prettierRecommended,
       eslintJs.configs.recommended,
       tseslint.configs.recommended,
       eslintReact.configs['recommended-typescript'],
-      // stylistic.configs.customize({
-      //   semi: true,
-      //   braceStyle: "1tbs",
-      //   arrowParens: true,
-      // }),
     ],
 
-    // plugins: {
-    //   "@stilistic": stylistic,
-    // },
-
-    // Configure language/parsing options
     languageOptions: {
-      // Use TypeScript ESLint parser for TypeScript files
       parser: tseslint.parser,
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
-        project: './tsconfig.eslint.json',
       },
     },
 
-    // Custom rule overrides (modify rule levels or disable rules)
     rules: {
       '@eslint-react/no-missing-key': 'error',
       '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
-      // '@stylistic/operator-linebreak': ['error', 'after'],
-      // '@stylistic/multiline-ternary': ['error', 'always'],
       'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     },
   },

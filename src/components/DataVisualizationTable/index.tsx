@@ -80,7 +80,7 @@ const DataVisualizationTable = ({
               {data.map((item, index) => {
                 if (isToDateSetToTheCurrentDay && index === data.length - 1) {
                   return (
-                    <EnlargedTableBodyCell key={item[i.label]}>
+                    <EnlargedTableBodyCell key={item.date}>
                       {item[i.label] ? (
                         <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
                       ) : (
@@ -90,7 +90,7 @@ const DataVisualizationTable = ({
                   );
                 } else {
                   return (
-                    <TableBodyCell key={item[i.label]}>
+                    <TableBodyCell key={item.date}>
                       {item[i.label] ? (
                         <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
                       ) : (

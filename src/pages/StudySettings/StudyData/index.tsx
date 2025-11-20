@@ -230,7 +230,9 @@ const StudyData = () => {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography>{protocol.name}</Typography>
+                <Typography width={'65%'} noWrap>
+                  {protocol.name}
+                </Typography>
                 <Typography variant="caption">
                   {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
                 </Typography>

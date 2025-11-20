@@ -62,8 +62,9 @@ const ParticipantDataCard = () => {
     const iv = [];
     if (!participantData || !participant) return iv;
     if (
-      participantData?.roles &&
-      participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
+      participantData?.roles?.[
+        participant?.assignedParticipantRoles.roleNames[0]
+      ]
     ) {
       Object.entries(
         participantData?.roles[

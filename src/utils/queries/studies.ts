@@ -13,6 +13,7 @@ import {
   StudyOverview,
   StudyProtocolSnapshot,
   StudyStatus,
+  User,
 } from '@carp-dk/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCurrentUser } from './auth';

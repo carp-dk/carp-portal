@@ -84,22 +84,16 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     const participantsToAddRows = participants.filter((participant) =>
       participantIdentifiers.includes(
         (participant.accountIdentity instanceof EmailAccountIdentity &&
-          (
-            participant.accountIdentity as EmailAccountIdentity
-          ).emailAddress.address.toLowerCase()) ||
+          participant.accountIdentity.emailAddress.address.toLowerCase()) ||
           (participant.accountIdentity instanceof UsernameAccountIdentity &&
-            (
-              participant.accountIdentity as UsernameAccountIdentity
-            ).username.name.toLowerCase()),
+            participant.accountIdentity.username.name.toLowerCase()),
       ),
     );
     const participantsWithRoles: ParticipantWithRoles[] =
       participantsToAddRows.map((participant) => {
         const identity =
           participant.accountIdentity instanceof EmailAccountIdentity
-            ? (
-                participant.accountIdentity as EmailAccountIdentity
-              ).emailAddress.address.toLowerCase()
+            ? participant.accountIdentity.emailAddress.address.toLowerCase()
             : (
                 participant.accountIdentity as UsernameAccountIdentity
               ).username.name.toLowerCase();

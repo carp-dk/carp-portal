@@ -290,7 +290,7 @@ export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   link.download = `${protocol.name}.json`;
   document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link);
+  link.remove();
 };
 
 export const getParticipantDataName = (dataType: string) => {
@@ -550,9 +550,9 @@ export const getUri = (pageType: PageType) => {
 
 export const patternToRegex = (pattern) => {
   // escape regex special chars except *
-  const escaped = pattern.replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&');
+  const escaped = pattern.replaceAll(/[-/\\^$+?.()|[\]{}]/g, String.raw`\$&`);
   // Keycloak-style *: one or more chars
-  const regexString = '^' + escaped.replace(/\*/g, '.+') + '$';
+  const regexString = '^' + escaped.replaceAll('*', '.+') + '$';
   return new RegExp(regexString);
 };
 

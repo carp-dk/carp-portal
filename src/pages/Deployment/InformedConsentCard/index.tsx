@@ -66,9 +66,9 @@ const InformedConsentCard = () => {
     ).toBlob();
     const a = document.createElement('a');
     a.download = 'informedConsent.pdf';
-    a.href = window.URL.createObjectURL(blob);
+    a.href = globalThis.window.URL.createObjectURL(blob);
     const clickEvt = new MouseEvent('click', {
-      view: window,
+      view: globalThis.window,
       bubbles: true,
       cancelable: true,
     });
@@ -107,7 +107,7 @@ const InformedConsentCard = () => {
       });
 
       if (files) {
-        const sortedFiles = files.sort((a, b) => {
+        const sortedFiles = files.toSorted((a, b) => {
           return (
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
           );

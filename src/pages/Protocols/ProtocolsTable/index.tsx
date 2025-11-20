@@ -1,4 +1,5 @@
 import SortingButton from '@Components/SortingButton';
+import { useCurrentUser } from '@Utils/queries/auth';
 import { useProtocols } from '@Utils/queries/protocols';
 import {
   formatDateTime,

@@ -87,8 +87,7 @@ const StudyStatusSection: React.FC = () => {
     'In order to go live study you need to fill out all the required data and invitation.';
   const readyStudyStatusDescription =
     'Once the study is live you will not be able to change the study settings.';
-  const liveStudyStatusDescription = '';
-  let currentStudyStatus: 'Draft' | 'Ready' | 'Live' = 'Draft';
+  let currentStudyStatus: 'Draft' | 'Ready' | 'Live';
   let currentStudyStatusDescription = '';
 
   const navigate = useNavigate();
@@ -118,7 +117,7 @@ const StudyStatusSection: React.FC = () => {
     }
   }, [deleteStudy.isSuccess]);
 
-  if (studyStatusIsLoading || studyDetailsIsLoading) {
+  if (studyStatusIsLoading || studyDetailsIsLoading || userLoading) {
     return <StudyStatusSectionSkeleton />;
   }
 
@@ -141,7 +140,6 @@ const StudyStatusSection: React.FC = () => {
     }
   } else {
     currentStudyStatus = 'Live';
-    currentStudyStatusDescription = liveStudyStatusDescription;
   }
 
   const handleDeleteStudy = () => {

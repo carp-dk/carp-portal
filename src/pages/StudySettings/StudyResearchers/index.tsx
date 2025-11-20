@@ -10,7 +10,8 @@ import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import ResearcherItem, { ResearcherItemSkeleton } from '../ResearcherItem';
 import {
-  AddResearcherButton, EmptyText,
+  AddResearcherButton,
+  EmptyText,
   ResearchersContainer,
   StyledCard,
   Subtitle,
@@ -76,16 +77,16 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
           <EmptyText>No researchers found</EmptyText>
         ) : (
           researchers.map((researcher) => (
-              <ResearcherItem
-                disabled={
-                  !isStudyOwner ||
-                  researcher.id === studyDetails.ownerId.stringRepresentation ||
-                  // CARP core type defines accountId it as UUID, after serialization it will be string
-                  researcher.id === (user.accountId as unknown as string)
-                }
-                key={uuidv4()}
-                researcher={researcher}
-              />
+            <ResearcherItem
+              disabled={
+                !isStudyOwner ||
+                researcher.id === studyDetails.ownerId.stringRepresentation ||
+                // CARP core type defines accountId it as UUID, after serialization it will be string
+                researcher.id === (user.accountId as unknown as string)
+              }
+              key={uuidv4()}
+              researcher={researcher}
+            />
           ))
         )}
       </ResearchersContainer>

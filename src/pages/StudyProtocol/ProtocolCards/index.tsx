@@ -1,10 +1,8 @@
 import getInputDataName from '@Assets/inputTypeNames';
-import { getRandomNumber } from '@Utils/utility';
 import carpCommon from '@cachet/carp-common';
 import carpProtocols from '@cachet/carp-protocols-core';
 import { StudyProtocolSnapshot } from '@carp-dk/client';
-import { Skeleton, Typography } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+import { Typography } from '@mui/material';
 import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
@@ -18,40 +16,6 @@ import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.Stu
 
 type ParticipantRole =
   carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
-
-const ProtocolNameCardSkeleton: React.FC = () => {
-  return (
-    <StyledNameCard elevation={2}>
-      <Skeleton height={32} animation="wave" variant="text" width={70} />
-      <Skeleton height={28} animation="wave" variant="text" width="83%" />
-      <Skeleton height={32} animation="wave" variant="text" width={130} />
-      <Skeleton animation="wave" variant="text" width="60%" />
-    </StyledNameCard>
-  );
-};
-
-const ProtocolCardSkeleton: React.FC = () => {
-  return (
-    <StyledCard elevation={2}>
-      <Skeleton
-        height={32}
-        animation="wave"
-        variant="text"
-        width={`${getRandomNumber(20, 50)}%`}
-      />
-      {[1, 2].map(() => {
-        return (
-          <Skeleton
-            key={uuidv4()}
-            animation="wave"
-            variant="text"
-            width={`${getRandomNumber(40, 70)}%`}
-          />
-        );
-      })}
-    </StyledCard>
-  );
-};
 
 type Props = {
   protocol: StudyProtocolSnapshot;

@@ -61,12 +61,8 @@ const StudyProtocol = () => {
             path={[sectionName, { name: study.protocolSnapshot.name, uri: '' }]}
             description={description}
           />
-          <ProtocolInfo
-            protocol={study.protocolSnapshot as any}
-          />
-          <ProtocolCards
-            protocol={study.protocolSnapshot as any}
-          />
+          <ProtocolInfo protocol={study.protocolSnapshot as any} />
+          <ProtocolCards protocol={study.protocolSnapshot as any} />
         </>
       )}
     </StudyPageLayout>
