@@ -323,8 +323,8 @@ export const themeInstance = createTheme({
       fontWeight: 300,
     },
     h5_web: {
-      fontSize: '1rem',
-      lineHeight: '1.5rem',
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
       fontWeight: 300,
     },
   },

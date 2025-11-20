@@ -78,6 +78,13 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
               );
               navigate('/', { replace: true });
             }
+
+            if ((error as unknown as CarpServiceError).code === 400) {
+              console.log(
+                "Bad request:",
+                (error as unknown as CarpServiceError).message,
+              );
+            }
             return failureCount < 3;
           },
         },
