@@ -10,6 +10,7 @@ import { formatDateTime } from '@Utils/utility';
 import LinkIcon from '@mui/icons-material/Link';
 import {
   FormLabel,
+  InputAdornment,
   MenuItem,
   Select,
   Stack,
@@ -17,6 +18,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import StudySetupSkeleton from '../StudySetupSkeleton';
@@ -86,6 +88,22 @@ const StudyData = () => {
       setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
     },
   });
+
+  useEffect(() => {
+    if (
+      studyDetails?.protocolSnapshot &&
+      protocols &&
+      studyStatus?.canSetStudyProtocol
+    ) {
+      const currentProtocol = protocols.find(
+        (protocol) =>
+          protocol.id.stringRepresentation ===
+          studyDetails.protocolSnapshot.id.stringRepresentation,
+      );
+      if (currentProtocol.equals(studyDetails.protocolSnapshot)) return;
+      setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
+    }
+  }, [studyDetails, studyStatus, protocols]);
 
   const handleDetailsBlur = (e) => {
     studyDetailsFormik.handleBlur(e);
@@ -162,34 +180,60 @@ const StudyData = () => {
           <LinkIcon sx={{ fontSize: 16 }} />
         </ProtocolInformation>
       </Stack>
-      <Select
-        disabled={!studyStatus.canSetStudyProtocol}
-        variant="outlined"
-        fullWidth
-        error={!!studyProtocolFormik.errors.protocolId}
-        name="protocolId"
-        value={studyProtocolFormik.values.protocolId}
-        onChange={handleProtocolChange}
-      >
-        {protocols?.map((protocol) => (
-          <MenuItem
-            key={protocol.id.stringRepresentation}
-            value={protocol.id.stringRepresentation}
-          >
-            <Stack
-              width="100%"
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
+      {!studyStatus.canSetStudyProtocol ? (
+        <TextField
+          variant="outlined"
+          fullWidth
+          disabled
+          sx={{ marginBottom: '8px' }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Typography>{studyDetails.protocolSnapshot.name}</Typography>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Typography variant="caption">
+                    {formatDateTime(
+                      studyDetails.protocolSnapshot.createdOn.toEpochMilliseconds(),
+                    )}
+                  </Typography>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      ) : (
+        <Select
+          variant="outlined"
+          fullWidth
+          error={!!studyProtocolFormik.errors.protocolId}
+          name="protocolId"
+          value={studyProtocolFormik.values.protocolId}
+          onChange={handleProtocolChange}
+        >
+          {protocols?.map((protocol) => (
+            <MenuItem
+              key={protocol.id.stringRepresentation}
+              value={protocol.id.stringRepresentation}
             >
-              <Typography>{protocol.name}</Typography>
-              <Typography variant="caption">
-                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-              </Typography>
-            </Stack>
-          </MenuItem>
-        ))}
-      </Select>
+              <Stack
+                width="100%"
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography>{protocol.name}</Typography>
+                <Typography variant="caption">
+                  {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
+      )}
     </StyledCard>
   );
 };
