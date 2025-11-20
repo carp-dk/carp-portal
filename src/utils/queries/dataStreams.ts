@@ -19,13 +19,12 @@ export const useDataStreamsSummary = (
 
 export const useDataStreamsSummaries = (
   requests: DataStreamSummaryRequest[],
-  options?: UseQueryOptions,
 ) => {
   return useQueries({
     queries: requests.map((request) => ({
       queryKey: ['dataStreamSummary', { ...request }],
       queryFn: () => carpApi.dataStreams.getDataStreamSummary(request),
-      enabled: options?.enabled ?? true,
+      enabled: requests.length > 0,
     })),
   });
 };

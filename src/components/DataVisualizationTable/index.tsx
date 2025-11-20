@@ -47,7 +47,7 @@ const DataVisualizationTable = ({
         </TableHeadLeftmostCell>
         <TableHeadCenterCellsWrapper>
           {data.map((item, index) => (
-            <TableHeadCell key={index}>
+            <TableHeadCell key={item.dayOfWeek + item.date}>
               {isToDateSetToTheCurrentDay && index === data.length - 1 ? (
                 <EnlargedText>
                   {item.dayOfWeek} <br /> {item.date}
@@ -80,7 +80,7 @@ const DataVisualizationTable = ({
               {data.map((item, index) => {
                 if (isToDateSetToTheCurrentDay && index === data.length - 1) {
                   return (
-                    <EnlargedTableBodyCell key={index}>
+                    <EnlargedTableBodyCell key={item[i.label]}>
                       {item[i.label] ? (
                         <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
                       ) : (
@@ -90,7 +90,7 @@ const DataVisualizationTable = ({
                   );
                 } else {
                   return (
-                    <TableBodyCell key={index}>
+                    <TableBodyCell key={item[i.label]}>
                       {item[i.label] ? (
                         <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
                       ) : (

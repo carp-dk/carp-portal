@@ -30,7 +30,6 @@ export interface StackedBarChartWrapperProps {
 
 const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
   const [toDate, setToDate] = React.useState(LocalDate.now());
-  const [expanded, setExpanded] = React.useState(true);
   const fromDate = toDate.minusDays(13);
 
   const dataStreamSummaryRequest: DataStreamSummaryRequest = {
@@ -79,7 +78,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
         titleColor={taskLabelColors[props.title]}
         title={props.title}
         description={props.subtitle}
-        isExpanded={expanded}
+        isExpanded={true}
       >
         <Skeleton
           sx={{ borderRadius: '10px' }}
@@ -98,7 +97,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
       titleColor={taskLabelColors[props.title]}
       title={props.title}
       description={props.subtitle}
-      isExpanded={expanded}
+      isExpanded={true}
     >
       <DataVisualizationTable
         data={mappedData}

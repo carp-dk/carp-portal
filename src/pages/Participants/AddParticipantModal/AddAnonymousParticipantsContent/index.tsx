@@ -1,5 +1,7 @@
+import { useRedirectURIs } from '@Utils/queries/auth';
 import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
+import { patternToRegex } from '@Utils/utility';
 import {
   FormHelperText,
   FormLabel,
@@ -10,6 +12,7 @@ import {
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { enGB } from 'date-fns/locale/en-GB';
 import { useFormik } from 'formik';
 import { FormEvent, useEffect } from 'react';
@@ -25,9 +28,6 @@ import {
   SecondaryCellText,
   Spinner,
 } from '../styles';
-import { useRedirectURIs } from '@Utils/queries/auth';
-import { addDays, endOfDay, startOfDay } from 'date-fns';
-import { patternToRegex } from '@Utils/utility';
 
 type Props = {
   open: boolean;
@@ -255,10 +255,10 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               </Select>
               {addAnonymousParticipantFormik.touched.clientId &&
                 addAnonymousParticipantFormik.errors.clientId && (
-                <FormHelperText error>
-                  {addAnonymousParticipantFormik.errors.clientId}
-                </FormHelperText>
-              )}
+                  <FormHelperText error>
+                    {addAnonymousParticipantFormik.errors.clientId}
+                  </FormHelperText>
+                )}
             </Grid>
             <Grid size={{ xs: 6 }}>
               <FormLabel required>Redirect URI</FormLabel>

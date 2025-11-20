@@ -20,7 +20,6 @@ const DataVisualizationForStudy = () => {
 
   const [toDate, setToDate] = React.useState(LocalDate.now());
   const fromDate = toDate.minusDays(13);
-  const [isExpanded, setIsExpanded] = React.useState(true);
 
   const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
@@ -47,9 +46,7 @@ const DataVisualizationForStudy = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const summaries = useDataStreamsSummaries(requests, {
-    enabled: requests.length > 0,
-  });
+  const summaries = useDataStreamsSummaries(requests);
 
   useEffect(() => {
     if (studyDetails) {
@@ -63,7 +60,8 @@ const DataVisualizationForStudy = () => {
 
   function updateRequestsForQuery() {
     const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
-      studyDetails.protocolSnapshot,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      studyDetails.protocolSnapshot as any,
     );
     if (listOfTaskTypes.length === 0) {
       setDisplayBlank(true);
@@ -105,7 +103,7 @@ const DataVisualizationForStudy = () => {
 
   if (loading)
     return (
-      <CarpAccordion title="Tasks" isExpanded={isExpanded}>
+      <CarpAccordion title="Tasks" isExpanded={true}>
         <Skeleton
           sx={{ borderRadius: '10px' }}
           variant="rectangular"
@@ -156,7 +154,7 @@ const DataVisualizationForStudy = () => {
   }
 
   return (
-    <CarpAccordion title="Tasks" isExpanded={isExpanded}>
+    <CarpAccordion title="Tasks" isExpanded={true}>
       <DataVisualizationTable
         data={data}
         handleLeftButtonClick={handleLeftButtonClick}
