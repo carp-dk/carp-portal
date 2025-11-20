@@ -31,6 +31,16 @@ export const ResearchersContainer = styled('div')({
   gap: 20,
 });
 
+export const EmptyText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  opacity: 0.7,
+  fontWeight: 900,
+  textAlign: 'center',
+  gridColumn: 'span 2',
+  marginTop: 50,
+  marginBottom: 20,
+}));
+
 export const AddResearcherButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.grey[700]}`,
   borderRadius: 18,
