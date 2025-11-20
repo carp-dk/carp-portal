@@ -89,55 +89,13 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
 
   const { mappedData } = mapDataToChartData(data);
 
-  if (error) {
-    return (
-      <CarpAccordion
-        titleColor={taskLabelColors[props.title]}
-        title={props.title}
-        description={props.subtitle}
-        isExpanded={expanded}
-      >
-        <DataVisualizationTable
-          data={mappedData}
-          handleLeftButtonClick={handleLeftButtonClick}
-          handleRightButtonClick={handleRightButtonClick}
-          legend={props.legend}
-          isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
-        />
-      </CarpAccordion>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <StyledCard>
-        <FlexRowBetween>
-          <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
-            {props.title}
-          </StyledTitle>
-          <StyledControlButton>
-            <ChevronUp></ChevronUp>
-          </StyledControlButton>
-        </FlexRowBetween>
-        <StyledDescription variant="h6">
-          {props.subtitle}
-        </StyledDescription>
-        <Skeleton variant="rectangular" height="200px" animation="wave" />
-      </StyledCard>
-    );
-  }
-
-  const { mappedData } = mapDataToChartData(data);
-
   return (
-    <StyledCard>
-      <StyledTitle variant="h2" customcolor={taskLabelColors[props.title]}>
-        {props.title}
-      </StyledTitle>
-      <StyledDescription variant="h6">
-        {props.subtitle}
-      </StyledDescription>
-
+    <CarpAccordion
+      titleColor={taskLabelColors[props.title]}
+      title={props.title}
+      description={props.subtitle}
+      isExpanded={expanded}
+    >
       <DataVisualizationTable
         data={mappedData}
         handleLeftButtonClick={handleLeftButtonClick}
@@ -145,8 +103,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
         legend={props.legend}
         isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
       />
-
-    </StyledCard>
+    </CarpAccordion>
   );
 };
 

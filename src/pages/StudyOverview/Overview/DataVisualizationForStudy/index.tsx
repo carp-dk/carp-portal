@@ -46,10 +46,7 @@ const DataVisualizationForStudy = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const summaries = useDataStreamsSummaries(requests, {
-    enabled: requests.length > 0,
-    queryKey: [],
-  });
+  const summaries = useDataStreamsSummaries(requests, { enabled: requests.length > 0 });
 
   useEffect(() => {
     if (studyDetails) {
@@ -67,82 +64,12 @@ const DataVisualizationForStudy = () => {
       setDisplayBlank(true);
       return;
     }
-
-    const [requests, setRequests] = React.useState([]);
-    const [displayBlank, setDisplayBlank] = React.useState(false);
-
-    const {
-      data: studyDetails,
-      isLoading: studyDetailsIsLoading,
-      error: studyDetailsError,
-    } = useStudyDetails(studyId);
-
-    const summaries = useDataStreamsSummaries(requests, { enabled: requests.length > 0 });
-
-    useEffect(() => {
-      if (studyDetails) {
-        if (studyDetails.protocolSnapshot == null) {
-          setDisplayBlank(true);
-        } else {
-          updateRequestsForQuery();
-        }
-      }
-    }, [studyDetails, toDate]);
-
-    function updateRequestsForQuery() {
-      const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
-      if (listOfTaskTypes.length === 0) {
-        setDisplayBlank(true);
-        return;
-      }
-      const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map((type) => ({
-        study_id: studyId,
-        scope: 'study',
-        type: type,
-        from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
-        to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
-      }));
-      setRequests(requests);
-    }
-
-    const summariesError = summaries.find((summary) => summary.isError);
-    const error = studyDetailsError || summariesError;
-
-    if (displayBlank) {
-      return null;
-    }
-
-    if (error) {
-      return (
-        <CarpErrorCardComponent
-          message="An error occurred while loading tasks"
-          error={studyDetailsError}
-        />
-      );
-    }
-
-    const loading = studyDetailsIsLoading || (summaries.some((summary) => summary.isLoading)) || requests.length === 0;
-    const loadingSkeletonHeight = 70 + 16 + (requests?.length * 40);
-
-    if (loading) return (
-      <CarpAccordion title="Tasks" isExpanded={isExpanded}>
-        <Skeleton
-          sx={{ borderRadius: '10px' }}
-          variant="rectangular"
-          height={loadingSkeletonHeight}
-          animation="wave"
-        />
-      </CarpAccordion>
-    );
-
-    const listOfTaskTypesFromProtocol = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
-
-    const legend = listOfTaskTypesFromProtocol.map((task, index) => ({
-      label: task,
-      color: colors[index % colors.length],
-      stack: 'stack',
-      labelMarkType: 'circle',
-      dataKey: task,
+    const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map((type) => ({
+      study_id: studyId,
+      scope: 'study',
+      type: type,
+      from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
+      to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
     }));
     setRequests(requests);
   }
@@ -156,27 +83,25 @@ const DataVisualizationForStudy = () => {
 
   if (error) {
     return (
-      <CarpAccordion title="Tasks" isExpanded={isExpanded}>
-        <DataVisualizationTable
-          data={data}
-          handleLeftButtonClick={handleLeftButtonClick}
-          handleRightButtonClick={handleRightButtonClick}
-          legend={legend}
-          isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
-        />
-      </CarpAccordion>
+      <CarpErrorCardComponent
+        message="An error occurred while loading tasks"
+        error={studyDetailsError}
+      />
     );
   }
 
   const loading = studyDetailsIsLoading || (summaries.some((summary) => summary.isLoading)) || requests.length === 0;
+  const loadingSkeletonHeight = 70 + 16 + (requests?.length * 40);
 
   if (loading) return (
-    <StyledContainer>
-      <StyledTitle variant="h2">
-        Tasks
-      </StyledTitle>
-      <Skeleton variant="rectangular" height={348} animation="wave" />
-    </StyledContainer>
+    <CarpAccordion title="Tasks" isExpanded={isExpanded}>
+      <Skeleton
+        sx={{ borderRadius: '10px' }}
+        variant="rectangular"
+        height={loadingSkeletonHeight}
+        animation="wave"
+      />
+    </CarpAccordion>
   );
 
   const listOfTaskTypesFromProtocol = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
@@ -191,18 +116,17 @@ const DataVisualizationForStudy = () => {
 
   const summedGroups = [];
 
-  for (const element of summaries) {
-    const summary = element.data;
+  for (let i = 0; i < summaries.length; i++) {
+    const summary = summaries[i].data;
     const { mappedData } = mapDataToChartData(summary);
 
     const output = mappedData.map((entry) => {
-      console.log('entry', entry);
       const { date, dayOfWeek, ...rest } = entry;
       const quantity = Object.values(rest).reduce((sum, value) => sum + value, 0);
 
       return { date, [summary.type]: quantity, dayOfWeek };
     });
-    console.log('output', output);
+
     summedGroups.push(output);
   }
 
@@ -216,20 +140,15 @@ const DataVisualizationForStudy = () => {
   }
 
   return (
-    <StyledContainer>
-      <StyledTitle variant="h2">
-        Tasks
-      </StyledTitle>
-      <StyledCard>
-        <DataVisualizationTable
-          data={data}
-          handleLeftButtonClick={handleLeftButtonClick}
-          handleRightButtonClick={handleRightButtonClick}
-          legend={legend}
-          isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
-        />
-      </StyledCard>
-    </StyledContainer>
+    <CarpAccordion title="Tasks" isExpanded={isExpanded}>
+      <DataVisualizationTable
+        data={data}
+        handleLeftButtonClick={handleLeftButtonClick}
+        handleRightButtonClick={handleRightButtonClick}
+        legend={legend}
+        isToDateSetToTheCurrentDay={isToDateSetToTheCurrentDay}
+      />
+    </CarpAccordion>
   );
 };
 
