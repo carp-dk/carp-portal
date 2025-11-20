@@ -1,15 +1,15 @@
-import StyledTooltip from "@Components/StyledTooltip";
-import { useDeleteStudyAnnouncement } from "@Utils/queries/studies";
-import { formatDate, getRandomNumber } from "@Utils/utility";
-import { MessageData } from "@carp-dk/client";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button, Collapse, IconButton, Skeleton } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import DeletionPrompt from "../../../components/Dialogs/DeletionPrompt";
+import StyledTooltip from '@Components/StyledTooltip';
+import { useDeleteStudyAnnouncement } from '@Utils/queries/studies';
+import { formatDate, getRandomNumber } from '@Utils/utility';
+import { MessageData } from '@carp-dk/client';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Button, Collapse, IconButton, Skeleton } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import DeletionPrompt from '../../../components/Dialogs/DeletionPrompt';
 import {
   AnnouncementActions,
   AnnouncementDate,
@@ -21,7 +21,7 @@ import {
   AnnouncementType,
   CollapseWrapper,
   StyledAlert,
-} from "./styles";
+} from './styles';
 
 type Props = {
   studyId: string;
@@ -111,7 +111,7 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
               onClick={handleExpandClick}
               startIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             >
-              {expanded ? "Show less" : "Show more"}
+              {expanded ? 'Show less' : 'Show more'}
             </Button>
           </CollapseWrapper>
         ) : (

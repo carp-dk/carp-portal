@@ -1,7 +1,7 @@
-import SortingButton from "@Components/SortingButton";
-import { useProtocols } from "@Utils/queries/protocols";
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SortingButton from '@Components/SortingButton';
+import { useProtocols } from '@Utils/queries/protocols';
+import { formatDateTime, getRandomNumber } from '@Utils/utility';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {
   Skeleton,
   Table,
@@ -9,9 +9,9 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AddProtocolButton,
   HeaderCellContainer,
@@ -22,7 +22,7 @@ import {
   StyledCard,
   StyledTableRow,
   TertiaryCellText,
-} from "./styles";
+} from './styles';
 
 const SkeletonTableRow = () => {
   return (
@@ -50,11 +50,11 @@ const ProtocolsTable = ({ openModal }: Props) => {
 
   // State for sorting
   const [sortOrder, setSortOrder] = useState<{
-    field: "name" | "createdOn";
+    field: 'name' | 'createdOn';
     ascending: boolean;
-  }>({ field: "createdOn", ascending: false });
+  }>({ field: 'createdOn', ascending: false });
 
-  const toggleSortOrder = (field: "name" | "createdOn") => {
+  const toggleSortOrder = (field: 'name' | 'createdOn') => {
     setSortOrder((prevSortOrder) => ({
       field,
       ascending:
@@ -67,7 +67,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
       ? []
       : protocols.sort((a, b) => {
           const compareResult =
-            sortOrder.field === "name"
+            sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
               : a.createdOn.toEpochMilliseconds() -
                 b.createdOn.toEpochMilliseconds();
@@ -89,9 +89,9 @@ const ProtocolsTable = ({ openModal }: Props) => {
   if (!protocols) return null;
   return (
     <StyledCard>
-      <TableContainer sx={{ paddingX: "32px", height: "70vh" }}>
+      <TableContainer sx={{ paddingX: '32px', height: '70vh' }}>
         <Table
-          style={{ tableLayout: "fixed" }}
+          style={{ tableLayout: 'fixed' }}
           stickyHeader
           aria-label="sticky table"
         >
@@ -146,7 +146,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
                     <SecondaryCellText variant="h5">
                       {protocol.description
                         ? formatDescription(protocol.description)
-                        : "—"}
+                        : '—'}
                     </SecondaryCellText>
                   </TableCell>
                   <TableCell>

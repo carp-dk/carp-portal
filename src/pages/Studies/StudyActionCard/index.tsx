@@ -1,6 +1,6 @@
-import { Add } from "@mui/icons-material";
-import { Grow, Typography } from "@mui/material";
-import { CardWrapper, CreateNewCard, NewStudyContent } from "./styles";
+import { Add } from '@mui/icons-material';
+import { Grow, Typography } from '@mui/material';
+import { CardWrapper, CreateNewCard, NewStudyContent } from './styles';
 
 interface Props {
   onClick: () => void;

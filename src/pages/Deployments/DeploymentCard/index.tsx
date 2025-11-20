@@ -1,12 +1,11 @@
-/* eslint-disable no-underscore-dangle */
-import CopyButton from "@Components/Buttons/CopyButton";
-import { ParticipantGroup } from "@carp-dk/client";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import { Skeleton, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import DateTooltip from "../DateTooltip";
-import ParticipantRecord from "../ParticipantRecord";
+import CopyButton from '@Components/Buttons/CopyButton';
+import { ParticipantGroup } from '@carp-dk/client';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { Skeleton, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import DateTooltip from '../DateTooltip';
+import ParticipantRecord from '../ParticipantRecord';
 import {
   HorizontalStatusContainer,
   IdContainer,
@@ -17,7 +16,7 @@ import {
   StyledDivider,
   StyledStatusDot,
   TopContainer,
-} from "./styles";
+} from './styles';
 
 interface Props {
   deployment: ParticipantGroup;
@@ -59,13 +58,13 @@ const DeploymentCard = ({
         .map((participant) =>
           participant.firstName
             ? `${participant.firstName} ${participant.lastName}`
-            : "",
+            : '',
         )
-        .join(", "),
+        .join(', '),
     [deployment.participants],
   );
 
-  if (names[0] === "," || names === "") names = "Names not available";
+  if (names[0] === ',' || names === '') names = 'Names not available';
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
@@ -89,13 +88,13 @@ const DeploymentCard = ({
         <HorizontalStatusContainer>
           <Typography variant="h6">Deployment status:</Typography>
           <StyledStatusDot
-            status={deployment.deploymentStatus.__type.split(".").pop()}
+            status={deployment.deploymentStatus.__type.split('.').pop()}
           />
           <Typography variant="h6">
             {deployment.deploymentStatus.__type
-              .split(".")
+              .split('.')
               .pop()
-              .replace(/([a-z])([A-Z])/g, "$1 $2")}
+              .replace(/([a-z])([A-Z])/g, '$1 $2')}
           </Typography>
           <DateTooltip
             invitedAt={deployment.deploymentStatus.createdOn}
@@ -125,8 +124,8 @@ const DeploymentCard = ({
         >
           <KeyboardArrowDownRoundedIcon
             sx={{
-              transform: isCardOpen ? "rotate(0deg)" : "rotate(-90deg)",
-              transition: "transform 0.3s ease",
+              transform: isCardOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+              transition: 'transform 0.3s ease',
             }}
           />
         </MinimizeButton>
@@ -169,7 +168,7 @@ export const DeploymentSkeletonCard = () => {
           <Skeleton animation="wave" variant="text" width={56} height={24} />
           <Skeleton animation="wave" variant="text" width={260} height={24} />
           <Skeleton
-            sx={{ ml: "2px" }}
+            sx={{ ml: '2px' }}
             variant="rounded"
             animation="wave"
             width={14}
@@ -179,7 +178,7 @@ export const DeploymentSkeletonCard = () => {
         <MinimizeButton disableRipple onClick={() => {}} open={false}>
           <KeyboardArrowDownRoundedIcon
             sx={{
-              transform: "rotate(-90deg)",
+              transform: 'rotate(-90deg)',
             }}
           />
         </MinimizeButton>

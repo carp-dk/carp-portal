@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@mui/material";
+} from '@mui/material';
 
 type Props = {
   open: boolean;
@@ -49,7 +49,7 @@ const DeletionPrompt = ({
           <>
             <Button onClick={onClose}>Cancel</Button>
             <Button onClick={action} color="error">
-              {actionText ?? "Delete"}
+              {actionText ?? 'Delete'}
             </Button>
           </>
         )}

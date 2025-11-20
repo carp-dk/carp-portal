@@ -1,13 +1,13 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useLatestProtocol } from "@Utils/queries/protocols";
-import { Connection } from "@Utils/types";
-import { getRandomNumber } from "@Utils/utility";
-import carpCommon from "@cachet/carp-common";
-import { Skeleton, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import getInputDataName from "@Assets/inputTypeNames";
-import DeviceDropdown from "../DeviceDropdown";
+import getInputDataName from '@Assets/inputTypeNames';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useLatestProtocol } from '@Utils/queries/protocols';
+import { Connection } from '@Utils/types';
+import { getRandomNumber } from '@Utils/utility';
+import carpCommon from '@cachet/carp-common';
+import { Skeleton, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
   ProtocolDescription,
@@ -15,7 +15,7 @@ import {
   StyledCard,
   StyledContainer,
   StyledNameCard,
-} from "./styles";
+} from './styles';
 
 type ParticipantRole =
   carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;

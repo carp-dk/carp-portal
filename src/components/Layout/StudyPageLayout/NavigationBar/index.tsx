@@ -1,18 +1,18 @@
-import Logo from "@Components/Logo";
-import AnnouncementRoundedIcon from "@mui/icons-material/AnnouncementRounded";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import DownloadForOfflineRoundedIcon from "@mui/icons-material/DownloadForOfflineRounded";
-import DeploymentsIcon from "@mui/icons-material/Groups";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
-import LanguageIcon from "@mui/icons-material/Language";
-import ParticipantsIcon from "@mui/icons-material/Person";
-import SecurityIcon from "@mui/icons-material/Security";
-import SettingsIcon from "@mui/icons-material/Settings";
-import { List, useMediaQuery } from "@mui/material";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import NavigationBarItem from "./NavigationBarItem";
+import Logo from '@Components/Logo';
+import AnnouncementRoundedIcon from '@mui/icons-material/AnnouncementRounded';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
+import DeploymentsIcon from '@mui/icons-material/Groups';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
+import LanguageIcon from '@mui/icons-material/Language';
+import ParticipantsIcon from '@mui/icons-material/Person';
+import SecurityIcon from '@mui/icons-material/Security';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { List, useMediaQuery } from '@mui/material';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import NavigationBarItem from './NavigationBarItem';
 import {
   Container,
   LogoWrapper,
@@ -21,11 +21,11 @@ import {
   SectionTitle,
   StyledBackdrop,
   StyledDivider,
-} from "./styles";
+} from './styles';
 
 const NavigationBar = () => {
   const { id: currentStudyId } = useParams();
-  const isLarge = useMediaQuery("(min-width: 1540px)");
+  const isLarge = useMediaQuery('(min-width: 1540px)');
   const studyPath = `/studies/${currentStudyId}`;
   let currentWidth = window.innerWidth;
   let lastChangedWidth = currentWidth;
@@ -43,7 +43,7 @@ const NavigationBar = () => {
     }
   };
 
-  window.addEventListener("resize", handleWidthChange);
+  window.addEventListener('resize', handleWidthChange);
 
   return (
     <>

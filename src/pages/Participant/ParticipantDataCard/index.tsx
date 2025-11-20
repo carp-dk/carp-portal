@@ -1,9 +1,13 @@
+import getInputDataName from '@Assets/inputTypeNames';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
   useSetParticipantData,
-} from "@Utils/queries/participants";
-import EditIcon from "@mui/icons-material/Edit";
+} from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { CarpInputDataTypes, ParticipantStatus, cdk } from '@carp-dk/client';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
   Divider,
@@ -13,13 +17,12 @@ import {
   Select,
   Stack,
   Typography,
-} from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { CarpInputDataTypes, ParticipantStatus, cdk } from "@carp-dk/client";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import getInputDataName from "@Assets/inputTypeNames";
+} from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import LoadingSkeleton from '../LoadingSkeleton';
+import getInputElement from './InputElements/selector';
+import getParticipantDataFormik from './InputElements/utils';
 import {
   EditButton,
   Left,
@@ -29,11 +32,8 @@ import {
   StyledDivider,
   Title,
   Top,
-} from "./styles";
-import getInputElement from "./InputElements/selector";
+} from './styles';
 import SelectOne = cdk.cachet.carp.common.application.data.input.elements.SelectOne;
-import LoadingSkeleton from "../LoadingSkeleton";
-import getParticipantDataFormik from "./InputElements/utils";
 
 const ParticipantDataCard = () => {
   const [editing, setEditing] = useState(false);
@@ -123,7 +123,7 @@ const ParticipantDataCard = () => {
     study?.protocolSnapshot.expectedParticipantData.toArray().length === 0 ||
     (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1 &&
       study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
-        .name === "informed_consent")
+        .name === 'informed_consent')
   ) {
     return null;
   }
@@ -150,7 +150,7 @@ const ParticipantDataCard = () => {
           {study?.protocolSnapshot.expectedParticipantData
             .toArray()
             .map((data) => {
-              if (data.inputDataType.name === "informed_consent") return null;
+              if (data.inputDataType.name === 'informed_consent') return null;
               return (
                 <Stack
                   direction="column"
@@ -180,7 +180,7 @@ const ParticipantDataCard = () => {
                           disabled={!editing}
                           required
                           name={`${data.inputDataType.name}.value`}
-                          value={participantDataFromik.values.sex.value ?? ""}
+                          value={participantDataFromik.values.sex.value ?? ''}
                           onChange={participantDataFromik.handleChange}
                           onBlur={participantDataFromik.handleBlur}
                           label={getInputDataName(data.inputDataType.name)}
@@ -206,7 +206,7 @@ const ParticipantDataCard = () => {
                     )}
                   {!CarpInputDataTypes.inputElements.get(data.inputDataType) &&
                     data.inputDataType.name &&
-                    data.inputDataType.name !== "informed_consent" &&
+                    data.inputDataType.name !== 'informed_consent' &&
                     getInputElement(
                       data.inputDataType.name,
                       participantDataFromik,
@@ -216,7 +216,7 @@ const ParticipantDataCard = () => {
               );
             })}
           <Button
-            sx={{ display: editing ? "block" : "none" }}
+            sx={{ display: editing ? 'block' : 'none' }}
             type="submit"
             variant="contained"
             onClick={participantDataFromik.submitForm}

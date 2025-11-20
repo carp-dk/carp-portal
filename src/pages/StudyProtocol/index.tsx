@@ -1,13 +1,13 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import LoadingLandingPage from "@Components/Layout/LoadingLandingPage";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import SiteUnavailable from "@Components/SiteUnavailable";
-import StudyHeader from "@Components/StudyHeader";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { useParams } from "react-router-dom";
-import { getUri, PageType } from "@Utils/utility";
-import ProtocolCards from "./ProtocolCards";
-import ProtocolInfo from "./ProtocolInfo";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import LoadingLandingPage from '@Components/Layout/LoadingLandingPage';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import SiteUnavailable from '@Components/SiteUnavailable';
+import StudyHeader from '@Components/StudyHeader';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { getUri, PageType } from '@Utils/utility';
+import { useParams } from 'react-router-dom';
+import ProtocolCards from './ProtocolCards';
+import ProtocolInfo from './ProtocolInfo';
 
 const StudyProtocol = () => {
   const { id: studyId } = useParams();
@@ -17,15 +17,15 @@ const StudyProtocol = () => {
     error: studyError,
   } = useStudyDetails(studyId);
   const sectionName = {
-    name: "Study Protocol",
+    name: 'Study Protocol',
     uri: getUri(PageType.PROTOCOL),
   };
-  const description = "See detailed information of Study Protocol.";
+  const description = 'See detailed information of Study Protocol.';
   const siteUnavailableDescription = [
-    "In order to overview Study Protocol Page, it is necessary to set a protocol for your study first.",
-    "To begin, please navigate to the study settings page.",
+    'In order to overview Study Protocol Page, it is necessary to set a protocol for your study first.',
+    'To begin, please navigate to the study settings page.',
   ];
-  const siteUnavailableLinkText = "Study Settings Page";
+  const siteUnavailableLinkText = 'Study Settings Page';
   const siteUnavailableLinkUrl = `/studies/${studyId}/settings`;
 
   if (studyLoading) {
@@ -58,7 +58,7 @@ const StudyProtocol = () => {
       ) : (
         <>
           <StudyHeader
-            path={[sectionName, { name: study.protocolSnapshot.name, uri: "" }]}
+            path={[sectionName, { name: study.protocolSnapshot.name, uri: '' }]}
             description={description}
           />
           <ProtocolInfo

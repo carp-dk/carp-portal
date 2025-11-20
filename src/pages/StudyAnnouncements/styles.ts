@@ -1,13 +1,13 @@
-import { Fab } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Fab } from '@mui/material';
+import { styled } from '@Utils/theme';
 
-export const AnnouncementsContainer = styled("div")({
-  display: "flex",
-  flexWrap: "wrap",
+export const AnnouncementsContainer = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
   gap: 24,
-  width: "100%",
-  "& > *": {
-    minWidth: "30%",
+  width: '100%',
+  '& > *': {
+    minWidth: '30%',
     width: 450,
     flexShrink: 0,
   },
@@ -15,7 +15,7 @@ export const AnnouncementsContainer = styled("div")({
 });
 
 export const StyledFab = styled(Fab)(({ theme }) => ({
-  position: "fixed",
+  position: 'fixed',
   zIndex: 100,
   boxShadow: theme.shadows[2],
   bottom: 36,
@@ -24,16 +24,16 @@ export const StyledFab = styled(Fab)(({ theme }) => ({
   borderRadius: 16,
   width: 72,
   height: 72,
-  "& > svg": {
+  '& > svg': {
     color: theme.palette.primary.main,
     fontSize: 48,
     stroke: theme.palette.secondary.light,
-    strokeWidth: "0.50px",
+    strokeWidth: '0.50px',
   },
-  "&:hover": {
-    backgroundColor: "#C7D7E4",
-    "& > svg": {
-      stroke: "#C7D7E4",
+  '&:hover': {
+    backgroundColor: '#C7D7E4',
+    '& > svg': {
+      stroke: '#C7D7E4',
     },
   },
 }));

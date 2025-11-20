@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import { formatDate } from "@Utils/utility";
+import { Button } from '@mui/material';
+import { formatDate } from '@Utils/utility';
 import {
   AnnouncementDate,
   AnnouncementHeader,
@@ -8,7 +8,7 @@ import {
   AnnouncementSubtitle,
   AnnouncementTitle,
   AnnouncementType,
-} from "./styles";
+} from './styles';
 
 type Props = {
   type: string;
@@ -22,8 +22,8 @@ type Props = {
 const extractHostname = (url: string) => {
   try {
     return new URL(url).hostname;
-  } catch (e) {
-    return "";
+  } catch {
+    return '';
   }
 };
 

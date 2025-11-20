@@ -1,12 +1,12 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useProtocolDetails } from "@Utils/queries/protocols";
-import { getRandomNumber } from "@Utils/utility";
-import carpCommon from "@cachet/carp-common";
-import carpProtocols from "@cachet/carp-protocols-core";
-import { Skeleton, Typography } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
-import getInputDataName from "@Assets/inputTypeNames";
-import DeviceDropdown from "../DeviceDropdown";
+import getInputDataName from '@Assets/inputTypeNames';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useProtocolDetails } from '@Utils/queries/protocols';
+import { getRandomNumber } from '@Utils/utility';
+import carpCommon from '@cachet/carp-common';
+import carpProtocols from '@cachet/carp-protocols-core';
+import { Skeleton, Typography } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
+import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
   ProtocolDescription,
@@ -14,7 +14,7 @@ import {
   StyledCard,
   StyledContainer,
   StyledNameCard,
-} from "./styles";
+} from './styles';
 import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot.DeviceConnection;
 
 type ParticipantRole =
@@ -119,7 +119,10 @@ const ProtocolCards = ({ protocolId }: Props) => {
           <ul>
             {protocol.expectedParticipantData.toArray().map((data) => {
               return (
-                <li key={data.inputDataType.toString()} style={{ marginBottom: 10 }}>
+                <li
+                  key={data.inputDataType.toString()}
+                  style={{ marginBottom: 10 }}
+                >
                   <Typography variant="h4">
                     {getInputDataName(data.attribute.inputDataType.name)}
                   </Typography>

@@ -1,12 +1,11 @@
-import { Modal, TextField, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import * as yup from "yup";
-import { GenericEmailRequest } from "@carp-dk/client";
-import { usePostEmailSendGeneric } from "@Utils/queries/participants";
+import { GenericEmailRequest } from '@carp-dk/client';
+import { Modal, TextField, Typography } from '@mui/material';
+import { usePostEmailSendGeneric } from '@Utils/queries/participants';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import * as yup from 'yup';
 import {
   CancelButton,
-  TypographyVariant,
   Content,
   DoneButton,
   HorizontalInputContainer,
@@ -14,8 +13,9 @@ import {
   ModalActions,
   ModalBox,
   Title,
+  TypographyVariant,
   VerticalInputContainer,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -28,8 +28,8 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  message: yup.string().required("Message (email content) is required"),
-  subject: yup.string().required("Subject is required"),
+  message: yup.string().required('Message (email content) is required'),
+  subject: yup.string().required('Subject is required'),
   cc: yup
     .array()
     .transform(function (value, originalValue) {
@@ -58,7 +58,7 @@ const SendReminderModal = ({
       urlRegex,
       (url) => `<a href="${url}">${url}</a>`,
     );
-    const withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, "<br>");
+    const withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, '<br>');
     const wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;
 
     return wrappedInPre;

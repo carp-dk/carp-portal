@@ -1,5 +1,5 @@
-import { SnackbarType } from "@Components/Snackbar";
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { SnackbarType } from '@Components/Snackbar';
+import { createContext, ReactNode, use, useMemo, useState } from 'react';
 
 type ProviderProps = {
   children: ReactNode;
@@ -15,19 +15,19 @@ type SnackbarContextType = {
 export const SnackbarContext = createContext({} as SnackbarContextType);
 
 export const useSnackbar = (): SnackbarContextType => {
-  return useContext(SnackbarContext);
+  return use(SnackbarContext);
 };
 
 export const SnackbarProvider = ({ children }: ProviderProps) => {
   const [snackbarState, setSnackbarState] = useState<SnackbarType>({
     snackbarOpen: false,
-    snackbarType: "error",
-    snackbarMessage: "Unexpected error",
+    snackbarType: 'error',
+    snackbarMessage: 'Unexpected error',
   });
   const setSnackbarSuccess = (message: string) => {
     setSnackbarState({
       snackbarOpen: true,
-      snackbarType: "success",
+      snackbarType: 'success',
       snackbarMessage: message,
     });
   };
@@ -35,24 +35,22 @@ export const SnackbarProvider = ({ children }: ProviderProps) => {
   const setSnackbarError = (message: string) => {
     setSnackbarState({
       snackbarOpen: true,
-      snackbarType: "error",
+      snackbarType: 'error',
       snackbarMessage: message,
     });
   };
 
+  const config = useMemo(() => {
+    return {
+      snackbarState,
+      setSnackbarState,
+      setSnackbarSuccess,
+      setSnackbarError,
+    };
+  }, [snackbarState, setSnackbarState, setSnackbarSuccess, setSnackbarError]);
+
   return useMemo(
-    () => (
-      <SnackbarContext.Provider
-        value={{
-          snackbarState,
-          setSnackbarState,
-          setSnackbarSuccess,
-          setSnackbarError,
-        }}
-      >
-        {children}
-      </SnackbarContext.Provider>
-    ),
+    () => <SnackbarContext value={config}>{children}</SnackbarContext>,
     [snackbarState, setSnackbarState, setSnackbarSuccess, setSnackbarError],
   );
 };

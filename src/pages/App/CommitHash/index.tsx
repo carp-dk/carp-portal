@@ -1,4 +1,4 @@
-import StyledCommitHash from "./styles";
+import StyledCommitHash from './styles';
 
 const CommitHash = () => {
   return (

@@ -1,207 +1,207 @@
-import RecentDataChart from "@Components/RecentDataChart";
-import { StyledCard, Subtitle, Title, TitleContainer, Top } from "./styles";
+import RecentDataChart from '@Components/RecentDataChart';
+import { StyledCard, Subtitle, Title, TitleContainer, Top } from './styles';
 
 const data = [
   {
-    name: "Mon.",
+    name: 'Mon.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 12,
       },
       {
-        type: "airquality",
+        type: 'airquality',
         numberOfDatapoints: 30,
       },
       {
-        type: "ambientlight",
+        type: 'ambientlight',
         numberOfDatapoints: 20,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "batterystate",
+        type: 'batterystate',
         numberOfDatapoints: 50,
       },
       {
-        type: "freememory",
+        type: 'freememory',
         numberOfDatapoints: 40,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 20,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 25,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 64,
       },
       {
-        type: "batterystate",
+        type: 'batterystate',
         numberOfDatapoints: 14,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 63,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 23,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 12,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 34,
       },
       {
-        type: "batterystate",
+        type: 'batterystate',
         numberOfDatapoints: 66,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 22,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 15,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 23,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 52,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "airquality",
+        type: 'airquality',
         numberOfDatapoints: 5,
       },
       {
-        type: "freememory",
+        type: 'freememory',
         numberOfDatapoints: 34,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 11,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "freememory",
+        type: 'freememory',
         numberOfDatapoints: 54,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 33,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 26,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 27,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 27,
       },
       {
-        type: "airquality",
+        type: 'airquality',
         numberOfDatapoints: 9,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "airquality",
+        type: 'airquality',
         numberOfDatapoints: 24,
       },
       {
-        type: "freememory",
+        type: 'freememory',
         numberOfDatapoints: 15,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 44,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "freememory",
+        type: 'freememory',
         numberOfDatapoints: 22,
       },
       {
-        type: "coverage",
+        type: 'coverage',
         numberOfDatapoints: 40,
       },
       {
-        type: "deviceinformation",
+        type: 'deviceinformation',
         numberOfDatapoints: 62,
       },
     ],
   },
   {
-    name: "Tue.",
+    name: 'Tue.',
     data: [
       {
-        type: "activity",
+        type: 'activity',
         numberOfDatapoints: 14,
       },
       {
-        type: "airquality",
+        type: 'airquality',
         numberOfDatapoints: 33,
       },
       {
-        type: "batterystate",
+        type: 'batterystate',
         numberOfDatapoints: 22,
       },
     ],

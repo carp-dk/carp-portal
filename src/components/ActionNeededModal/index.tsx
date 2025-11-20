@@ -1,4 +1,4 @@
-import { Modal } from "@mui/material";
+import { Modal } from '@mui/material';
 import {
   ActionButton,
   Bottom,
@@ -7,7 +7,7 @@ import {
   DescriptionContainer,
   ModalBox,
   Title,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;

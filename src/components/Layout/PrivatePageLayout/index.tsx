@@ -1,7 +1,7 @@
-import Logo from "@Components/Logo";
-import { ReactNode } from "react";
-import BannerAccountButton from "../../Buttons/BannerAccountButton";
-import { CustomContainer, PrivatePageBanner } from "./styles";
+import Logo from '@Components/Logo';
+import { ReactNode } from 'react';
+import BannerAccountButton from '../../Buttons/BannerAccountButton';
+import { CustomContainer, PrivatePageBanner } from './styles';
 
 type Props = {
   children: ReactNode;

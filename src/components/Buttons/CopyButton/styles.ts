@@ -1,13 +1,13 @@
-import { Button } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Button } from '@mui/material';
+import { styled } from '@Utils/theme';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: 1,
   minWidth: 20,
-  float: "right",
-  alignSelf: "flex-end",
+  float: 'right',
+  alignSelf: 'flex-end',
   color: theme.palette.primary.main,
-  cursor: "pointer",
+  cursor: 'pointer',
 }));
 
 export default StyledButton;

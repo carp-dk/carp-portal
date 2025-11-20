@@ -1,5 +1,5 @@
-import { CircularProgress } from "@mui/material";
-import StyledAuthActionButton from "./styles";
+import { CircularProgress } from '@mui/material';
+import StyledAuthActionButton from './styles';
 
 type Props = {
   text: string;

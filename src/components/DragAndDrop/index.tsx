@@ -1,11 +1,11 @@
-import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
-import ImageIcon from "@mui/icons-material/Image";
-import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
-import { Button, CircularProgress } from "@mui/material";
-import { FormikProps } from "formik";
-import React from "react";
-import { FileUploader } from "react-drag-drop-files";
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
+import ImageIcon from '@mui/icons-material/Image';
+import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+import { Button, CircularProgress } from '@mui/material';
+import { FormikProps } from 'formik';
+import React from 'react';
+import { FileUploader } from 'react-drag-drop-files';
 import {
   EmptyFileWrapper,
   FileNameInElipse,
@@ -15,7 +15,7 @@ import {
   UploadFileBrowse,
   UploadFileBrowseWrapper,
   UploadFileText,
-} from "./styles";
+} from './styles';
 
 interface FormikConfigProps {
   [key: string]: string;
@@ -63,7 +63,7 @@ const DragAndDrop = ({
           </>
         ) : !formik.values[name] ? (
           <>
-            {name === "image" ? (
+            {name === 'image' ? (
               <ImageIcon fontSize="large" />
             ) : (
               <UploadFileRoundedIcon fontSize="large" />
