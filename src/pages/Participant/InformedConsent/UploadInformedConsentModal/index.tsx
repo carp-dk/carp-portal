@@ -1,10 +1,10 @@
-import DragAndDrop from "@Components/DragAndDrop";
-import { Modal } from "@mui/material";
-import { useFormik } from "formik";
-import { useCreateFile } from "@Utils/queries/studies";
-import { useParams } from "react-router";
-import * as yup from "yup";
-import { useTranslation } from "react-i18next";
+import DragAndDrop from '@Components/DragAndDrop';
+import { Modal } from '@mui/material';
+import { useFormik } from 'formik';
+import { useCreateFile } from '@Utils/queries/studies';
+import { useParams } from 'react-router';
+import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import {
   ModalBox,
   ModalTitle,
@@ -14,28 +14,28 @@ import {
   ModalActions,
   CancelButton,
   DoneButton,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
-const fileTypes = ["application/pdf", "image/"];
+const fileTypes = ['application/pdf', 'image/'];
 
 const consentSchema = yup.object({
   file: yup
     .mixed()
-    .required("Required")
-    .test("fileSize", "File must be smaller than 20MB", (value: File) => {
+    .required('Required')
+    .test('fileSize', 'File must be smaller than 20MB', (value: File) => {
       if (!value) return true;
       const size = value.size / 1024 / 1024;
       return size < 20;
     })
-    .test("fileType", "Invalid file type", (value: File) => {
+    .test('fileType', 'Invalid file type', (value: File) => {
       if (!value) return true;
-      if (value.type === "application/pdf") return true;
-      return value.type.startsWith("image/");
+      if (value.type === 'application/pdf') return true;
+      return value.type.startsWith('image/');
     }),
 });
 
@@ -53,16 +53,16 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
     validationSchema: consentSchema,
     onSubmit: async ({ file }: { file: File }) => {
       const formData = new FormData();
-      formData.append("file", file, file.name);
+      formData.append('file', file, file.name);
       formData.append(
-        "metadata",
+        'metadata',
         JSON.stringify({
-          "content-type": file.type,
-          "document-type": "informed_consent",
-          "participant-id": participantId,
+          'content-type': file.type,
+          'document-type': 'informed_consent',
+          'participant-id': participantId,
         }),
       );
-      formData.append("deployment_id", deploymentId);
+      formData.append('deployment_id', deploymentId);
       await createFile.mutateAsync({
         studyId,
         formData,
@@ -78,7 +78,7 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
   };
 
   const handleChange = (file: File) => {
-    addInformedConsentFormik.setFieldValue("file", file);
+    addInformedConsentFormik.setFieldValue('file', file);
   };
 
   return (
@@ -90,10 +90,10 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
     >
       <ModalBox sx={{ boxShadow: 24 }}>
         <ModalTitle variant="h2" id="modal-modal-title">
-          {t("participant:informed_consent.upload.title")}
+          {t('participant:informed_consent.upload.title')}
         </ModalTitle>
         <ModalDescription variant="h5" id="modal-modal-description">
-          {t("participant:informed_consent.upload.description")}
+          {t('participant:informed_consent.upload.description')}
         </ModalDescription>
         <ModalContainer>
           <ModalContent fixHeight>
@@ -101,7 +101,7 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
               handleChange={handleChange}
               fileTypes={fileTypes}
               name="file"
-              formik={addInformedConsentFormik as any}
+              formik={addInformedConsentFormik as never}
               uploading={uploading}
               fileName={addInformedConsentFormik.values.file?.name}
             />
@@ -109,18 +109,18 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
         </ModalContainer>
         <ModalActions>
           <CancelButton variant="text" onClick={closeModal}>
-            {t("common:cancel")}
+            {t('common:cancel')}
           </CancelButton>
           <DoneButton
             disabled={
-              !addInformedConsentFormik.dirty ||
-              !addInformedConsentFormik.isValid
+              !addInformedConsentFormik.dirty
+              || !addInformedConsentFormik.isValid
             }
             variant="contained"
             sx={{ elevation: 0 }}
             onClick={() => addInformedConsentFormik.handleSubmit()}
           >
-            {t("common:add")}
+            {t('common:add')}
           </DoneButton>
         </ModalActions>
       </ModalBox>

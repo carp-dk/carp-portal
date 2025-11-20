@@ -1,11 +1,11 @@
-import { Button } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Button } from '@mui/material';
+import { styled } from '@Utils/theme';
 
 const StyledAuthActionButton = styled(Button)(({ theme }) => ({
-  borderRadius: "24px",
-  width: "100%",
+  borderRadius: '24px',
+  width: '100%',
   height: 48,
-  textTransform: "none",
+  textTransform: 'none',
   fontSize: theme.typography.h2_web.fontSize,
   lineHeight: theme.typography.h2_web.lineHeight,
   fontWeight: theme.typography.h2_web.fontWeight,

@@ -1,26 +1,26 @@
-import ActionNeededModal from "@Components/ActionNeededModal";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import StudyHeader from "@Components/StudyHeader";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getUri, PageType } from "@Utils/utility";
-import AddNewDeploymentModal from "./AddNewDeploymentModal";
-import AddParticipantModal from "./AddParticipantModal";
-import ImportParticipantsModal from "./ImportParticipantsModal";
-import ParticipantsTable from "./ParticipantsTable";
+import ActionNeededModal from '@Components/ActionNeededModal';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import StudyHeader from '@Components/StudyHeader';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getUri, PageType } from '@Utils/utility';
+import AddNewDeploymentModal from './AddNewDeploymentModal';
+import AddParticipantModal from './AddParticipantModal';
+import ImportParticipantsModal from './ImportParticipantsModal';
+import ParticipantsTable from './ParticipantsTable';
 
 const Participants = () => {
   const [addParticipantModalOpen, setAddParticipantModalOpen] = useState(false);
-  const [importParticipantsModalOpen, setImportParticipantsModalOpen] =
-    useState(false);
+  const [importParticipantsModalOpen, setImportParticipantsModalOpen]
+    = useState(false);
   const [newDeploymentModalOpen, setNewDeploymentModalOpen] = useState(false);
   const [actionNeededModalOpen, setActionNeededModalOpen] = useState(false);
   const [participantsToAdd, setParticipantsToAdd] = useState([]);
   const sectionName = {
-    name: "Participants",
+    name: 'Participants',
     uri: getUri(PageType.PARTICIPANTS),
   };
-  const description = "See all the participants of the Study.";
+  const description = 'See all the participants of the Study.';
   const navigate = useNavigate();
   const { id: studyId } = useParams();
   const openAddParticipantModal = () => {

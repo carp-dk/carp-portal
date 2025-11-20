@@ -1,9 +1,9 @@
-/* eslint-disable no-underscore-dangle */
-import * as yup from "yup";
-import carpStudies from "@cachet/carp-studies-core";
-import { useFormik } from "formik";
-import { UseMutationResult } from "@tanstack/react-query";
-import { Data } from "@carp-dk/client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as yup from 'yup';
+import carpStudies from '@cachet/carp-studies-core';
+import { useFormik } from 'formik';
+import { UseMutationResult } from '@tanstack/react-query';
+import { Data } from '@carp-dk/client';
 import sdk = carpStudies.dk;
 import ExpectedParticipantData = sdk.cachet.carp.common.application.users.ExpectedParticipantData;
 
@@ -16,8 +16,8 @@ const phoneNumberValidationSchema = yup
     }),
   })
   .test(
-    "conditional-required",
-    "Country code is required when number is set",
+    'conditional-required',
+    'Country code is required when number is set',
     (value, schema) => {
       const {
         phone_number: { countryCode, number },
@@ -25,15 +25,15 @@ const phoneNumberValidationSchema = yup
 
       if (number && !countryCode) {
         return schema.createError({
-          path: "phone_number.countryCode",
-          message: "Country code is required when number is set",
+          path: 'phone_number.countryCode',
+          message: 'Country code is required when number is set',
         });
       }
 
       if (countryCode && !number) {
         return schema.createError({
-          path: "phone_number.number",
-          message: "Number is required when country code is set",
+          path: 'phone_number.number',
+          message: 'Number is required when country code is set',
         });
       }
 
@@ -49,8 +49,8 @@ const ssnValidationSchema = yup
     }),
   })
   .test(
-    "conditional-required",
-    "Country code is required when number is set",
+    'conditional-required',
+    'Country code is required when number is set',
     (value, schema) => {
       const {
         ssn: { country, socialSecurityNumber },
@@ -58,15 +58,15 @@ const ssnValidationSchema = yup
 
       if (socialSecurityNumber && !country) {
         return schema.createError({
-          path: "ssn.country",
-          message: "Country is required when social security number is set",
+          path: 'ssn.country',
+          message: 'Country is required when social security number is set',
         });
       }
 
       if (country && !socialSecurityNumber) {
         return schema.createError({
-          path: "ssn.socialSecurityNumber",
-          message: "Social Security Number is required when country is set",
+          path: 'ssn.socialSecurityNumber',
+          message: 'Social Security Number is required when country is set',
         });
       }
 
@@ -103,8 +103,8 @@ const diagnosisValidationSchema = yup
     }),
   })
   .test(
-    "conditional-required",
-    "ICD11 code is required when other diagnosis fields are set",
+    'conditional-required',
+    'ICD11 code is required when other diagnosis fields are set',
     (value, schema) => {
       const {
         diagnosis: { effectiveDate, diagnosis, icd11Code, conclusion },
@@ -112,8 +112,8 @@ const diagnosisValidationSchema = yup
 
       if ((effectiveDate || diagnosis || conclusion) && !icd11Code) {
         return schema.createError({
-          path: "diagnosis.icd11Code",
-          message: "ICD11 code is required when other diagnosis fields are set",
+          path: 'diagnosis.icd11Code',
+          message: 'ICD11 code is required when other diagnosis fields are set',
         });
       }
 
@@ -132,68 +132,68 @@ const getParticipantDataFormik = (
 
   const initialValues = {
     phone_number: {
-      __type: "",
-      countryCode: "",
-      isoCode: "",
-      number: "",
+      __type: '',
+      countryCode: '',
+      isoCode: '',
+      number: '',
     },
     sex: {
-      __type: "",
-      value: "",
+      __type: '',
+      value: '',
     },
     full_name: {
-      __type: "",
-      firstName: "",
-      lastName: "",
-      middleName: "",
+      __type: '',
+      firstName: '',
+      lastName: '',
+      middleName: '',
     },
     address: {
-      __type: "",
-      address1: "",
-      address2: "",
-      street: "",
-      city: "",
-      postalCode: "",
-      country: "",
+      __type: '',
+      address1: '',
+      address2: '',
+      street: '',
+      city: '',
+      postalCode: '',
+      country: '',
     },
     diagnosis: {
-      __type: "",
+      __type: '',
       effectiveDate: null,
-      diagnosis: "",
-      icd11Code: "",
-      conclusion: "",
+      diagnosis: '',
+      icd11Code: '',
+      conclusion: '',
     },
     ssn: {
-      __type: "",
-      country: "",
-      socialSecurityNumber: "",
+      __type: '',
+      country: '',
+      socialSecurityNumber: '',
     },
   };
 
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
-      if (data.attribute.inputDataType.name === "informed_consent") return;
-      initialValues[data.attribute.inputDataType.name].__type =
-        `${data.attribute.inputDataType.namespace}.${data.attribute.inputDataType.name}`;
+      if (data.attribute.inputDataType.name === 'informed_consent') return;
+      initialValues[data.attribute.inputDataType.name].__type
+        = `${data.attribute.inputDataType.namespace}.${data.attribute.inputDataType.name}`;
 
       switch (data.attribute.inputDataType.name) {
-        case "sex":
+        case 'sex':
           break;
-        case "full_name":
+        case 'full_name':
           validationSchema = validationSchema.concat(fullNameValidationSchema);
           break;
-        case "phone_number":
+        case 'phone_number':
           validationSchema = validationSchema.concat(
             phoneNumberValidationSchema,
           );
           break;
-        case "ssn":
+        case 'ssn':
           validationSchema = validationSchema.concat(ssnValidationSchema);
           break;
-        case "address":
+        case 'address':
           validationSchema = validationSchema.concat(addressValidationSchema);
           break;
-        case "diagnosis":
+        case 'diagnosis':
           validationSchema = validationSchema.concat(diagnosisValidationSchema);
           break;
         default:
@@ -204,8 +204,8 @@ const getParticipantDataFormik = (
 
   startingData?.forEach((data) => {
     const [k, e] = Object.entries(data)[0];
-    initialValues[k.split(".").pop()] = {
-      ...initialValues[k.split(".").pop()],
+    initialValues[k.split('.').pop()] = {
+      ...initialValues[k.split('.').pop()],
       ...e,
     };
   });
@@ -217,10 +217,11 @@ const getParticipantDataFormik = (
     onSubmit: async (values) => {
       const newParticipantData = {};
       Object.values(values).forEach((value) => {
-        if (value.__type && value.__type !== "") {
-          if (Object.entries(value).every(([k, v]) => k === "__type" || !v)) {
+        if (value.__type && value.__type !== '') {
+          if (Object.entries(value).every(([k, v]) => k === '__type' || !v)) {
             newParticipantData[(value as any).__type] = null;
-          } else {
+          }
+          else {
             newParticipantData[(value as any).__type] = value;
           }
         }

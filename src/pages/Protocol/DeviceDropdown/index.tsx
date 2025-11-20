@@ -1,10 +1,11 @@
-import { getDeviceIcon } from "@Utils/utility";
-import carpProtocols from "@cachet/carp-protocols-core";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DeviceIcon from "@mui/icons-material/Smartphone";
-import { Typography } from "@mui/material";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getDeviceIcon } from '@Utils/utility';
+import carpProtocols from '@cachet/carp-protocols-core';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeviceIcon from '@mui/icons-material/Smartphone';
+import { Typography } from '@mui/material';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import {
   ConnectedDeviceItem,
   ConnectedDevicesContainer,
@@ -12,7 +13,7 @@ import {
   DropdownBar,
   ExpandButton,
   StyledContainer,
-} from "./styles";
+} from './styles';
 import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.StudyProtocolSnapshot.DeviceConnection;
 import DeviceConfiguration = carpProtocols.dk.cachet.carp.common.application.devices.DeviceConfiguration;
 
@@ -35,9 +36,9 @@ const DeviceDropdown = ({ device, connections, connectedDevices }: Props) => {
       </DropdownBar>
       <ConnectedDevicesContainer>
         {connections.map((connection) => {
-          const deviceType =
+          const deviceType
             // TODO: CORE missing js type for i20_1, so for now we will go with the HACK
-            (
+            = (
               connectedDevices.find((connectedDevice) => {
                 return connectedDevice.roleName === connection.roleName;
               }) as any

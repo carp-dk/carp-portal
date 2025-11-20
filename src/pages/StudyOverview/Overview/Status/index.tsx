@@ -1,12 +1,12 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useStudyDetails, useStudyStatus } from "@Utils/queries/studies";
-import { formatDateTime } from "@Utils/utility";
-import kotlinx from "@cachet/carp-kotlinx-datetime";
-import { useNavigate, useParams } from "react-router-dom";
-import { Typography } from "@mui/material";
-import LinkIcon from "@mui/icons-material/Link";
-import { StudyStatus } from "@carp-dk/client";
-import LoadingSkeleton from "../LoadingSkeleton";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useStudyDetails, useStudyStatus } from '@Utils/queries/studies';
+import { formatDateTime } from '@Utils/utility';
+import kotlinx from '@cachet/carp-kotlinx-datetime';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
+import { StudyStatus } from '@carp-dk/client';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ProtocolData,
   StatusName,
@@ -17,7 +17,7 @@ import {
   StyledStatusDot,
   StyledTitle,
   Top,
-} from "./styles";
+} from './styles';
 // HACK toEpochMilliseconds is not a function if Insant is not imported
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Instant = kotlinx.datetime.Instant;
@@ -25,7 +25,7 @@ import Instant = kotlinx.datetime.Instant;
 const Status = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
-  let currentStudyStatus: "Draft" | "Ready" | "Live" = "Draft";
+  let currentStudyStatus: 'Draft' | 'Ready' | 'Live' = 'Draft';
   const {
     data: studyStatus,
     isLoading: studyStatusIsLoading,
@@ -39,12 +39,14 @@ const Status = () => {
   if (studyStatusIsLoading || studyDetailsIsLoading) return <LoadingSkeleton />;
   if (studyStatus instanceof StudyStatus.Configuring) {
     if (studyStatus.canGoLive) {
-      currentStudyStatus = "Ready";
-    } else {
-      currentStudyStatus = "Draft";
+      currentStudyStatus = 'Ready';
     }
-  } else {
-    currentStudyStatus = "Live";
+    else {
+      currentStudyStatus = 'Draft';
+    }
+  }
+  else {
+    currentStudyStatus = 'Live';
   }
 
   if (studyStatusError || studyDetailsError) {
@@ -75,7 +77,9 @@ const Status = () => {
       {studyDetails.protocolSnapshot && (
         <div>
           <ProtocolData variant="h4">
-            Study Protocol: {studyDetails.protocolSnapshot.name}
+            Study Protocol:
+            {' '}
+            {studyDetails.protocolSnapshot.name}
           </ProtocolData>
           <Typography variant="h6">
             {studyDetails.protocolSnapshot.description}
@@ -89,8 +93,8 @@ const Status = () => {
             See detailed information in Study Settings
             <LinkIcon
               sx={{
-                marginLeft: "0.1rem",
-                fontSize: "1rem",
+                marginLeft: '0.1rem',
+                fontSize: '1rem',
               }}
             />
           </StyledLink>

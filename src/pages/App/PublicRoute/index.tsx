@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
-import { useAuth } from "react-oidc-context";
-import { Navigate } from "react-router-dom";
-import CommitHash from "../CommitHash";
+import { ReactElement } from 'react';
+import { useAuth } from 'react-oidc-context';
+import { Navigate } from 'react-router-dom';
+import CommitHash from '../CommitHash';
 
 interface PublicRouteProps {
   children: ReactElement;
@@ -16,8 +16,8 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
   return (
     <>
       {children}
-      {process.env.NODE_ENV === "development" &&
-        import.meta.env.VITE_GIT_COMMIT && <CommitHash />}
+      {process.env.NODE_ENV === 'development'
+        && import.meta.env.VITE_GIT_COMMIT && <CommitHash />}
     </>
   );
 };

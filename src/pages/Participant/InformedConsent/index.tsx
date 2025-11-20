@@ -1,20 +1,19 @@
-/* eslint-disable no-underscore-dangle */
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { convertICToReactPdf, formatDateTime } from "@Utils/utility";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import { Stack, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import { Stack, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
-} from "@Utils/queries/participants";
-import { pdf } from "@react-pdf/renderer";
-import { useDownloadFile, useGetFiles } from "@Utils/queries/studies";
-import { CarpFile, InformedConsentType } from "@carp-dk/client";
-import { useTranslation } from "react-i18next";
-import LoadingSkeleton from "../LoadingSkeleton";
+} from '@Utils/queries/participants';
+import { pdf } from '@react-pdf/renderer';
+import { useDownloadFile, useGetFiles } from '@Utils/queries/studies';
+import { CarpFile, InformedConsentType } from '@carp-dk/client';
+import { useTranslation } from 'react-i18next';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ActionButton,
   LastUploadText,
@@ -22,8 +21,8 @@ import {
   StyledCard,
   StyledDivider,
   Title,
-} from "./styles";
-import UploadInformedConsentModal from "./UploadInformedConsentModal";
+} from './styles';
+import UploadInformedConsentModal from './UploadInformedConsentModal';
 
 const InformedConsent = () => {
   const { t } = useTranslation();
@@ -58,10 +57,10 @@ const InformedConsent = () => {
     const blob = await pdf(
       await convertICToReactPdf(JSON.parse(consent.consent)),
     ).toBlob();
-    const a = document.createElement("a");
-    a.download = "informedConsent.pdf";
+    const a = document.createElement('a');
+    a.download = 'informedConsent.pdf';
     a.href = window.URL.createObjectURL(blob);
-    const clickEvt = new MouseEvent("click", {
+    const clickEvt = new MouseEvent('click', {
       view: window,
       bubbles: true,
       cancelable: true,
@@ -84,8 +83,8 @@ const InformedConsent = () => {
         })
         .find((f) => {
           return (
-            f.metadata["document-type"] === "informed_consent" &&
-            f.metadata["participant-id"] === participantId
+            f.metadata['document-type'] === 'informed_consent'
+            && f.metadata['participant-id'] === participantId
           );
         });
       if (c) {
@@ -97,19 +96,19 @@ const InformedConsent = () => {
   useEffect(() => {
     if (!isLoading && !participantGroupStatusLoading) {
       const participant = participantGroupStatus.groups
-        .find((g) => g.participantGroupId === deploymentId)
+        .find(g => g.participantGroupId === deploymentId)
         .deploymentStatus.participantStatusList.find(
-          (p) => p.participantId === participantId,
+          p => p.participantId === participantId,
         );
 
       if (participantData.common.keys) {
-        const consentData =
-          participantData.common.values[InformedConsentType.type];
+        const consentData
+          = participantData.common.values[InformedConsentType.type];
         setConsent(consentData);
       }
 
-      const participantRoleData =
-        participantData.roles[
+      const participantRoleData
+        = participantData.roles[
           participant.assignedParticipantRoles.roleNames[0]
         ];
       if (participantRoleData) {
@@ -121,28 +120,28 @@ const InformedConsent = () => {
 
   const dateOfLastUpdateForParticipantData = useMemo(() => {
     if (consent) {
-      return t("participant:informed_consent.participant_data_upload_date", {
+      return t('participant:informed_consent.participant_data_upload_date', {
         date: formatDateTime(consent.signedTimestamp, {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
         }),
       });
     }
-    return t("participant:informed_consent.data_not_found");
+    return t('participant:informed_consent.data_not_found');
   }, [consent]);
 
   const dateOfLastUpdateForUploadedFile = useMemo(() => {
     if (consentFile) {
-      return t("participant:informed_consent.file_upload_date", {
+      return t('participant:informed_consent.file_upload_date', {
         date: formatDateTime(consentFile.created_at, {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
         }),
       });
     }
-    return t("participant:informed_consent.file_not_found");
+    return t('participant:informed_consent.file_not_found');
   }, [consentFile]);
 
   if (isLoading || filesLoading || participantGroupStatusLoading)
@@ -151,7 +150,7 @@ const InformedConsent = () => {
   if (error || participantGroupStatusError || filesError) {
     return (
       <CarpErrorCardComponent
-        message={t("error:informed_consents")}
+        message={t('error:informed_consents')}
         error={error ?? participantGroupStatusError ?? filesError}
       />
     );
@@ -161,7 +160,7 @@ const InformedConsent = () => {
     <>
       <UploadInformedConsentModal open={open} onClose={onModalClose} />
       <StyledCard elevation={2}>
-        <Title variant="h3">{t("participant:informed_consent.title")}</Title>
+        <Title variant="h3">{t('participant:informed_consent.title')}</Title>
         <Right>
           <Stack direction="column" alignItems="flex-start">
             <Stack
@@ -175,14 +174,14 @@ const InformedConsent = () => {
               </LastUploadText>
               <StyledDivider />
               <ActionButton onClick={() => setOpen(true)}>
-                <Typography variant="h6">{t("common:upload")}</Typography>
+                <Typography variant="h6">{t('common:upload')}</Typography>
                 <FileUploadOutlinedIcon fontSize="small" />
               </ActionButton>
               <ActionButton
                 onClick={() => downloadFile()}
                 disabled={!consentFile}
               >
-                <Typography variant="h6">{t("common:download")}</Typography>
+                <Typography variant="h6">{t('common:download')}</Typography>
                 <FileDownloadOutlinedIcon fontSize="small" />
               </ActionButton>
             </Stack>
@@ -199,7 +198,7 @@ const InformedConsent = () => {
               {consent && (
                 <ActionButton onClick={() => downloadPdf()}>
                   <Typography variant="h6">
-                    {t("common:download_pdf")}
+                    {t('common:download_pdf')}
                   </Typography>
                   <FileDownloadOutlinedIcon fontSize="small" />
                 </ActionButton>

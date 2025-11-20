@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-import { StyledDescription, StyledLink } from "./styles";
+import { v4 as uuidv4 } from 'uuid';
+import { StyledDescription, StyledLink } from './styles';
 
 type Props = {
   siteUnavailableDescription: string[];
@@ -14,7 +14,7 @@ const SiteUnavailable = ({
 }: Props) => {
   return (
     <>
-      {siteUnavailableDescription.map((description) => (
+      {siteUnavailableDescription.map(description => (
         <StyledDescription variant="h3" key={uuidv4()}>
           {description}
         </StyledDescription>

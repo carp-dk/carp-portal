@@ -1,22 +1,22 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import StudyPageLayout from "@Components/Layout/StudyPageLayout";
-import SiteUnavailable from "@Components/SiteUnavailable";
-import StudyHeader from "@Components/StudyHeader";
-import { useParticipantGroupsAccountsAndStatus } from "@Utils/queries/participants";
-import { useStudyStatus } from "@Utils/queries/studies";
-import { ParticipantGroup, StudyStatus } from "@carp-dk/client";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getUri, PageType } from "@Utils/utility";
-import DeploymentCard, { DeploymentSkeletonCard } from "./DeploymentCard";
-import Pagination from "./Pagination";
-import Toolbar from "./Toolbar";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import StudyPageLayout from '@Components/Layout/StudyPageLayout';
+import SiteUnavailable from '@Components/SiteUnavailable';
+import StudyHeader from '@Components/StudyHeader';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import { useStudyStatus } from '@Utils/queries/studies';
+import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getUri, PageType } from '@Utils/utility';
+import DeploymentCard, { DeploymentSkeletonCard } from './DeploymentCard';
+import Pagination from './Pagination';
+import Toolbar from './Toolbar';
 
 const PageSize = 8;
 
 const Deployments = () => {
   const { id: studyId } = useParams();
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [deployments, setDeployments] = useState([] as ParticipantGroup[]);
   const [paginatedDeployments, setPaginatedDeployments] = useState(
     [] as ParticipantGroup[],
@@ -27,12 +27,12 @@ const Deployments = () => {
     error: deploymentsError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: studyStatus, isLoading: isStudyStatusLoading } =
-    useStudyStatus(studyId);
+  const { data: studyStatus, isLoading: isStudyStatusLoading }
+    = useStudyStatus(studyId);
   const [openCardCount, setOpenCardCount] = useState(0);
 
   const toggleAllCards = () => {
-    setOpenCardCount((prevOpenCardCount) =>
+    setOpenCardCount(prevOpenCardCount =>
       prevOpenCardCount === paginatedDeployments.length
         ? 0
         : paginatedDeployments.length,
@@ -46,11 +46,11 @@ const Deployments = () => {
   useEffect(() => {
     setOpenCardCount(0);
     if (
-      studyStatus instanceof StudyStatus.Live &&
-      deploymentsData?.groups !== undefined &&
-      deploymentsData?.groups.length !== 0
+      studyStatus instanceof StudyStatus.Live
+      && deploymentsData?.groups !== undefined
+      && deploymentsData?.groups.length !== 0
     ) {
-      if (searchText === "") {
+      if (searchText === '') {
         setDeployments(deploymentsData?.groups);
         setPaginatedDeployments(
           deploymentsData?.groups.slice(
@@ -58,19 +58,20 @@ const Deployments = () => {
             currentPage * PageSize,
           ),
         );
-      } else {
+      }
+      else {
         const newDeployments = deploymentsData?.groups.filter(
-          (deployment) =>
-            deployment?.participantGroupId.includes(searchText) ||
-            deployment?.participants?.some(
-              (participant) =>
-                (participant.firstName &&
-                  participant.lastName &&
-                  `${participant.firstName} ${participant.lastName}`
+          deployment =>
+            deployment?.participantGroupId.includes(searchText)
+            || deployment?.participants?.some(
+              participant =>
+                (participant.firstName
+                  && participant.lastName
+                  && `${participant.firstName} ${participant.lastName}`
                     .toLowerCase()
-                    .includes(searchText)) ||
-                (participant.email &&
-                  participant.email.toLowerCase().includes(searchText)),
+                    .includes(searchText))
+                  || (participant.email
+                    && participant.email.toLowerCase().includes(searchText)),
             ),
         );
         setDeployments(newDeployments);
@@ -85,22 +86,22 @@ const Deployments = () => {
   }, [searchText, currentPage, deploymentsData, studyStatus]);
 
   const sectionName = {
-    name: "Deployments",
+    name: 'Deployments',
     uri: getUri(PageType.DEPLOYMENTS),
   };
-  const description =
-    "See all the deployments, expand them for more information.";
+  const description
+    = 'See all the deployments, expand them for more information.';
   const siteUnavailableDescription = [
-    "In order to overview Deployments page, it is necessary to start your study first.",
-    "To begin, please navigate to the study settings page.",
+    'In order to overview Deployments page, it is necessary to start your study first.',
+    'To begin, please navigate to the study settings page.',
   ];
-  const siteUnavailableLinkText = "Study Settings Page";
+  const siteUnavailableLinkText = 'Study Settings Page';
   const siteUnavailableLinkUrl = `/studies/${studyId}/settings`;
   const siteUnavailableDescription2 = [
-    "In order to overview Deployments page, you have to create a deployment first.",
-    "To begin, please navigate to the study participants page.",
+    'In order to overview Deployments page, you have to create a deployment first.',
+    'To begin, please navigate to the study participants page.',
   ];
-  const siteUnavailableLinkText2 = "Study Participants Page";
+  const siteUnavailableLinkText2 = 'Study Participants Page';
   const siteUnavailableLinkUrl2 = `/studies/${studyId}/participants`;
 
   if (isdeploymentsLoading || isStudyStatusLoading) {
@@ -155,14 +156,14 @@ const Deployments = () => {
     <StudyPageLayout>
       <StudyHeader path={[sectionName]} description={description} />
       <Toolbar
-        searchDeployments={(text) => setSearchText(text)}
+        searchDeployments={text => setSearchText(text)}
         toggleAllCards={toggleAllCards}
         isAllCardsOpen={
-          openCardCount === paginatedDeployments.length &&
-          paginatedDeployments.length !== 0
+          openCardCount === paginatedDeployments.length
+          && paginatedDeployments.length !== 0
         } // error here: length of undefined
       />
-      {paginatedDeployments.map((deployment) => (
+      {paginatedDeployments.map(deployment => (
         <DeploymentCard
           deployment={deployment}
           openCardCount={openCardCount}
@@ -175,7 +176,7 @@ const Deployments = () => {
         currentPage={currentPage}
         totalCount={deployments.length}
         pageSize={PageSize}
-        onPageChange={(page) => setCurrentPage(page)}
+        onPageChange={page => setCurrentPage(page)}
       />
     </StudyPageLayout>
   );

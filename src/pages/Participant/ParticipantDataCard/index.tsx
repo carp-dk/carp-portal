@@ -2,8 +2,8 @@ import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
   useSetParticipantData,
-} from "@Utils/queries/participants";
-import EditIcon from "@mui/icons-material/Edit";
+} from '@Utils/queries/participants';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Button,
   Divider,
@@ -13,13 +13,13 @@ import {
   Select,
   Stack,
   Typography,
-} from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { CarpInputDataTypes, ParticipantStatus, cdk } from "@carp-dk/client";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import getInputDataName from "@Assets/inputTypeNames";
+} from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { CarpInputDataTypes, ParticipantStatus, cdk } from '@carp-dk/client';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import getInputDataName from '@Assets/inputTypeNames';
 import {
   EditButton,
   Left,
@@ -29,11 +29,11 @@ import {
   StyledDivider,
   Title,
   Top,
-} from "./styles";
-import getInputElement from "./InputElements/selector";
+} from './styles';
+import getInputElement from './InputElements/selector';
 import SelectOne = cdk.cachet.carp.common.application.data.input.elements.SelectOne;
-import LoadingSkeleton from "../LoadingSkeleton";
-import getParticipantDataFormik from "./InputElements/utils";
+import LoadingSkeleton from '../LoadingSkeleton';
+import getParticipantDataFormik from './InputElements/utils';
 
 const ParticipantDataCard = () => {
   const [editing, setEditing] = useState(false);
@@ -62,8 +62,8 @@ const ParticipantDataCard = () => {
     const iv = [];
     if (!participantData || !participant) return iv;
     if (
-      participantData?.roles &&
-      participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
+      participantData?.roles
+      && participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
     ) {
       Object.entries(
         participantData?.roles[
@@ -86,9 +86,9 @@ const ParticipantDataCard = () => {
     if (participantGroupStatus) {
       setParticipant(
         participantGroupStatus.groups
-          .find((g) => g.participantGroupId === deploymentId)
+          .find(g => g.participantGroupId === deploymentId)
           .deploymentStatus.participantStatusList.find(
-            (p) => p.participantId === participantId,
+            p => p.participantId === participantId,
           ),
       );
     }
@@ -120,10 +120,10 @@ const ParticipantDataCard = () => {
   }
 
   if (
-    study?.protocolSnapshot.expectedParticipantData.toArray().length === 0 ||
-    (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1 &&
-      study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
-        .name === "informed_consent")
+    study?.protocolSnapshot.expectedParticipantData.toArray().length === 0
+    || (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1
+      && study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
+        .name === 'informed_consent')
   ) {
     return null;
   }
@@ -150,7 +150,7 @@ const ParticipantDataCard = () => {
           {study?.protocolSnapshot.expectedParticipantData
             .toArray()
             .map((data) => {
-              if (data.inputDataType.name === "informed_consent") return null;
+              if (data.inputDataType.name === 'informed_consent') return null;
               return (
                 <Stack
                   direction="column"
@@ -165,49 +165,49 @@ const ParticipantDataCard = () => {
                   <Title variant="h4" paddingBottom={2}>
                     {getInputDataName(data.inputDataType.name)}
                   </Title>
-                  {CarpInputDataTypes.inputElements.get(data.inputDataType) &&
-                    CarpInputDataTypes.inputElements.get(
+                  {CarpInputDataTypes.inputElements.get(data.inputDataType)
+                    && CarpInputDataTypes.inputElements.get(
                       data.inputDataType,
                     ) instanceof SelectOne && (
-                      <FormControl>
-                        <InputLabel
-                          id={`${data.inputDataType.name}Label`}
-                          required
-                        >
-                          {getInputDataName(data.inputDataType.name)}
-                        </InputLabel>
-                        <Select
-                          disabled={!editing}
-                          required
-                          name={`${data.inputDataType.name}.value`}
-                          value={participantDataFromik.values.sex.value ?? ""}
-                          onChange={participantDataFromik.handleChange}
-                          onBlur={participantDataFromik.handleBlur}
-                          label={getInputDataName(data.inputDataType.name)}
-                          labelId={`${data.inputDataType.name}Label`}
-                        >
-                          <MenuItem id="None" key="None" value={null}>
-                            Clear
-                          </MenuItem>
-                          <Divider />
-                          {(
-                            CarpInputDataTypes.inputElements.get(
-                              data.inputDataType,
-                            ) as SelectOne
-                          ).options
-                            .toArray()
-                            .map((option) => (
-                              <MenuItem id={option} value={option} key={option}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                      </FormControl>
-                    )}
-                  {!CarpInputDataTypes.inputElements.get(data.inputDataType) &&
-                    data.inputDataType.name &&
-                    data.inputDataType.name !== "informed_consent" &&
-                    getInputElement(
+                    <FormControl>
+                      <InputLabel
+                        id={`${data.inputDataType.name}Label`}
+                        required
+                      >
+                        {getInputDataName(data.inputDataType.name)}
+                      </InputLabel>
+                      <Select
+                        disabled={!editing}
+                        required
+                        name={`${data.inputDataType.name}.value`}
+                        value={participantDataFromik.values.sex.value ?? ''}
+                        onChange={participantDataFromik.handleChange}
+                        onBlur={participantDataFromik.handleBlur}
+                        label={getInputDataName(data.inputDataType.name)}
+                        labelId={`${data.inputDataType.name}Label`}
+                      >
+                        <MenuItem id="None" key="None" value={null}>
+                          Clear
+                        </MenuItem>
+                        <Divider />
+                        {(
+                          CarpInputDataTypes.inputElements.get(
+                            data.inputDataType,
+                          ) as SelectOne
+                        ).options
+                          .toArray()
+                          .map(option => (
+                            <MenuItem id={option} value={option} key={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                  {!CarpInputDataTypes.inputElements.get(data.inputDataType)
+                    && data.inputDataType.name
+                    && data.inputDataType.name !== 'informed_consent'
+                    && getInputElement(
                       data.inputDataType.name,
                       participantDataFromik,
                       editing,
@@ -216,7 +216,7 @@ const ParticipantDataCard = () => {
               );
             })}
           <Button
-            sx={{ display: editing ? "block" : "none" }}
+            sx={{ display: editing ? 'block' : 'none' }}
             type="submit"
             variant="contained"
             onClick={participantDataFromik.submitForm}

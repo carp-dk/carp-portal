@@ -1,9 +1,9 @@
-import { useFormik } from "formik";
-import FullNameInput from "./FullNameInput";
-import AddressInput from "./AddressInput";
-import SSNInput from "./SSNInput";
-import PhoneNumberInput from "./PhoneNumberInput";
-import DiagnosisInput from "./DiagnosisInput";
+import { useFormik } from 'formik';
+import FullNameInput from './FullNameInput';
+import AddressInput from './AddressInput';
+import SSNInput from './SSNInput';
+import PhoneNumberInput from './PhoneNumberInput';
+import DiagnosisInput from './DiagnosisInput';
 
 const getInputElement = (
   name: string,
@@ -11,18 +11,18 @@ const getInputElement = (
   editing: boolean,
 ) => {
   switch (name) {
-    case "full_name":
+    case 'full_name':
       return <FullNameInput formik={formik} editing={editing} />;
-    case "phone_number":
+    case 'phone_number':
       return <PhoneNumberInput formik={formik} editing={editing} />;
-    case "ssn":
+    case 'ssn':
       return <SSNInput formik={formik} editing={editing} />;
-    case "address":
+    case 'address':
       return <AddressInput formik={formik} editing={editing} />;
-    case "diagnosis":
+    case 'diagnosis':
       return <DiagnosisInput formik={formik} editing={editing} />;
     default:
-      // eslint-disable-next-line no-console
+
       console.error(`No input element found for ${name}`);
       return null;
   }

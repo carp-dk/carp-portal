@@ -1,18 +1,18 @@
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
-import { User } from "@carp-dk/client";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Skeleton, Typography } from "@mui/material";
-import { useRemoveResearcherFromStudy } from "@Utils/queries/studies";
-import { getRandomNumber } from "@Utils/utility";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { User } from '@carp-dk/client';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Skeleton, Typography } from '@mui/material';
+import { useRemoveResearcherFromStudy } from '@Utils/queries/studies';
+import { getRandomNumber } from '@Utils/utility';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   AccountIcon,
   CloseButton,
   Initials,
   Middle,
   StyledCard,
-} from "./styles";
+} from './styles';
 
 type Props = {
   researcher: User;
@@ -22,8 +22,8 @@ type Props = {
 const ResearcherItem = ({ researcher, disabled }: Props) => {
   const { id: studyId } = useParams();
   const removeResearcher = useRemoveResearcherFromStudy(studyId);
-  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
-    useState(false);
+  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal]
+    = useState(false);
 
   const handleRemoveResearcher = () => {
     removeResearcher.mutate(researcher.email);
@@ -33,12 +33,12 @@ const ResearcherItem = ({ researcher, disabled }: Props) => {
     open: openDeleteConfirmationModal,
     onClose: () => setOpenDeleteConfirmationModal(false),
     onConfirm: handleRemoveResearcher,
-    title: "Remove a Researcher",
+    title: 'Remove a Researcher',
     description:
-      "The researcher will be permanently removed and will no longer be part of the Study.",
-    boldText: "You can not undo this action.",
-    checkboxLabel: "I'm sure I want to remove it",
-    actionButtonLabel: "Remove",
+      'The researcher will be permanently removed and will no longer be part of the Study.',
+    boldText: 'You can not undo this action.',
+    checkboxLabel: 'I\'m sure I want to remove it',
+    actionButtonLabel: 'Remove',
   };
 
   return (
@@ -52,7 +52,9 @@ const ResearcherItem = ({ researcher, disabled }: Props) => {
       </AccountIcon>
       <Middle>
         <Typography variant="h4">
-          {researcher.firstName} {researcher.lastName}
+          {researcher.firstName}
+          {' '}
+          {researcher.lastName}
         </Typography>
         <Typography variant="h5">{researcher.email}</Typography>
       </Middle>
@@ -85,7 +87,7 @@ export const ResearcherItemSkeleton = () => {
         variant="circular"
         width={40}
         height={40}
-        sx={{ mr: "8px", ml: "6px" }}
+        sx={{ mr: '8px', ml: '6px' }}
       />
       <Middle>
         <Skeleton

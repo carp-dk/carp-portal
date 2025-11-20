@@ -1,5 +1,5 @@
-import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
+import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
 import {
   FormHelperText,
   FormLabel,
@@ -7,14 +7,14 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { enGB } from "date-fns/locale/en-GB";
-import { useFormik } from "formik";
-import { FormEvent, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
+} from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { enGB } from 'date-fns/locale/en-GB';
+import { useFormik } from 'formik';
+import { FormEvent, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -24,10 +24,10 @@ import {
   ModalTitle,
   SecondaryCellText,
   Spinner,
-} from "../styles";
-import { useRedirectURIs } from "@Utils/queries/auth";
-import { addDays, endOfDay, startOfDay } from "date-fns";
-import { patternToRegex } from "@Utils/utility";
+} from '../styles';
+import { useRedirectURIs } from '@Utils/queries/auth';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
+import { patternToRegex } from '@Utils/utility';
 
 type Props = {
   open: boolean;
@@ -37,67 +37,67 @@ type Props = {
 const validationSchema = yup.object({
   numberOfParticipants: yup
     .number()
-    .required("Number of participants is required")
-    .min(1, "Number of participants must be at least 1")
-    .max(2500, "Number of participants must be at most 2500"),
+    .required('Number of participants is required')
+    .min(1, 'Number of participants must be at least 1')
+    .max(2500, 'Number of participants must be at most 2500'),
   expiryDate: yup
     .date()
-    .required("Expiry date is required")
+    .required('Expiry date is required')
     .min(
       addDays(startOfDay(new Date()), 1),
-      "Expiry date should be in the future"
+      'Expiry date should be in the future',
     ),
-  role: yup.string().required("Role is required"),
+  role: yup.string().required('Role is required'),
   redirectUri: yup
     .string()
-    .test("is-url", "Redirect URI must be a valid URL", (value) => {
+    .test('is-url', 'Redirect URI must be a valid URL', (value) => {
       try {
-        // eslint-disable-next-line no-new
         new URL(value);
-      } catch {
+      }
+      catch {
         return false;
       }
       return true;
     })
-    .required("Redirect URI is required"),
-  clientId: yup.string().required("Application Type is required"),
+    .required('Redirect URI is required'),
+  clientId: yup.string().required('Application Type is required'),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
-  const { data: studyDetails, isLoading: isStudyDetailsLoading } =
-    useStudyDetails(studyId);
-  const { data: redirectURIs, isLoading: isRedirectURIsLoading } =
-    useRedirectURIs();
+  const { data: studyDetails, isLoading: isStudyDetailsLoading }
+    = useStudyDetails(studyId);
+  const { data: redirectURIs, isLoading: isRedirectURIsLoading }
+    = useRedirectURIs();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
       numberOfParticipants: 0,
       expiryDate: new Date(endOfDay(addDays(new Date(), 1))),
-      role: "",
-      redirectUri: "",
-      clientId: "",
+      role: '',
+      redirectUri: '',
+      clientId: '',
     },
     validationSchema,
     onSubmit: (values) => {
       if (
-        !redirectURIs[values.clientId]?.some((uri) =>
-          patternToRegex(uri).test(values.redirectUri)
+        !redirectURIs[values.clientId]?.some(uri =>
+          patternToRegex(uri).test(values.redirectUri),
         )
       ) {
         addAnonymousParticipantFormik.setFieldError(
-          "redirectUri",
-          "Redirect URI must contain one of the predefined URIs"
+          'redirectUri',
+          'Redirect URI must contain one of the predefined URIs',
         );
         return;
       }
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
-          (values.expiryDate.getTime() - new Date().getTime()) / 1000
+          (values.expiryDate.getTime() - new Date().getTime()) / 1000,
         ),
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
@@ -160,7 +160,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField
                 autoFocus
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={
                   !!addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
@@ -173,13 +173,13 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onChange={(event) => {
                   const eventClone = event;
                   if (parseInt(event.target.value, 10) < 1) {
-                    eventClone.target.value = "1";
+                    eventClone.target.value = '1';
                   }
                   addAnonymousParticipantFormik.handleChange(eventClone);
                 }}
                 helperText={
-                  addAnonymousParticipantFormik.touched.numberOfParticipants &&
-                  addAnonymousParticipantFormik.errors.numberOfParticipants
+                  addAnonymousParticipantFormik.touched.numberOfParticipants
+                  && addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -188,7 +188,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               <FormLabel required>Role</FormLabel>
               <TextField
                 select
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 variant="outlined"
                 id="role-select"
                 name="role"
@@ -200,7 +200,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               >
                 {studyDetails.protocolSnapshot.participantRoles
                   .toArray()
-                  .map((participantRole) => (
+                  .map(participantRole => (
                     <MenuItem
                       key={participantRole.role}
                       value={participantRole.role}
@@ -218,12 +218,11 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 defaultValue={addAnonymousParticipantFormik.values.expiryDate}
                 name="expiryDate"
                 value={addAnonymousParticipantFormik.values.expiryDate}
-                onChange={(value) =>
+                onChange={value =>
                   addAnonymousParticipantFormik.setFieldValue(
-                    "expiryDate",
-                    value
-                  )
-                }
+                    'expiryDate',
+                    value,
+                  )}
                 slotProps={{
                   textField: {
                     error: !!addAnonymousParticipantFormik.errors.expiryDate,
@@ -239,7 +238,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
             <Grid size={{ xs: 6 }}>
               <FormLabel required>Application Type</FormLabel>
               <Select
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={!!addAnonymousParticipantFormik.errors.clientId}
                 variant="outlined"
                 name="clientId"
@@ -248,23 +247,23 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onChange={addAnonymousParticipantFormik.handleChange}
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               >
-                {Object.keys(redirectURIs).map((uri) => (
+                {Object.keys(redirectURIs).map(uri => (
                   <MenuItem key={uri} value={uri}>
                     {uri}
                   </MenuItem>
                 ))}
               </Select>
-              {addAnonymousParticipantFormik.touched.clientId &&
-                addAnonymousParticipantFormik.errors.clientId && (
-                  <FormHelperText error>
-                    {addAnonymousParticipantFormik.errors.clientId}
-                  </FormHelperText>
-                )}
+              {addAnonymousParticipantFormik.touched.clientId
+                && addAnonymousParticipantFormik.errors.clientId && (
+                <FormHelperText error>
+                  {addAnonymousParticipantFormik.errors.clientId}
+                </FormHelperText>
+              )}
             </Grid>
             <Grid size={{ xs: 6 }}>
               <FormLabel required>Redirect URI</FormLabel>
               <TextField
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={!!addAnonymousParticipantFormik.errors.redirectUri}
                 variant="outlined"
                 name="redirectUri"
@@ -272,8 +271,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 value={addAnonymousParticipantFormik.values.redirectUri}
                 onChange={addAnonymousParticipantFormik.handleChange}
                 helperText={
-                  addAnonymousParticipantFormik.touched.redirectUri &&
-                  addAnonymousParticipantFormik.errors.redirectUri
+                  addAnonymousParticipantFormik.touched.redirectUri
+                  && addAnonymousParticipantFormik.errors.redirectUri
                 }
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
@@ -285,24 +284,26 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <CancelButton variant="text" onClick={onClose}>
           Cancel
         </CancelButton>
-        {generateAnonymousAccounts.isPending ? (
-          <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
-            <Spinner size={20} />
-          </DoneButton>
-        ) : (
-          <DoneButton
-            disabled={
-              !addAnonymousParticipantFormik.dirty ||
-              !addAnonymousParticipantFormik.isValid
-            }
-            variant="contained"
-            sx={{ elevation: 0 }}
-            type="submit"
-            onClick={() => addAnonymousParticipantFormik.handleSubmit()}
-          >
-            Add
-          </DoneButton>
-        )}
+        {generateAnonymousAccounts.isPending
+          ? (
+              <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
+                <Spinner size={20} />
+              </DoneButton>
+            )
+          : (
+              <DoneButton
+                disabled={
+                  !addAnonymousParticipantFormik.dirty
+                  || !addAnonymousParticipantFormik.isValid
+                }
+                variant="contained"
+                sx={{ elevation: 0 }}
+                type="submit"
+                onClick={() => addAnonymousParticipantFormik.handleSubmit()}
+              >
+                Add
+              </DoneButton>
+            )}
       </ModalActions>
     </LocalizationProvider>
   );

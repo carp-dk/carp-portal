@@ -1,5 +1,5 @@
-import { getDataColor, getMaxDatapoints } from "@Utils/utility";
-import { v4 as uuidv4 } from "uuid";
+import { getDataColor, getMaxDatapoints } from '@Utils/utility';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Column,
   DataPointBlock,
@@ -7,7 +7,7 @@ import {
   NumberOfDatapoints,
   SingleDayContainer,
   StyledContainer,
-} from "./styles";
+} from './styles';
 
 export type Record = {
   type: string;

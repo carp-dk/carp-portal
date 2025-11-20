@@ -1,6 +1,6 @@
-import { Typography } from "@mui/material";
-import { formatDate } from "@Utils/utility";
-import TooltipContainer, { HorizontalContainer } from "./styles";
+import { Typography } from '@mui/material';
+import { formatDate } from '@Utils/utility';
+import TooltipContainer, { HorizontalContainer } from './styles';
 
 type Props = {
   invitedAt: string;

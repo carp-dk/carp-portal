@@ -1,5 +1,5 @@
-import { Checkbox, FormControlLabel, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { Checkbox, FormControlLabel, Modal, Typography } from '@mui/material';
+import { useState } from 'react';
 import {
   ActionButton,
   BoldText,
@@ -10,7 +10,7 @@ import {
   DescriptionContainer,
   ModalBox,
   Title,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -55,12 +55,12 @@ const DeleteConfirmationModal = ({
         </DescriptionContainer>
         <Bottom>
           <FormControlLabel
-            control={
+            control={(
               <Checkbox
                 onChange={() => setChecked(!checked)}
                 checked={checked}
               />
-            }
+            )}
             label={<Typography variant="h5">{checkboxLabel}</Typography>}
           />
           <ButtonsContainer>

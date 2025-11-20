@@ -1,7 +1,7 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import { Skeleton } from "@mui/material";
-import { useCurrentUser } from "@Utils/queries/auth";
-import { getRandomNumber } from "@Utils/utility";
+import CopyButton from '@Components/Buttons/CopyButton';
+import { Skeleton } from '@mui/material';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { getRandomNumber } from '@Utils/utility';
 import {
   DataContainer,
   EmailText,
@@ -11,7 +11,7 @@ import {
   NameText,
   ProfilePicture,
   StyledContainer,
-} from "./styles";
+} from './styles';
 
 const BasicInfoSkeleton = () => {
   return (
@@ -40,8 +40,8 @@ const BasicInfoSkeleton = () => {
 };
 
 const BasicInfo = () => {
-  const { data: currentUser, isLoading: currentUserIsLoading } =
-    useCurrentUser();
+  const { data: currentUser, isLoading: currentUserIsLoading }
+    = useCurrentUser();
   if (currentUserIsLoading) {
     return <BasicInfoSkeleton />;
   }

@@ -1,44 +1,44 @@
-import { Button, Card, Divider, Typography } from "@mui/material";
-import { styled } from "@Utils/theme";
+import { Button, Card, Divider, Typography } from '@mui/material';
+import { styled } from '@Utils/theme';
 
 export const StyledCard = styled(Card)({
-  display: "flex",
-  justifyContent: "space-between",
-  padding: "16px 24px",
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: '16px 24px',
   marginBottom: 32,
   borderRadius: 8,
 });
 
-export const Left = styled("div")({
-  display: "grid",
-  gridTemplateColumns: "48px 1fr auto auto auto",
-  alignItems: "center",
+export const Left = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: '48px 1fr auto auto auto',
+  alignItems: 'center',
 });
 
-export const Right = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  gap: 8,
-  "& button": {
+export const Right = styled('div')({
+  'display': 'flex',
+  'alignItems': 'center',
+  'gap': 8,
+  '& button': {
     paddingBottom: 10,
   },
 });
 
-export const AccountIcon = styled("div")(({ theme }) => ({
+export const AccountIcon = styled('div')(({ theme }) => ({
   width: 40,
   height: 40,
   backgroundColor: theme.palette.company.isotype,
-  borderRadius: "50%",
-  position: "relative",
+  borderRadius: '50%',
+  position: 'relative',
   marginRight: 8,
 }));
 
 export const Initials = styled(Typography)(({ theme }) => ({
   color: theme.palette.common.white,
-  position: "absolute",
-  top: "52%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '52%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
 }));
 
 export const StyledDivider = styled(Divider)(({ theme }) => ({
@@ -51,10 +51,10 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
 }));
 
 export const RemindersContainer = styled(Button)({
-  display: "flex",
-  alignItems: "center",
+  display: 'flex',
+  alignItems: 'center',
   gap: 4,
-  textTransform: "none",
+  textTransform: 'none',
 });
 
 export const ReminderText = styled(Typography)(({ theme }) => ({

@@ -1,21 +1,20 @@
-/* eslint-disable no-underscore-dangle */
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import {
   calculateDaysPassedFromDate,
   getDeviceIcon,
   getRandomNumber,
-} from "@Utils/utility";
+} from '@Utils/utility';
 import {
   DeviceStatus,
   ParticipantDataInput,
   ParticipantStatus,
-} from "@carp-dk/client";
-import ContactPageIcon from "@mui/icons-material/ContactPage";
-import PersonIcon from "@mui/icons-material/Person";
-import { Skeleton, Typography } from "@mui/material";
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+} from '@carp-dk/client';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import PersonIcon from '@mui/icons-material/Person';
+import { Skeleton, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import {
   AccountIcon,
   EmailContainer,
@@ -25,7 +24,7 @@ import {
   StatusContainer,
   StyledContainer,
   StyledStatusDot,
-} from "./styles";
+} from './styles';
 
 type Props = {
   participantData: ParticipantDataInput;
@@ -43,23 +42,23 @@ const ParticipantRecord = ({
   const { t } = useTranslation();
   const { id: studyId } = useParams();
 
-  const participantRole =
-    participantStatus.assignedParticipantRoles.roleNames[0];
-  const participantDeviceRoleName =
-    participantStatus.assignedPrimaryDeviceRoleNames[0];
+  const participantRole
+    = participantStatus.assignedParticipantRoles.roleNames[0];
+  const participantDeviceRoleName
+    = participantStatus.assignedPrimaryDeviceRoleNames[0];
   const primaryDevice = deviceStatusList.find(
-    (device) => device.device.roleName === participantDeviceRoleName,
+    device => device.device.roleName === participantDeviceRoleName,
   );
   const participantDeviceType = primaryDevice.device.__type;
-  const deviceStatus = primaryDevice.__type.split(".").pop();
+  const deviceStatus = primaryDevice.__type.split('.').pop();
 
   const lastDataUpload = useMemo(() => {
     const lastData = participantData.dateOfLastDataUpload;
     if (!lastData) {
-      return "";
+      return '';
     }
     const elapsedDays = calculateDaysPassedFromDate(lastData.toString());
-    return t("common:last_data", { count: elapsedDays });
+    return t('common:last_data', { count: elapsedDays });
   }, [participantData.dateOfLastDataUpload]);
 
   return (
@@ -83,7 +82,9 @@ const ParticipantRecord = ({
           <PersonIcon fontSize="small" />
           {participantData.firstName && (
             <Typography variant="h6" noWrap>
-              {participantData.firstName} {participantData.lastName}
+              {participantData.firstName}
+              {' '}
+              {participantData.lastName}
             </Typography>
           )}
         </>
@@ -144,7 +145,7 @@ export const ParticipantRecordSkeleton = () => {
       </RoleContainer>
       <StatusContainer>
         <Skeleton
-          sx={{ m: "0px 8px 0px 4px" }}
+          sx={{ m: '0px 8px 0px 4px' }}
           animation="wave"
           variant="circular"
           width={20}
