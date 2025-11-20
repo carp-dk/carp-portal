@@ -16,9 +16,9 @@ export const Left = styled('div')({
 });
 
 export const Right = styled('div')({
-  'display': 'flex',
-  'alignItems': 'center',
-  'gap': 8,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
   '& button': {
     paddingBottom: 10,
   },

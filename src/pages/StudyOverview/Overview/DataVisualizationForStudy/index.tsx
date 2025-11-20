@@ -1,16 +1,19 @@
+import { DataStreamSummaryRequest } from '@carp-dk/client';
+import CarpAccordion from '@Components/CarpAccordion';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DataVisualizationTable from '@Components/DataVisualizationTable';
+import {
+  colors,
+  getUniqueTaskTypesFromProtocolSnapshot,
+  mapDataToChartData,
+  toUTCDate,
+} from '@Components/DataVisualizationTable/helper';
+import { LocalDate } from '@js-joda/core';
+import { Skeleton } from '@mui/material';
+import { useDataStreamsSummaries } from '@Utils/queries/dataStreams';
+import { useStudyDetails } from '@Utils/queries/studies';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useStudyDetails } from '@Utils/queries/studies';
-import {
-  colors, getUniqueTaskTypesFromProtocolSnapshot, mapDataToChartData, toUTCDate,
-} from '@Components/DataVisualizationTable/helper';
-import { Skeleton } from '@mui/material';
-import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { LocalDate } from '@js-joda/core';
-import { useDataStreamsSummaries } from '@Utils/queries/dataStreams';
-import { DataStreamSummaryRequest } from '@carp-dk/client';
-import DataVisualizationTable from '@Components/DataVisualizationTable';
-import CarpAccordion from '@Components/CarpAccordion';
 
 const DataVisualizationForStudy = () => {
   const { id: studyId } = useParams();
@@ -32,9 +35,7 @@ const DataVisualizationForStudy = () => {
     const today = LocalDate.now();
 
     // Don't go beyond today
-    setToDate(newToDate.isAfter(today) ?
-      today :
-      newToDate);
+    setToDate(newToDate.isAfter(today) ? today : newToDate);
   }
 
   const [requests, setRequests] = React.useState([]);
@@ -46,7 +47,9 @@ const DataVisualizationForStudy = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const summaries = useDataStreamsSummaries(requests, { enabled: requests.length > 0 });
+  const summaries = useDataStreamsSummaries(requests, {
+    enabled: requests.length > 0,
+  });
 
   useEffect(() => {
     if (studyDetails) {
@@ -59,18 +62,22 @@ const DataVisualizationForStudy = () => {
   }, [studyDetails, toDate]);
 
   function updateRequestsForQuery() {
-    const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
+    const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
+      studyDetails.protocolSnapshot,
+    );
     if (listOfTaskTypes.length === 0) {
       setDisplayBlank(true);
       return;
     }
-    const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map((type) => ({
-      study_id: studyId,
-      scope: 'study',
-      type: type,
-      from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
-      to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
-    }));
+    const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map(
+      (type) => ({
+        study_id: studyId,
+        scope: 'study',
+        type: type,
+        from: toUTCDate(fromDate.atStartOfDay()).toISOString(),
+        to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
+      }),
+    );
     setRequests(requests);
   }
 
@@ -90,21 +97,27 @@ const DataVisualizationForStudy = () => {
     );
   }
 
-  const loading = studyDetailsIsLoading || (summaries.some((summary) => summary.isLoading)) || requests.length === 0;
-  const loadingSkeletonHeight = 70 + 16 + (requests?.length * 40);
+  const loading =
+    studyDetailsIsLoading ||
+    summaries.some((summary) => summary.isLoading) ||
+    requests.length === 0;
+  const loadingSkeletonHeight = 70 + 16 + requests?.length * 40;
 
-  if (loading) return (
-    <CarpAccordion title="Tasks" isExpanded={isExpanded}>
-      <Skeleton
-        sx={{ borderRadius: '10px' }}
-        variant="rectangular"
-        height={loadingSkeletonHeight}
-        animation="wave"
-      />
-    </CarpAccordion>
+  if (loading)
+    return (
+      <CarpAccordion title="Tasks" isExpanded={isExpanded}>
+        <Skeleton
+          sx={{ borderRadius: '10px' }}
+          variant="rectangular"
+          height={loadingSkeletonHeight}
+          animation="wave"
+        />
+      </CarpAccordion>
+    );
+
+  const listOfTaskTypesFromProtocol = getUniqueTaskTypesFromProtocolSnapshot(
+    studyDetails.protocolSnapshot,
   );
-
-  const listOfTaskTypesFromProtocol = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
 
   const legend = listOfTaskTypesFromProtocol.map((task, index) => ({
     label: task,
@@ -122,7 +135,10 @@ const DataVisualizationForStudy = () => {
 
     const output = mappedData.map((entry) => {
       const { date, dayOfWeek, ...rest } = entry;
-      const quantity = Object.values(rest).reduce((sum, value) => sum + value, 0);
+      const quantity = Object.values(rest).reduce(
+        (sum, value) => sum + value,
+        0,
+      );
 
       return { date, [summary.type]: quantity, dayOfWeek };
     });

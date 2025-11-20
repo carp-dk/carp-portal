@@ -2,14 +2,14 @@ import { styled } from '@Utils/theme';
 import { NavLink } from 'react-router-dom';
 
 export const DefaultLogo = styled(NavLink)({
-  'boxSizing': 'border-box',
-  'display': 'flex',
-  'height': 60,
-  'margin': '0',
-  'padding': '10px 24px !important',
-  'position': 'relative',
-  'textAlign': 'left',
-  'textDecoration': 'none !important',
+  boxSizing: 'border-box',
+  display: 'flex',
+  height: 60,
+  margin: '0',
+  padding: '10px 24px !important',
+  position: 'relative',
+  textAlign: 'left',
+  textDecoration: 'none !important',
 
   '& img': {
     display: 'inline-block',
@@ -19,12 +19,12 @@ export const DefaultLogo = styled(NavLink)({
 });
 
 export const FlatLogo = styled(NavLink)({
-  'boxSizing': 'border-box',
-  'display': 'flex',
-  'margin': '5px auto',
-  'position': 'relative',
-  'textAlign': 'left',
-  'textDecoration': 'none !important',
+  boxSizing: 'border-box',
+  display: 'flex',
+  margin: '5px auto',
+  position: 'relative',
+  textAlign: 'left',
+  textDecoration: 'none !important',
 
   '& img': {
     height: 35,
@@ -32,13 +32,13 @@ export const FlatLogo = styled(NavLink)({
 });
 
 export const FlatColoredLogo = styled(NavLink)({
-  'boxSizing': 'border-box',
-  'display': 'flex',
-  'alignItems': 'center',
-  'margin': '0',
-  'position': 'relative',
-  'textAlign': 'left',
-  'textDecoration': 'none !important',
+  boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'center',
+  margin: '0',
+  position: 'relative',
+  textAlign: 'left',
+  textDecoration: 'none !important',
 
   '& img': {
     display: 'inline-block',
@@ -48,7 +48,7 @@ export const FlatColoredLogo = styled(NavLink)({
 });
 
 export const FlatWhiteLogo = styled(NavLink)({
-  'boxSizing': 'border-box',
+  boxSizing: 'border-box',
   '& img': {
     height: 28,
   },

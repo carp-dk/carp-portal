@@ -55,12 +55,12 @@ const DeleteConfirmationModal = ({
         </DescriptionContainer>
         <Bottom>
           <FormControlLabel
-            control={(
+            control={
               <Checkbox
                 onChange={() => setChecked(!checked)}
                 checked={checked}
               />
-            )}
+            }
             label={<Typography variant="h5">{checkboxLabel}</Typography>}
           />
           <ButtonsContainer>

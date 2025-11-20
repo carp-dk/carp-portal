@@ -1,5 +1,5 @@
-import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
 import { Export } from '@carp-dk/client';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { Button } from '@mui/material';
 import { useDeleteExport } from '@Utils/queries/studies';

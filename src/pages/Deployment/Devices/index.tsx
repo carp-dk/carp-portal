@@ -1,18 +1,19 @@
+import CarpAccordion from '@Components/CarpAccordion';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
   useDeviceDeployed,
   useParticipantGroupsAccountsAndStatus,
   useRegisterDevice,
 } from '@Utils/queries/participants';
-import { Checkbox, Modal, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import CarpAccordion from '@Components/CarpAccordion';
-import { useTranslation } from 'react-i18next';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { getDeviceIcon } from '@Utils/utility';
 import { CarpServiceError } from '@carp-dk/client';
+import { Checkbox, Modal, Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ActionButton,
   Bottom,
@@ -27,7 +28,6 @@ import {
   SubDeviceRow,
   Title,
 } from './styles';
-import LoadingSkeleton from '../LoadingSkeleton';
 
 const Devices = () => {
   const { id: studyId, deploymentId } = useParams();

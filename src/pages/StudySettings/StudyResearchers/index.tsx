@@ -59,9 +59,9 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
         </div>
       </Top>
       <ResearchersContainer>
-        {researchersLoading || studyDetailsLoading || userLoading ?
-            [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />) :
-            researchers?.map((researcher) => (
+        {researchersLoading || studyDetailsLoading || userLoading
+          ? [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
+          : researchers?.map((researcher) => (
               <ResearcherItem
                 disabled={
                   researcher.id === studyDetails.ownerId.stringRepresentation ||

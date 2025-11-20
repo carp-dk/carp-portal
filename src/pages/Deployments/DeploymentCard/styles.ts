@@ -17,9 +17,9 @@ export const TopContainer = styled('div')({
 });
 
 export const Names = styled(Typography)(({ theme }) => ({
-  'overflow': 'hidden',
-  'minWidth': '200px',
-  'cursor': 'pointer',
+  overflow: 'hidden',
+  minWidth: '200px',
+  cursor: 'pointer',
   ':hover': {
     textDecoration: 'underline',
     color: theme.palette.primary.main,
@@ -27,10 +27,10 @@ export const Names = styled(Typography)(({ theme }) => ({
 }));
 
 export const HorizontalStatusContainer = styled('div')({
-  'display': 'flex',
-  'alignItems': 'center',
-  'gap': 4,
-  'position': 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+  position: 'relative',
   '&:hover': {
     '& > div': {
       display: 'flex',
@@ -39,14 +39,14 @@ export const HorizontalStatusContainer = styled('div')({
 });
 
 export const IdContainer = styled('div')({
-  'display': 'flex',
-  'alignItems': 'center',
-  'gap': 8,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
   '& button': {
     paddingBottom: 4,
     paddingRight: 4,
   },
-  'justifyContent': 'flex-end',
+  justifyContent: 'flex-end',
 });
 
 export const StatusContainer = styled('div')({
@@ -69,12 +69,8 @@ export const StyledCard = styled(Card, {
   borderRadius: 16,
   position: 'relative',
   paddingLeft: 16,
-  paddingBottom: open ?
-    16 :
-    0,
-  height: open ?
-    'auto' :
-    52,
+  paddingBottom: open ? 16 : 0,
+  height: open ? 'auto' : 52,
   overflow: 'initial',
 }));
 
@@ -116,16 +112,14 @@ export const StyledStatusDot = styled('div', {
 export const MinimizeButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ theme, open }) => ({
-  'minWidth': 36,
-  'color': theme.palette.grey[700],
-  'justifyContent': 'flex-end',
-  'transition': theme.transitions.create('transform', {
+  minWidth: 36,
+  color: theme.palette.grey[700],
+  justifyContent: 'flex-end',
+  transition: theme.transitions.create('transform', {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  'transform': open ?
-    'rotateX(180deg)' :
-    'rotateX(0deg)',
+  transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
   '& svg': {
     fontSize: 36,
   },
@@ -135,13 +129,13 @@ export const MinimizeButton = styled(Button, {
 }));
 
 export const DownloadButton = styled(Button)(({ theme }) => ({
-  'color': theme.palette.primary.main,
-  'backgroundColor': 'transparent',
-  'border': 'none',
-  'cursor': 'pointer',
-  'textTransform': 'none',
-  'gap': 4,
-  'textDecoration': 'underline',
+  color: theme.palette.primary.main,
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  textTransform: 'none',
+  gap: 4,
+  textDecoration: 'underline',
   '&:hover': {
     textDecoration: 'underline',
   },

@@ -9,9 +9,7 @@ export const StyledContainer = styled('div', {
     marginTop: 12,
     display: 'flex',
     flexDirection: 'column',
-    height: open ?
-      `calc(${numberOfConnections}*52px)+42px` :
-      '42px',
+    height: open ? `calc(${numberOfConnections}*52px)+42px` : '42px',
     overflow: 'hidden',
     transition: theme.transitions.create(['height'], {
       easing: theme.transitions.easing.easeOut,
@@ -45,9 +43,7 @@ export const ExpandButton = styled('div', {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  transform: open ?
-    'rotateX(180deg)' :
-    'rotateX(0deg)',
+  transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
 }));
 
 export const ConnectedDeviceItem = styled('div')({

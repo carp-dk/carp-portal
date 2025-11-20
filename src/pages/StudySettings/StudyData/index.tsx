@@ -6,6 +6,8 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from '@Utils/queries/studies';
+import { formatDateTime } from '@Utils/utility';
+import LinkIcon from '@mui/icons-material/Link';
 import {
   FormLabel,
   MenuItem,
@@ -14,11 +16,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import LinkIcon from '@mui/icons-material/Link';
 import { useFormik } from 'formik';
 import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
-import { formatDateTime } from '@Utils/utility';
 import StudySetupSkeleton from '../StudySetupSkeleton';
 import {
   Heading,
@@ -74,9 +74,9 @@ const StudyData = () => {
 
   const studyProtocolFormik = useFormik({
     initialValues: {
-      protocolId: studyDetails?.protocolSnapshot ?
-        studyDetails.protocolSnapshot.id :
-        '',
+      protocolId: studyDetails?.protocolSnapshot
+        ? studyDetails.protocolSnapshot.id
+        : '',
     },
     validationSchema: studyProtocolValidationSchema,
     onSubmit: (values) => {

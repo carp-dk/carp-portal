@@ -36,7 +36,7 @@ export const HeaderText = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledTableRow = styled(TableRow)({
-  'paddingLeft': 0,
+  paddingLeft: 0,
   '&:hover': {
     backgroundColor: '#EDEDED',
     transition: 'background-color 0.2s ease-in-out',
@@ -53,9 +53,9 @@ export const StyledTableCell = styled(TableCell)({
 });
 
 export const StyledSelect = styled(Select)({
-  'height': '32px',
-  'width': '116px',
-  'borderRadius': '16px',
+  height: '32px',
+  width: '116px',
+  borderRadius: '16px',
   '& .MuiOutlinedInput-notchedOutline': {
     borderRadius: '16px',
   },

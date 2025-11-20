@@ -2,9 +2,9 @@ import { Button, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const StyledContainer = styled('div')(({ theme }) => ({
-  'display': 'flex',
-  'flexDirection': 'column',
-  'gap': 16,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
   '& label': {
     color: theme.palette.text.primary,
     fontWeight: 600,

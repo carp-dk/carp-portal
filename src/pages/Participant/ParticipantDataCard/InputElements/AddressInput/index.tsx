@@ -126,8 +126,7 @@ const AddressInput = ({ formik, editing }: Props) => {
               }}
               gridTemplateColumns="30px auto"
             >
-              <DanishFlag name="Denmark" onSelect={undefined} width={30} />
-              {' '}
+              <DanishFlag name="Denmark" onSelect={undefined} width={30} />{' '}
               Denmark
             </Stack>
           </MenuItem>

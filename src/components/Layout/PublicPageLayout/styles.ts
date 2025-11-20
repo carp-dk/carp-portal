@@ -8,7 +8,7 @@ export const PublicPageBanner = styled('div')(({ theme }) => ({
   padding: '2rem 4rem 1em',
   alignItems: 'center',
   [theme.breakpoints.down('sm')]: {
-    'padding': '0 1.5rem 0',
+    padding: '0 1.5rem 0',
     '& *> img': {
       height: 18,
     },
@@ -21,10 +21,10 @@ export const StyledLogo = styled(Logo)({
 });
 
 export const BannerActionText = styled(Typography)(({ theme }) => ({
-  'display': 'flex',
-  'alignItems': 'center',
-  'textAlign': 'right',
-  'gap': 8,
+  display: 'flex',
+  alignItems: 'center',
+  textAlign: 'right',
+  gap: 8,
   '& > a': {
     visibility: 'visible',
     fontSize: theme.typography.h4.fontSize,

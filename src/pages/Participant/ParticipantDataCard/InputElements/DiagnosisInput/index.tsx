@@ -1,8 +1,8 @@
 import { Stack, TextField } from '@mui/material';
-import { getIn, useFormik } from 'formik';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { enGB } from 'date-fns/locale/en-GB';
+import { getIn, useFormik } from 'formik';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -38,12 +38,13 @@ const DiagnosisInput = ({ formik, editing }: Props) => {
             label="Effective date"
             name="diagnosis.effectiveDate"
             value={
-              formik.values.diagnosis.effectiveDate ?
-                new Date(formik.values.diagnosis.effectiveDate) :
-                null
+              formik.values.diagnosis.effectiveDate
+                ? new Date(formik.values.diagnosis.effectiveDate)
+                : null
             }
             onChange={(value) =>
-              formik.setFieldValue('diagnosis.effectiveDate', value)}
+              formik.setFieldValue('diagnosis.effectiveDate', value)
+            }
             slotProps={{
               actionBar: {
                 actions: ['clear'],

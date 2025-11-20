@@ -14,25 +14,21 @@ const PublicPageLayout = ({ children }: Props) => {
     <>
       <PublicPageBanner>
         <StyledLogo type="flat-colored" />
-        {location.pathname.includes('/register') ?
-            (
-              <BannerActionText>
-                Already have an account?
-                {' '}
-                <StyledLink to="/" isBold>
-                  Login
-                </StyledLink>
-              </BannerActionText>
-            ) :
-            (
-              <BannerActionText>
-                New to CARP?
-                {' '}
-                <StyledLink to="/register" isBold>
-                  Sign up
-                </StyledLink>
-              </BannerActionText>
-            )}
+        {location.pathname.includes('/register') ? (
+          <BannerActionText>
+            Already have an account?{' '}
+            <StyledLink to="/" isBold>
+              Login
+            </StyledLink>
+          </BannerActionText>
+        ) : (
+          <BannerActionText>
+            New to CARP?{' '}
+            <StyledLink to="/register" isBold>
+              Sign up
+            </StyledLink>
+          </BannerActionText>
+        )}
       </PublicPageBanner>
       {children}
     </>

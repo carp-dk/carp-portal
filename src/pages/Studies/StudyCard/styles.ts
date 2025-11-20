@@ -53,9 +53,7 @@ export const StatusDotContainer = styled('div', {
   display: 'flex',
   alignItems: 'flex-end',
   paddingTop: 8,
-  paddingBottom: skeleton ?
-    4 :
-    0,
+  paddingBottom: skeleton ? 4 : 0,
 }));
 
 export const InfoContainer = styled('div')({

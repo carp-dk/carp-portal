@@ -1,10 +1,6 @@
 import DragAndDrop from '@Components/DragAndDrop';
 import { useCurrentUser } from '@Utils/queries/auth';
 import { useCreateProtocol } from '@Utils/queries/protocols';
-import { FormLabel, Modal, TextField } from '@mui/material';
-import { useFormik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
-import * as yup from 'yup';
 import {
   DefaultSerializer,
   getSerializer,
@@ -12,6 +8,10 @@ import {
   StudyProtocol,
   StudyProtocolSnapshot,
 } from '@carp-dk/client';
+import { FormLabel, Modal, TextField } from '@mui/material';
+import { useFormik } from 'formik';
+import { useEffect, useRef, useState } from 'react';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,

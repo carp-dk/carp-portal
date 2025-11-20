@@ -30,7 +30,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
               failureCount === 0 &&
               ((error as unknown as CarpServiceError).code === 403 ||
                 (error as unknown as CarpServiceError).code === 401) &&
-                !hasOngoingRefreshRequest
+              !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;
 

@@ -1,19 +1,19 @@
 import DragAndDrop from '@Components/DragAndDrop';
 import { Modal } from '@mui/material';
-import { useFormik } from 'formik';
 import { useCreateFile } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
 import {
-  ModalBox,
-  ModalTitle,
-  ModalDescription,
-  ModalContainer,
-  ModalContent,
-  ModalActions,
   CancelButton,
   DoneButton,
+  ModalActions,
+  ModalBox,
+  ModalContainer,
+  ModalContent,
+  ModalDescription,
+  ModalTitle,
 } from './styles';
 
 type Props = {

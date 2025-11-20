@@ -1,6 +1,6 @@
 import { getCountry } from '@Assets/languageMap';
-import DragAndDrop from '@Components/DragAndDrop';
 import { ResourceData } from '@carp-dk/client';
+import DragAndDrop from '@Components/DragAndDrop';
 import { FormLabel, Modal } from '@mui/material';
 import { useUpdateTranslation } from '@Utils/queries/studies';
 import { useFormik } from 'formik';
@@ -114,11 +114,8 @@ const EditTranslationModal = ({ open, onClose, translation }: Props) => {
           Update Translation
         </ModalTitle>
         <ModalDescription variant="h5" id="modal-modal-description">
-          Provide a file to overwrite the
-          {' '}
-          {getCountry(translation.name as string)}
-          {' '}
-          translation. The file must be
+          Provide a file to overwrite the{' '}
+          {getCountry(translation.name as string)} translation. The file must be
           a JSON file.
         </ModalDescription>
         <ModalContainer>

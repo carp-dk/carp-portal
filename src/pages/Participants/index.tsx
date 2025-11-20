@@ -1,9 +1,9 @@
 import ActionNeededModal from '@Components/ActionNeededModal';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
+import { getUri, PageType } from '@Utils/utility';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUri, PageType } from '@Utils/utility';
 import AddNewDeploymentModal from './AddNewDeploymentModal';
 import AddParticipantModal from './AddParticipantModal';
 import ImportParticipantsModal from './ImportParticipantsModal';

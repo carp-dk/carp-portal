@@ -72,7 +72,7 @@ const Resources = () => {
     description:
       'The resource will be permanently deleted and will no longer appear on your Resources page.',
     boldText: 'You can not undo this action.',
-    checkboxLabel: 'I\'m sure I want to delete it',
+    checkboxLabel: "I'm sure I want to delete it",
     actionButtonLabel: 'Delete',
   };
 
@@ -118,8 +118,8 @@ const Resources = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {resourcesLoading ?
-                  [1, 2, 3].map(() => (
+              {resourcesLoading
+                ? [1, 2, 3].map(() => (
                     <StyledTableRow key={uuidv4()}>
                       <TableCell>
                         <Skeleton
@@ -142,17 +142,17 @@ const Resources = () => {
                         </IconButton>
                       </TableCell>
                     </StyledTableRow>
-                  )) :
-                  resources?.documents.map((resource: CarpDocument) => (
+                  ))
+                : resources?.documents.map((resource: CarpDocument) => (
                     <StyledTableRow key={resource.id}>
                       <TableCell>{resource.name}</TableCell>
                       <TableCell>
                         {formatDateTime(resource.created_at) +
-                          (resource.updated_at !== resource.created_at ?
-                            ` (updated ${formatDateTime(
-                              resource.updated_at,
-                            )})` :
-                            '')}
+                          (resource.updated_at !== resource.created_at
+                            ? ` (updated ${formatDateTime(
+                                resource.updated_at,
+                              )})`
+                            : '')}
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Delete">

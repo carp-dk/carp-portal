@@ -58,25 +58,21 @@ const ProtocolsTable = ({ openModal }: Props) => {
     setSortOrder((prevSortOrder) => ({
       field,
       ascending:
-        prevSortOrder.field === field ?
-            !prevSortOrder.ascending :
-          true,
+        prevSortOrder.field === field ? !prevSortOrder.ascending : true,
     }));
   };
 
   const sortedProtocols =
-    protocolsLoading || !protocols ?
-        [] :
-        protocols.sort((a, b) => {
+    protocolsLoading || !protocols
+      ? []
+      : protocols.sort((a, b) => {
           const compareResult =
-            sortOrder.field === 'name' ?
-                a.name.localeCompare(b.name) :
-              a.createdOn.toEpochMilliseconds() -
-              b.createdOn.toEpochMilliseconds();
+            sortOrder.field === 'name'
+              ? a.name.localeCompare(b.name)
+              : a.createdOn.toEpochMilliseconds() -
+                b.createdOn.toEpochMilliseconds();
 
-          return sortOrder.ascending ?
-            compareResult :
-              -compareResult;
+          return sortOrder.ascending ? compareResult : -compareResult;
         });
 
   const selectProtocolHandler = (protocolId: string) => {
@@ -127,41 +123,40 @@ const ProtocolsTable = ({ openModal }: Props) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {protocolsLoading ?
-                (
-                  <>
-                    <SkeletonTableRow />
-                    <SkeletonTableRow />
-                    <SkeletonTableRow />
-                  </>
-                ) :
-                (
-                  sortedProtocols.map((protocol) => (
-                    <StyledTableRow
-                      key={protocol.id.stringRepresentation}
-                      onClick={() =>
-                        selectProtocolHandler(protocol.id.stringRepresentation)}
-                    >
-                      <TableCell>
-                        <PrimaryCellText variant="h4">
-                          {protocol.name}
-                        </PrimaryCellText>
-                      </TableCell>
-                      <TableCell>
-                        <SecondaryCellText variant="h5">
-                          {protocol.description ?
-                              formatDescription(protocol.description) :
-                            '—'}
-                        </SecondaryCellText>
-                      </TableCell>
-                      <TableCell>
-                        <TertiaryCellText variant="h5">
-                          {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-                        </TertiaryCellText>
-                      </TableCell>
-                    </StyledTableRow>
-                  ))
-                )}
+            {protocolsLoading ? (
+              <>
+                <SkeletonTableRow />
+                <SkeletonTableRow />
+                <SkeletonTableRow />
+              </>
+            ) : (
+              sortedProtocols.map((protocol) => (
+                <StyledTableRow
+                  key={protocol.id.stringRepresentation}
+                  onClick={() =>
+                    selectProtocolHandler(protocol.id.stringRepresentation)
+                  }
+                >
+                  <TableCell>
+                    <PrimaryCellText variant="h4">
+                      {protocol.name}
+                    </PrimaryCellText>
+                  </TableCell>
+                  <TableCell>
+                    <SecondaryCellText variant="h5">
+                      {protocol.description
+                        ? formatDescription(protocol.description)
+                        : '—'}
+                    </SecondaryCellText>
+                  </TableCell>
+                  <TableCell>
+                    <TertiaryCellText variant="h5">
+                      {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                    </TertiaryCellText>
+                  </TableCell>
+                </StyledTableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

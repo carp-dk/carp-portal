@@ -1,19 +1,20 @@
+import { ParticipantGroup } from '@carp-dk/client';
 import CopyButton from '@Components/Buttons/CopyButton';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { Stop } from '@mui/icons-material';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { Box, Stack, Typography } from '@mui/material';
 import {
   useParticipantGroupsAccountsAndStatus,
   useStopParticipantGroup,
 } from '@Utils/queries/participants';
-import { ParticipantGroup } from '@carp-dk/client';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Stack, Typography } from '@mui/material';
-import { formatDateTime } from '@Utils/utility';
-import { Stop } from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useCreateSummary } from '@Utils/queries/studies';
-import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { formatDateTime } from '@Utils/utility';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ExportButton,
   Left,
@@ -25,7 +26,6 @@ import {
   StyledStatusDot,
   StyledStatusText,
 } from './styles';
-import LoadingSkeleton from '../LoadingSkeleton';
 
 const BasicInfo = () => {
   const { deploymentId, id: studyId } = useParams();
@@ -95,7 +95,8 @@ const BasicInfo = () => {
       <Box display="flex" justifyContent="flex-end" marginBottom="16px">
         <ExportButton
           onClick={() =>
-            generateExport.mutate({ studyId, deploymentIds: [deploymentId] })}
+            generateExport.mutate({ studyId, deploymentIds: [deploymentId] })
+          }
         >
           <FileDownloadOutlinedIcon fontSize="small" />
           <Typography variant="h5">{t('common:export_data')}</Typography>

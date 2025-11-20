@@ -1,12 +1,12 @@
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
-import { useTranslation } from 'react-i18next';
 import { getUri, PageType } from '@Utils/utility';
+import { useTranslation } from 'react-i18next';
 import BasicInfo from './BasicInfo';
-import Participants from './Participants';
-import InformedConsentCard from './InformedConsentCard';
-import Devices from './Devices';
 import DataVisualizationForDeployment from './DataVisualizationForDeployment';
+import Devices from './Devices';
+import InformedConsentCard from './InformedConsentCard';
+import Participants from './Participants';
 
 const Deployment = () => {
   const { t } = useTranslation();

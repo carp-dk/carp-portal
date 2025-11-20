@@ -1,7 +1,7 @@
-import * as flags from 'react-flags-select';
-import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
 import isoCountries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
+import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
+import * as flags from 'react-flags-select';
 
 isoCountries.registerLocale(en);
 
@@ -9,29 +9,29 @@ type Flags = typeof flags;
 type FlagKey = keyof Flags;
 
 type LanguageLabelCountries =
-  | 'BG' |
-  'HR' |
-  'CZ' |
-  'DK' |
-  'NL' |
-  'GB' |
-  'EE' |
-  'FI' |
-  'FR' |
-  'DE' |
-  'GR' |
-  'HU' |
-  'IE' |
-  'IT' |
-  'LV' |
-  'MT' |
-  'PL' |
-  'PT' |
-  'RO' |
-  'SK' |
-  'SI' |
-  'ES' |
-  'SE';
+  | 'BG'
+  | 'HR'
+  | 'CZ'
+  | 'DK'
+  | 'NL'
+  | 'GB'
+  | 'EE'
+  | 'FI'
+  | 'FR'
+  | 'DE'
+  | 'GR'
+  | 'HU'
+  | 'IE'
+  | 'IT'
+  | 'LV'
+  | 'MT'
+  | 'PL'
+  | 'PT'
+  | 'RO'
+  | 'SK'
+  | 'SI'
+  | 'ES'
+  | 'SE';
 type LanguageLabelsMapping = {
   [key in LanguageLabelCountries]: { primary: string; secondary: string };
 };

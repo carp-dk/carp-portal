@@ -2,10 +2,10 @@ import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useStudyDetails, useStudyStatus } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
 import kotlinx from '@cachet/carp-kotlinx-datetime';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
-import LinkIcon from '@mui/icons-material/Link';
 import { StudyStatus } from '@carp-dk/client';
+import LinkIcon from '@mui/icons-material/Link';
+import { Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ProtocolData,
@@ -75,9 +75,7 @@ const Status = () => {
       {studyDetails.protocolSnapshot && (
         <div>
           <ProtocolData variant="h4">
-            Study Protocol:
-            {' '}
-            {studyDetails.protocolSnapshot.name}
+            Study Protocol: {studyDetails.protocolSnapshot.name}
           </ProtocolData>
           <Typography variant="h6">
             {studyDetails.protocolSnapshot.description}

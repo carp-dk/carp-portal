@@ -7,9 +7,7 @@ const StyledStyledLink = styled(Link, {
   textDecoration: 'none',
   fontSize: 'inherit',
   color: theme.palette.primary.main,
-  fontWeight: isBold ?
-    700 :
-    'inherit',
+  fontWeight: isBold ? 700 : 'inherit',
 }));
 
 export default StyledStyledLink;

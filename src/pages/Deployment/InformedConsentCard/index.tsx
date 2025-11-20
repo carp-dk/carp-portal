@@ -1,23 +1,24 @@
-import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useParams } from 'react-router-dom';
-import CarpAccordion from '@Components/CarpAccordion';
-import { Stack, Typography } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import { useTranslation } from 'react-i18next';
 import {
   CarpFile,
   InformedConsentType,
   ParticipantDataInput,
 } from '@carp-dk/client';
+import CarpAccordion from '@Components/CarpAccordion';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import PersonIcon from '@mui/icons-material/Person';
+import { Stack, Typography } from '@mui/material';
+import { pdf } from '@react-pdf/renderer';
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from '@Utils/queries/participants';
-import { useEffect, useState } from 'react';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
-import { pdf } from '@react-pdf/renderer';
 import { useDownloadFile, useGetFiles } from '@Utils/queries/studies';
+import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   DownloadButton,
   LastUploadText,
@@ -26,7 +27,6 @@ import {
   Right,
   StyledStack,
 } from './styles';
-import LoadingSkeleton from '../LoadingSkeleton';
 
 const InformedConsentCard = () => {
   const { t } = useTranslation();
@@ -141,7 +141,10 @@ const InformedConsentCard = () => {
   if (!consents) return null;
 
   return (
-    <CarpAccordion isExpanded={true} title={t('deployment:informed_consents_card.title')}>
+    <CarpAccordion
+      isExpanded={true}
+      title={t('deployment:informed_consents_card.title')}
+    >
       <Stack gap="16px">
         {consents.map(({ participant, consent, consentFile }) => {
           return (

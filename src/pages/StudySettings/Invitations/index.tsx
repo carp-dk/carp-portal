@@ -4,11 +4,11 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from '@Utils/queries/studies';
+import { StudyStatus } from '@carp-dk/client';
 import { FormLabel, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { useParams } from 'react-router';
 import * as yup from 'yup';
-import { StudyStatus } from '@carp-dk/client';
 import StudySetupSkeleton from '../StudySetupSkeleton';
 import { Heading, StyledCard, Subheading } from '../styles';
 

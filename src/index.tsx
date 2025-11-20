@@ -7,12 +7,12 @@ import { CssBaseline } from '@mui/material';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
+import { BrowserRouter } from 'react-router-dom';
 import validateEnv from './envValidator';
+import i18n from './i18n';
 import App from './pages/App';
 import QueryClientComponent from './queryClientComponent';
-import i18n from './i18n';
 
 if (process.env.NODE_ENV === 'development') {
   setupLocatorUI();

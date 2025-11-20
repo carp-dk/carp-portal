@@ -32,16 +32,14 @@ export const ModalContainer = styled('div')({
 export const ModalContent = styled('div', {
   shouldForwardProp: (prop) => prop !== 'fixHeight',
 })<{ fixHeight?: boolean }>(({ fixHeight }) => ({
-  'flexGrow': 1,
-  'display': 'flex',
-  'flexDirection': 'column',
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
   '& > *:last-child': {
     flex: '1 0',
   },
   '& > *:last-child > div': {
-    height: fixHeight ?
-      '100%' :
-      150,
+    height: fixHeight ? '100%' : 150,
   },
 }));
 

@@ -44,9 +44,9 @@ const DeploymentCard = ({
   const handleCardToggle = (event) => {
     event.stopPropagation();
     setIsCardOpen((prevIsCardOpen) => {
-      const newOpenCardCount = prevIsCardOpen ?
-        openCardCount - 1 :
-        openCardCount + 1;
+      const newOpenCardCount = prevIsCardOpen
+        ? openCardCount - 1
+        : openCardCount + 1;
       setOpenCardCount(newOpenCardCount);
       return !prevIsCardOpen;
     });
@@ -56,9 +56,9 @@ const DeploymentCard = ({
     () =>
       deployment.participants
         .map((participant) =>
-          participant.firstName ?
-            `${participant.firstName} ${participant.lastName}` :
-            '',
+          participant.firstName
+            ? `${participant.firstName} ${participant.lastName}`
+            : '',
         )
         .join(', '),
     [deployment.participants],
@@ -75,15 +75,14 @@ const DeploymentCard = ({
           onClick={() =>
             navigate(
               `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
-            )}
+            )
+          }
         >
-          {!deployment.participants.every((p) => p.email == null) ?
-              (
-                names
-              ) :
-              (
-                <i>Generated deployment</i>
-              )}
+          {!deployment.participants.every((p) => p.email == null) ? (
+            names
+          ) : (
+            <i>Generated deployment</i>
+          )}
         </Names>
         <StyledDivider />
         <HorizontalStatusContainer>
@@ -111,9 +110,7 @@ const DeploymentCard = ({
         </HorizontalStatusContainer>
         <IdContainer>
           <Typography variant="h6">
-            Deployment ID:
-            {' '}
-            {deployment.participantGroupId}
+            Deployment ID: {deployment.participantGroupId}
           </Typography>
           <CopyButton
             textToCopy={deployment.participantGroupId}
@@ -127,9 +124,7 @@ const DeploymentCard = ({
         >
           <KeyboardArrowDownRoundedIcon
             sx={{
-              transform: isCardOpen ?
-                'rotate(0deg)' :
-                'rotate(-90deg)',
+              transform: isCardOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
               transition: 'transform 0.3s ease',
             }}
           />

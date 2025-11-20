@@ -36,9 +36,7 @@ const validationSchema = yup.object({
   type: yup.string().required('Type is required'),
   // if type is other, require 'name'
   name: yup.string().when('type', (type: string | string[], schema) => {
-    return type === 'other' ?
-        schema.required('Name is required') :
-      schema;
+    return type === 'other' ? schema.required('Name is required') : schema;
   }),
   file: yup
     .mixed()

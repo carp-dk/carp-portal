@@ -12,8 +12,8 @@ export const StyledIconButton = styled(IconButton)({
 });
 
 export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
-  'height': 48,
-  'width': 96,
+  height: 48,
+  width: 96,
   '&:hover': {
     backgroundColor: '#ededed',
   },
@@ -24,10 +24,10 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     borderTop: `1px solid ${theme.palette.grey[200]}`,
   },
   '& a': {
-    'textTransform': 'capitalize',
-    'fontWeight': 300,
-    'color': theme.palette.text.primary,
-    'textDecoration': 'none',
+    textTransform: 'capitalize',
+    fontWeight: 300,
+    color: theme.palette.text.primary,
+    textDecoration: 'none',
     '&:hover': {
       textDecoration: 'none',
     },

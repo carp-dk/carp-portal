@@ -145,13 +145,13 @@ export const themeInstance = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        'body': {
+        body: {
           fontSize: '0.875rem',
           lineHeight: '1.25rem',
           fontWeight: 300,
         },
         '@font-face': opensans100,
-        'fallbacks': [
+        fallbacks: [
           {
             '@font-face': opensans300,
           },
@@ -189,12 +189,12 @@ export const themeInstance = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          'fontSize': '1rem',
-          'lineHeight': '1.5rem',
-          'fontWeight': 700,
-          'marginTop': 26,
-          'marginBottom': 8,
-          'display': 'block',
+          fontSize: '1rem',
+          lineHeight: '1.5rem',
+          fontWeight: 700,
+          marginTop: 26,
+          marginBottom: 8,
+          display: 'block',
           '&.Mui-disabled': {
             opacity: '0.5',
           },

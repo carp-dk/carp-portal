@@ -2,7 +2,7 @@ import { Chip, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const AnnouncementLeft = styled('div')({
-  'flexGrow': '1',
+  flexGrow: '1',
   '& img': {
     width: '100%',
   },
@@ -41,20 +41,20 @@ export const AnnouncementMessage = styled(Typography)(({ theme }) => ({
 }));
 
 export const CollapseWrapper = styled('div')({
-  'display': 'flex',
-  'flexDirection': 'column',
-  'alignItems': 'center',
-  'width': '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100%',
   '& > button': {
     marginLeft: -24,
   },
 });
 
 export const AnnouncementType = styled(Chip)({
-  'marginLeft': 12,
-  'fontSize': 10,
-  'height': 22,
-  'textTransform': 'uppercase',
+  marginLeft: 12,
+  fontSize: 10,
+  height: 22,
+  textTransform: 'uppercase',
   '& > span': {
     padding: '0 10px',
   },

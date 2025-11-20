@@ -1,12 +1,11 @@
+import { GenericEmailRequest } from '@carp-dk/client';
 import { Modal, TextField, Typography } from '@mui/material';
+import { usePostEmailSendGeneric } from '@Utils/queries/participants';
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import * as yup from 'yup';
-import { GenericEmailRequest } from '@carp-dk/client';
-import { usePostEmailSendGeneric } from '@Utils/queries/participants';
 import {
   CancelButton,
-  TypographyVariant,
   Content,
   DoneButton,
   HorizontalInputContainer,
@@ -14,6 +13,7 @@ import {
   ModalActions,
   ModalBox,
   Title,
+  TypographyVariant,
   VerticalInputContainer,
 } from './styles';
 
@@ -36,9 +36,7 @@ const validationSchema = yup.object({
       if (this.isType(value) && value !== null) {
         return value;
       }
-      return originalValue ?
-          originalValue.split(/[\s,]+/) :
-          [];
+      return originalValue ? originalValue.split(/[\s,]+/) : [];
     })
     .of(yup.string().email(({ value }) => `${value} is not a valid email`)),
 });

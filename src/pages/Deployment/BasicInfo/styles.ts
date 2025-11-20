@@ -20,7 +20,7 @@ export const Left = styled('div')({
 });
 
 export const Right = styled('div')({
-  'display': 'flex',
+  display: 'flex',
   '& button': {
     paddingBottom: 10,
   },
@@ -68,12 +68,12 @@ export const ExportButton = styled(Button)(({ theme }) => ({
 }));
 
 export const StyledButton = styled(Button)(({ theme }) => ({
-  'border': `1px solid ${theme.palette.grey[700]}`,
-  'borderRadius': 16,
-  'textTransform': 'none',
-  'padding': '8px 16px',
-  'color': theme.palette.error.main,
-  'gap': 8,
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 16,
+  textTransform: 'none',
+  padding: '8px 16px',
+  color: theme.palette.error.main,
+  gap: 8,
   '&:disabled': {
     color: theme.palette.primary.main,
     opacity: '0.4',

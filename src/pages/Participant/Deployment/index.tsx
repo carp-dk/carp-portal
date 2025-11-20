@@ -102,7 +102,6 @@ const Deployment = () => {
             participant: { ...p, lastUpload },
             roleName,
             deviceInfo: {
-
               deviceStatus: device.__type.split('.').pop(),
               deviceRole,
 
@@ -114,7 +113,6 @@ const Deployment = () => {
       );
 
       setDeploymentInformation({
-
         groupStatus: group.deploymentStatus.__type.split('.').pop(),
         deploymentStatus,
         participants,
@@ -129,9 +127,7 @@ const Deployment = () => {
       !participant.firstName ||
       !participant.lastName
     ) {
-      return participant.role ?
-        participant.role[0] :
-        '?';
+      return participant.role ? participant.role[0] : '?';
     }
     return `${participant.firstName[0]}${participant.lastName[0]}`;
   };
@@ -171,9 +167,7 @@ const Deployment = () => {
           </DeploymentStatusContainer>
           <DeploymentIdContainer>
             <SecondaryText variant="h6">
-              Deployment ID:
-              {' '}
-              {deploymentId}
+              Deployment ID: {deploymentId}
             </SecondaryText>
             <CopyButton textToCopy={deploymentId} idType="Deployment" />
           </DeploymentIdContainer>
@@ -203,9 +197,7 @@ const Deployment = () => {
                 <>
                   <PersonIcon fontSize="small" />
                   <Typography variant="h6">
-                    {p.participant.firstName}
-                    {' '}
-                    {p.participant.lastName}
+                    {p.participant.firstName} {p.participant.lastName}
                   </Typography>
                 </>
               )}

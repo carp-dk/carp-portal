@@ -29,9 +29,9 @@ export const ModalContainer = styled('div')({
 });
 
 export const ModalContent = styled('div')({
-  'flexGrow': 1,
-  'display': 'flex',
-  'flexDirection': 'column',
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
   '& > *:last-child': {
     flex: '1 0',
   },

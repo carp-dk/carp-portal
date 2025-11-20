@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LocalDateTime } from '@js-joda/core';
 import { StackedBarChartWrapperProps } from '@Components/DataVisualizationTableWrapper';
-import { DataStreamSummary, DataStreamType, StudyProtocolSnapshot } from '@carp-dk/client';
+import {
+  DataStreamSummary,
+  DataStreamType,
+  StudyProtocolSnapshot,
+} from '@carp-dk/client';
+import { LocalDateTime } from '@js-joda/core';
 
 export const taskLabelColors = {
   Survey: '#3A82F7',
@@ -63,15 +67,17 @@ export const chartConfigs: Partial<StackedBarChartWrapperProps>[] = [
 ];
 
 export function toUTCDate(localDateTime: LocalDateTime): Date {
-  return new Date(Date.UTC(
-    localDateTime.year(),
-    localDateTime.monthValue() - 1,
-    localDateTime.dayOfMonth(),
-    localDateTime.hour(),
-    localDateTime.minute(),
-    localDateTime.second(),
-    Math.floor(localDateTime.nano() / 1_000_000),
-  ));
+  return new Date(
+    Date.UTC(
+      localDateTime.year(),
+      localDateTime.monthValue() - 1,
+      localDateTime.dayOfMonth(),
+      localDateTime.hour(),
+      localDateTime.minute(),
+      localDateTime.second(),
+      Math.floor(localDateTime.nano() / 1_000_000),
+    ),
+  );
 }
 
 function generateDateRange(startISO: string, endISO: string): string[] {
@@ -91,24 +97,26 @@ function generateDateRange(startISO: string, endISO: string): string[] {
 export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
   let isThereAnyData = false;
 
-  const uniqueTasks = Array.from(new Set(dataStreamSummary.data.map((item) => item.task)));
-
-  const groupedData = dataStreamSummary.data.reduce((acc, { date, task, quantity }) => {
-    const day = date.split('T')[0];
-
-    if (!acc[day]) {
-      acc[day] = { date: day };
-      uniqueTasks.forEach((t) => acc[day][t] = 0); // initialize all tasks with 0
-    }
-
-    acc[day][task] = quantity;
-    return acc;
-  }, {} as Record<string, Record<string, any>>);
-
-  const dates = generateDateRange(
-    dataStreamSummary.from,
-    dataStreamSummary.to,
+  const uniqueTasks = Array.from(
+    new Set(dataStreamSummary.data.map((item) => item.task)),
   );
+
+  const groupedData = dataStreamSummary.data.reduce(
+    (acc, { date, task, quantity }) => {
+      const day = date.split('T')[0];
+
+      if (!acc[day]) {
+        acc[day] = { date: day };
+        uniqueTasks.forEach((t) => (acc[day][t] = 0)); // initialize all tasks with 0
+      }
+
+      acc[day][task] = quantity;
+      return acc;
+    },
+    {} as Record<string, Record<string, any>>,
+  );
+
+  const dates = generateDateRange(dataStreamSummary.from, dataStreamSummary.to);
 
   const mappedData = dates.map((day) => {
     if (groupedData[day]) {
@@ -117,7 +125,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     }
 
     const empty = { date: day };
-    uniqueTasks.forEach((task) => empty[task] = 0);
+    uniqueTasks.forEach((task) => (empty[task] = 0));
     return empty;
   });
 
@@ -128,18 +136,26 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
     return {
       ...item,
       date: `${day}/${month}`,
-      dayOfWeek: new Date(item.date).toLocaleString('en-US', { weekday: 'short' }),
+      dayOfWeek: new Date(item.date).toLocaleString('en-US', {
+        weekday: 'short',
+      }),
     };
   });
 
   return { mappedData: mappedDataWithFancyDates, isThereAnyData };
 }
 
-export function getListOfTasksFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): object[] {
-  return protocolSnapshot.tasks['g4_1']['h4_1'].filter((x) => x?.['u21_1'] != null).map((x) => JSON.parse(x['u21_1']));
+export function getListOfTasksFromProtocolSnapshot(
+  protocolSnapshot: StudyProtocolSnapshot,
+): object[] {
+  return protocolSnapshot.tasks['g4_1']['h4_1']
+    .filter((x) => x?.['u21_1'] != null)
+    .map((x) => JSON.parse(x['u21_1']));
 }
 
-export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyProtocolSnapshot): string[] {
+export function getUniqueTaskTypesFromProtocolSnapshot(
+  protocolSnapshot: StudyProtocolSnapshot,
+): string[] {
   const tasks = getListOfTasksFromProtocolSnapshot(protocolSnapshot);
   const uniqueTaskTypes = new Set<string>(tasks.map((task: any) => task.type));
 
@@ -152,7 +168,10 @@ export function getUniqueTaskTypesFromProtocolSnapshot(protocolSnapshot: StudyPr
   return Array.from(uniqueTaskTypes);
 }
 
-export function getLegend(type: DataStreamType, tasks: object[]): { label: string; color: string }[] {
+export function getLegend(
+  type: DataStreamType,
+  tasks: object[],
+): { label: string; color: string }[] {
   const tasksOfType = tasks.filter((task: any) => task.type === type);
   return tasksOfType.map((task: any, index) => {
     return {

@@ -58,11 +58,11 @@ export const CancelButton = styled(Button)(({ theme }) => ({
 }));
 
 export const DoneButton = styled(Button)(({ theme }) => ({
-  'backgroundColor': theme.palette.primary.main,
-  'color': theme.palette.common.white,
-  'textTransform': 'none',
-  'padding': '8px 24px',
-  'borderRadius': 16,
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  textTransform: 'none',
+  padding: '8px 24px',
+  borderRadius: 16,
   '&.circle': {
     width: '20 px',
     height: '20 px',

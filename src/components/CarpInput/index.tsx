@@ -48,10 +48,8 @@ const CarpInput = ({
       name={name as string}
       label={label}
       inputProps={{
-        'data-testid': rows ?
-          'single-line-input' :
-          'multi-line-input',
-        'onAnimationStart': handleAnimationStart,
+        'data-testid': rows ? 'single-line-input' : 'multi-line-input',
+        onAnimationStart: handleAnimationStart,
       }}
       id={name as string}
       placeholder={placeholder}

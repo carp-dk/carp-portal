@@ -12,9 +12,9 @@ import {
 import { useCreateTranslation } from '@Utils/queries/studies';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import * as flags from 'react-flags-select';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import * as flags from 'react-flags-select';
 import {
   CancelButton,
   DoneButton,
@@ -150,7 +150,8 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
               getOptionLabel={(option) =>
                 `${languageLabels[option].primary} ${
                   languageLabels[option].secondary
-                }`}
+                }`
+              }
               renderInput={(params) => {
                 if (!formik.values.language) {
                   return (

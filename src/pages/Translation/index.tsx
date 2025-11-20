@@ -88,7 +88,7 @@ const Translations = () => {
     description:
       'The translation will be permanently deleted and will no longer appear on your Translations page.',
     boldText: 'You can not undo this action.',
-    checkboxLabel: 'I\'m sure I want to delete it',
+    checkboxLabel: "I'm sure I want to delete it",
     actionButtonLabel: 'Delete',
   };
 
@@ -134,8 +134,8 @@ const Translations = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {translationsLoading ?
-                  [1, 2, 3].map(() => {
+              {translationsLoading
+                ? [1, 2, 3].map(() => {
                     return (
                       <StyledTableRow key={uuidv4()}>
                         <TableCell>
@@ -165,8 +165,8 @@ const Translations = () => {
                         </TableCell>
                       </StyledTableRow>
                     );
-                  }) :
-                  translations?.documents.map((translation: CarpDocument) => {
+                  })
+                : translations?.documents.map((translation: CarpDocument) => {
                     const CountryFlag = getFlag(translation.name);
                     return (
                       <StyledTableRow key={translation.id}>
@@ -175,7 +175,7 @@ const Translations = () => {
                             <CountryFlagIcon>
                               <CountryFlag selected="" onSelect={undefined} />
                             </CountryFlagIcon>
-                            { }
+                            {}
                             <CountryLanguage>
                               {getCountry(translation.name)}
                             </CountryLanguage>
@@ -183,11 +183,11 @@ const Translations = () => {
                         </TableCell>
                         <TableCell>
                           {formatDateTime(translation.created_at) +
-                            (translation.updated_at !== translation.created_at ?
-                              ` (updated ${formatDateTime(
-                                translation.updated_at,
-                              )})` :
-                              '')}
+                            (translation.updated_at !== translation.created_at
+                              ? ` (updated ${formatDateTime(
+                                  translation.updated_at,
+                                )})`
+                              : '')}
                         </TableCell>
                         <TableCell>
                           <Tooltip title="Delete">

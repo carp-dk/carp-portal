@@ -3,7 +3,7 @@ import Fab from '@mui/material/Fab';
 import { styled } from '@Utils/theme';
 
 export const StyledContainer = styled('div')(({ theme }) => ({
-  'position': 'relative',
+  position: 'relative',
   '& label.MuiInputLabel-outlined': {
     color: theme.palette.primary.main,
     height: 100,
@@ -100,15 +100,15 @@ export const StyledContainer = styled('div')(({ theme }) => ({
 }));
 
 export const TopToolbarButton = styled(Button)(({ theme }) => ({
-  'border': `1px solid ${theme.palette.grey[700]}`,
-  'borderRadius': 16,
-  'textTransform': 'none',
-  'padding': '8px 16px',
-  'color': theme.palette.primary.main,
-  'display': 'flex',
-  'flexDirection': 'row',
-  'justifyContent': 'center',
-  'gap': 8,
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 16,
+  textTransform: 'none',
+  padding: '8px 16px',
+  color: theme.palette.primary.main,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  gap: 8,
   '&:disabled': {
     color: theme.palette.primary.main,
     opacity: '0.4',
@@ -133,14 +133,14 @@ export const StatusCell = styled('div')({
 });
 
 export const AddUserButton = styled(Fab)(({ theme }) => ({
-  'position': 'absolute',
-  'boxShadow': theme.shadows[2],
-  'bottom': 72,
-  'right': 72,
-  'backgroundColor': theme.palette.secondary.light,
-  'borderRadius': 16,
-  'width': 72,
-  'height': 72,
+  position: 'absolute',
+  boxShadow: theme.shadows[2],
+  bottom: 72,
+  right: 72,
+  backgroundColor: theme.palette.secondary.light,
+  borderRadius: 16,
+  width: 72,
+  height: 72,
   '& > svg': {
     color: theme.palette.primary.main,
     fontSize: 48,
@@ -148,7 +148,7 @@ export const AddUserButton = styled(Fab)(({ theme }) => ({
     strokeWidth: '0.50px',
   },
   '&:hover': {
-    'backgroundColor': '#C7D7E4',
+    backgroundColor: '#C7D7E4',
     '& > svg': {
       stroke: '#C7D7E4',
     },

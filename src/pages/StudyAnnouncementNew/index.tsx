@@ -1,7 +1,7 @@
+import { MessageData, UUID } from '@carp-dk/client';
 import DragAndDrop from '@Components/DragAndDrop';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
-import { useCreateAnnouncement } from '@Utils/queries/studies';
 import {
   CircularProgress,
   FormControl,
@@ -12,12 +12,12 @@ import {
   Typography,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
+import { useCreateAnnouncement } from '@Utils/queries/studies';
+import { getUri, PageType } from '@Utils/utility';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { MessageData, UUID } from '@carp-dk/client';
-import { getUri, PageType } from '@Utils/utility';
 import StudyAnnouncementPreview from '../../components/StudyAnnouncementPreview';
 import { StyledContainer } from '../Studies/StudiesSection/styles';
 import { ContainerRight, StyledButton, StyledCard } from './styles';
@@ -212,13 +212,11 @@ const StudyAnnouncementNew = () => {
               onClick={() => formik.handleSubmit()}
               disabled={createAnnouncement.isPending}
             >
-              {createAnnouncement.isPending ?
-                  (
-                    <CircularProgress size={16} />
-                  ) :
-                  (
-                    'Create announcement'
-                  )}
+              {createAnnouncement.isPending ? (
+                <CircularProgress size={16} />
+              ) : (
+                'Create announcement'
+              )}
             </StyledButton>
           </form>
         </StyledCard>

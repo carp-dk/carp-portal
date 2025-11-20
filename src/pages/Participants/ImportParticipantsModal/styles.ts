@@ -38,17 +38,15 @@ export const Container = styled('div')({
 export const ModalContent = styled('div', {
   shouldForwardProp: (prop) => prop !== 'fixHeight',
 })<{ fixHeight?: boolean }>(({ fixHeight }) => ({
-  'flexGrow': 1,
-  'gap': 8,
-  'display': 'flex',
-  'flexDirection': 'column',
+  flexGrow: 1,
+  gap: 8,
+  display: 'flex',
+  flexDirection: 'column',
   '& > *:last-child': {
     flex: '1 0',
   },
   '& > *:last-child > div': {
-    height: fixHeight ?
-      '100%' :
-      272,
+    height: fixHeight ? '100%' : 272,
   },
 }));
 

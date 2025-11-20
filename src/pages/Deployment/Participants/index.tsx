@@ -1,14 +1,14 @@
+import CarpAccordion from '@Components/CarpAccordion';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
-import { Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ParticipantGroup } from '@carp-dk/client';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import PersonIcon from '@mui/icons-material/Person';
-import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
-import CarpAccordion from '@Components/CarpAccordion';
+import { Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
   AccountIcon,
@@ -47,7 +47,10 @@ const Participants = () => {
   }
 
   return (
-    <CarpAccordion isExpanded={true} title={t('deployment:participants_card.title')}>
+    <CarpAccordion
+      isExpanded={true}
+      title={t('deployment:participants_card.title')}
+    >
       <Stack spacing="8px">
         {group &&
           group.participants.map((p) => (
@@ -57,14 +60,15 @@ const Participants = () => {
               onClick={() =>
                 navigate(
                   `/studies/${studyId}/deployments/${deploymentId}/participants/${p.participantId}`,
-                )}
+                )
+              }
             >
               <Stack gap="15px" direction="row">
                 <AccountIcon>
                   <Initials variant="h4">
-                    {!p.firstName ?
-                      p.role[0] :
-                      `${p.firstName[0]}${p.lastName[0]}`}
+                    {!p.firstName
+                      ? p.role[0]
+                      : `${p.firstName[0]}${p.lastName[0]}`}
                   </Initials>
                 </AccountIcon>
                 <Typography variant="h5" alignContent="center" noWrap>
@@ -75,9 +79,7 @@ const Participants = () => {
                 <PersonIcon fontSize="small" />
                 {p.firstName && (
                   <Typography variant="h5" noWrap>
-                    {p.firstName}
-                    {' '}
-                    {p.lastName}
+                    {p.firstName} {p.lastName}
                   </Typography>
                 )}
               </NameContainer>

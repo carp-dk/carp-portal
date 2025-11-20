@@ -2,28 +2,26 @@ import { Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const UploadFileBox = styled('div')(({ theme }) => ({
-  'display': 'flex',
-  'flexDirection': 'column',
-  'gap': 8,
-  'alignItems': 'center',
-  'justifyContent': 'center',
-  'flex': '1 0',
-  'border': `2px dashed ${theme.palette.grey[300]}`,
-  'borderRadius': 8,
-  'cursor': 'pointer',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: '1 0',
+  border: `2px dashed ${theme.palette.grey[300]}`,
+  borderRadius: 8,
+  cursor: 'pointer',
   '& > svg': {
     fontSize: 48,
     color: theme.palette.primary.main,
   },
-  'padding': 25,
+  padding: 25,
 }));
 
 export const UploadFileText = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'error',
 })<{ error?: boolean }>(({ error, theme }) => ({
-  color: error ?
-    theme.palette.error.main :
-    theme.palette.text.primary,
+  color: error ? theme.palette.error.main : theme.palette.text.primary,
 }));
 
 export const UploadFileBrowseWrapper = styled('div')({
@@ -53,25 +51,21 @@ export const UploadFileBoxHover = styled('div')({
 export const UploadEllipse = styled('div', {
   shouldForwardProp: (prop) => prop !== 'error',
 })<{ error?: boolean }>(({ error, theme }) => ({
-  'display': 'flex',
-  'alignItems': 'center',
-  'justifyContent': 'center',
-  'flexDirection': 'column',
-  'gap': 12,
-  'width': 170,
-  'height': 170,
-  'borderRadius': '50%',
-  'border': `10px solid ${
-    error ?
-      theme.palette.error.main :
-      theme.palette.primary.light
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  gap: 12,
+  width: 170,
+  height: 170,
+  borderRadius: '50%',
+  border: `10px solid ${
+    error ? theme.palette.error.main : theme.palette.primary.light
   }`,
-  'marginBottom': 8,
+  marginBottom: 8,
   '& > svg': {
     fontSize: 36,
-    color: error ?
-      theme.palette.error.main :
-      theme.palette.success.main,
+    color: error ? theme.palette.error.main : theme.palette.success.main,
   },
 }));
 

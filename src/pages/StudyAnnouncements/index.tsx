@@ -3,11 +3,11 @@ import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import StyledTooltip from '@Components/StyledTooltip';
 import { useStudyAnnouncements } from '@Utils/queries/studies';
+import { getUri, PageType } from '@Utils/utility';
 import { MessageData } from '@carp-dk/client';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { getUri, PageType } from '@Utils/utility';
 import StudyAnnouncement, {
   StudyAnnouncmentSkeleton,
 } from './StudyAnnouncement';
@@ -52,9 +52,9 @@ const StudyAnnouncements = () => {
         description="View announcements created by researchers for this study"
       />
       <AnnouncementsContainer>
-        {isLoading ?
-            [1, 2, 3].map(() => <StudyAnnouncmentSkeleton key={uuidv4()} />) :
-            announcements?.documents.map((announcement) => (
+        {isLoading
+          ? [1, 2, 3].map(() => <StudyAnnouncmentSkeleton key={uuidv4()} />)
+          : announcements?.documents.map((announcement) => (
               <StudyAnnouncement
                 announcement={announcement.data as MessageData}
                 announcementId={announcement.id}

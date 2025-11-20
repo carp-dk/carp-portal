@@ -87,8 +87,7 @@ const ProtocolInfo = ({ protocolId }: Props) => {
             {/* Study protocol v{protocol.version} */}
           </ProtocolVersion>
           <Subtitle variant="h6">
-            Update the Protocol by adding a new version in
-            {' '}
+            Update the Protocol by adding a new version in{' '}
             <StyledLink to={`/protocols/${protocolId}`}>
               Protocol&#39;s main page
             </StyledLink>

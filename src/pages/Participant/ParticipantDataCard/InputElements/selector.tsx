@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
-import FullNameInput from './FullNameInput';
 import AddressInput from './AddressInput';
-import SSNInput from './SSNInput';
-import PhoneNumberInput from './PhoneNumberInput';
 import DiagnosisInput from './DiagnosisInput';
+import FullNameInput from './FullNameInput';
+import PhoneNumberInput from './PhoneNumberInput';
+import SSNInput from './SSNInput';
 
 const getInputElement = (
   name: string,
@@ -22,7 +22,6 @@ const getInputElement = (
     case 'diagnosis':
       return <DiagnosisInput formik={formik} editing={editing} />;
     default:
-
       console.error(`No input element found for ${name}`);
       return null;
   }

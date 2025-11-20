@@ -8,9 +8,7 @@ export const StyledContainer = styled('div', {
   gap: 32,
   marginTop: 32,
   gridTemplateColumns: '1fr 1fr',
-  opacity: isLive ?
-    '0.5' :
-    1,
+  opacity: isLive ? '0.5' : 1,
   [theme.breakpoints.down('md')]: {
     gap: 22,
   },
@@ -22,27 +20,21 @@ export const StyledCard = styled(Card, {
   display: 'block',
   padding: '28px 28px 28px 28px',
   borderRadius: 16,
-  opacity: isDisabled ?
-    '0.5' :
-    1,
+  opacity: isDisabled ? '0.5' : 1,
 }));
 
 export const Heading = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'disabled',
 })<{ disabled?: boolean }>(({ disabled, theme }) => ({
   color: theme.palette.primary.main,
-  opacity: disabled ?
-    '0.5' :
-    1,
+  opacity: disabled ? '0.5' : 1,
 }));
 
 export const Subheading = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'disabled',
 })<{ disabled?: boolean }>(({ disabled, theme }) => ({
   color: theme.palette.text.primary,
-  opacity: disabled ?
-    '0.5' :
-    1,
+  opacity: disabled ? '0.5' : 1,
 }));
 
 export const ProtocolInformation = styled(Stack)(({ theme }) => ({

@@ -78,7 +78,8 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
                 onClick={() =>
                   navigate(
                     `/studies/${studyId}/announcements/${announcementId}/edit`,
-                  )}
+                  )
+                }
               >
                 <EditIcon />
               </IconButton>
@@ -99,37 +100,27 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
             {announcement.sub_title}
           </AnnouncementSubtitle>
         )}
-        {announcement.message.length > 200 ?
-            (
-              <CollapseWrapper>
-                <Collapse in={expanded} collapsedSize={186}>
-                  <AnnouncementMessage variant="body1">
-                    {announcement.message}
-                  </AnnouncementMessage>
-                </Collapse>
-                <Button
-                  onClick={handleExpandClick}
-                  startIcon={expanded ?
-                      <ExpandLessIcon /> :
-                      <ExpandMoreIcon />}
-                >
-                  {expanded ?
-                    'Show less' :
-                    'Show more'}
-                </Button>
-              </CollapseWrapper>
-            ) :
-            (
+        {announcement.message.length > 200 ? (
+          <CollapseWrapper>
+            <Collapse in={expanded} collapsedSize={186}>
               <AnnouncementMessage variant="body1">
                 {announcement.message}
               </AnnouncementMessage>
-            )}
+            </Collapse>
+            <Button
+              onClick={handleExpandClick}
+              startIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            >
+              {expanded ? 'Show less' : 'Show more'}
+            </Button>
+          </CollapseWrapper>
+        ) : (
+          <AnnouncementMessage variant="body1">
+            {announcement.message}
+          </AnnouncementMessage>
+        )}
         {announcement.url && (
-          <Button>
-            View more (
-            {new URL(announcement.url).hostname}
-            )
-          </Button>
+          <Button>View more ({new URL(announcement.url).hostname})</Button>
         )}
       </AnnouncementLeft>
       <DeletionPrompt

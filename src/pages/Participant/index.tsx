@@ -2,10 +2,10 @@ import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import { getUri, PageType } from '@Utils/utility';
 import BasicInfo from './BasicInfo';
+import DataVisualizationForParticipant from './DataVisualizationForParticipant';
 import Deployment from './Deployment';
 import InformedConsent from './InformedConsent';
 import ParticipantDataCard from './ParticipantDataCard';
-import DataVisualizationForParticipant from './DataVisualizationForParticipant';
 
 const Participant = () => {
   const sectionName = [

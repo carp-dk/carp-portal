@@ -1,5 +1,5 @@
-import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
 import { User } from '@carp-dk/client';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Skeleton, Typography } from '@mui/material';
 import { useRemoveResearcherFromStudy } from '@Utils/queries/studies';
@@ -37,7 +37,7 @@ const ResearcherItem = ({ researcher, disabled }: Props) => {
     description:
       'The researcher will be permanently removed and will no longer be part of the Study.',
     boldText: 'You can not undo this action.',
-    checkboxLabel: 'I\'m sure I want to remove it',
+    checkboxLabel: "I'm sure I want to remove it",
     actionButtonLabel: 'Remove',
   };
 
@@ -45,16 +45,14 @@ const ResearcherItem = ({ researcher, disabled }: Props) => {
     <StyledCard elevation={2}>
       <AccountIcon>
         <Initials variant="h3">
-          {!researcher.firstName || !researcher.lastName ?
-            researcher.role[0] :
-            `${researcher.firstName[0]}${researcher.lastName[0]}`}
+          {!researcher.firstName || !researcher.lastName
+            ? researcher.role[0]
+            : `${researcher.firstName[0]}${researcher.lastName[0]}`}
         </Initials>
       </AccountIcon>
       <Middle>
         <Typography variant="h4">
-          {researcher.firstName}
-          {' '}
-          {researcher.lastName}
+          {researcher.firstName} {researcher.lastName}
         </Typography>
         <Typography variant="h5">{researcher.email}</Typography>
       </Middle>

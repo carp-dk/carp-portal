@@ -96,11 +96,11 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     const participantsWithRoles: ParticipantWithRoles[] =
       participantsToAddRows.map((participant) => {
         const identity =
-          participant.accountIdentity instanceof EmailAccountIdentity ?
-              (
+          participant.accountIdentity instanceof EmailAccountIdentity
+            ? (
                 participant.accountIdentity as EmailAccountIdentity
-              ).emailAddress.address.toLowerCase() :
-              (
+              ).emailAddress.address.toLowerCase()
+            : (
                 participant.accountIdentity as UsernameAccountIdentity
               ).username.name.toLowerCase();
         return {
@@ -159,8 +159,8 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                 </TableHead>
 
                 <TableBody>
-                  {isParticipantsLoading || isStudyDetailsLoading ?
-                      [1, 2, 3].map(() => (
+                  {isParticipantsLoading || isStudyDetailsLoading
+                    ? [1, 2, 3].map(() => (
                         <StyledTableRow key={uuidv4()}>
                           <TableCell>
                             <Skeleton
@@ -175,8 +175,8 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                             />
                           </TableCell>
                         </StyledTableRow>
-                      )) :
-                      participantsToAdd.map(
+                      ))
+                    : participantsToAdd.map(
                         (participant: ParticipantAccount) => (
                           <StyledTableRow
                             key={participant.email ?? participant.username}
@@ -188,13 +188,11 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                             </TableCell>
                             <TableCell>
                               <PrimaryCellText variant="h5">
-                                {participant.email ?
-                                    (
-                                      `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
-                                    ) :
-                                    (
-                                      <GeneratedAccountLabel />
-                                    )}
+                                {participant.email ? (
+                                  `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
+                                ) : (
+                                  <GeneratedAccountLabel />
+                                )}
                               </PrimaryCellText>
                             </TableCell>
                             <TableCell sx={{ position: 'relative' }}>
@@ -211,7 +209,8 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                                     handleRoleChange(
                                       participant.email ?? participant.username,
                                       [event.target.value],
-                                    )}
+                                    )
+                                  }
                                 >
                                   {studyDetails.protocolSnapshot.participantRoles
                                     .toArray()
@@ -250,7 +249,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
               onClick={createNewGroupHandler}
               disabled={
                 Object.keys(participantDeviceRoleNames).length <
-                  participantsToAdd.length
+                participantsToAdd.length
               }
             >
               New deployment

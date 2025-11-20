@@ -2,10 +2,10 @@ import { Card, Fab, TableCell, TableRow, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const HeaderTableCell = styled(TableCell)(({ theme }) => ({
-  'borderBottomColor': theme.palette.grey[500],
-  'backgroundColor': theme.palette.common.white,
-  'borderBottomWidth': 1,
-  'zIndex': 0,
+  borderBottomColor: theme.palette.grey[500],
+  backgroundColor: theme.palette.common.white,
+  borderBottomWidth: 1,
+  zIndex: 0,
   '&:nth-of-type(1)': {
     paddingLeft: 56,
     width: '52%',
@@ -61,14 +61,14 @@ export const StyledTableRow = styled(TableRow)({
 });
 
 export const AddResourceButton = styled(Fab)(({ theme }) => ({
-  'position': 'absolute',
-  'boxShadow': theme.shadows[2],
-  'bottom': 36,
-  'right': 36,
-  'backgroundColor': theme.palette.secondary.light,
-  'borderRadius': 16,
-  'width': 72,
-  'height': 72,
+  position: 'absolute',
+  boxShadow: theme.shadows[2],
+  bottom: 36,
+  right: 36,
+  backgroundColor: theme.palette.secondary.light,
+  borderRadius: 16,
+  width: 72,
+  height: 72,
   '& > svg': {
     color: theme.palette.primary.main,
     fontSize: 48,
@@ -76,10 +76,10 @@ export const AddResourceButton = styled(Fab)(({ theme }) => ({
     strokeWidth: '0.50px',
   },
   '&:hover': {
-    'backgroundColor': '#C7D7E4',
+    backgroundColor: '#C7D7E4',
     '& > svg': {
       stroke: '#C7D7E4',
     },
   },
-  'zIndex': 0,
+  zIndex: 0,
 }));

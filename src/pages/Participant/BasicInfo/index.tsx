@@ -2,15 +2,16 @@ import CopyButton from '@Components/Buttons/CopyButton';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import SendReminderModal from '@Components/SendReminderModal';
+import NotificationsIcon from '@mui/icons-material/NotificationsSharp';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import NotificationsIcon from '@mui/icons-material/NotificationsSharp';
 
 import { getUser } from '@carp-dk/authentication-react';
+import { ParticipantDataInput } from '@carp-dk/client';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { useTranslation } from 'react-i18next';
-import { ParticipantDataInput } from '@carp-dk/client';
+import LoadingSkeleton from '../LoadingSkeleton';
 import {
   AccountIcon,
   Email,
@@ -24,7 +25,6 @@ import {
   StyledCard,
   StyledDivider,
 } from './styles';
-import LoadingSkeleton from '../LoadingSkeleton';
 
 const BasicInfo = () => {
   const { t } = useTranslation();
@@ -69,17 +69,13 @@ const BasicInfo = () => {
 
   const name = useMemo(() => {
     if (!participant) return '';
-    return participant.email ?
-        (
-          <Name variant="h3">
-            {participant.firstName ?? ''}
-            {' '}
-            {participant.lastName ?? ''}
-          </Name>
-        ) :
-        (
-          <GeneratedAccountLabel />
-        );
+    return participant.email ? (
+      <Name variant="h3">
+        {participant.firstName ?? ''} {participant.lastName ?? ''}
+      </Name>
+    ) : (
+      <GeneratedAccountLabel />
+    );
   }, [participant]);
 
   const isGeneratedAccount = !participant?.email;

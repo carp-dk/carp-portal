@@ -19,9 +19,7 @@ export const SingleDayContainer = styled('div')({
 export const NumberOfDatapoints = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'highest',
 })<{ highest?: boolean }>(({ highest, theme }) => ({
-  color: highest ?
-    '#FB8500' :
-    theme.palette.text.secondary,
+  color: highest ? '#FB8500' : theme.palette.text.secondary,
 }));
 
 export const Column = styled('div', {

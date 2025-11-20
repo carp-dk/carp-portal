@@ -1,3 +1,4 @@
+import getInputDataName from '@Assets/inputTypeNames';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useLatestProtocol } from '@Utils/queries/protocols';
 import { Connection } from '@Utils/types';
@@ -6,7 +7,6 @@ import carpCommon from '@cachet/carp-common';
 import { Skeleton, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import getInputDataName from '@Assets/inputTypeNames';
 import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
@@ -92,24 +92,24 @@ const ProtocolCards = () => {
       </StyledNameCard>
       {protocol.snapshot.primaryDevices.size() > 0 &&
         protocol.snapshot.connections.size() > 0 && (
-        <StyledCard elevation={2}>
-          <CardTitle variant="h2">Devices</CardTitle>
-          {protocol.snapshot.primaryDevices.toArray().map((device) => {
-            return (
-              <DeviceDropdown
-                connectedDevices={protocol.snapshot.connectedDevices.toArray()}
-                connections={protocol.snapshot.connections
-                  .toArray()
-                  .filter((connection: Connection) => {
-                    return connection.connectedToRoleName === device.roleName;
-                  })}
-                key={device.roleName}
-                device={device}
-              />
-            );
-          })}
-        </StyledCard>
-      )}
+          <StyledCard elevation={2}>
+            <CardTitle variant="h2">Devices</CardTitle>
+            {protocol.snapshot.primaryDevices.toArray().map((device) => {
+              return (
+                <DeviceDropdown
+                  connectedDevices={protocol.snapshot.connectedDevices.toArray()}
+                  connections={protocol.snapshot.connections
+                    .toArray()
+                    .filter((connection: Connection) => {
+                      return connection.connectedToRoleName === device.roleName;
+                    })}
+                  key={device.roleName}
+                  device={device}
+                />
+              );
+            })}
+          </StyledCard>
+        )}
       {protocol.snapshot.expectedParticipantData.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant data</CardTitle>

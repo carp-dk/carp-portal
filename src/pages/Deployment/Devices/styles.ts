@@ -1,4 +1,4 @@
-import { Typography, Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 import { getDeviceStatusColor } from '@Utils/utility';
 

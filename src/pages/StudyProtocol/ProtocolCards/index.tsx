@@ -1,3 +1,4 @@
+import getInputDataName from '@Assets/inputTypeNames';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useProtocolDetails } from '@Utils/queries/protocols';
 import { getRandomNumber } from '@Utils/utility';
@@ -5,7 +6,6 @@ import carpCommon from '@cachet/carp-common';
 import carpProtocols from '@cachet/carp-protocols-core';
 import { Skeleton, Typography } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-import getInputDataName from '@Assets/inputTypeNames';
 import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
@@ -95,31 +95,34 @@ const ProtocolCards = ({ protocolId }: Props) => {
       </StyledNameCard>
       {protocol.primaryDevices.size() > 0 &&
         protocol.connectedDevices.size() > 0 && (
-        <StyledCard elevation={2}>
-          <CardTitle variant="h2">Devices</CardTitle>
-          {protocol.primaryDevices.toArray().map((device) => {
-            return (
-              <DeviceDropdown
-                connectedDevices={protocol.connectedDevices.toArray()}
-                connections={protocol.connections
-                  .toArray()
-                  .filter((connection: DeviceConnection) => {
-                    return connection.connectedToRoleName === device.roleName;
-                  })}
-                key={device.roleName}
-                device={device}
-              />
-            );
-          })}
-        </StyledCard>
-      )}
+          <StyledCard elevation={2}>
+            <CardTitle variant="h2">Devices</CardTitle>
+            {protocol.primaryDevices.toArray().map((device) => {
+              return (
+                <DeviceDropdown
+                  connectedDevices={protocol.connectedDevices.toArray()}
+                  connections={protocol.connections
+                    .toArray()
+                    .filter((connection: DeviceConnection) => {
+                      return connection.connectedToRoleName === device.roleName;
+                    })}
+                  key={device.roleName}
+                  device={device}
+                />
+              );
+            })}
+          </StyledCard>
+        )}
       {protocol.expectedParticipantData.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant data</CardTitle>
           <ul>
             {protocol.expectedParticipantData.toArray().map((data) => {
               return (
-                <li key={data.inputDataType.toString()} style={{ marginBottom: 10 }}>
+                <li
+                  key={data.inputDataType.toString()}
+                  style={{ marginBottom: 10 }}
+                >
                   <Typography variant="h4">
                     {getInputDataName(data.attribute.inputDataType.name)}
                   </Typography>

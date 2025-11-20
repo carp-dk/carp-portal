@@ -8,12 +8,12 @@ import {
   useStudyStatus,
 } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
+import { StudyStatus } from '@carp-dk/client';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { Skeleton, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { StudyStatus } from '@carp-dk/client';
 import StartStudyConfirmationModal from '../StartStudyConfirmationModal';
 import {
   Container,
@@ -160,7 +160,7 @@ const StudyStatusSection: React.FC = () => {
     description:
       'The study will be permanently deleted and will no longer appear on your Study page.',
     boldText: 'You can not undo this action.',
-    checkboxLabel: 'I\'m sure I want to delete it',
+    checkboxLabel: "I'm sure I want to delete it",
     actionButtonLabel: 'Delete',
   };
   return (

@@ -1,10 +1,10 @@
-import { useQueries, useQuery, UseQueryOptions } from '@tanstack/react-query';
-import carpApi from '@Utils/api/api';
 import {
   CarpServiceError,
   DataStreamSummary,
   DataStreamSummaryRequest,
 } from '@carp-dk/client';
+import { useQueries, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import carpApi from '@Utils/api/api';
 
 export const useDataStreamsSummary = (
   request: DataStreamSummaryRequest,

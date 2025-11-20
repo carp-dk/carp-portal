@@ -14,9 +14,7 @@ const AuthActionButton = ({ text, loading }: Props) => {
       disabled={loading}
       type="submit"
     >
-      {loading ?
-          <CircularProgress size={24} /> :
-        text}
+      {loading ? <CircularProgress size={24} /> : text}
     </StyledAuthActionButton>
   );
 };

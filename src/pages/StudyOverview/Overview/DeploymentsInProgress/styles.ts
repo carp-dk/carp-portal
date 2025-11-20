@@ -18,7 +18,7 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledTooltip = styled(Tooltip)(({ theme }) => ({
-  'color': theme.palette.grey[500],
+  color: theme.palette.grey[500],
   '&:hover': {
     color: theme.palette.primary.main,
   },

@@ -1,5 +1,5 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Table,
   TableBody,
@@ -7,10 +7,10 @@ import {
   TableHead,
   Typography,
 } from '@mui/material';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Stack } from '@mui/system';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Stack } from '@mui/system';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
   HeaderTableCell,
@@ -122,7 +122,8 @@ const DeploymentsInProgress = () => {
                     onClick={() =>
                       navigate(
                         `/studies/${studyId}/deployments/${g.deploymentId}`,
-                      )}
+                      )
+                    }
                     sx={{
                       '&:hover': {
                         backgroundColor: '#EDEDED',

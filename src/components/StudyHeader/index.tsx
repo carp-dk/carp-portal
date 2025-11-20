@@ -1,8 +1,8 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useStudyDetails } from '@Utils/queries/studies';
+import { NavigateNext } from '@mui/icons-material';
 import { Breadcrumbs, Skeleton } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
-import { NavigateNext } from '@mui/icons-material';
 import {
   Description,
   Path,
@@ -31,13 +31,11 @@ const StudyHeader = ({ description, path }: Props) => {
   return (
     <StudyHeaderContainer>
       <Breadcrumbs separator={<NavigateNext />}>
-        {isLoading ?
-            (
-              <Skeleton height="32px" width="220px" animation="wave" />
-            ) :
-            (
-              <Path variant="h2">{studyDetails.name}</Path>
-            )}
+        {isLoading ? (
+          <Skeleton height="32px" width="220px" animation="wave" />
+        ) : (
+          <Path variant="h2">{studyDetails.name}</Path>
+        )}
         {path.map((p) => {
           return (
             <Link

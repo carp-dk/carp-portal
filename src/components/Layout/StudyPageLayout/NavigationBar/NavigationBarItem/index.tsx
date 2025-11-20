@@ -24,9 +24,9 @@ const NavigationBarItem = ({
       <ListItem disablePadding>
         <StyledListItemButton
           active={
-            exact ?
-              location.pathname === path :
-                location.pathname.startsWith(path)
+            exact
+              ? location.pathname === path
+              : location.pathname.startsWith(path)
           }
         >
           <StyledIcon>{icon}</StyledIcon>
@@ -36,15 +36,13 @@ const NavigationBarItem = ({
     </StyledNavLink>
   );
 
-  return showTooltip ?
-      (
-        <Tooltip title={text} placement="right">
-          {children}
-        </Tooltip>
-      ) :
-      (
-        children
-      );
+  return showTooltip ? (
+    <Tooltip title={text} placement="right">
+      {children}
+    </Tooltip>
+  ) : (
+    children
+  );
 };
 
 export default NavigationBarItem;

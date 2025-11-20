@@ -1,19 +1,20 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import { Stack, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   useGetParticipantData,
   useParticipantGroupsAccountsAndStatus,
 } from '@Utils/queries/participants';
-import { pdf } from '@react-pdf/renderer';
 import { useDownloadFile, useGetFiles } from '@Utils/queries/studies';
+import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
 import { CarpFile, InformedConsentType } from '@carp-dk/client';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import { Stack, Typography } from '@mui/material';
+import { pdf } from '@react-pdf/renderer';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
+import UploadInformedConsentModal from './UploadInformedConsentModal';
 import {
   ActionButton,
   LastUploadText,
@@ -22,7 +23,6 @@ import {
   StyledDivider,
   Title,
 } from './styles';
-import UploadInformedConsentModal from './UploadInformedConsentModal';
 
 const InformedConsent = () => {
   const { t } = useTranslation();

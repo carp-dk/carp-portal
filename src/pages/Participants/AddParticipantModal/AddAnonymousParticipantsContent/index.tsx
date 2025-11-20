@@ -221,7 +221,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   addAnonymousParticipantFormik.setFieldValue(
                     'expiryDate',
                     value,
-                  )}
+                  )
+                }
                 slotProps={{
                   textField: {
                     error: !!addAnonymousParticipantFormik.errors.expiryDate,
@@ -283,26 +284,24 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <CancelButton variant="text" onClick={onClose}>
           Cancel
         </CancelButton>
-        {generateAnonymousAccounts.isPending ?
-            (
-              <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
-                <Spinner size={20} />
-              </DoneButton>
-            ) :
-            (
-              <DoneButton
-                disabled={
-                  !addAnonymousParticipantFormik.dirty ||
-                  !addAnonymousParticipantFormik.isValid
-                }
-                variant="contained"
-                sx={{ elevation: 0 }}
-                type="submit"
-                onClick={() => addAnonymousParticipantFormik.handleSubmit()}
-              >
-                Add
-              </DoneButton>
-            )}
+        {generateAnonymousAccounts.isPending ? (
+          <DoneButton variant="contained" sx={{ elevation: 0 }} type="submit">
+            <Spinner size={20} />
+          </DoneButton>
+        ) : (
+          <DoneButton
+            disabled={
+              !addAnonymousParticipantFormik.dirty ||
+              !addAnonymousParticipantFormik.isValid
+            }
+            variant="contained"
+            sx={{ elevation: 0 }}
+            type="submit"
+            onClick={() => addAnonymousParticipantFormik.handleSubmit()}
+          >
+            Add
+          </DoneButton>
+        )}
       </ModalActions>
     </LocalizationProvider>
   );

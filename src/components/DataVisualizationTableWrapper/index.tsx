@@ -1,16 +1,20 @@
-import { Skeleton } from '@mui/material';
+import {
+  DataStreamScope,
+  DataStreamSummaryRequest,
+  DataStreamType,
+} from '@carp-dk/client';
+import CarpAccordion from '@Components/CarpAccordion';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DataVisualizationTable from '@Components/DataVisualizationTable';
 import {
   mapDataToChartData,
   taskLabelColors,
   toUTCDate,
 } from '@Components/DataVisualizationTable/helper';
-import React from 'react';
 import { LocalDate } from '@js-joda/core';
+import { Skeleton } from '@mui/material';
 import { useDataStreamsSummary } from '@Utils/queries/dataStreams';
-import { DataStreamScope, DataStreamSummaryRequest, DataStreamType } from '@carp-dk/client';
-import DataVisualizationTable from '@Components/DataVisualizationTable';
-import CarpAccordion from '@Components/CarpAccordion';
+import React from 'react';
 
 export interface StackedBarChartWrapperProps {
   deploymentId?: string;
@@ -39,7 +43,9 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
     to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
   };
 
-  const { data, isLoading, error } = useDataStreamsSummary(dataStreamSummaryRequest);
+  const { data, isLoading, error } = useDataStreamsSummary(
+    dataStreamSummaryRequest,
+  );
 
   const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
@@ -53,9 +59,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
     const newToDate = toDate.plusDays(14);
     const today = LocalDate.now();
 
-    setToDate(newToDate.isAfter(today) ?
-      today :
-      newToDate);
+    setToDate(newToDate.isAfter(today) ? today : newToDate);
   }
 
   if (error) {
@@ -67,7 +71,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
     );
   }
 
-  const heightOfLoadingSkeleton = 70 + 16 + (props.legend.length * 40);
+  const heightOfLoadingSkeleton = 70 + 16 + props.legend.length * 40;
 
   if (isLoading) {
     return (

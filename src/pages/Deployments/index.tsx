@@ -4,10 +4,10 @@ import SiteUnavailable from '@Components/SiteUnavailable';
 import StudyHeader from '@Components/StudyHeader';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import { useStudyStatus } from '@Utils/queries/studies';
+import { getUri, PageType } from '@Utils/utility';
 import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUri, PageType } from '@Utils/utility';
 import DeploymentCard, { DeploymentSkeletonCard } from './DeploymentCard';
 import Pagination from './Pagination';
 import Toolbar from './Toolbar';
@@ -33,9 +33,9 @@ const Deployments = () => {
 
   const toggleAllCards = () => {
     setOpenCardCount((prevOpenCardCount) =>
-      prevOpenCardCount === paginatedDeployments.length ?
-        0 :
-        paginatedDeployments.length,
+      prevOpenCardCount === paginatedDeployments.length
+        ? 0
+        : paginatedDeployments.length,
     );
   };
 
@@ -69,8 +69,8 @@ const Deployments = () => {
                   `${participant.firstName} ${participant.lastName}`
                     .toLowerCase()
                     .includes(searchText)) ||
-                    (participant.email &&
-                      participant.email.toLowerCase().includes(searchText)),
+                (participant.email &&
+                  participant.email.toLowerCase().includes(searchText)),
             ),
         );
         setDeployments(newDeployments);

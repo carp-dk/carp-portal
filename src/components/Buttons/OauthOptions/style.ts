@@ -8,22 +8,22 @@ export const StyledOption = styled('div')({
 });
 
 export const LoginOauthOptionButton = styled(ButtonBase)(({ theme }) => ({
-  'border': `1px solid ${theme.palette.grey[500]}`,
-  'borderRadius': 16,
-  'padding': 18,
+  border: `1px solid ${theme.palette.grey[500]}`,
+  borderRadius: 16,
+  padding: 18,
   '& > img': {
     height: 30,
   },
   [theme.breakpoints.down('sm')]: {
-    'padding': 12,
-    'borderRadius': 16,
+    padding: 12,
+    borderRadius: 16,
     '& > img': {
       height: 20,
     },
   },
   [theme.breakpoints.down('xs')]: {
-    'padding': 12,
-    'borderRadius': 12,
+    padding: 12,
+    borderRadius: 12,
     '& > img': {
       height: 16,
     },

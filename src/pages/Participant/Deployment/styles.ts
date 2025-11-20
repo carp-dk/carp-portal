@@ -1,6 +1,6 @@
 import { Button, Card, Divider, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
-import { getDeviceStatusColor, getDeploymentStatusColor } from '@Utils/utility';
+import { getDeploymentStatusColor, getDeviceStatusColor } from '@Utils/utility';
 import { Link } from 'react-router-dom';
 
 export const StyledCard = styled(Card)({
@@ -65,10 +65,10 @@ export const SecondaryText = styled(Typography)(({ theme }) => ({
 }));
 
 export const DeploymentStatusContainer = styled('div')({
-  'display': 'flex',
-  'alignItems': 'center',
-  'gap': 4,
-  'position': 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+  position: 'relative',
   '&:hover': {
     '& > div:last-of-type': {
       display: 'flex',
@@ -78,9 +78,9 @@ export const DeploymentStatusContainer = styled('div')({
 });
 
 export const DeploymentIdContainer = styled('div')({
-  'display': 'flex',
-  'alignItems': 'center',
-  'gap': 8,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
   '& > button:last-of-type': {
     paddingBottom: 0,
   },
@@ -166,16 +166,16 @@ export const ParticipantsContainer = styled('div')({
 });
 
 export const StyledContainer = styled(Link)({
-  'display': 'grid',
-  'gridTemplateColumns':
+  display: 'grid',
+  gridTemplateColumns:
     '28px minmax(0px, 172px) minmax(0px, 172px) 0.75fr 1fr 1fr 2fr',
-  'overflow': 'hidden',
-  'alignItems': 'center',
-  'columnGap': 15,
-  'textDecoration': 'none',
-  'color': 'inherit',
-  'padding': '12px 4px',
-  'borderRadius': 16,
+  overflow: 'hidden',
+  alignItems: 'center',
+  columnGap: 15,
+  textDecoration: 'none',
+  color: 'inherit',
+  padding: '12px 4px',
+  borderRadius: 16,
   '&:hover': {
     backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },

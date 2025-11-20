@@ -15,10 +15,10 @@ export const Middle = styled('div')({
 });
 
 export const CloseButton = styled(Button)({
-  'padding': 8,
-  'flexGrow': 0,
-  'display': 'flex',
-  'minWidth': 0,
+  padding: 8,
+  flexGrow: 0,
+  display: 'flex',
+  minWidth: 0,
   '&:disabled': {
     opacity: 0,
   },

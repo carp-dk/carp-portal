@@ -36,13 +36,11 @@ const CopyButton = ({ textToCopy, idType, disabled }: Props) => {
       disabled={disabled}
       onClick={(event) => copyTextToClipboard(event)}
     >
-      {disabled ?
-          (
-            <ContentCopyRoundedIcon color="disabled" fontSize="small" />
-          ) :
-          (
-            <ContentCopyRoundedIcon fontSize="small" />
-          )}
+      {disabled ? (
+        <ContentCopyRoundedIcon color="disabled" fontSize="small" />
+      ) : (
+        <ContentCopyRoundedIcon fontSize="small" />
+      )}
     </StyledButton>
   );
 };

@@ -107,10 +107,7 @@ const EditResourceModal = ({ open, onClose, resource }: Props) => {
           Update Resource
         </ModalTitle>
         <ModalDescription variant="h5" id="modal-modal-description">
-          Provide a file to overwrite
-          {' '}
-          {resource.name as string}
-          . The file must
+          Provide a file to overwrite {resource.name as string}. The file must
           be a JSON file.
         </ModalDescription>
         <ModalContainer>

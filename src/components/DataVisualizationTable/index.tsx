@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from 'react';
 import {
   BulletPoint,
   EnlargedTableBodyCell,
@@ -32,7 +31,11 @@ interface StackedBarChartForDataStreamsSummaryProps {
 }
 
 const DataVisualizationTable = ({
-  legend, data, handleLeftButtonClick, isToDateSetToTheCurrentDay, handleRightButtonClick,
+  legend,
+  data,
+  handleLeftButtonClick,
+  isToDateSetToTheCurrentDay,
+  handleRightButtonClick,
 }: StackedBarChartForDataStreamsSummaryProps) => {
   return (
     <Table>
@@ -45,25 +48,15 @@ const DataVisualizationTable = ({
         <TableHeadCenterCellsWrapper>
           {data.map((item, index) => (
             <TableHeadCell key={index}>
-              {isToDateSetToTheCurrentDay && index === data.length - 1 ?
-                  (
-                    <EnlargedText>
-                      {item.dayOfWeek}
-                      {' '}
-                      <br />
-                      {' '}
-                      {item.date}
-                    </EnlargedText>
-                  ) :
-                  (
-                    <>
-                      {item.dayOfWeek}
-                      {' '}
-                      <br />
-                      {' '}
-                      {item.date}
-                    </>
-                  )}
+              {isToDateSetToTheCurrentDay && index === data.length - 1 ? (
+                <EnlargedText>
+                  {item.dayOfWeek} <br /> {item.date}
+                </EnlargedText>
+              ) : (
+                <>
+                  {item.dayOfWeek} <br /> {item.date}
+                </>
+              )}
             </TableHeadCell>
           ))}
         </TableHeadCenterCellsWrapper>
@@ -88,17 +81,21 @@ const DataVisualizationTable = ({
                 if (isToDateSetToTheCurrentDay && index === data.length - 1) {
                   return (
                     <EnlargedTableBodyCell key={index}>
-                      {item[i.label] ?
-                          <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
-                          <StyledClearIcon />}
+                      {item[i.label] ? (
+                        <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
+                      ) : (
+                        <StyledClearIcon />
+                      )}
                     </EnlargedTableBodyCell>
                   );
                 } else {
                   return (
                     <TableBodyCell key={index}>
-                      {item[i.label] ?
-                          <StyledLabelVariant>{item[i.label]}</StyledLabelVariant> :
-                          <StyledClearIcon />}
+                      {item[i.label] ? (
+                        <StyledLabelVariant>{item[i.label]}</StyledLabelVariant>
+                      ) : (
+                        <StyledClearIcon />
+                      )}
                     </TableBodyCell>
                   );
                 }

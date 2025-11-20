@@ -1,5 +1,4 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useInactiveDeployments } from '@Utils/queries/participants';
 import {
   MenuItem,
   Table,
@@ -8,10 +7,11 @@ import {
   TableHead,
   Typography,
 } from '@mui/material';
+import { Stack } from '@mui/system';
+import { useInactiveDeployments } from '@Utils/queries/participants';
+import { formatDateTime } from '@Utils/utility';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Stack } from '@mui/system';
-import { formatDateTime } from '@Utils/utility';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
   HeaderTableCell,
@@ -118,7 +118,8 @@ const InactiveDeployments = () => {
                 onClick={() =>
                   navigate(
                     `/studies/${studyId}/deployments/${participant.deploymentId}`,
-                  )}
+                  )
+                }
                 key={participant.deploymentId as unknown as string}
               >
                 <StyledTableCell>

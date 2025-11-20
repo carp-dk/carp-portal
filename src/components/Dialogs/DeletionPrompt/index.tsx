@@ -41,20 +41,18 @@ const DeletionPrompt = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        {loading ?
-            (
-              <Button color="primary" variant="contained" disabled>
-                <CircularProgress size={24} />
-              </Button>
-            ) :
-            (
-              <>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={action} color="error">
-                  {actionText ?? 'Delete'}
-                </Button>
-              </>
-            )}
+        {loading ? (
+          <Button color="primary" variant="contained" disabled>
+            <CircularProgress size={24} />
+          </Button>
+        ) : (
+          <>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={action} color="error">
+              {actionText ?? 'Delete'}
+            </Button>
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );

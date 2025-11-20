@@ -4,8 +4,8 @@ import { styled } from '@Utils/theme';
 export const StyledAlert = styled(Alert, {
   shouldForwardProp: (prop) => prop !== 'isSkeleton',
 })<{ isSkeleton?: boolean }>(({ isSkeleton, theme }) => ({
-  'border': 'none',
-  'padding': '12px 24px 12px',
+  border: 'none',
+  padding: '12px 24px 12px',
   '& .MuiAlert-message': {
     flexDirection: 'row',
     display: 'flex',
@@ -14,9 +14,9 @@ export const StyledAlert = styled(Alert, {
   '& .MuiAlert-icon': {
     marginRight: 12,
     paddingTop: 8,
-    color: isSkeleton ?
-      theme.palette.background.default :
-      theme.palette.primary.main,
+    color: isSkeleton
+      ? theme.palette.background.default
+      : theme.palette.primary.main,
   },
   '& img': {
     width: '100%',
@@ -66,19 +66,19 @@ export const AnnouncementMessage = styled(Typography)(({ theme }) => ({
 }));
 
 export const CollapseWrapper = styled('div')({
-  'display': 'flex',
-  'flexDirection': 'column',
-  'alignItems': 'center',
-  'width': '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100%',
   '& > button': {
     marginLeft: -24,
   },
 });
 
 export const AnnouncementType = styled(Chip)({
-  'fontSize': 10,
-  'height': 22,
-  'textTransform': 'uppercase',
+  fontSize: 10,
+  height: 22,
+  textTransform: 'uppercase',
   '& > span': {
     padding: '0 10px',
   },

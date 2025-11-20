@@ -6,9 +6,7 @@ export const StyledCard = styled(Card, {
 })<{ isDisabled?: boolean }>(({ isDisabled }) => ({
   display: 'block',
   borderRadius: 16,
-  opacity: isDisabled ?
-    '0.5' :
-    1,
+  opacity: isDisabled ? '0.5' : 1,
   gridColumn: 'span 2',
   padding: 28,
 }));

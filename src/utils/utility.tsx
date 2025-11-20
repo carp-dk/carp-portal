@@ -23,11 +23,11 @@ import TimelineRoundedIcon from '@mui/icons-material/TimelineRounded';
 import WatchRoundedIcon from '@mui/icons-material/WatchRounded';
 import {
   Document,
-  Page,
-  Text,
-  StyleSheet,
-  Image as PdfImage,
   Font,
+  Page,
+  Image as PdfImage,
+  StyleSheet,
+  Text,
 } from '@react-pdf/renderer';
 import { useParams } from 'react-router';
 import TimesItalics from 'src/assets/fonts/Times-Italic Regular.ttf';
@@ -92,123 +92,91 @@ export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
     case 'dk.cachet.carp.common.application.devices.Button':
       return (
         <RadioButtonCheckedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.EmbracePlus':
       return (
         <WatchRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.Sens':
       return (
         <TimelineRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.HealthService':
       return (
         <HealthAndSafetyRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.MovesenseDevice':
-      return isBlue ?
-          (
-            <img
-              src={ecgHeartIconBlue}
-              width="20px"
-              height="20px"
-              alt="heart icon"
-            />
-          ) :
-          (
-            <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
-          );
+      return isBlue ? (
+        <img
+          src={ecgHeartIconBlue}
+          width="20px"
+          height="20px"
+          alt="heart icon"
+        />
+      ) : (
+        <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
+      );
     case 'dk.cachet.carp.common.application.devices.Smartphone':
       return <SmartphoneIcon color="inherit" fontSize="small" />;
     case 'dk.cachet.carp.common.application.devices.PersonalComputer':
       return (
         <ComputerRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.LocationService':
       return (
         <LocationOnIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.WeatherService':
       return (
-        <CloudIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
-          fontSize="small"
-        />
+        <CloudIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
       );
     case 'dk.cachet.carp.common.application.devices.AirQualityService':
       return (
         <AirRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.ESenseDevice':
       return (
         <HearingRoundedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.PolarDevice':
       return (
         <MonitorHeartOutlinedIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.WebBrowser':
       return (
-        <PublicIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
-          fontSize="small"
-        />
+        <PublicIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
       );
     default:
       return (
         <DeviceHubIcon
-          color={isBlue ?
-            'primary' :
-            'inherit'}
+          color={isBlue ? 'primary' : 'inherit'}
           fontSize="small"
         />
       );
@@ -508,9 +476,7 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
             JSON.parse(consent.signature.signatureImage),
           )}
         />
-        <Text
-          style={styles.signatureName}
-        >
+        <Text style={styles.signatureName}>
           {`${consent.signature.firstName} ${consent.signature.lastName}`}
         </Text>
         <Text style={styles.date}>
@@ -523,7 +489,8 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
         <Text
           style={styles.pageNumber}
           render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`}
+            `${pageNumber} / ${totalPages}`
+          }
           fixed
         />
       </Page>
@@ -575,7 +542,6 @@ export const getUri = (pageType: PageType) => {
     case PageType.EXPORTS:
       return `/studies/${studyId}/exports`;
     default:
-
       console.error('Unknown page type');
       return '/';
   }

@@ -4,16 +4,16 @@ import { getDeviceStatusColor } from '@Utils/utility';
 import { Link } from 'react-router-dom';
 
 export const StyledContainer = styled(Link)({
-  'display': 'grid',
-  'gridTemplateColumns': '185px 150px 1fr 2fr 3fr 2fr',
-  'overflow': 'hidden',
-  'alignItems': 'center',
-  'columnGap': '16px',
-  'textDecoration': 'none',
-  'color': 'inherit',
-  'padding': '12px 0px 12px 16px',
-  'marginRight': '16px',
-  'borderRadius': '16px',
+  display: 'grid',
+  gridTemplateColumns: '185px 150px 1fr 2fr 3fr 2fr',
+  overflow: 'hidden',
+  alignItems: 'center',
+  columnGap: '16px',
+  textDecoration: 'none',
+  color: 'inherit',
+  padding: '12px 0px 12px 16px',
+  marginRight: '16px',
+  borderRadius: '16px',
   ':hover': {
     backgroundColor: '#EDEDED',
     transition: 'background-color 0.2s ease-in-out',
@@ -58,15 +58,13 @@ export const ActivityDataContainer = styled('div')({
 export const MinimizeButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ theme, open }) => ({
-  'minWidth': 36,
-  'color': theme.palette.grey[700],
-  'transition': theme.transitions.create('transform', {
+  minWidth: 36,
+  color: theme.palette.grey[700],
+  transition: theme.transitions.create('transform', {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  'transform': open ?
-    'rotateX(180deg)' :
-    'rotateX(0deg)',
+  transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
   '& svg': {
     fontSize: 36,
   },

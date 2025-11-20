@@ -1,21 +1,21 @@
 import carpApi from '@Utils/api/api';
 import { useSnackbar } from '@Utils/snackbar';
 import {
+  ArrayList,
   CarpServiceError,
+  ExpectedParticipantData,
+  GenericEmailRequest,
+  InactiveDeployment,
+  InputDataType,
+  PaginatedParticipantAccounts,
+  Participant,
   ParticipantAccount,
   ParticipantGroups,
+  ParticipantGroupStatus,
   ParticipantInfo,
   ParticipantWithRoles,
-  InactiveDeployment,
   Statistics,
-  InputDataType,
-  GenericEmailRequest,
-  ExpectedParticipantData,
-  Participant,
-  ParticipantGroupStatus,
   StudyDeploymentStatus,
-  ArrayList,
-  PaginatedParticipantAccounts,
 } from '@carp-dk/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -239,7 +239,10 @@ export const useParticipantsInfo = (studyId: string) => {
 };
 
 export const useParticipantsAccounts = (studyId: string) => {
-  return useQuery<ParticipantAccount[] | PaginatedParticipantAccounts, CarpServiceError>({
+  return useQuery<
+    ParticipantAccount[] | PaginatedParticipantAccounts,
+    CarpServiceError
+  >({
     queryFn: () =>
       carpApi.study.recruitment.getParticipantAccounts({ studyId }),
     queryKey: ['participantsAccounts', studyId],

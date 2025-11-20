@@ -40,9 +40,7 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
         id: 'createdOn',
         header: 'Created on',
         sortingFn: (row1, row2) =>
-          row1.original.created_at > row2.original.created_at ?
-            1 :
-              -1,
+          row1.original.created_at > row2.original.created_at ? 1 : -1,
         size: 160,
       },
       {

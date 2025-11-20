@@ -49,9 +49,9 @@ const BasicInfo = () => {
     <StyledContainer>
       <ProfilePicture>
         <Initials>
-          {!currentUser.firstName || !currentUser.lastName ?
-            currentUser.role[0] :
-            `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
+          {!currentUser.firstName || !currentUser.lastName
+            ? currentUser.role[0]
+            : `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
         </Initials>
       </ProfilePicture>
       <DataContainer>

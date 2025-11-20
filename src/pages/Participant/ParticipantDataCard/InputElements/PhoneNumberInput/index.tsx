@@ -1,3 +1,4 @@
+import { countryInfos } from '@Assets/languageMap';
 import {
   Divider,
   FormControl,
@@ -9,8 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useFormik, getIn } from 'formik';
-import { countryInfos } from '@Assets/languageMap';
+import { getIn, useFormik } from 'formik';
 import * as flags from 'react-flags-select';
 
 type Props = {
@@ -72,8 +72,7 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                 }}
                 gridTemplateColumns="30px 50px auto"
               >
-                <DanishFlag onSelect={undefined} width={30} />
-                {' '}
+                <DanishFlag onSelect={undefined} width={30} />{' '}
                 <Typography>+45</Typography>
                 <Typography>Denmark</Typography>
               </Stack>

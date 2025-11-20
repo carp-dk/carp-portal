@@ -1,6 +1,6 @@
 import { customPalette, styled } from '@Utils/theme';
-import { Button } from '@mui/material';
 import { Clear } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
 export const Table = styled('div')({
   display: 'flex',
@@ -70,7 +70,9 @@ export const TableBodyLeftMostCell = styled('div')({
   alignItems: 'center',
 });
 
-export const TableBodyCenterCellsWrapper = styled(TableHeadCenterCellsWrapper)({});
+export const TableBodyCenterCellsWrapper = styled(TableHeadCenterCellsWrapper)(
+  {},
+);
 
 export const TableBodyRightmostCell = styled(TableHeadRightmostCell)({});
 

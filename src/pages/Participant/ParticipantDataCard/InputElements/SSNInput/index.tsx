@@ -1,3 +1,4 @@
+import { countryInfos } from '@Assets/languageMap';
 import {
   Divider,
   FormControl,
@@ -9,7 +10,6 @@ import {
   TextField,
 } from '@mui/material';
 import { getIn, useFormik } from 'formik';
-import { countryInfos } from '@Assets/languageMap';
 import * as flags from 'react-flags-select';
 
 type Props = {
@@ -65,8 +65,7 @@ const SSNInput = ({ formik, editing }: Props) => {
                 }}
                 gridTemplateColumns="30px auto"
               >
-                <DanishFlag name="Denmark" onSelect={undefined} width={30} />
-                {' '}
+                <DanishFlag name="Denmark" onSelect={undefined} width={30} />{' '}
                 Denmark
               </Stack>
             </MenuItem>

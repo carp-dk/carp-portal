@@ -2,10 +2,10 @@ import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import { useExports } from '@Utils/queries/studies';
+import { getUri, PageType } from '@Utils/utility';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUri, PageType } from '@Utils/utility';
 import ExportsTable from './ExportsTable';
 
 const Export: React.FC = () => {

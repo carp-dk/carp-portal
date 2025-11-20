@@ -133,9 +133,7 @@ const ParticipantsTable = ({
       },
       {
         accessorFn: (row) => {
-          return row?.id !== null ?
-            'Yes' :
-            'No';
+          return row?.id !== null ? 'Yes' : 'No';
         },
         id: 'user_id',
         header: 'Registered',
@@ -213,12 +211,12 @@ const ParticipantsTable = ({
     enableHiding: false,
     enableColumnActions: false,
     enableSorting: true,
-    muiToolbarAlertBannerProps: isParticipantsAccountsError ?
-        {
+    muiToolbarAlertBannerProps: isParticipantsAccountsError
+      ? {
           color: 'error',
           children: 'Error loading data',
-        } :
-      undefined,
+        }
+      : undefined,
   });
 
   return (

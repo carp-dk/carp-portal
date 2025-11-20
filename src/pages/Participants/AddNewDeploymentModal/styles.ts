@@ -35,10 +35,10 @@ export const ModalDescription = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledList = styled('ul')(({ theme }) => ({
-  'color': theme.palette.text.secondary,
-  'marginTop': 0,
-  'marginBottom': 8,
-  'listStyleType': 'disc',
+  color: theme.palette.text.secondary,
+  marginTop: 0,
+  marginBottom: 8,
+  listStyleType: 'disc',
   '& li': {
     display: 'list-item',
     fontSize: theme.typography.h5.fontSize,
@@ -120,7 +120,7 @@ export const StyledTableRow = styled(TableRow)({
 });
 
 export const StyledSelect = styled(Select)({
-  'height': 32,
+  height: 32,
   '& #role-select': {
     padding: '8.5px 16px 4.5px 16px',
   },
