@@ -61,13 +61,13 @@ const ProtocolInfo = ({ protocol }: Props) => {
             <CreationInfoContainer>
               <Typography variant="h6">Created on</Typography>
               <Typography variant="h6">
-                {/*{formatDateTime(protocol.createdOn.toEpochMilliseconds())}*/}
+                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
               </Typography>
             </CreationInfoContainer>
             <CreationInfoContainer>
               <Typography variant="h6">Last version</Typography>
               <Typography variant="h6">
-                {/*{formatDateTime(protocol.createdOn.toEpochMilliseconds())}*/}
+                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
               </Typography>
             </CreationInfoContainer>
           </InnerLeftContainer>

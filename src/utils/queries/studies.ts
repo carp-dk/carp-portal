@@ -130,6 +130,7 @@ export const useSetStudyDetails = () => {
       });
     },
     onError: (error: CarpServiceError) => {
+      console.log(error);
       setSnackbarError(error.message);
     },
   });

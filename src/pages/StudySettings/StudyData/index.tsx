@@ -100,7 +100,8 @@ const StudyData = () => {
           protocol.id.stringRepresentation ===
           studyDetails.protocolSnapshot.id.stringRepresentation,
       );
-      if (currentProtocol.equals(studyDetails.protocolSnapshot)) return;
+      if (!currentProtocol) return;
+      if (studyDetails.protocolSnapshot.equals(currentProtocol)) return;
       setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
     }
   }, [studyDetails, studyStatus, protocols]);
@@ -127,8 +128,8 @@ const StudyData = () => {
     );
   }
 
-  const isProtocolSelectorEnabled = protocols && protocols.length > 0
-
+  const isProtocolSelectorEnabled = protocols && protocols.length > 0;
+  console.log({ studyStatus, isProtocolSelectorEnabled });
   return (
     <StyledCard elevation={2}>
       <Heading variant="h2">Study Data</Heading>
@@ -182,7 +183,6 @@ const StudyData = () => {
           <LinkIcon sx={{ fontSize: 16 }} />
         </ProtocolInformation>
       </Stack>
-
       {!isProtocolSelectorEnabled || !studyStatus.canSetStudyProtocol ? (
         <TextField
           variant="outlined"
@@ -193,15 +193,17 @@ const StudyData = () => {
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <Typography>{studyDetails.protocolSnapshot.name}</Typography>
+                  <Typography>{studyDetails.protocolSnapshot?.name}</Typography>
                 </InputAdornment>
               ),
               endAdornment: (
                 <InputAdornment position="end">
                   <Typography variant="caption">
-                    {formatDateTime(
-                      studyDetails.protocolSnapshot.createdOn.toEpochMilliseconds(),
-                    )}
+                    {studyDetails.protocolSnapshot
+                      ? formatDateTime(
+                          studyDetails.protocolSnapshot?.createdOn.toEpochMilliseconds(),
+                        )
+                      : ''}
                   </Typography>
                 </InputAdornment>
               ),
@@ -210,32 +212,32 @@ const StudyData = () => {
         />
       ) : (
         <Select
-                      variant="outlined"
-                fullWidth
-                error={!!studyProtocolFormik.errors.protocolId}
-                name="protocolId"
-                value={studyProtocolFormik.values.protocolId}
-                onChange={handleProtocolChange}
+          variant="outlined"
+          fullWidth
+          error={!!studyProtocolFormik.errors.protocolId}
+          name="protocolId"
+          value={studyProtocolFormik.values.protocolId}
+          onChange={handleProtocolChange}
+        >
+          {protocols.map((protocol) => (
+            <MenuItem
+              key={protocol.id.stringRepresentation}
+              value={protocol.id.stringRepresentation}
             >
-              {protocols.map((protocol) => (
-                  <MenuItem
-                      key={protocol.id.stringRepresentation}
-                      value={protocol.id.stringRepresentation}
-                  >
-                    <Stack
-                        width="100%"
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                    >
-                      <Typography>{protocol.name}</Typography>
-                      <Typography variant="caption">
-                        {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-              ))}
-            </Select>
+              <Stack
+                width="100%"
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography>{protocol.name}</Typography>
+                <Typography variant="caption">
+                  {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
       )}
     </StyledCard>
   );

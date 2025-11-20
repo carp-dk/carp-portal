@@ -1,7 +1,10 @@
 import SortingButton from '@Components/SortingButton';
-import { useCurrentUser } from '@Utils/queries/auth';
 import { useProtocols } from '@Utils/queries/protocols';
-import { formatDateTime, getRandomNumber } from '@Utils/utility';
+import {
+  formatDateTime,
+  getRandomNumber,
+  isUserResearcher,
+} from '@Utils/utility';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {
   Skeleton,
@@ -48,7 +51,7 @@ interface Props {
 const ProtocolsTable = ({ openModal }: Props) => {
   const navigate = useNavigate();
   const { data: protocols, isLoading: protocolsLoading } = useProtocols();
-  const { data: user, isLoading: userLoading } = useCurrentUser();
+  const { data: user } = useCurrentUser();
 
   // State for sorting
   const [sortOrder, setSortOrder] = useState<{
@@ -88,7 +91,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
     return description;
   };
 
-  const isResearcher = user?.role?.includes('RESEARCHER') ?? false;
+  const isResearcher = isUserResearcher(user);
 
   if (!protocols) return null;
   return (

@@ -7,6 +7,7 @@ import {
   getSerializer,
   Json,
   StudyProtocolSnapshot,
+  User,
 } from '@carp-dk/client';
 import AirRoundedIcon from '@mui/icons-material/AirRounded';
 import CloudIcon from '@mui/icons-material/Cloud';
@@ -553,4 +554,13 @@ export const patternToRegex = (pattern) => {
   // Keycloak-style *: one or more chars
   const regexString = '^' + escaped.replace(/\*/g, '.+') + '$';
   return new RegExp(regexString);
+};
+
+export const isUserResearcher = (user?: User | null) => {
+  if (!user) return false;
+  return (
+    user.role.includes('RESEARCHER') ||
+    user.role.includes('CARP_ADMIN') ||
+    user.role.includes('SYSTEM_ADMIN')
+  );
 };

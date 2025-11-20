@@ -35,14 +35,7 @@ const validationSchema = yup.object({
   subTitle: yup.string(),
   message: yup.string().required('Message is required'),
   type: yup.string().required('Type is required'),
-  url: yup.string().test('is-url-valid', 'URL is not valid', (value) => {
-    try {
-      new URL(value);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+  url: yup.string().url('URL is not valid').notRequired(),
   image: yup
     .mixed()
     .nullable()
@@ -208,6 +201,8 @@ const StudyAnnouncementEdit = () => {
                   value={formik.values.url}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  helperText={formik.touched.url && formik.errors.url}
+                  error={formik.touched.url && !!formik.errors.url}
                 />
                 <FormLabel required>Message</FormLabel>
                 <TextField

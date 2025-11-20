@@ -1,6 +1,7 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useCurrentUser } from '@Utils/queries/auth';
 import { useStudies } from '@Utils/queries/studies';
+import { isUserResearcher } from '@Utils/utility';
 import { StudyOverview } from '@carp-dk/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,7 @@ const StudiesSection = () => {
   } = useStudies();
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { data: user, isLoading: userLoading } = useCurrentUser();
+  const { data: user } = useCurrentUser();
 
   const selectStudyHandler = (studyId: string) => {
     navigate(`/studies/${studyId}/overview`);
@@ -41,7 +42,7 @@ const StudiesSection = () => {
     return 'Draft';
   };
 
-  const isResearcher = user?.role?.includes('RESEARCHER') ?? false;
+  const isResearcher = isUserResearcher(user);
 
   if (studiesError) {
     return (
