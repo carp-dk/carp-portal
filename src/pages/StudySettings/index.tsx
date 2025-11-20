@@ -17,8 +17,8 @@ const Studies: React.FC = () => {
     name: 'Study Settings',
     uri: getUri(PageType.SETTINGS),
   };
-  const description
-    = 'Give a name, description, set a protocol and invitation.';
+  const description =
+    'Give a name, description, set a protocol and invitation.';
   const { id: studyId } = useParams();
   const { isLoading: studyLoading } = useStudyDetails(studyId);
   const [openAddResearcherModal, setOpenAddResearcherModal] = useState(false);

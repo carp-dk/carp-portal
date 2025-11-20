@@ -57,9 +57,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
         try {
           JSON.parse(text);
           return true;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        catch (e) {
+        } catch {
           return false;
         }
       })
@@ -78,9 +76,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
           const modifiedText = JSON.stringify(parsedJson);
           json.decodeFromString(serializer, modifiedText);
           return true;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        catch (e) {
+        } catch {
           return false;
         }
       }),
@@ -139,8 +135,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
             if (parsed.name) {
               await addProtocolFormik.setFieldTouched('name', true);
               await addProtocolFormik.setFieldValue('name', parsed.name);
-            }
-            else {
+            } else {
               nameRef.current.focus();
             }
           }

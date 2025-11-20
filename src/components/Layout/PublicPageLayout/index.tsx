@@ -14,8 +14,8 @@ const PublicPageLayout = ({ children }: Props) => {
     <>
       <PublicPageBanner>
         <StyledLogo type="flat-colored" />
-        {location.pathname.includes('/register')
-          ? (
+        {location.pathname.includes('/register') ?
+            (
               <BannerActionText>
                 Already have an account?
                 {' '}
@@ -23,8 +23,8 @@ const PublicPageLayout = ({ children }: Props) => {
                   Login
                 </StyledLink>
               </BannerActionText>
-            )
-          : (
+            ) :
+            (
               <BannerActionText>
                 New to CARP?
                 {' '}

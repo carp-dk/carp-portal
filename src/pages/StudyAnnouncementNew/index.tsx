@@ -42,8 +42,7 @@ const validationSchema = yup.object().shape({
 
       new URL(value);
       return true;
-    }
-    catch {
+    } catch {
       return false;
     }
   }),
@@ -213,11 +212,11 @@ const StudyAnnouncementNew = () => {
               onClick={() => formik.handleSubmit()}
               disabled={createAnnouncement.isPending}
             >
-              {createAnnouncement.isPending
-                ? (
+              {createAnnouncement.isPending ?
+                  (
                     <CircularProgress size={16} />
-                  )
-                : (
+                  ) :
+                  (
                     'Create announcement'
                   )}
             </StyledButton>

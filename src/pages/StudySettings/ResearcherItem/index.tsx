@@ -22,8 +22,8 @@ type Props = {
 const ResearcherItem = ({ researcher, disabled }: Props) => {
   const { id: studyId } = useParams();
   const removeResearcher = useRemoveResearcherFromStudy(studyId);
-  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal]
-    = useState(false);
+  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+    useState(false);
 
   const handleRemoveResearcher = () => {
     removeResearcher.mutate(researcher.email);
@@ -45,9 +45,9 @@ const ResearcherItem = ({ researcher, disabled }: Props) => {
     <StyledCard elevation={2}>
       <AccountIcon>
         <Initials variant="h3">
-          {!researcher.firstName || !researcher.lastName
-            ? researcher.role[0]
-            : `${researcher.firstName[0]}${researcher.lastName[0]}`}
+          {!researcher.firstName || !researcher.lastName ?
+            researcher.role[0] :
+            `${researcher.firstName[0]}${researcher.lastName[0]}`}
         </Initials>
       </AccountIcon>
       <Middle>

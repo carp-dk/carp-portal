@@ -44,14 +44,14 @@ const DeploymentsInProgress = () => {
 
   useEffect(() => {
     if (
-      deploymentsAccountAndStatus?.groups !== undefined
-      && deploymentsAccountAndStatus?.groups.length !== 0
+      deploymentsAccountAndStatus?.groups !== undefined &&
+      deploymentsAccountAndStatus?.groups.length !== 0
     ) {
       const deployments = deploymentsAccountAndStatus.groups
-        .filter(g => !g.deploymentStatus.__type.includes('Stopped'))
+        .filter((g) => !g.deploymentStatus.__type.includes('Stopped'))
         .map((g) => {
           const devices = g.deploymentStatus.deviceStatusList.filter(
-            dl => dl.device.isPrimaryDevice,
+            (dl) => dl.device.isPrimaryDevice,
           );
           return { deploymentId: g.participantGroupId, devices };
         })
@@ -114,7 +114,7 @@ const DeploymentsInProgress = () => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {deploymentProgress.map(g => (
+            {deploymentProgress.map((g) => (
               <StyledTableRow key={g.deploymentId}>
                 <StyledTableCell align="center">
                   <SecondaryCellText
@@ -138,7 +138,7 @@ const DeploymentsInProgress = () => {
                 <StyledTableCell>
                   <SecondaryCellText variant="h5" noWrap>
                     <Stack direction="row" spacing="16px">
-                      {g.devices.map(d => (
+                      {g.devices.map((d) => (
                         <Stack
                           direction="row"
                           spacing={0.5}

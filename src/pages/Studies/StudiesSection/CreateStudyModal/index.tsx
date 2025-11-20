@@ -88,8 +88,8 @@ const CreateStudyModal = ({ open, onClose }: Props) => {
             onChange={createStudyFormik.handleChange}
             fullWidth
             helperText={
-              createStudyFormik.touched.description
-              && createStudyFormik.errors.description
+              createStudyFormik.touched.description &&
+              createStudyFormik.errors.description
             }
             onBlur={createStudyFormik.handleBlur}
             size="small"

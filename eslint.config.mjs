@@ -26,8 +26,14 @@ export default tseslint.config(
       eslintReact.configs["recommended-typescript"],
       stylistic.configs.customize({
         semi: true,
+        braceStyle: "1tbs",
+        arrowParens: true,
       }),
     ],
+
+    plugins: {
+      "@stilistic": stylistic,
+    },
 
     // Configure language/parsing options
     languageOptions: {
@@ -42,7 +48,9 @@ export default tseslint.config(
 
     // Custom rule overrides (modify rule levels or disable rules)
     rules: {
-      "@eslint-react/no-missing-key": "warn",
+      "@eslint-react/no-missing-key": "error",
+      "@stylistic/operator-linebreak": ["error", "after"],
+      "@stylistic/multiline-ternary": ["error", "always"],
     },
-  }
+  },
 );

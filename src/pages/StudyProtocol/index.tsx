@@ -46,8 +46,8 @@ const StudyProtocol = () => {
 
   return (
     <StudyPageLayout>
-      {study.protocolSnapshot == null
-        ? (
+      {study.protocolSnapshot == null ?
+          (
             <>
               <StudyHeader path={[sectionName]} description={description} />
               <SiteUnavailable
@@ -56,8 +56,8 @@ const StudyProtocol = () => {
                 siteUnavailableLinkUrl={siteUnavailableLinkUrl}
               />
             </>
-          )
-        : (
+          ) :
+          (
             <>
               <StudyHeader
                 path={[sectionName, { name: study.protocolSnapshot.name, uri: '' }]}

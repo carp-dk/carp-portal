@@ -48,12 +48,14 @@ export const CardTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const StatusDotContainer = styled('div', {
-  shouldForwardProp: prop => prop !== 'skeleton',
+  shouldForwardProp: (prop) => prop !== 'skeleton',
 })<{ skeleton?: boolean }>(({ skeleton }) => ({
   display: 'flex',
   alignItems: 'flex-end',
   paddingTop: 8,
-  paddingBottom: skeleton ? 4 : 0,
+  paddingBottom: skeleton ?
+    4 :
+    0,
 }));
 
 export const InfoContainer = styled('div')({
@@ -79,7 +81,7 @@ export const CreationText = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 16,
   height: 16,

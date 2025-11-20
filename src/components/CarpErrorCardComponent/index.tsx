@@ -31,7 +31,9 @@ const CarpErrorCardComponent = ({ message, error }: Props) => {
                 cursor: 'pointer',
               }}
             >
-              {open ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+              {open ?
+                  <KeyboardArrowDown /> :
+                  <KeyboardArrowUp />}
               Click here to show error
             </StyledMessage>
             <Collapse in={open}>

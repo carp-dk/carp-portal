@@ -39,22 +39,18 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledNumber = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status, theme }) => {
   let color;
   if (status === 'Deployed') {
     color = theme.palette.status.green;
-  }
-  else if (status === 'Registered') {
+  } else if (status === 'Registered') {
     color = theme.palette.status.yellow;
-  }
-  else if (status === 'Unregistered') {
+  } else if (status === 'Unregistered') {
     color = theme.palette.status.purple;
-  }
-  else if (status === 'NeedsRedeployment') {
+  } else if (status === 'NeedsRedeployment') {
     color = theme.palette.status.red;
-  }
-  else {
+  } else {
     color = theme.palette.primary.main;
   }
   return {

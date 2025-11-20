@@ -27,10 +27,10 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
           retry: (failureCount, error) => {
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
-              failureCount === 0
-              && ((error as unknown as CarpServiceError).code === 403
-                || (error as unknown as CarpServiceError).code === 401)
-              && !hasOngoingRefreshRequest
+              failureCount === 0 &&
+              ((error as unknown as CarpServiceError).code === 403 ||
+                (error as unknown as CarpServiceError).code === 401) &&
+                !hasOngoingRefreshRequest
             ) {
               hasOngoingRefreshRequest = true;
 
@@ -60,10 +60,9 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                 .finally(() => {
                   hasOngoingRefreshRequest = false;
                 });
-            }
-            else if (
-              failureCount === 1
-              && (error as unknown as CarpServiceError).code === 403
+            } else if (
+              failureCount === 1 &&
+              (error as unknown as CarpServiceError).code === 403
             ) {
               // we already tried refreshing the token. the user really shouldn't be able to access this
               // throw them back to the homepage
@@ -71,8 +70,8 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
               navigate('/', { replace: true });
             }
             if (
-              failureCount === 1
-              && (error as unknown as CarpServiceError).code === 401
+              failureCount === 1 &&
+              (error as unknown as CarpServiceError).code === 401
             ) {
               setSnackbarError(
                 'You are not authorized to access this resource.',

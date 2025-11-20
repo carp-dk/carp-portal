@@ -41,14 +41,11 @@ const DeploymentStatus = () => {
           const depStatus = curr.studyDeploymentStatus;
           if (depStatus instanceof StudyDeploymentStatus.Invited) {
             acc.invited.value += 1;
-          }
-          else if (depStatus instanceof StudyDeploymentStatus.Running) {
+          } else if (depStatus instanceof StudyDeploymentStatus.Running) {
             acc.running.value += 1;
-          }
-          else if (depStatus instanceof StudyDeploymentStatus.Stopped) {
+          } else if (depStatus instanceof StudyDeploymentStatus.Stopped) {
             acc.stopped.value += 1;
-          }
-          else if (
+          } else if (
             depStatus instanceof StudyDeploymentStatus.DeployingDevices
           ) {
             acc.deploying.value += 1;

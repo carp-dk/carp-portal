@@ -39,8 +39,8 @@ const BasicInfo = () => {
   const stopDeployment = useStopParticipantGroup(studyId);
 
   const [deployment, setDeployment] = useState<ParticipantGroup | null>(null);
-  const [openStopConfirmationModal, setOpenStopConfirmationModal]
-    = useState(false);
+  const [openStopConfirmationModal, setOpenStopConfirmationModal] =
+    useState(false);
 
   const handleStopDeployment = () => {
     setOpenStopConfirmationModal(false);
@@ -64,7 +64,7 @@ const BasicInfo = () => {
     if (!participantDataLoading && participantData && participantData.groups) {
       setDeployment(
         participantData.groups.find(
-          g => g.participantGroupId === deploymentId,
+          (g) => g.participantGroupId === deploymentId,
         ),
       );
     }

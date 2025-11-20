@@ -40,8 +40,8 @@ const BasicInfoSkeleton = () => {
 };
 
 const BasicInfo = () => {
-  const { data: currentUser, isLoading: currentUserIsLoading }
-    = useCurrentUser();
+  const { data: currentUser, isLoading: currentUserIsLoading } =
+    useCurrentUser();
   if (currentUserIsLoading) {
     return <BasicInfoSkeleton />;
   }
@@ -49,9 +49,9 @@ const BasicInfo = () => {
     <StyledContainer>
       <ProfilePicture>
         <Initials>
-          {!currentUser.firstName || !currentUser.lastName
-            ? currentUser.role[0]
-            : `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
+          {!currentUser.firstName || !currentUser.lastName ?
+            currentUser.role[0] :
+            `${currentUser.firstName[0]}${currentUser.lastName[0]}`}
         </Initials>
       </ProfilePicture>
       <DataContainer>

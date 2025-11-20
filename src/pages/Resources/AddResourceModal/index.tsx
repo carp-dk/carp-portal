@@ -36,7 +36,9 @@ const validationSchema = yup.object({
   type: yup.string().required('Type is required'),
   // if type is other, require 'name'
   name: yup.string().when('type', (type: string | string[], schema) => {
-    return type === 'other' ? schema.required('Name is required') : schema;
+    return type === 'other' ?
+        schema.required('Name is required') :
+      schema;
   }),
   file: yup
     .mixed()
@@ -52,9 +54,7 @@ const validationSchema = yup.object({
       try {
         JSON.parse(text);
         return true;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      catch (e) {
+      } catch {
         return false;
       }
     }),
@@ -86,8 +86,7 @@ const AddResourceModal = ({ open, onClose }: Props) => {
   const handleTypeChange = (e: SelectChangeEvent) => {
     if (e.target.value === 'other') {
       formik.setFieldValue('name', '');
-    }
-    else {
+    } else {
       formik.setFieldValue('name', resourceTypes[e.target.value]);
     }
     formik.setFieldValue('type', e.target.value);
@@ -145,7 +144,7 @@ const AddResourceModal = ({ open, onClose }: Props) => {
               label="Type"
               onChange={handleTypeChange}
             >
-              {Object.keys(resourceTypes).map(type => (
+              {Object.keys(resourceTypes).map((type) => (
                 <MenuItem key={type} value={type}>
                   {type}
                 </MenuItem>

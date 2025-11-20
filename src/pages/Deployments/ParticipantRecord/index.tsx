@@ -42,12 +42,12 @@ const ParticipantRecord = ({
   const { t } = useTranslation();
   const { id: studyId } = useParams();
 
-  const participantRole
-    = participantStatus.assignedParticipantRoles.roleNames[0];
-  const participantDeviceRoleName
-    = participantStatus.assignedPrimaryDeviceRoleNames[0];
+  const participantRole =
+    participantStatus.assignedParticipantRoles.roleNames[0];
+  const participantDeviceRoleName =
+    participantStatus.assignedPrimaryDeviceRoleNames[0];
   const primaryDevice = deviceStatusList.find(
-    device => device.device.roleName === participantDeviceRoleName,
+    (device) => device.device.roleName === participantDeviceRoleName,
   );
   const participantDeviceType = primaryDevice.device.__type;
   const deviceStatus = primaryDevice.__type.split('.').pop();
@@ -68,9 +68,9 @@ const ParticipantRecord = ({
       <EmailContainer>
         <AccountIcon>
           <Initials variant="h4">
-            {!participantData.firstName
-              ? participantRole[0]
-              : `${participantData.firstName[0]}${participantData.lastName[0]}`}
+            {!participantData.firstName ?
+              participantRole[0] :
+              `${participantData.firstName[0]}${participantData.lastName[0]}`}
           </Initials>
         </AccountIcon>
         <Typography variant="h6" noWrap>

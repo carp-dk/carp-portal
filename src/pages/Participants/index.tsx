@@ -11,8 +11,8 @@ import ParticipantsTable from './ParticipantsTable';
 
 const Participants = () => {
   const [addParticipantModalOpen, setAddParticipantModalOpen] = useState(false);
-  const [importParticipantsModalOpen, setImportParticipantsModalOpen]
-    = useState(false);
+  const [importParticipantsModalOpen, setImportParticipantsModalOpen] =
+    useState(false);
   const [newDeploymentModalOpen, setNewDeploymentModalOpen] = useState(false);
   const [actionNeededModalOpen, setActionNeededModalOpen] = useState(false);
   const [participantsToAdd, setParticipantsToAdd] = useState([]);

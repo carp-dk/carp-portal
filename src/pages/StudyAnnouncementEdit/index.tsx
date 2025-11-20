@@ -39,9 +39,7 @@ const validationSchema = yup.object({
     try {
       new URL(value);
       return true;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    catch (error) {
+    } catch {
       return false;
     }
   }),
@@ -151,11 +149,11 @@ const StudyAnnouncementEdit = () => {
         description="Edit an announcement for this study"
       />
       <StyledContainer>
-        {isLoading
-          ? (
+        {isLoading ?
+            (
               <CircularProgress />
-            )
-          : (
+            ) :
+            (
               <>
                 <StyledCard elevation={2} sx={{ flex: 2 }}>
                   <form onSubmit={formik.handleSubmit}>
@@ -242,11 +240,11 @@ const StudyAnnouncementEdit = () => {
                       onClick={() => formik.handleSubmit()}
                       disabled={formik.isSubmitting}
                     >
-                      {updateAnnouncement.isPending
-                        ? (
+                      {updateAnnouncement.isPending ?
+                          (
                             <CircularProgress size={16} />
-                          )
-                        : (
+                          ) :
+                          (
                             'Edit announcement'
                           )}
                     </StyledButton>

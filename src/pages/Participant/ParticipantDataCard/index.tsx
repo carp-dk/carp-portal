@@ -62,8 +62,8 @@ const ParticipantDataCard = () => {
     const iv = [];
     if (!participantData || !participant) return iv;
     if (
-      participantData?.roles
-      && participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
+      participantData?.roles &&
+      participantData?.roles[participant?.assignedParticipantRoles.roleNames[0]]
     ) {
       Object.entries(
         participantData?.roles[
@@ -86,18 +86,18 @@ const ParticipantDataCard = () => {
     if (participantGroupStatus) {
       setParticipant(
         participantGroupStatus.groups
-          .find(g => g.participantGroupId === deploymentId)
+          .find((g) => g.participantGroupId === deploymentId)
           .deploymentStatus.participantStatusList.find(
-            p => p.participantId === participantId,
+            (p) => p.participantId === participantId,
           ),
       );
     }
   }, [participantGroupStatus]);
 
   const participantDataFromik = getParticipantDataFormik(
-    study?.protocolSnapshot.expectedParticipantData
-      ? study?.protocolSnapshot.expectedParticipantData.toArray()
-      : [],
+    study?.protocolSnapshot.expectedParticipantData ?
+        study?.protocolSnapshot.expectedParticipantData.toArray() :
+        [],
     initalValues,
     setParticipantData,
     participant?.assignedParticipantRoles.roleNames[0],
@@ -120,9 +120,9 @@ const ParticipantDataCard = () => {
   }
 
   if (
-    study?.protocolSnapshot.expectedParticipantData.toArray().length === 0
-    || (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1
-      && study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
+    study?.protocolSnapshot.expectedParticipantData.toArray().length === 0 ||
+    (study?.protocolSnapshot.expectedParticipantData.toArray().length === 1 &&
+      study?.protocolSnapshot.expectedParticipantData.toArray()[0].inputDataType
         .name === 'informed_consent')
   ) {
     return null;
@@ -165,8 +165,8 @@ const ParticipantDataCard = () => {
                   <Title variant="h4" paddingBottom={2}>
                     {getInputDataName(data.inputDataType.name)}
                   </Title>
-                  {CarpInputDataTypes.inputElements.get(data.inputDataType)
-                    && CarpInputDataTypes.inputElements.get(
+                  {CarpInputDataTypes.inputElements.get(data.inputDataType) &&
+                    CarpInputDataTypes.inputElements.get(
                       data.inputDataType,
                     ) instanceof SelectOne && (
                     <FormControl>
@@ -196,7 +196,7 @@ const ParticipantDataCard = () => {
                           ) as SelectOne
                         ).options
                           .toArray()
-                          .map(option => (
+                          .map((option) => (
                             <MenuItem id={option} value={option} key={option}>
                               {option}
                             </MenuItem>
@@ -204,10 +204,10 @@ const ParticipantDataCard = () => {
                       </Select>
                     </FormControl>
                   )}
-                  {!CarpInputDataTypes.inputElements.get(data.inputDataType)
-                    && data.inputDataType.name
-                    && data.inputDataType.name !== 'informed_consent'
-                    && getInputElement(
+                  {!CarpInputDataTypes.inputElements.get(data.inputDataType) &&
+                    data.inputDataType.name &&
+                    data.inputDataType.name !== 'informed_consent' &&
+                    getInputElement(
                       data.inputDataType.name,
                       participantDataFromik,
                       editing,
@@ -216,7 +216,9 @@ const ParticipantDataCard = () => {
               );
             })}
           <Button
-            sx={{ display: editing ? 'block' : 'none' }}
+            sx={{ display: editing ?
+              'block' :
+              'none' }}
             type="submit"
             variant="contained"
             onClick={participantDataFromik.submitForm}

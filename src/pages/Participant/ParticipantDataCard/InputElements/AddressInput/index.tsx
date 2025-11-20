@@ -93,8 +93,8 @@ const AddressInput = ({ formik, editing }: Props) => {
           disabled={!editing}
           name="address.country"
           error={
-            getIn(formik.touched, 'address.country')
-            && !!getIn(formik.errors, 'address.country')
+            getIn(formik.touched, 'address.country') &&
+            !!getIn(formik.errors, 'address.country')
           }
           value={formik.values.address.country}
           onChange={formik.handleChange}
@@ -133,14 +133,13 @@ const AddressInput = ({ formik, editing }: Props) => {
           </MenuItem>
           <Divider />
           {countryInfos.map((country) => {
-            const countryCode
-              = country.isoCode[0].toUpperCase()
-                + country.isoCode[1].toLowerCase();
+            const countryCode =
+              country.isoCode[0].toUpperCase() +
+              country.isoCode[1].toLowerCase();
             let CountryFlag;
             if (countryCode in flags) {
               CountryFlag = flags[countryCode];
-            }
-            else {
+            } else {
               CountryFlag = 'div';
             }
             return (

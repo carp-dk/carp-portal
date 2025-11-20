@@ -19,9 +19,9 @@ const SortingButton = ({ columnName, toggleSortOrder, sortOrder }: Props) => {
         fontSize="small"
         sx={{
           opacity:
-            sortOrder.field === columnName && sortOrder.ascending
-              ? '100%'
-              : '20%',
+            sortOrder.field === columnName && sortOrder.ascending ?
+              '100%' :
+              '20%',
         }}
       />
       <KeyboardArrowDownRoundedIcon
@@ -29,9 +29,9 @@ const SortingButton = ({ columnName, toggleSortOrder, sortOrder }: Props) => {
         fontSize="small"
         sx={{
           opacity:
-            sortOrder.field === columnName && !sortOrder.ascending
-              ? '100%'
-              : '20%',
+            sortOrder.field === columnName && !sortOrder.ascending ?
+              '100%' :
+              '20%',
         }}
       />
     </StyledButton>

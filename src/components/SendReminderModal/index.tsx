@@ -36,7 +36,9 @@ const validationSchema = yup.object({
       if (this.isType(value) && value !== null) {
         return value;
       }
-      return originalValue ? originalValue.split(/[\s,]+/) : [];
+      return originalValue ?
+          originalValue.split(/[\s,]+/) :
+          [];
     })
     .of(yup.string().email(({ value }) => `${value} is not a valid email`)),
 });
@@ -56,7 +58,7 @@ const SendReminderModal = ({
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const urlsWrappedIntoAnchorTags = str.replace(
       urlRegex,
-      url => `<a href="${url}">${url}</a>`,
+      (url) => `<a href="${url}">${url}</a>`,
     );
     const withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, '<br>');
     const wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;

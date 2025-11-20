@@ -43,9 +43,7 @@ const Invitations = () => {
         parsedApplicaitonData = JSON.parse(
           studyDetails?.invitation.applicationData,
         );
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      catch (e) {
+      } catch {
         setStudyInvitation.mutate({
           studyId,
           invitationName: values.invitationName,
@@ -109,8 +107,8 @@ const Invitations = () => {
         value={studyInvitationFormik.values.invitationName}
         onChange={studyInvitationFormik.handleChange}
         helperText={
-          studyInvitationFormik.touched.invitationName
-          && studyInvitationFormik.errors.invitationName
+          studyInvitationFormik.touched.invitationName &&
+          studyInvitationFormik.errors.invitationName
         }
         onBlur={handleInvitationBlur}
       />
@@ -128,8 +126,8 @@ const Invitations = () => {
         value={studyInvitationFormik.values.invitationDescription}
         onChange={studyInvitationFormik.handleChange}
         helperText={
-          studyInvitationFormik.touched.invitationDescription
-          && studyInvitationFormik.errors.invitationDescription
+          studyInvitationFormik.touched.invitationDescription &&
+          studyInvitationFormik.errors.invitationDescription
         }
         onBlur={handleInvitationBlur}
       />

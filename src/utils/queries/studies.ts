@@ -18,8 +18,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCurrentUser } from './auth';
 
 export const useStudies = () => {
-  const { data: currentUser, isLoading: isCurrentUserLoading }
-    = useCurrentUser();
+  const { data: currentUser, isLoading: isCurrentUserLoading } =
+    useCurrentUser();
 
   return useQuery<StudyOverview[], CarpServiceError>({
     queryFn: () => carpApi.studies.getOverview(),
@@ -333,7 +333,7 @@ export const useDeleteStudy = () => {
     },
     onSuccess: () => {
       queryClient.setQueryData(['studies'], (old: StudyOverview[]) =>
-        old.filter(study => study.studyId !== id),
+        old.filter((study) => study.studyId !== id),
       );
       queryClient.invalidateQueries({ queryKey: ['studies'] });
       setSnackbarSuccess('Study deleted!');
@@ -370,14 +370,13 @@ export const useCreateSummary = () => {
     },
     onSuccess: (response, variables) => {
       const { id } = response;
-      const existingSummary = (
-        queryClient.getQueryData(['exports', variables.studyId]) as Export[]
-      )?.find(summary => summary.id === id);
+      const existingSummary = queryClient
+        .getQueryData<Export[]>(['exports', variables.studyId])
+        ?.find((summary) => summary.id === id);
 
       if (existingSummary) {
         setSnackbarError('Wait until creating a new export');
-      }
-      else {
+      } else {
         setSnackbarSuccess('Export data initiated!');
       }
     },
@@ -450,9 +449,7 @@ const getCollectionFiles = async (collectionName: string, studyId: string) => {
       collectionName,
       studyId,
     });
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  catch (error) {
+  } catch {
     return { documents: [] } as Collection;
   }
 };
@@ -507,8 +504,7 @@ export const useCreateAnnouncement = () => {
         try {
           const imageUrl = await uploadImageRequest(props.studyId, props.image);
           announcement = { ...announcement, image: imageUrl };
-        }
-        catch (error) {
+        } catch (error) {
           setSnackbarError('Error uploading image');
           throw error;
         }
@@ -563,8 +559,7 @@ export const useUpdateAnnouncement = () => {
             props.newImage,
           );
           announcement = { ...announcement, image: imageUrl };
-        }
-        catch (error) {
+        } catch (error) {
           setSnackbarError('Error uploading image');
           throw error;
         }

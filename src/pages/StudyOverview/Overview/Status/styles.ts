@@ -45,7 +45,7 @@ export const StyledLink = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledStatus = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   alignSelf: 'flex-end',
   display: 'flex',
@@ -57,7 +57,7 @@ export const StyledStatus = styled('div', {
 }));
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 24,
   height: 24,
@@ -67,16 +67,14 @@ export const StyledStatusDot = styled('div', {
 }));
 
 export const StatusName = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status, theme }) => {
   let color;
   if (status === 'Draft') {
     color = theme.palette.status.purple;
-  }
-  else if (status === 'Ready') {
+  } else if (status === 'Ready') {
     color = theme.palette.status.yellow;
-  }
-  else {
+  } else {
     color = theme.palette.status.green;
   }
 

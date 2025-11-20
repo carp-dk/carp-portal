@@ -31,10 +31,12 @@ export const AuthTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export const AuthInfoText = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'hideOnMobile',
+  shouldForwardProp: (prop) => prop !== 'hideOnMobile',
 })<{ hideOnMobile?: boolean }>(({ hideOnMobile, theme }) => ({
   margin: '8px 0 24px 0',
   [theme.breakpoints.down('sm')]: {
-    display: hideOnMobile ? 'none' : 'block',
+    display: hideOnMobile ?
+      'none' :
+      'block',
   },
 }));

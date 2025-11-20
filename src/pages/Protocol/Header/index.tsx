@@ -9,8 +9,8 @@ import {
 
 const Header = () => {
   const { id: protocolId } = useParams();
-  const { data: protocol, isLoading: protocolLoading }
-    = useProtocolDetails(protocolId);
+  const { data: protocol, isLoading: protocolLoading } =
+    useProtocolDetails(protocolId);
   const description = 'See detailed information of the Protocol.';
 
   if (protocolLoading) return null;

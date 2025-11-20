@@ -99,8 +99,8 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
             {announcement.sub_title}
           </AnnouncementSubtitle>
         )}
-        {announcement.message.length > 200
-          ? (
+        {announcement.message.length > 200 ?
+            (
               <CollapseWrapper>
                 <Collapse in={expanded} collapsedSize={186}>
                   <AnnouncementMessage variant="body1">
@@ -109,13 +109,17 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
                 </Collapse>
                 <Button
                   onClick={handleExpandClick}
-                  startIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  startIcon={expanded ?
+                      <ExpandLessIcon /> :
+                      <ExpandMoreIcon />}
                 >
-                  {expanded ? 'Show less' : 'Show more'}
+                  {expanded ?
+                    'Show less' :
+                    'Show more'}
                 </Button>
               </CollapseWrapper>
-            )
-          : (
+            ) :
+            (
               <AnnouncementMessage variant="body1">
                 {announcement.message}
               </AnnouncementMessage>

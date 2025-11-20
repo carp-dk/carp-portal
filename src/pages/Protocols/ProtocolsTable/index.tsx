@@ -55,24 +55,28 @@ const ProtocolsTable = ({ openModal }: Props) => {
   }>({ field: 'createdOn', ascending: false });
 
   const toggleSortOrder = (field: 'name' | 'createdOn') => {
-    setSortOrder(prevSortOrder => ({
+    setSortOrder((prevSortOrder) => ({
       field,
       ascending:
-        prevSortOrder.field === field ? !prevSortOrder.ascending : true,
+        prevSortOrder.field === field ?
+            !prevSortOrder.ascending :
+          true,
     }));
   };
 
-  const sortedProtocols
-    = protocolsLoading || !protocols
-      ? []
-      : protocols.sort((a, b) => {
-          const compareResult
-            = sortOrder.field === 'name'
-              ? a.name.localeCompare(b.name)
-              : a.createdOn.toEpochMilliseconds()
-                - b.createdOn.toEpochMilliseconds();
+  const sortedProtocols =
+    protocolsLoading || !protocols ?
+        [] :
+        protocols.sort((a, b) => {
+          const compareResult =
+            sortOrder.field === 'name' ?
+                a.name.localeCompare(b.name) :
+              a.createdOn.toEpochMilliseconds() -
+              b.createdOn.toEpochMilliseconds();
 
-          return sortOrder.ascending ? compareResult : -compareResult;
+          return sortOrder.ascending ?
+            compareResult :
+              -compareResult;
         });
 
   const selectProtocolHandler = (protocolId: string) => {
@@ -123,16 +127,16 @@ const ProtocolsTable = ({ openModal }: Props) => {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            {protocolsLoading
-              ? (
+            {protocolsLoading ?
+                (
                   <>
                     <SkeletonTableRow />
                     <SkeletonTableRow />
                     <SkeletonTableRow />
                   </>
-                )
-              : (
-                  sortedProtocols.map(protocol => (
+                ) :
+                (
+                  sortedProtocols.map((protocol) => (
                     <StyledTableRow
                       key={protocol.id.stringRepresentation}
                       onClick={() =>
@@ -145,9 +149,9 @@ const ProtocolsTable = ({ openModal }: Props) => {
                       </TableCell>
                       <TableCell>
                         <SecondaryCellText variant="h5">
-                          {protocol.description
-                            ? formatDescription(protocol.description)
-                            : '—'}
+                          {protocol.description ?
+                              formatDescription(protocol.description) :
+                            '—'}
                         </SecondaryCellText>
                       </TableCell>
                       <TableCell>

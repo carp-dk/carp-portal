@@ -42,7 +42,7 @@ export const SecondaryText = styled(Typography)(({ theme }) => ({
 }));
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 24,
   height: 24,
@@ -52,7 +52,7 @@ export const StyledStatusDot = styled('div', {
 }));
 
 export const StyledStatusText = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   color: getDeploymentStatusColor(status),
   textTransform: 'uppercase',

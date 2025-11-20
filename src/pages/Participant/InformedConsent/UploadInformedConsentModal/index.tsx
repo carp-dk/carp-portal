@@ -113,8 +113,8 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
           </CancelButton>
           <DoneButton
             disabled={
-              !addInformedConsentFormik.dirty
-              || !addInformedConsentFormik.isValid
+              !addInformedConsentFormik.dirty ||
+              !addInformedConsentFormik.isValid
             }
             variant="contained"
             sx={{ elevation: 0 }}

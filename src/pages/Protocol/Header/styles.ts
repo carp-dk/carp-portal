@@ -10,9 +10,11 @@ export const PathContainer = styled('div')({
 });
 
 export const PathItem = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'section',
+  shouldForwardProp: (prop) => prop !== 'section',
 })<{ section?: boolean }>(({ section, theme }) => ({
-  color: section ? theme.palette.primary.main : theme.palette.text.heading,
+  color: section ?
+    theme.palette.primary.main :
+    theme.palette.text.heading,
 }));
 
 export const Description = styled(Typography)(({ theme }) => ({

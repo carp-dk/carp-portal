@@ -60,17 +60,17 @@ const Translations = () => {
   const closeAddModal = () => setOpenAdd(false);
   const openAddModal = () => setOpenAdd(true);
 
-  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal]
-    = useState(false);
-  const [translationToDelete, setTranslationToDelete]
-    = useState<CarpDocument>(null);
+  const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
+    useState(false);
+  const [translationToDelete, setTranslationToDelete] =
+    useState<CarpDocument>(null);
   const deleteTranslation = useDeleteTranslation();
 
   const [editOpen, setEditOpen] = useState(false);
   const closeEditModal = () => setEditOpen(false);
   const openEditModal = () => setEditOpen(true);
-  const [translationToEdit, setTranslationToEdit]
-    = useState<CarpDocument>(null);
+  const [translationToEdit, setTranslationToEdit] =
+    useState<CarpDocument>(null);
 
   const handleDeleteTranslation = () => {
     deleteTranslation.mutate({
@@ -134,8 +134,8 @@ const Translations = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {translationsLoading
-                ? [1, 2, 3].map(() => {
+              {translationsLoading ?
+                  [1, 2, 3].map(() => {
                     return (
                       <StyledTableRow key={uuidv4()}>
                         <TableCell>
@@ -165,8 +165,8 @@ const Translations = () => {
                         </TableCell>
                       </StyledTableRow>
                     );
-                  })
-                : translations?.documents.map((translation: CarpDocument) => {
+                  }) :
+                  translations?.documents.map((translation: CarpDocument) => {
                     const CountryFlag = getFlag(translation.name);
                     return (
                       <StyledTableRow key={translation.id}>
@@ -182,12 +182,12 @@ const Translations = () => {
                           </LanguageWrapper>
                         </TableCell>
                         <TableCell>
-                          {formatDateTime(translation.created_at)
-                            + (translation.updated_at !== translation.created_at
-                              ? ` (updated ${formatDateTime(
+                          {formatDateTime(translation.created_at) +
+                            (translation.updated_at !== translation.created_at ?
+                              ` (updated ${formatDateTime(
                                 translation.updated_at,
-                              )})`
-                              : '')}
+                              )})` :
+                              '')}
                         </TableCell>
                         <TableCell>
                           <Tooltip title="Delete">

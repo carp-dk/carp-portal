@@ -44,7 +44,7 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
   const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
   function handleLeftButtonClick() {
-    setToDate(prev => prev.minusDays(14));
+    setToDate((prev) => prev.minusDays(14));
   }
 
   function handleRightButtonClick() {
@@ -53,7 +53,9 @@ const DataVisualizationTableWrapper = (props: StackedBarChartWrapperProps) => {
     const newToDate = toDate.plusDays(14);
     const today = LocalDate.now();
 
-    setToDate(newToDate.isAfter(today) ? today : newToDate);
+    setToDate(newToDate.isAfter(today) ?
+      today :
+      newToDate);
   }
 
   if (error) {

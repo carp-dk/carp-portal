@@ -25,7 +25,7 @@ const DataVisualizationForDeployment = () => {
   useEffect(() => {
     if (studyDetails) {
       const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(studyDetails.protocolSnapshot);
-      const newChartConfigs = configs.filter(cfg => listOfTaskTypes.includes(cfg.type));
+      const newChartConfigs = configs.filter((cfg) => listOfTaskTypes.includes(cfg.type));
 
       setChartConfigs(newChartConfigs);
     }
@@ -66,7 +66,7 @@ const DataVisualizationForDeployment = () => {
         Tasks
       </StyledTitle>
       {chartConfigs.map(
-        cfg => (
+        (cfg) => (
           <React.Fragment key={cfg.type}>
             <DataVisualizationTableWrapper
               legend={getLegend(cfg.type, listOfTasksFromProtocol)}

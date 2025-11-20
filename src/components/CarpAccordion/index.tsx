@@ -19,7 +19,7 @@ type Props = {
 const CarpAccordion = ({ title, description, children, isExpanded, titleColor }: Props) => {
   const [expanded, setExpanded] = useState(isExpanded || false);
   const handleChange = () => {
-    setExpanded(prev => !prev);
+    setExpanded((prev) => !prev);
   };
 
   return (
@@ -28,7 +28,9 @@ const CarpAccordion = ({ title, description, children, isExpanded, titleColor }:
         expandIcon={(
           <KeyboardArrowRightIcon
             sx={{
-              transform: expanded ? 'rotate(-270deg)' : 'rotate(0deg)',
+              transform: expanded ?
+                'rotate(-270deg)' :
+                'rotate(0deg)',
               transition: 'transform 0.3s ease',
             }}
           />

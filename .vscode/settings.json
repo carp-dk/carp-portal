@@ -11,4 +11,9 @@
     "src/public/locales",
   ],
   "i18n-ally.keystyle": "nested",
+  "bundleSize.cache": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

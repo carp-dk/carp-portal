@@ -76,13 +76,19 @@ export const IDsContainer = styled('div')({
 });
 
 export const StyledDivider = styled(Divider, {
-  shouldForwardProp: prop => prop !== 'isHorizontal',
+  shouldForwardProp: (prop) => prop !== 'isHorizontal',
 })<{ isHorizontal?: boolean }>(({ isHorizontal, theme }) => ({
   color: theme.palette.grey[300],
   borderWidth: 1,
-  orientation: isHorizontal ? 'horizontal' : 'vertical',
-  width: isHorizontal ? '100%' : 1,
-  margin: isHorizontal ? '0 auto' : '0',
+  orientation: isHorizontal ?
+    'horizontal' :
+    'vertical',
+  width: isHorizontal ?
+    '100%' :
+    1,
+  margin: isHorizontal ?
+    '0 auto' :
+    '0',
 }));
 
 export const IDContainer = styled('div')(({ theme }) => ({
@@ -122,7 +128,7 @@ export const DeleteStudyButton = styled(Button)(({ theme }) => ({
 }));
 
 export const Status = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -132,16 +138,14 @@ export const Status = styled('div', {
 }));
 
 export const StatusName = styled(Typography, {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status, theme }) => {
   let color;
   if (status === 'Draft') {
     color = theme.palette.status.draft;
-  }
-  else if (status === 'Ready') {
+  } else if (status === 'Ready') {
     color = theme.palette.status.ready;
-  }
-  else {
+  } else {
     color = theme.palette.status.live;
   }
 
@@ -184,7 +188,7 @@ export const GoLiveButton = styled(Button)(({ theme }) => ({
 }));
 
 export const StyledStatusDot = styled('div', {
-  shouldForwardProp: prop => prop !== 'status',
+  shouldForwardProp: (prop) => prop !== 'status',
 })<{ status?: string }>(({ status }) => ({
   width: 24,
   height: 24,

@@ -2,14 +2,16 @@ import { Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const StyledContainer = styled('div', {
-  shouldForwardProp: prop =>
+  shouldForwardProp: (prop) =>
     prop !== 'open' && prop !== 'numberOfConnections',
 })<{ open?: boolean; numberOfConnections: number }>(
   ({ open, numberOfConnections, theme }) => ({
     marginTop: 12,
     display: 'flex',
     flexDirection: 'column',
-    height: open ? `calc(${numberOfConnections}*52px)+42px` : '42px',
+    height: open ?
+      `calc(${numberOfConnections}*52px)+42px` :
+      '42px',
     overflow: 'hidden',
     transition: theme.transitions.create(['height'], {
       easing: theme.transitions.easing.easeOut,
@@ -34,7 +36,7 @@ export const DeviceName = styled(Typography)(({ theme }) => ({
 }));
 
 export const ExpandButton = styled('div', {
-  shouldForwardProp: prop => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ open, theme }) => ({
   padding: 0,
   minWidth: 'auto',
@@ -43,7 +45,9 @@ export const ExpandButton = styled('div', {
     easing: theme.transitions.easing.easeOut,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
+  transform: open ?
+    'rotateX(180deg)' :
+    'rotateX(0deg)',
 }));
 
 export const ConnectedDeviceItem = styled('div')({

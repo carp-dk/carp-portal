@@ -41,13 +41,13 @@ const DeletionPrompt = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        {loading
-          ? (
+        {loading ?
+            (
               <Button color="primary" variant="contained" disabled>
                 <CircularProgress size={24} />
               </Button>
-            )
-          : (
+            ) :
+            (
               <>
                 <Button onClick={onClose}>Cancel</Button>
                 <Button onClick={action} color="error">

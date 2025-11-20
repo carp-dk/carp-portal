@@ -51,8 +51,8 @@ const BasicInfo = () => {
     if (!participantDataLoading && participantData && participantData.groups) {
       setParticipant(
         participantData.groups
-          .find(g => g.participantGroupId === deploymentId)
-          .participants.find(p => p.participantId === participantId),
+          .find((g) => g.participantGroupId === deploymentId)
+          .participants.find((p) => p.participantId === participantId),
       );
     }
   }, [participantData, participantDataLoading, participantId, deploymentId]);
@@ -69,15 +69,15 @@ const BasicInfo = () => {
 
   const name = useMemo(() => {
     if (!participant) return '';
-    return participant.email
-      ? (
+    return participant.email ?
+        (
           <Name variant="h3">
             {participant.firstName ?? ''}
             {' '}
             {participant.lastName ?? ''}
           </Name>
-        )
-      : (
+        ) :
+        (
           <GeneratedAccountLabel />
         );
   }, [participant]);
@@ -85,10 +85,10 @@ const BasicInfo = () => {
   const isGeneratedAccount = !participant?.email;
 
   if (
-    participantDataLoading
-    || !participant
-    || studyDetailsLoading
-    || !studyDetailsData
+    participantDataLoading ||
+    !participant ||
+    studyDetailsLoading ||
+    !studyDetailsData
   )
     return <LoadingSkeleton />;
 

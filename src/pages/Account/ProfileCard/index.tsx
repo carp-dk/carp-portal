@@ -94,8 +94,8 @@ const ProfileCardSkeleton = () => {
 };
 
 const ProfileCard = () => {
-  const { data: currentUser, isLoading: currentUserIsLoading }
-    = useCurrentUser();
+  const { data: currentUser, isLoading: currentUserIsLoading } =
+    useCurrentUser();
   const profileFormik = useFormik({
     initialValues: {
       phone: '+45 12345678',
@@ -139,8 +139,8 @@ const ProfileCard = () => {
             value={profileFormik.values.affiliation}
             onChange={profileFormik.handleChange}
             helperText={
-              profileFormik.touched.affiliation
-              && profileFormik.errors.affiliation
+              profileFormik.touched.affiliation &&
+              profileFormik.errors.affiliation
             }
             onBlur={handleBlur}
             placeholder="Affiliation"

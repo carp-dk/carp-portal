@@ -92,42 +92,50 @@ export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
     case 'dk.cachet.carp.common.application.devices.Button':
       return (
         <RadioButtonCheckedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.EmbracePlus':
       return (
         <WatchRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.Sens':
       return (
         <TimelineRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.HealthService':
       return (
         <HealthAndSafetyRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.MovesenseDevice':
-      return isBlue
-        ? (
+      return isBlue ?
+          (
             <img
               src={ecgHeartIconBlue}
               width="20px"
               height="20px"
               alt="heart icon"
             />
-          )
-        : (
+          ) :
+          (
             <img src={ecgHeartIcon} width="20px" height="20px" alt="heart icon" />
           );
     case 'dk.cachet.carp.common.application.devices.Smartphone':
@@ -135,50 +143,72 @@ export const getDeviceIcon = (deviceType: string, isBlue?: boolean) => {
     case 'dk.cachet.carp.common.application.devices.PersonalComputer':
       return (
         <ComputerRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.LocationService':
       return (
         <LocationOnIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.WeatherService':
       return (
-        <CloudIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
+        <CloudIcon
+          color={isBlue ?
+            'primary' :
+            'inherit'}
+          fontSize="small"
+        />
       );
     case 'dk.cachet.carp.common.application.devices.AirQualityService':
       return (
         <AirRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.ESenseDevice':
       return (
         <HearingRoundedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.PolarDevice':
       return (
         <MonitorHeartOutlinedIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
     case 'dk.cachet.carp.common.application.devices.WebBrowser':
       return (
-        <PublicIcon color={isBlue ? 'primary' : 'inherit'} fontSize="small" />
+        <PublicIcon
+          color={isBlue ?
+            'primary' :
+            'inherit'}
+          fontSize="small"
+        />
       );
     default:
       return (
         <DeviceHubIcon
-          color={isBlue ? 'primary' : 'inherit'}
+          color={isBlue ?
+            'primary' :
+            'inherit'}
           fontSize="small"
         />
       );
@@ -273,7 +303,7 @@ export const getStudyStatusColor = (studyStatus: string) => {
 export const getMaxDatapoints = (days?: Day[]): number => {
   if (!days) return 0;
   return Math.max(
-    ...days.map(day =>
+    ...days.map((day) =>
       day.data.reduce((a: number, b: Record) => a + b.numberOfDatapoints, 0),
     ),
   );
@@ -458,8 +488,8 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
                 {section.summary.replaceAll('\n', ' ')}
               </Text>
               <Text style={styles.text}>{section.content}</Text>
-              {section.dataTypes
-                && section.dataTypes.map((dataType) => {
+              {section.dataTypes &&
+                section.dataTypes.map((dataType) => {
                   return (
                     <div key={dataType.dataName}>
                       <Text style={styles.h3}>{dataType.dataName}</Text>
