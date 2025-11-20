@@ -1,19 +1,15 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useCurrentUser } from '@Utils/queries/auth';
 import { useStudies } from '@Utils/queries/studies';
 import { StudyOverview } from '@carp-dk/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudyActionCard from '../StudyActionCard';
 import StudyCard, { SkeletonCard } from '../StudyCard';
+import CreateStudyModal from './CreateStudyModal';
 import { CardsContainer, StyledContainer, Title } from './styles';
 
-import CreateStudyModal from './CreateStudyModal';
-
-type StudiesProps = {
-  isAdmin: boolean;
-};
-
-const StudiesSection = ({ isAdmin }: StudiesProps) => {
+const StudiesSection = () => {
   const {
     data: studies,
     isLoading: studiesLoading,
@@ -21,6 +17,7 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
   } = useStudies();
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { data: user, isLoading: userLoading } = useCurrentUser();
 
   const selectStudyHandler = (studyId: string) => {
     navigate(`/studies/${studyId}/overview`);
@@ -34,10 +31,6 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
     setModalOpen(false);
   };
 
-  const inviteResearcherHandler = () => {
-    // navigate('/inviteResearcher');
-  };
-
   const getStudyStatus = (study: StudyOverview) => {
     if (study.canDeployToParticipants) {
       return 'Live';
@@ -47,6 +40,8 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
     }
     return 'Draft';
   };
+
+  const isResearcher = user?.role?.includes('RESEARCHER') ?? false;
 
   if (studiesError) {
     return (
@@ -61,10 +56,12 @@ const StudiesSection = ({ isAdmin }: StudiesProps) => {
     <StyledContainer>
       <Title variant="h2">Your CARP studies</Title>
       <CardsContainer>
-        <StudyActionCard
-          actionText={isAdmin ? 'Invite Researcher' : 'Add study'}
-          onClick={isAdmin ? inviteResearcherHandler : openCreateStudyModal}
-        />
+        {isResearcher && (
+          <StudyActionCard
+            actionText={'Add study'}
+            onClick={openCreateStudyModal}
+          />
+        )}
         {studiesLoading ? (
           <>
             <SkeletonCard />

@@ -1,6 +1,7 @@
 import CopyButton from '@Components/Buttons/CopyButton';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { useCurrentUser } from '@Utils/queries/auth';
 import {
   useDeleteStudy,
   useSetStudyLive,
@@ -103,6 +104,7 @@ const StudyStatusSection: React.FC = () => {
     isLoading: studyDetailsIsLoading,
     error: studyDetailsError,
   } = useStudyDetails(studyId);
+  const { data: user, isLoading: userLoading } = useCurrentUser();
   const setStudyLive = useSetStudyLive();
   const deleteStudy = useDeleteStudy();
   const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
@@ -163,6 +165,13 @@ const StudyStatusSection: React.FC = () => {
     checkboxLabel: "I'm sure I want to delete it",
     actionButtonLabel: 'Delete',
   };
+
+  const isStudyOwner =
+    studyDetails?.ownerId?.stringRepresentation &&
+    user?.accountId?.stringRepresentation &&
+    studyDetails?.ownerId?.stringRepresentation ==
+      user?.accountId?.stringRepresentation;
+
   return (
     <Container>
       <Left>
@@ -194,12 +203,14 @@ const StudyStatusSection: React.FC = () => {
               {formatDateTime(studyStatus.createdOn.toEpochMilliseconds())}
             </Typography>
           </CreationInfoContainer>
-          <DeleteStudyButton
-            onClick={() => setOpenDeleteConfirmationModal(true)}
-          >
-            <DeleteForeverRoundedIcon fontSize="small" />
-            <Typography variant="h5">Delete Study</Typography>
-          </DeleteStudyButton>
+          {isStudyOwner && (
+            <DeleteStudyButton
+              onClick={() => setOpenDeleteConfirmationModal(true)}
+            >
+              <DeleteForeverRoundedIcon fontSize="small" />
+              <Typography variant="h5">Delete Study</Typography>
+            </DeleteStudyButton>
+          )}
         </InnerLeftContainer>
         {!isDownMd && <StyledDivider />}
         <IDsContainer>
