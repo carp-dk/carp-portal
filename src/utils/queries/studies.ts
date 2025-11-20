@@ -8,11 +8,11 @@ import {
   Export,
   MessageData,
   ResourceData,
+  Role,
   StudyDetails,
   StudyOverview,
   StudyProtocolSnapshot,
   StudyStatus,
-  User,
 } from '@carp-dk/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCurrentUser } from './auth';
@@ -193,7 +193,7 @@ export const useResearchers = (studyId: string) => {
 export const useResearcherAssistants = (studyId: string) => {
   return useQuery<User[], CarpServiceError, User[], any>({
     queryFn: async () => {
-      return carpApi.study.researchers.getStudyResearcherAssistants({
+      return carpApi.study.researchers.getStudyResearchAssistants({
         studyId,
       });
     },
@@ -284,18 +284,22 @@ export const useSetStudyLive = () => {
   });
 };
 
-export const useAddResearcherAssistantToStudy = (studyId: string) => {
+export const useAddUserWithRole = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (email: string) => {
-      return carpApi.study.researchers.addResearcherAssistantToStudy({
+    mutationFn: async ({ email, role }: { email: string; role: Role }) => {
+      return carpApi.study.researchers.addResearcherToStudy({
         studyId,
         email,
+        role,
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['researchers', studyId],
+      });
       queryClient.invalidateQueries({
         queryKey: ['researcherAssistants', studyId],
       });
@@ -307,18 +311,21 @@ export const useAddResearcherAssistantToStudy = (studyId: string) => {
   });
 };
 
-export const useRemoveResearcherAssistantFromStudy = (studyId: string) => {
+export const useRemoveResearcherFromStudy = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (email: string) => {
-      return carpApi.study.researchers.removeResearcherAssistantFromStudy({
+      return carpApi.study.researchers.removeResearcherFromStudy({
         studyId,
         email,
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['researchers', studyId],
+      });
       queryClient.invalidateQueries({
         queryKey: ['researcherAssistants', studyId],
       });
