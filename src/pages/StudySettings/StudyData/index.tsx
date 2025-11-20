@@ -129,7 +129,7 @@ const StudyData = () => {
   }
 
   const isProtocolSelectorEnabled = protocols && protocols.length > 0;
-  console.log({ studyStatus, isProtocolSelectorEnabled });
+
   return (
     <StyledCard elevation={2}>
       <Heading variant="h2">Study Data</Heading>

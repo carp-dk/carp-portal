@@ -1,10 +1,10 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { Skeleton, Typography } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import { useResearchers, useStudyDetails } from '@Utils/queries/studies';
 import { useParams } from 'react-router-dom';
-import { AccountIcon, Initials } from '../ResearcherItem/styles';
-import { RightWrapper, Wrapper } from '../StudyData/styles';
-import { StyledCard } from '../styles';
+import ResearcherItem from '../ResearcherItem';
+import { ResearchersContainer } from '../StudyResearchers/styles';
+import { Heading, StyledCard, Subheading } from '../styles';
 
 const StudyOwner = () => {
   const { id: studyId } = useParams();
@@ -42,31 +42,17 @@ const StudyOwner = () => {
       elevation={2}
       sx={{
         gridColumn: 'span 2',
-        paddingTop: '8px',
-        paddingBottom: '8px',
-        paddingLeft: '16px',
       }}
     >
-      <Wrapper>
-        <AccountIcon>
-          <Initials variant="h3">
-            {!studyOwner.firstName || !studyOwner.lastName
-              ? studyOwner.role[0]
-              : `${studyOwner.firstName[0]}${studyOwner.lastName[0]}`}
-          </Initials>
-        </AccountIcon>
-        <RightWrapper>
-          <Typography variant="h4" sx={{ marginBottom: '8px' }}>
-            Study owner:
-          </Typography>
-          <Typography variant="h5" color={'textSecondary'}>
-            {studyOwner.firstName} {studyOwner.lastName}
-          </Typography>
-          <Typography variant="h5" color={'textSecondary'}>
-            {studyOwner.email}
-          </Typography>
-        </RightWrapper>
-      </Wrapper>
+      <Heading variant="h2">Study Owner</Heading>
+      <Subheading variant="h6">Study owner can manage the study.</Subheading>
+      <ResearchersContainer>
+        <ResearcherItem
+          disabled={true}
+          key={studyOwner.id}
+          researcher={studyOwner}
+        />
+      </ResearchersContainer>
     </StyledCard>
   );
 };
