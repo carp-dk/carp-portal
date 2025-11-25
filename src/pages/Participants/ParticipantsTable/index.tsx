@@ -133,7 +133,7 @@ const ParticipantsTable = ({
       },
       {
         accessorFn: (row) => {
-          return row?.id !== null ? 'Yes' : 'No';
+          return row?.id === null ? 'No' : 'Yes';
         },
         id: 'user_id',
         header: 'Registered',

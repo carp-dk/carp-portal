@@ -69,8 +69,7 @@ const Deployments = () => {
                   `${participant.firstName} ${participant.lastName}`
                     .toLowerCase()
                     .includes(searchText)) ||
-                (participant.email &&
-                  participant.email.toLowerCase().includes(searchText)),
+                participant.email?.toLowerCase().includes(searchText),
             ),
         );
         setDeployments(newDeployments);

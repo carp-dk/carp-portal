@@ -24,9 +24,9 @@ export const useInviteResearcher = () => {
 export const useCurrentUser = () => {
   const auth = useAuth();
 
-  return useQuery<User, CarpServiceError>({
+  return useQuery<User, CarpServiceError, User, any>({
     queryKey: ['currentUser'],
-    queryFn: async () => {
+    queryFn: () => {
       const user = parseUser(getUser()?.access_token);
       carpApi.setAuthToken(getUser()?.access_token);
       return user;

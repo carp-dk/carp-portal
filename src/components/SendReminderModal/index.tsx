@@ -54,11 +54,11 @@ const SendReminderModal = ({
 
   const convertTextareaInputToHtml = (str: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const urlsWrappedIntoAnchorTags = str.replace(
+    const urlsWrappedIntoAnchorTags = str.replaceAll(
       urlRegex,
       (url) => `<a href="${url}">${url}</a>`,
     );
-    const withAddedBr = urlsWrappedIntoAnchorTags.replace(/\n/g, '<br>');
+    const withAddedBr = urlsWrappedIntoAnchorTags.replaceAll('\n', '<br>');
     const wrappedInPre = `<pre style="white-space: pre-wrap;">${withAddedBr}</pre>`;
 
     return wrappedInPre;

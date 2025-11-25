@@ -1,6 +1,7 @@
 import CopyButton from '@Components/Buttons/CopyButton';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { useCurrentUser } from '@Utils/queries/auth';
 import {
   useDeleteStudy,
   useSetStudyLive,
@@ -86,8 +87,7 @@ const StudyStatusSection: React.FC = () => {
     'In order to go live study you need to fill out all the required data and invitation.';
   const readyStudyStatusDescription =
     'Once the study is live you will not be able to change the study settings.';
-  const liveStudyStatusDescription = '';
-  let currentStudyStatus: 'Draft' | 'Ready' | 'Live' = 'Draft';
+  let currentStudyStatus: 'Draft' | 'Ready' | 'Live';
   let currentStudyStatusDescription = '';
 
   const navigate = useNavigate();
@@ -103,6 +103,7 @@ const StudyStatusSection: React.FC = () => {
     isLoading: studyDetailsIsLoading,
     error: studyDetailsError,
   } = useStudyDetails(studyId);
+  const { data: user, isLoading: userLoading } = useCurrentUser();
   const setStudyLive = useSetStudyLive();
   const deleteStudy = useDeleteStudy();
   const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
@@ -116,7 +117,7 @@ const StudyStatusSection: React.FC = () => {
     }
   }, [deleteStudy.isSuccess]);
 
-  if (studyStatusIsLoading || studyDetailsIsLoading) {
+  if (studyStatusIsLoading || studyDetailsIsLoading || userLoading) {
     return <StudyStatusSectionSkeleton />;
   }
 
@@ -139,7 +140,6 @@ const StudyStatusSection: React.FC = () => {
     }
   } else {
     currentStudyStatus = 'Live';
-    currentStudyStatusDescription = liveStudyStatusDescription;
   }
 
   const handleDeleteStudy = () => {
@@ -163,6 +163,13 @@ const StudyStatusSection: React.FC = () => {
     checkboxLabel: "I'm sure I want to delete it",
     actionButtonLabel: 'Delete',
   };
+
+  const isStudyOwner =
+    studyDetails?.ownerId?.stringRepresentation &&
+    user?.accountId?.stringRepresentation &&
+    studyDetails?.ownerId?.stringRepresentation ==
+      user?.accountId?.stringRepresentation;
+
   return (
     <Container>
       <Left>
@@ -194,12 +201,14 @@ const StudyStatusSection: React.FC = () => {
               {formatDateTime(studyStatus.createdOn.toEpochMilliseconds())}
             </Typography>
           </CreationInfoContainer>
-          <DeleteStudyButton
-            onClick={() => setOpenDeleteConfirmationModal(true)}
-          >
-            <DeleteForeverRoundedIcon fontSize="small" />
-            <Typography variant="h5">Delete Study</Typography>
-          </DeleteStudyButton>
+          {isStudyOwner && (
+            <DeleteStudyButton
+              onClick={() => setOpenDeleteConfirmationModal(true)}
+            >
+              <DeleteForeverRoundedIcon fontSize="small" />
+              <Typography variant="h5">Delete Study</Typography>
+            </DeleteStudyButton>
+          )}
         </InnerLeftContainer>
         {!isDownMd && <StyledDivider />}
         <IDsContainer>

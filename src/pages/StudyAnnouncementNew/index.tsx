@@ -36,16 +36,7 @@ const validationSchema = yup.object().shape({
   subTitle: yup.string(),
   message: yup.string().required('Message is required'),
   type: yup.string().required('Type is required'),
-  url: yup.string().test('is-url-valid', 'URL is not valid', (value) => {
-    try {
-      if (!value) return true;
-
-      new URL(value);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+  url: yup.string().url('URL is not valid').notRequired(),
   image: yup
     .mixed()
     .nullable()

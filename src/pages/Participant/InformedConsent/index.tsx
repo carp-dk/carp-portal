@@ -59,9 +59,9 @@ const InformedConsent = () => {
     ).toBlob();
     const a = document.createElement('a');
     a.download = 'informedConsent.pdf';
-    a.href = window.URL.createObjectURL(blob);
+    a.href = globalThis.URL.createObjectURL(blob);
     const clickEvt = new MouseEvent('click', {
-      view: window,
+      view: globalThis.window,
       bubbles: true,
       cancelable: true,
     });
@@ -76,7 +76,7 @@ const InformedConsent = () => {
   useEffect(() => {
     if (files) {
       const c = files
-        .sort((a, b) => {
+        .toSorted((a, b) => {
           return (
             new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
           );

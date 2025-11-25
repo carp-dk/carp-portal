@@ -94,10 +94,7 @@ const Deployment = () => {
           const device = group.deploymentStatus.deviceStatusList.find(
             (d) => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
           );
-          // TODO: Fix this type assertion in client
-          const lastUpload = lastDataUpload(
-            p.dateOfLastDataUpload as unknown as Date,
-          );
+          const lastUpload = lastDataUpload(p.dateOfLastDataUpload);
           return {
             participant: { ...p, lastUpload },
             roleName,
@@ -154,7 +151,7 @@ const Deployment = () => {
               status={deploymentInformation.groupStatus}
             />
             <SecondaryText variant="h6">
-              {deploymentInformation.groupStatus.replace(
+              {deploymentInformation.groupStatus.replaceAll(
                 /([a-z])([A-Z])/g,
                 '$1 $2',
               )}

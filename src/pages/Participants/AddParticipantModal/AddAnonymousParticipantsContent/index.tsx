@@ -96,7 +96,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
-          (values.expiryDate.getTime() - new Date().getTime()) / 1000,
+          (values.expiryDate.getTime() - Date.now()) / 1000,
         ),
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
@@ -154,7 +154,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       </ModalDescription>
       <ModalContent>
         <form onSubmit={handleFormSubmit}>
-          <Grid container spacing={4} align-item="center">
+          <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField
@@ -171,7 +171,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 }
                 onChange={(event) => {
                   const eventClone = event;
-                  if (parseInt(event.target.value, 10) < 1) {
+                  if (Number.parseInt(event.target.value, 10) < 1) {
                     eventClone.target.value = '1';
                   }
                   addAnonymousParticipantFormik.handleChange(eventClone);

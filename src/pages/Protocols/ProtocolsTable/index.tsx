@@ -1,6 +1,11 @@
 import SortingButton from '@Components/SortingButton';
+import { useCurrentUser } from '@Utils/queries/auth';
 import { useProtocols } from '@Utils/queries/protocols';
-import { formatDateTime, getRandomNumber } from '@Utils/utility';
+import {
+  formatDateTime,
+  getRandomNumber,
+  isUserResearcher,
+} from '@Utils/utility';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {
   Skeleton,
@@ -47,6 +52,7 @@ interface Props {
 const ProtocolsTable = ({ openModal }: Props) => {
   const navigate = useNavigate();
   const { data: protocols, isLoading: protocolsLoading } = useProtocols();
+  const { data: user } = useCurrentUser();
 
   // State for sorting
   const [sortOrder, setSortOrder] = useState<{
@@ -65,7 +71,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
   const sortedProtocols =
     protocolsLoading || !protocols
       ? []
-      : protocols.sort((a, b) => {
+      : protocols.toSorted((a, b) => {
           const compareResult =
             sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
@@ -85,6 +91,8 @@ const ProtocolsTable = ({ openModal }: Props) => {
     }
     return description;
   };
+
+  const isResearcher = isUserResearcher(user);
 
   if (!protocols) return null;
   return (
@@ -160,9 +168,11 @@ const ProtocolsTable = ({ openModal }: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <AddProtocolButton sx={{ boxShadow: 2 }} onClick={openModal}>
-        <AddRoundedIcon />
-      </AddProtocolButton>
+      {isResearcher && (
+        <AddProtocolButton sx={{ boxShadow: 2 }} onClick={openModal}>
+          <AddRoundedIcon />
+        </AddProtocolButton>
+      )}
     </StyledCard>
   );
 };

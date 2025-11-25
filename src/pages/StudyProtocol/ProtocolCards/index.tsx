@@ -1,11 +1,8 @@
 import getInputDataName from '@Assets/inputTypeNames';
-import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useProtocolDetails } from '@Utils/queries/protocols';
-import { getRandomNumber } from '@Utils/utility';
 import carpCommon from '@cachet/carp-common';
 import carpProtocols from '@cachet/carp-protocols-core';
-import { Skeleton, Typography } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+import { StudyProtocolSnapshot } from '@carp-dk/client';
+import { Typography } from '@mui/material';
 import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
@@ -20,69 +17,11 @@ import DeviceConnection = carpProtocols.dk.cachet.carp.protocols.application.Stu
 type ParticipantRole =
   carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
 
-const ProtocolNameCardSkeleton: React.FC = () => {
-  return (
-    <StyledNameCard elevation={2}>
-      <Skeleton height={32} animation="wave" variant="text" width={70} />
-      <Skeleton height={28} animation="wave" variant="text" width="83%" />
-      <Skeleton height={32} animation="wave" variant="text" width={130} />
-      <Skeleton animation="wave" variant="text" width="60%" />
-    </StyledNameCard>
-  );
-};
-
-const ProtocolCardSkeleton: React.FC = () => {
-  return (
-    <StyledCard elevation={2}>
-      <Skeleton
-        height={32}
-        animation="wave"
-        variant="text"
-        width={`${getRandomNumber(20, 50)}%`}
-      />
-      {[1, 2].map(() => {
-        return (
-          <Skeleton
-            key={uuidv4()}
-            animation="wave"
-            variant="text"
-            width={`${getRandomNumber(40, 70)}%`}
-          />
-        );
-      })}
-    </StyledCard>
-  );
-};
-
 type Props = {
-  protocolId: string;
+  protocol: StudyProtocolSnapshot;
 };
 
-const ProtocolCards = ({ protocolId }: Props) => {
-  const {
-    data: protocol,
-    isLoading: protocolLoading,
-    error: protocolError,
-  } = useProtocolDetails(protocolId);
-  if (protocolLoading)
-    return (
-      <StyledContainer>
-        <ProtocolNameCardSkeleton />
-        <ProtocolCardSkeleton />
-        <ProtocolCardSkeleton />
-        <ProtocolCardSkeleton />
-      </StyledContainer>
-    );
-
-  if (protocolError) {
-    return (
-      <CarpErrorCardComponent
-        message="An error occurred while loading protocol"
-        error={protocolError}
-      />
-    );
-  }
-
+const ProtocolCards = ({ protocol }: Props) => {
   return (
     <StyledContainer>
       <StyledNameCard elevation={2}>

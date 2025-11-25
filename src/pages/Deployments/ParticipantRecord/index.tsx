@@ -68,9 +68,9 @@ const ParticipantRecord = ({
       <EmailContainer>
         <AccountIcon>
           <Initials variant="h4">
-            {!participantData.firstName
-              ? participantRole[0]
-              : `${participantData.firstName[0]}${participantData.lastName[0]}`}
+            {participantData.firstName
+              ? `${participantData.firstName[0]}${participantData.lastName[0]}`
+              : participantRole[0]}
           </Initials>
         </AccountIcon>
         <Typography variant="h6" noWrap>

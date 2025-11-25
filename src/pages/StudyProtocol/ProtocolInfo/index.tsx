@@ -1,8 +1,8 @@
+import { StudyProtocolSnapshot } from '@carp-dk/client';
 import CopyButton from '@Components/Buttons/CopyButton';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import LinkIcon from '@mui/icons-material/Link';
-import { Skeleton, Typography, useMediaQuery } from '@mui/material';
-import { useProtocolDetails } from '@Utils/queries/protocols';
+import { Typography, useMediaQuery } from '@mui/material';
 import { downloadProtocolAsJSONFile, formatDateTime } from '@Utils/utility';
 import {
   CreationInfoContainer,
@@ -20,51 +20,12 @@ import {
   Subtitle,
 } from './styles';
 
-const ProtocolInfoSkeleton = () => {
-  const isDownMd = useMediaQuery('(max-width:1250px)');
-  return (
-    <StyledContainer>
-      <Left>
-        <Skeleton animation="wave" variant="text" width={200} />
-        <Skeleton animation="wave" variant="text" width={410} />
-      </Left>
-      {isDownMd && <StyledDivider isHorizontal />}
-      <Right>
-        <InnerLeftContainer>
-          <CreationInfoContainer>
-            <Skeleton animation="wave" variant="text" width={70} />
-            <Skeleton animation="wave" variant="text" width={110} />
-          </CreationInfoContainer>
-          <CreationInfoContainer>
-            <Skeleton animation="wave" variant="text" width={70} />
-            <Skeleton animation="wave" variant="text" width={110} />
-          </CreationInfoContainer>
-        </InnerLeftContainer>
-        {!isDownMd && <StyledDivider />}
-        <IDsContainer>
-          <IDContainer>
-            <Skeleton animation="wave" variant="text" width={60} />
-            <Skeleton animation="wave" variant="text" width={300} />
-          </IDContainer>
-          <IDContainer>
-            <Skeleton animation="wave" variant="text" width={60} />
-            <Skeleton animation="wave" variant="text" width={300} />
-          </IDContainer>
-        </IDsContainer>
-      </Right>
-    </StyledContainer>
-  );
-};
-
 type Props = {
-  protocolId: string;
+  protocol: StudyProtocolSnapshot;
 };
 
-const ProtocolInfo = ({ protocolId }: Props) => {
+const ProtocolInfo = ({ protocol }: Props) => {
   const isDownMd = useMediaQuery('(max-width:1725px)');
-  const { data: protocol, isLoading: protocolLoading } =
-    useProtocolDetails(protocolId);
-  if (protocolLoading) return <ProtocolInfoSkeleton />;
 
   return (
     <>
@@ -88,7 +49,7 @@ const ProtocolInfo = ({ protocolId }: Props) => {
           </ProtocolVersion>
           <Subtitle variant="h6">
             Update the Protocol by adding a new version in{' '}
-            <StyledLink to={`/protocols/${protocolId}`}>
+            <StyledLink to={`/protocols/${protocol.id.stringRepresentation}`}>
               Protocol&#39;s main page
             </StyledLink>
             <LinkIcon fontSize="small" color="primary" />

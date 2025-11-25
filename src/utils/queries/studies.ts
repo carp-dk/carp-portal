@@ -8,6 +8,7 @@ import {
   Export,
   MessageData,
   ResourceData,
+  Role,
   StudyDetails,
   StudyOverview,
   StudyProtocolSnapshot,
@@ -130,6 +131,7 @@ export const useSetStudyDetails = () => {
       });
     },
     onError: (error: CarpServiceError) => {
+      console.log(error);
       setSnackbarError(error.message);
     },
   });
@@ -187,6 +189,17 @@ export const useResearchers = (studyId: string) => {
       return carpApi.study.researchers.getStudyResearchers({ studyId });
     },
     queryKey: ['researchers', studyId],
+  });
+};
+
+export const useResearcherAssistants = (studyId: string) => {
+  return useQuery<User[], CarpServiceError, User[], any>({
+    queryFn: async () => {
+      return carpApi.study.researchers.getStudyResearchAssistants({
+        studyId,
+      });
+    },
+    queryKey: ['researcherAssistants', studyId],
   });
 };
 
@@ -273,29 +286,25 @@ export const useSetStudyLive = () => {
   });
 };
 
-export const useAddResearcherToStudy = (studyId: string) => {
+export const useAddUserWithRole = (studyId: string) => {
   const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (email: string) => {
-      const isResearcher = await carpApi.accounts.isAccountOfRole({
-        emailAddress: email,
-        role: 'RESEARCHER',
-      });
-
-      if (!isResearcher) {
-        setSnackbarError('Email does not belong to a researcher.');
-        return null;
-      }
+    mutationFn: async ({ email, role }: { email: string; role: Role }) => {
       return carpApi.study.researchers.addResearcherToStudy({
         studyId,
         email,
-        role: 'RESEARCHER',
+        role,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['researchers', studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ['researchers', studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['researcherAssistants', studyId],
+      });
       setSnackbarSuccess('Added researcher to study!');
     },
     onError: (error: CarpServiceError) => {
@@ -316,7 +325,12 @@ export const useRemoveResearcherFromStudy = (studyId: string) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['researchers', studyId] });
+      queryClient.invalidateQueries({
+        queryKey: ['researchers', studyId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['researcherAssistants', studyId],
+      });
       setSnackbarSuccess('Removed researcher from study!');
     },
     onError: (error: CarpServiceError) => {

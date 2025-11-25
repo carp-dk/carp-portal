@@ -61,7 +61,7 @@ const BasicInfo = () => {
   const generateExport = useCreateSummary();
 
   useEffect(() => {
-    if (!participantDataLoading && participantData && participantData.groups) {
+    if (!participantDataLoading && participantData?.groups) {
       setDeployment(
         participantData.groups.find(
           (g) => g.participantGroupId === deploymentId,
@@ -116,7 +116,7 @@ const BasicInfo = () => {
               {deployment.deploymentStatus.__type
                 .split('.')
                 .pop()
-                .replace(/([a-z])([A-Z])/g, '$1 $2')}
+                .replaceAll(/([a-z])([A-Z])/g, '$1 $2')}
             </StyledStatusText>
           </Stack>
           {!deployment.deploymentStatus.__type.includes('Stopped') && (

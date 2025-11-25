@@ -127,8 +127,8 @@ const DataVisualizationForStudy = () => {
 
   const summedGroups = [];
 
-  for (let i = 0; i < summaries.length; i++) {
-    const summary = summaries[i].data;
+  for (const element of summaries) {
+    const summary = element.data;
     const { mappedData } = mapDataToChartData(summary);
 
     const output = mappedData.map((entry) => {
