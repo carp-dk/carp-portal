@@ -15,7 +15,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { enGB } from 'date-fns/locale/en-GB';
 import { useFormik } from 'formik';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
@@ -63,6 +63,7 @@ const validationSchema = yup.object({
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
+  console.log(globalThis.location);
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
@@ -71,6 +72,11 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
   const { data: redirectURIs, isLoading: isRedirectURIsLoading } =
     useRedirectURIs();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
+
+  const [preDefinedUriMap, setPreDefinedUriMap] = useState({});
+  const [notMappedClientNames, setNotMappedClientNames] = useState<string[]>(
+    [],
+  );
 
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
@@ -122,6 +128,34 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       navigate(`/studies/${studyId}/export`);
     }
   }, [generateAnonymousAccounts.isSuccess]);
+
+  useEffect(() => {
+    if (!redirectURIs) return;
+    const studyAppClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('studies-app'),
+    );
+    const icatClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('icat'),
+    );
+    setNotMappedClientNames(
+      Object.keys(redirectURIs).filter(
+        (key) => key !== studyAppClientName && key !== icatClientName,
+      ),
+    );
+
+    if (globalThis.location.host.includes('localhost')) {
+      setPreDefinedUriMap({
+        [studyAppClientName]: `https://app.dev.carp.dk/anonymous`,
+        [icatClientName]: `http://localhost:3000/icat`,
+      });
+      return;
+    }
+
+    setPreDefinedUriMap({
+      [studyAppClientName]: `https://app.${globalThis.location.host}/anonymous`,
+      [icatClientName]: `http://${globalThis.location.host}/icat`,
+    });
+  }, [redirectURIs]);
 
   if (isStudyDetailsLoading || isRedirectURIsLoading) return null;
 
@@ -235,7 +269,15 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 disablePast
               />
             </Grid>
-            <Grid size={{ xs: 6 }}>
+            <Grid
+              size={{
+                xs: !notMappedClientNames.includes(
+                  addAnonymousParticipantFormik.values.clientId,
+                )
+                  ? 12
+                  : 6,
+              }}
+            >
               <FormLabel required>Application Type</FormLabel>
               <Select
                 sx={{ width: '100%' }}
@@ -244,7 +286,13 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 name="clientId"
                 type="url"
                 value={addAnonymousParticipantFormik.values.clientId}
-                onChange={addAnonymousParticipantFormik.handleChange}
+                onChange={async (value) => {
+                  await addAnonymousParticipantFormik.setFieldValue(
+                    'redirectUri',
+                    preDefinedUriMap[value.target.value] || '',
+                  );
+                  addAnonymousParticipantFormik.handleChange(value);
+                }}
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               >
                 {Object.keys(redirectURIs).map((uri) => (
@@ -260,7 +308,16 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   </FormHelperText>
                 )}
             </Grid>
-            <Grid size={{ xs: 6 }}>
+            <Grid
+              size={{
+                xs: 6,
+              }}
+              hidden={
+                !notMappedClientNames.includes(
+                  addAnonymousParticipantFormik.values.clientId,
+                )
+              }
+            >
               <FormLabel required>Redirect URI</FormLabel>
               <TextField
                 sx={{ width: '100%' }}

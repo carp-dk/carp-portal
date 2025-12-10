@@ -192,12 +192,17 @@ const StudyData = () => {
           slotProps={{
             input: {
               startAdornment: (
-                <InputAdornment position="start">
-                  <Typography>{studyDetails.protocolSnapshot?.name}</Typography>
+                <InputAdornment
+                  position="start"
+                  sx={{ display: 'flex', width: '60%' }}
+                >
+                  <Typography noWrap>
+                    {studyDetails.protocolSnapshot?.name}
+                  </Typography>
                 </InputAdornment>
               ),
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment position="end" sx={{ width: '35%' }}>
                   <Typography variant="caption">
                     {studyDetails.protocolSnapshot
                       ? formatDateTime(
@@ -229,6 +234,7 @@ const StudyData = () => {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
+                spacing={2}
               >
                 <Typography width={'65%'} noWrap>
                   {protocol.name}
