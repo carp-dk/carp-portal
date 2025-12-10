@@ -63,7 +63,6 @@ const validationSchema = yup.object({
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
-  console.log(globalThis.location);
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
