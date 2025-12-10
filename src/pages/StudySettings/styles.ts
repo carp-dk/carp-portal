@@ -16,11 +16,14 @@ export const StyledContainer = styled('div', {
 
 export const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== 'isDisabled',
-})<{ isDisabled?: boolean }>(({ isDisabled }) => ({
+})<{ isDisabled?: boolean }>(({ isDisabled, theme }) => ({
   display: 'block',
   padding: '28px 28px 28px 28px',
   borderRadius: 16,
   opacity: isDisabled ? '0.5' : 1,
+  [theme.breakpoints.down('md')]: {
+    gridColumn: 'span 2',
+  },
 }));
 
 export const Heading = styled(Typography, {

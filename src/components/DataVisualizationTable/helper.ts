@@ -148,7 +148,8 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
 export function getListOfTasksFromProtocolSnapshot(
   protocolSnapshot: StudyProtocolSnapshot,
 ): object[] {
-  return protocolSnapshot.tasks['g4_1']['h4_1']
+  return protocolSnapshot.tasks
+    .toArray()
     .filter((x) => x?.['u21_1'] != null)
     .map((x) => JSON.parse(x['u21_1']));
 }
@@ -175,11 +176,11 @@ export function getLegend(
   const tasksOfType = tasks.filter((task: any) => task.type === type);
   return tasksOfType.map((task: any, index) => {
     return {
-      label: task.title,
+      label: task.name,
       color: colors[index % colors.length], // 🎨 assign color cyclically
       stack: 'stack',
       labelMarkType: 'circle',
-      dataKey: task.title,
+      dataKey: task.name,
     };
   });
 }
