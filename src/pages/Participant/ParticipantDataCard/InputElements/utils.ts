@@ -121,6 +121,58 @@ const diagnosisValidationSchema = yup
     },
   );
 
+const educationalDegreeValidationSchema = yup
+  .object({
+    educational_degree: yup.object({
+      level: yup.string(),
+      details: yup.string().notRequired(),
+    }),
+  })
+  .test(
+    'conditional-required',
+    'Level is required when details field is set',
+    (value, schema) => {
+      const {
+        educational_degree: { level, details },
+      } = value;
+
+      if (details && !level) {
+        return schema.createError({
+          path: 'educational_degree.level',
+          message: 'Level is required when details field is set',
+        });
+      }
+
+      return true;
+    },
+  );
+
+const occupationValidationSchema = yup
+  .object({
+    occupation: yup.object({
+      roles: yup.array().of(yup.string()),
+      other: yup.string().notRequired(),
+    }),
+  })
+  .test(
+    'conditional-required',
+    'Other is required when roles include Other',
+    (value, schema) => {
+      const {
+        occupation: { roles, other },
+      } = value;
+
+      if (roles && roles.includes('Other') && !other) {
+        return schema.createError({
+          path: 'occupation.other',
+          message: 'Other is required when roles include Other',
+        });
+      }
+
+      return true;
+    },
+  );
+
 const getParticipantDataFormik = (
   participantData: ExpectedParticipantData[] | undefined,
   startingData: Data[],
@@ -168,11 +220,25 @@ const getParticipantDataFormik = (
       country: '',
       socialSecurityNumber: '',
     },
+    note: {
+      __type: '',
+      note: '',
+    },
+    educational_degree: {
+      __type: '',
+      level: '',
+      details: '',
+    },
   };
 
   if (participantData && participantData.length !== 0) {
     participantData.forEach((data) => {
       if (data.attribute.inputDataType.name === 'informed_consent') return;
+      if (!initialValues[data.attribute.inputDataType.name]) {
+        initialValues[data.attribute.inputDataType.name] = {
+          __type: '',
+        };
+      }
       initialValues[data.attribute.inputDataType.name].__type =
         `${data.attribute.inputDataType.namespace}.${data.attribute.inputDataType.name}`;
 
@@ -195,6 +261,16 @@ const getParticipantDataFormik = (
           break;
         case 'diagnosis':
           validationSchema = validationSchema.concat(diagnosisValidationSchema);
+          break;
+        case 'educational_degree':
+          validationSchema = validationSchema.concat(
+            educationalDegreeValidationSchema,
+          );
+          break;
+        case 'occupation':
+          validationSchema = validationSchema.concat(
+            occupationValidationSchema,
+          );
           break;
         default:
           break;

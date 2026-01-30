@@ -25,7 +25,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
            *  We need to refresh the token to get the new claim.
            */
           retry: (failureCount, error) => {
-            console.log(`Query failed with ${failureCount} failures.`);
+            // console.log(`Query failed with ${failureCount} failures.`);
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
               failureCount === 0 &&
@@ -51,7 +51,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
                   return true;
                 })
                 .catch(() => {
-                  console.log(`${failureCount} token refresing`);
+                  // console.log(`${failureCount} token refresing`);
                   // could not refresh token for some reason
                   queryClient.clear();
                   auth.signoutSilent();

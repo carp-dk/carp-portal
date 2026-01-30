@@ -74,10 +74,11 @@ const ParticipantDataCard = () => {
         iv.push({ [key]: value });
       });
     }
-
     if (participantData?.common) {
       if (Object.entries(participantData?.common).length !== 0) {
-        iv.push(Object.fromEntries(Object.entries(participantData?.common)));
+        Object.entries(participantData?.common).forEach(([key, value]) => {
+          iv.push({ [key]: value });
+        });
       }
     }
     return iv;

@@ -377,13 +377,16 @@ export const useCreateSummary = () => {
     mutationFn: async ({
       studyId,
       deploymentIds,
+      activeDeploymentsOnly = false,
     }: {
       studyId: string;
       deploymentIds: string[];
+      activeDeploymentsOnly?: boolean;
     }) => {
       return carpApi.study.exports.create({
         studyId,
         deploymentIds,
+        activeDeploymentsOnly,
       });
     },
     onSuccess: (response, variables) => {

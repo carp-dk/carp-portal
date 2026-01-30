@@ -1,13 +1,15 @@
 import { useCreateSummary } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
 import { Export } from '@carp-dk/client';
+import { ArrowDropDown } from '@mui/icons-material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { ClickAwayListener, Grow, Paper, Popper } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DeleteButton from '../DeleteButton';
 import DownloadButton from '../DownloadButton';
@@ -15,6 +17,7 @@ import StatusCell from '../StatusCell';
 import TypeCell from '../TypeCell';
 import {
   CreateSummaryButton,
+  CreateSummaryButtonGroup,
   DeletingWarning,
   StyledContainer,
 } from './styles';
@@ -113,15 +116,92 @@ const ExportsTable = memo(({ exports, exportsLoading }: Props) => {
     },
   });
 
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: Event) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <StyledContainer>
-      <CreateSummaryButton
-        variant="outlined"
-        startIcon={<AddRoundedIcon />}
-        onClick={() => createSummary.mutate({ studyId, deploymentIds: null })}
+      <CreateSummaryButtonGroup variant="outlined" ref={anchorRef}>
+        <CreateSummaryButton
+          startIcon={<AddRoundedIcon />}
+          loading={createSummary.isPending}
+          loadingPosition="start"
+          onClick={() =>
+            createSummary.mutate({
+              studyId,
+              deploymentIds: null,
+              activeDeploymentsOnly: false,
+            })
+          }
+        >
+          New Export
+        </CreateSummaryButton>
+        <CreateSummaryButton
+          size="small"
+          onClick={handleToggle}
+          disabled={createSummary.isPending}
+          sx={{
+            backgroundColor: (theme) =>
+              open ? theme.palette.grey[200] : theme.palette.grey[100],
+          }}
+        >
+          <ArrowDropDown />
+        </CreateSummaryButton>
+      </CreateSummaryButtonGroup>
+      <Popper
+        sx={{ zIndex: 1, paddingTop: '4px' }}
+        open={open}
+        anchorEl={anchorRef.current}
+        placement="bottom-end"
+        role={undefined}
+        transition
+        disablePortal
       >
-        New Export
-      </CreateSummaryButton>
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === 'bottom' ? 'center top' : 'center bottom',
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <CreateSummaryButton
+                  variant="outlined"
+                  loading={createSummary.isPending}
+                  loadingPosition="start"
+                  startIcon={<AddRoundedIcon />}
+                  onClick={() => {
+                    createSummary.mutate({
+                      studyId,
+                      deploymentIds: null,
+                      activeDeploymentsOnly: true,
+                    });
+                    setOpen(false);
+                  }}
+                >
+                  New Active Only Export
+                </CreateSummaryButton>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
       <DeletingWarning variant="h4">
         Exports are deleted 7 days after creation.
       </DeletingWarning>
