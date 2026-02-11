@@ -9,7 +9,6 @@ export const Container = styled('div')({
 
 export const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
-  marginBottom: 16,
 }));
 
 export const Subtitle = styled(Typography)(({ theme }) => ({
@@ -18,12 +17,12 @@ export const Subtitle = styled(Typography)(({ theme }) => ({
 
 export const BackButton = styled(NavLink)(({ theme }) => ({
   color: theme.palette.primary.main,
-  position: 'absolute',
+  display: 'flex',
+  textDecoration: 'none',
   minWidth: 0,
-  top: 0,
-  left: '-36px',
   height: 32,
-  width: 32,
+  width: 'auto',
+  marginBottom: 16,
   '& svg': {
     fontSize: 32,
   },
