@@ -67,7 +67,7 @@ const DataVisualizationForParticipant = () => {
 
   return (
     <StyledContainer>
-      <StyledTitle variant="h2">Tasks</StyledTitle>
+      {chartConfigs.length > 0 && <StyledTitle variant="h2">Tasks</StyledTitle>}
       {chartConfigs.map((cfg) => (
         <React.Fragment key={cfg.type}>
           <DataVisualizationTableWrapper

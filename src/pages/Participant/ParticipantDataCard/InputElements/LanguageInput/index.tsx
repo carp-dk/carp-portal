@@ -19,7 +19,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
   return (
     <FormControl fullWidth>
       <Stack direction="row" gap={2}>
-        <div>
+        <div style={{ width: '100%' }}>
           <Autocomplete
             options={Object.keys(languageLabels)}
             value={formik.values.language.languageCode || ''}
@@ -132,7 +132,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
           disabled={!editing}
           type="text"
           name="language.displayName"
-          label="Region"
+          label="Display Name"
           fullWidth
           error={
             getIn(formik.touched, 'language.displayName') &&
