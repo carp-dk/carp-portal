@@ -445,7 +445,6 @@ export const useDownloadSummary = () => {
         studyId,
         exportId,
       });
-      // @ts-expect-error: response.data is a Blob
       const blob = new Blob([response.data], { type: 'application/zip' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');

@@ -223,28 +223,43 @@ const StudyData = () => {
           name="protocolId"
           value={studyProtocolFormik.values.protocolId}
           onChange={handleProtocolChange}
+          MenuProps={{
+            slotProps: {
+              paper: {
+                sx: {
+                  maxHeight: 400,
+                },
+              },
+            },
+          }}
         >
-          {protocols.map((protocol) => (
-            <MenuItem
-              key={protocol.id.stringRepresentation}
-              value={protocol.id.stringRepresentation}
-            >
-              <Stack
-                width="100%"
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                spacing={2}
+          {protocols
+            .toSorted(
+              (a, b) =>
+                b.createdOn.toEpochMilliseconds() -
+                a.createdOn.toEpochMilliseconds(),
+            )
+            .map((protocol) => (
+              <MenuItem
+                key={protocol.id.stringRepresentation}
+                value={protocol.id.stringRepresentation}
               >
-                <Typography width={'65%'} noWrap>
-                  {protocol.name}
-                </Typography>
-                <Typography variant="caption">
-                  {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-                </Typography>
-              </Stack>
-            </MenuItem>
-          ))}
+                <Stack
+                  width="100%"
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                >
+                  <Typography width={'65%'} noWrap>
+                    {protocol.name}
+                  </Typography>
+                  <Typography variant="caption">
+                    {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                  </Typography>
+                </Stack>
+              </MenuItem>
+            ))}
         </Select>
       )}
     </StyledCard>
