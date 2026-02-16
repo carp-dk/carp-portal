@@ -217,6 +217,12 @@ const ParticipantsTable = ({
           children: 'Error loading data',
         }
       : undefined,
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: row.getToggleSelectedHandler(),
+      sx: {
+        cursor: 'pointer',
+      },
+    }),
   });
 
   return (
