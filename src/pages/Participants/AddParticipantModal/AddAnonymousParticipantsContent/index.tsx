@@ -144,14 +144,14 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
 
     if (globalThis.location.host.includes('localhost')) {
       setPreDefinedUriMap({
-        [studyAppClientName]: `https://app.dev.carp.dk/anonymous`,
+        [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
         [icatClientName]: `http://localhost:3000/icat`,
       });
       return;
     }
 
     setPreDefinedUriMap({
-      [studyAppClientName]: `https://app.${globalThis.location.host}/anonymous`,
+      [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
       [icatClientName]: `http://${globalThis.location.host}/icat`,
     });
   }, [redirectURIs]);
