@@ -173,6 +173,45 @@ const occupationValidationSchema = yup
     },
   );
 
+const handedOutDeviceValidationSchema = yup
+  .object({
+    handed_out_device: yup.object({
+      devices: yup.array().of(
+        yup.object({
+          deviceId: yup.string(),
+          deviceType: yup.string(),
+          handedOutAt: yup.date(),
+          notes: yup.string(),
+        }),
+      ),
+    }),
+  })
+  .test(
+    'conditional-required',
+    'Device ID is required when Device Type, Handed Out At or Notes are set',
+    (value, schema) => {
+      const {
+        handed_out_device: { devices },
+      } = value;
+
+      if (devices && devices.length > 0) {
+        for (const device of devices) {
+          if (
+            (device.deviceType || device.handedOutAt || device.notes) &&
+            !device.deviceId
+          ) {
+            return schema.createError({
+              path: `handed_out_device.devices.${devices.indexOf(device)}.deviceId`,
+              message: 'Device ID is required when other fields are set',
+            });
+          }
+        }
+      }
+
+      return true;
+    },
+  );
+
 const getParticipantDataFormik = (
   participantData: ExpectedParticipantData[] | undefined,
   startingData: Data[],
@@ -229,6 +268,10 @@ const getParticipantDataFormik = (
       level: '',
       details: '',
     },
+    handed_out_device: {
+      __type: '',
+      devices: [],
+    },
   };
 
   if (participantData && participantData.length !== 0) {
@@ -270,6 +313,11 @@ const getParticipantDataFormik = (
         case 'occupation':
           validationSchema = validationSchema.concat(
             occupationValidationSchema,
+          );
+          break;
+        case 'handed_out_device':
+          validationSchema = validationSchema.concat(
+            handedOutDeviceValidationSchema,
           );
           break;
         default:

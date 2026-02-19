@@ -11,6 +11,7 @@ const enUS: { [key: string]: string } = {
   language: 'Preferred Language',
   occupation: 'Occupation',
   educational_degree: 'Educational Degree',
+  handed_out_device: 'Handed Out Devices',
 };
 
 const getInputDataName = (key: string): string => {

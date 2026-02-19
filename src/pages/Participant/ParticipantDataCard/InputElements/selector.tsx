@@ -3,6 +3,7 @@ import AddressInput from './AddressInput';
 import DiagnosisInput from './DiagnosisInput';
 import EducationalDegreeInput from './EducationalDegreeInput';
 import FullNameInput from './FullNameInput';
+import HandedOutDevicesInput from './HandedOutDevicesInput';
 import LanguageInput from './LanguageInput';
 import NoteInput from './NoteInput';
 import OccupationInput from './OccupationInput';
@@ -36,6 +37,8 @@ const getInputElement = (
       return <EducationalDegreeInput formik={formik} editing={editing} />;
     case 'onboarding_researcher':
       return <OnboardingResearcherInput formik={formik} editing={editing} />;
+    case 'handed_out_device':
+      return <HandedOutDevicesInput formik={formik} editing={editing} />;
     default:
       console.error(`No input element found for ${name}`);
       return null;
