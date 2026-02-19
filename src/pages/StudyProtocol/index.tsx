@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import LoadingLandingPage from '@Components/Layout/LoadingLandingPage';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';

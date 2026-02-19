@@ -193,7 +193,7 @@ export const useResearchers = (studyId: string) => {
 };
 
 export const useResearcherAssistants = (studyId: string) => {
-  return useQuery<User[], CarpServiceError, User[], any>({
+  return useQuery<User[], CarpServiceError>({
     queryFn: async () => {
       return carpApi.study.researchers.getStudyResearchAssistants({
         studyId,

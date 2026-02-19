@@ -25,7 +25,7 @@ import Instant = kotlinx.datetime.Instant;
 const Status = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
-  let currentStudyStatus: 'Draft' | 'Ready' | 'Live' = 'Draft';
+  let currentStudyStatus: 'Draft' | 'Ready' | 'Live';
   const {
     data: studyStatus,
     isLoading: studyStatusIsLoading,

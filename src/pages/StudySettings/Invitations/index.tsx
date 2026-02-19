@@ -38,7 +38,7 @@ const Invitations = () => {
     },
     validationSchema: studyInvitationValidationSchema,
     onSubmit: (values) => {
-      let parsedApplicaitonData = null;
+      let parsedApplicaitonData;
       try {
         parsedApplicaitonData = JSON.parse(
           studyDetails?.invitation.applicationData,

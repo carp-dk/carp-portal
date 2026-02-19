@@ -24,7 +24,7 @@ export const useInviteResearcher = () => {
 export const useCurrentUser = () => {
   const auth = useAuth();
 
-  return useQuery<User, CarpServiceError, User, any>({
+  return useQuery<User, CarpServiceError>({
     queryKey: ['currentUser'],
     queryFn: () => {
       const user = parseUser(getUser()?.access_token);

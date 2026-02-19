@@ -10,7 +10,7 @@ type StatusCellProps = {
 
 const StatusCell = ({ cell }: StatusCellProps) => {
   const { status } = cell.row.original;
-  let statusText = '';
+  let statusText;
   switch (status) {
     case 'AVAILABLE':
       statusText = 'Created';

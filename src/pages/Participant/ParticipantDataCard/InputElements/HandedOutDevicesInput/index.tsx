@@ -11,7 +11,6 @@ type Props = {
 };
 
 const HandedOutDevicesInput = ({ formik, editing }: Props) => {
-  console.log('Rendering HandedOutDevicesInput with values:', formik);
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
       <FormControl fullWidth>
