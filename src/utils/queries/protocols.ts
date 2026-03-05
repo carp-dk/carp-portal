@@ -4,6 +4,7 @@ import { useSnackbar } from '@Utils/snackbar';
 import {
   CarpServiceError,
   LatestProtocol,
+  ProtocolVersion,
   StudyProtocol,
   StudyProtocolSnapshot,
 } from '@carp-dk/client';
@@ -107,5 +108,19 @@ export const useUpdateProtocol = (originalProtocolId: string) => {
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
     },
+  });
+};
+
+export const useGetVersionHistory = (protocolId: string) => {
+  return useQuery<ProtocolVersion[], CarpServiceError>({
+    queryFn: async () => carpApi.protocols.getVersionHistory({ protocolId }),
+    queryKey: ['protocolVersionHistory', protocolId],
+  });
+};
+
+export const useGetByVersion = (protocolId: string, versionTag: string) => {
+  return useQuery<StudyProtocolSnapshot, CarpServiceError>({
+    queryFn: async () => carpApi.protocols.getBy({ protocolId, versionTag }),
+    queryKey: ['protocolByVersion', protocolId, versionTag],
   });
 };
