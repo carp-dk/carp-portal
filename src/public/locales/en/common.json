@@ -1,4 +1,6 @@
 {
+  "sign_out": "Sign out",
+  "about": "About",
   "owner_id": "Owner ID: {{id}}",
   "study_id": "Study ID: {{id}}",
   "deployment_id": "Deployment ID: {{id}}",

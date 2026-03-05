@@ -1,5 +1,5 @@
-import { FormLabel, Skeleton } from "@mui/material";
-import { Heading, StyledCard, Subheading } from "../styles";
+import { FormLabel, Skeleton } from '@mui/material';
+import { Heading, StyledCard, Subheading } from '../styles';
 
 const StudySetupSkeleton = () => {
   return (

@@ -1,7 +1,0 @@
-node_modules/*
-build
-*.test.tsx
-vite.config.ts
-env.d.ts
-app.js
-.eslintrc.js

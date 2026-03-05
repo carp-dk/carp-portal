@@ -1,11 +1,23 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import { useLatestProtocol } from "@Utils/queries/protocols";
-import { downloadProtocolAsJSONFile, formatDateTime } from "@Utils/utility";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { Skeleton, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import AddProtocolVersionModal from "../AddProtocolVersionModal";
+import CopyButton from '@Components/Buttons/CopyButton';
+import {
+  useGetByVersion,
+  useGetVersionHistory,
+} from '@Utils/queries/protocols';
+import { downloadProtocolAsJSONFile, formatDateTime } from '@Utils/utility';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Skeleton,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import AddProtocolVersionModal from '../AddProtocolVersionModal';
 import {
   AddVersionButton,
   CreationInfoContainer,
@@ -20,10 +32,10 @@ import {
   StyledContainer,
   StyledDivider,
   VersionContainer,
-} from "./styles";
+} from './styles';
 
 const ProtocolInfoSkeleton: React.FC = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   return (
     <StyledContainer>
       <Left>
@@ -59,12 +71,19 @@ const ProtocolInfoSkeleton: React.FC = () => {
 };
 
 const ProtocolInfo = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   const { id: protocolId } = useParams();
-  const { data: protocol, isLoading: protocolLoading } =
-    useLatestProtocol(protocolId);
+  const navigate = useNavigate();
+  const [version, setVersion] = useState(null);
+  const { data: protocol, isLoading: protocolLoading } = useGetByVersion(
+    protocolId,
+    version,
+  );
+  const { data: versions, isLoading: versionsLoading } =
+    useGetVersionHistory(protocolId);
   const [modalOpen, setModalOpen] = useState(false);
-  if (protocolLoading) return <ProtocolInfoSkeleton />;
+  if (protocolLoading || versionsLoading || !protocol)
+    return <ProtocolInfoSkeleton />;
   return (
     <>
       <DownloadButtonContainer>
@@ -73,7 +92,7 @@ const ProtocolInfo = () => {
           color="primary"
           startIcon={<FileDownloadOutlinedIcon />}
           onClick={() => {
-            downloadProtocolAsJSONFile(protocol.snapshot);
+            downloadProtocolAsJSONFile(protocol);
           }}
         >
           Export Protocol
@@ -89,9 +108,47 @@ const ProtocolInfo = () => {
             Add version
           </AddVersionButton>
           <VersionContainer>
-            <ProtocolVersion variant="h4">
-              Current version: {protocol.versionTag}
-            </ProtocolVersion>
+            <Stack direction="row" gap={2} alignItems="center">
+              <ProtocolVersion variant="h4">
+                Current version: {version ?? versions[0].tag}
+              </ProtocolVersion>
+              <FormControl sx={{ width: '175px' }}>
+                <InputLabel
+                  id="protocol-version-select"
+                  sx={{
+                    top: '50%',
+                    transform: 'translate(14px, -50%) scale(1)',
+                    '&.MuiInputLabel-shrink': {
+                      top: 0,
+                      transform: 'translate(14px, -9px) scale(0.75)',
+                    },
+                  }}
+                >
+                  Protocol version
+                </InputLabel>
+                <Select
+                  labelId="protocol-version-select"
+                  size="small"
+                  label="Protocol version"
+                  value={version}
+                  onChange={(e) => {
+                    setVersion(
+                      e.target.value === '' ? undefined : e.target.value,
+                    );
+                    navigate(
+                      `/protocols/${protocolId}?version=${e.target.value}`,
+                    );
+                  }}
+                  sx={{ maxHeight: '32px' }}
+                >
+                  {versions.map((version) => (
+                    <MenuItem key={version.tag} value={version.tag}>
+                      {version.tag}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
             <Typography variant="h6">
               Update the Protocol data by adding a new version
             </Typography>
@@ -103,13 +160,15 @@ const ProtocolInfo = () => {
             <CreationInfoContainer>
               <Typography variant="h6">Created on</Typography>
               <Typography variant="h6">
-                {formatDateTime(protocol.firstVersionCreatedDate)}
+                {formatDateTime(
+                  versions[versions.length - 1].date.toEpochMilliseconds(),
+                )}
               </Typography>
             </CreationInfoContainer>
             <CreationInfoContainer>
               <Typography variant="h6">Last version</Typography>
               <Typography variant="h6">
-                {formatDateTime(protocol.lastVersionCreatedDate)}
+                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
               </Typography>
             </CreationInfoContainer>
           </InnerLeftContainer>
@@ -118,20 +177,20 @@ const ProtocolInfo = () => {
             <IDContainer>
               <Typography variant="h6">Owner ID:</Typography>
               <Typography variant="h6">
-                {protocol.snapshot.ownerId.stringRepresentation}
+                {protocol.ownerId.stringRepresentation}
               </Typography>
               <CopyButton
-                textToCopy={protocol.snapshot.ownerId.stringRepresentation}
+                textToCopy={protocol.ownerId.stringRepresentation}
                 idType="Owner"
               />
             </IDContainer>
             <IDContainer>
               <Typography variant="h6">Protocol ID:</Typography>
               <Typography variant="h6">
-                {protocol.snapshot.id.stringRepresentation}
+                {protocol.id.stringRepresentation ?? 'N/A'}
               </Typography>
               <CopyButton
-                textToCopy={protocol.snapshot.id.stringRepresentation}
+                textToCopy={protocol.id.stringRepresentation ?? ''}
                 idType="Protocol"
               />
             </IDContainer>
@@ -141,7 +200,7 @@ const ProtocolInfo = () => {
       <AddProtocolVersionModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        originalProtocolId={protocol.snapshot.id.stringRepresentation}
+        originalProtocolId={protocol.id.stringRepresentation ?? ''}
       />
     </>
   );

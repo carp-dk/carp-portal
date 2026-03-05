@@ -1,7 +1,12 @@
-import SortingButton from "@Components/SortingButton";
-import { useProtocols } from "@Utils/queries/protocols";
-import { formatDateTime, getRandomNumber } from "@Utils/utility";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SortingButton from '@Components/SortingButton';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { useProtocols } from '@Utils/queries/protocols';
+import {
+  formatDateTime,
+  getRandomNumber,
+  isUserResearcher,
+} from '@Utils/utility';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import {
   Skeleton,
   Table,
@@ -9,9 +14,9 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-} from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AddProtocolButton,
   HeaderCellContainer,
@@ -22,7 +27,7 @@ import {
   StyledCard,
   StyledTableRow,
   TertiaryCellText,
-} from "./styles";
+} from './styles';
 
 const SkeletonTableRow = () => {
   return (
@@ -47,14 +52,15 @@ interface Props {
 const ProtocolsTable = ({ openModal }: Props) => {
   const navigate = useNavigate();
   const { data: protocols, isLoading: protocolsLoading } = useProtocols();
+  const { data: user } = useCurrentUser();
 
   // State for sorting
   const [sortOrder, setSortOrder] = useState<{
-    field: "name" | "createdOn";
+    field: 'name' | 'createdOn';
     ascending: boolean;
-  }>({ field: "createdOn", ascending: false });
+  }>({ field: 'createdOn', ascending: false });
 
-  const toggleSortOrder = (field: "name" | "createdOn") => {
+  const toggleSortOrder = (field: 'name' | 'createdOn') => {
     setSortOrder((prevSortOrder) => ({
       field,
       ascending:
@@ -65,9 +71,9 @@ const ProtocolsTable = ({ openModal }: Props) => {
   const sortedProtocols =
     protocolsLoading || !protocols
       ? []
-      : protocols.sort((a, b) => {
+      : protocols.toSorted((a, b) => {
           const compareResult =
-            sortOrder.field === "name"
+            sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
               : a.createdOn.toEpochMilliseconds() -
                 b.createdOn.toEpochMilliseconds();
@@ -86,12 +92,14 @@ const ProtocolsTable = ({ openModal }: Props) => {
     return description;
   };
 
+  const isResearcher = isUserResearcher(user);
+
   if (!protocols) return null;
   return (
     <StyledCard>
-      <TableContainer sx={{ paddingX: "32px", height: "70vh" }}>
+      <TableContainer sx={{ paddingX: '32px', height: '70vh' }}>
         <Table
-          style={{ tableLayout: "fixed" }}
+          style={{ tableLayout: 'fixed' }}
           stickyHeader
           aria-label="sticky table"
         >
@@ -146,7 +154,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
                     <SecondaryCellText variant="h5">
                       {protocol.description
                         ? formatDescription(protocol.description)
-                        : "—"}
+                        : '—'}
                     </SecondaryCellText>
                   </TableCell>
                   <TableCell>
@@ -160,9 +168,11 @@ const ProtocolsTable = ({ openModal }: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <AddProtocolButton sx={{ boxShadow: 2 }} onClick={openModal}>
-        <AddRoundedIcon />
-      </AddProtocolButton>
+      {isResearcher && (
+        <AddProtocolButton sx={{ boxShadow: 2 }} onClick={openModal}>
+          <AddRoundedIcon />
+        </AddProtocolButton>
+      )}
     </StyledCard>
   );
 };

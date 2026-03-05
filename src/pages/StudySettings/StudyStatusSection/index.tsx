@@ -1,20 +1,21 @@
-import CopyButton from "@Components/Buttons/CopyButton";
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import DeleteConfirmationModal from "@Components/DeleteConfirmationModal";
+import CopyButton from '@Components/Buttons/CopyButton';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import { useCurrentUser } from '@Utils/queries/auth';
 import {
   useDeleteStudy,
   useSetStudyLive,
   useStudyDetails,
   useStudyStatus,
-} from "@Utils/queries/studies";
-import { formatDateTime } from "@Utils/utility";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
-import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import { Skeleton, Typography, useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { StudyStatus } from "@carp-dk/client";
-import StartStudyConfirmationModal from "../StartStudyConfirmationModal";
+} from '@Utils/queries/studies';
+import { formatDateTime } from '@Utils/utility';
+import { StudyStatus } from '@carp-dk/client';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import { Skeleton, Typography, useMediaQuery } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import StartStudyConfirmationModal from '../StartStudyConfirmationModal';
 import {
   Container,
   CreationInfoContainer,
@@ -31,10 +32,10 @@ import {
   StatusName,
   StyledDivider,
   StyledStatusDot,
-} from "./styles";
+} from './styles';
 
 const StudyStatusSectionSkeleton: React.FC = () => {
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   return (
     <Container>
       <Left>
@@ -83,15 +84,14 @@ const StudyStatusSectionSkeleton: React.FC = () => {
 
 const StudyStatusSection: React.FC = () => {
   const draftStudyStatusDescription =
-    "In order to go live study you need to fill out all the required data and invitation.";
+    'In order to go live study you need to fill out all the required data and invitation.';
   const readyStudyStatusDescription =
-    "Once the study is live you will not be able to change the study settings.";
-  const liveStudyStatusDescription = "";
-  let currentStudyStatus: "Draft" | "Ready" | "Live" = "Draft";
-  let currentStudyStatusDescription = "";
+    'Once the study is live you will not be able to change the study settings.';
+  let currentStudyStatus: 'Draft' | 'Ready' | 'Live';
+  let currentStudyStatusDescription = '';
 
   const navigate = useNavigate();
-  const isDownMd = useMediaQuery("(max-width:1250px)");
+  const isDownMd = useMediaQuery('(max-width:1250px)');
   const { id: studyId } = useParams();
   const {
     data: studyStatus,
@@ -103,6 +103,7 @@ const StudyStatusSection: React.FC = () => {
     isLoading: studyDetailsIsLoading,
     error: studyDetailsError,
   } = useStudyDetails(studyId);
+  const { data: user, isLoading: userLoading } = useCurrentUser();
   const setStudyLive = useSetStudyLive();
   const deleteStudy = useDeleteStudy();
   const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
@@ -112,11 +113,11 @@ const StudyStatusSection: React.FC = () => {
 
   useEffect(() => {
     if (deleteStudy.isSuccess) {
-      navigate("/studies");
+      navigate('/studies');
     }
   }, [deleteStudy.isSuccess]);
 
-  if (studyStatusIsLoading || studyDetailsIsLoading) {
+  if (studyStatusIsLoading || studyDetailsIsLoading || userLoading) {
     return <StudyStatusSectionSkeleton />;
   }
 
@@ -131,20 +132,19 @@ const StudyStatusSection: React.FC = () => {
 
   if (studyStatus instanceof StudyStatus.Configuring) {
     if (studyStatus.canGoLive) {
-      currentStudyStatus = "Ready";
+      currentStudyStatus = 'Ready';
       currentStudyStatusDescription = readyStudyStatusDescription;
     } else {
-      currentStudyStatus = "Draft";
+      currentStudyStatus = 'Draft';
       currentStudyStatusDescription = draftStudyStatusDescription;
     }
   } else {
-    currentStudyStatus = "Live";
-    currentStudyStatusDescription = liveStudyStatusDescription;
+    currentStudyStatus = 'Live';
   }
 
   const handleDeleteStudy = () => {
     setOpenDeleteConfirmationModal(false);
-    deleteStudy.mutateAsync(studyId).then(() => navigate("/studies"));
+    deleteStudy.mutateAsync(studyId).then(() => navigate('/studies'));
   };
 
   const handleStartStudy = () => {
@@ -156,13 +156,20 @@ const StudyStatusSection: React.FC = () => {
     open: openDeleteConfirmationModal,
     onClose: () => setOpenDeleteConfirmationModal(false),
     onConfirm: handleDeleteStudy,
-    title: "Delete Study",
+    title: 'Delete Study',
     description:
-      "The study will be permanently deleted and will no longer appear on your Study page.",
-    boldText: "You can not undo this action.",
+      'The study will be permanently deleted and will no longer appear on your Study page.',
+    boldText: 'You can not undo this action.',
     checkboxLabel: "I'm sure I want to delete it",
-    actionButtonLabel: "Delete",
+    actionButtonLabel: 'Delete',
   };
+
+  const isStudyOwner =
+    studyDetails?.ownerId?.stringRepresentation &&
+    user?.accountId?.stringRepresentation &&
+    studyDetails?.ownerId?.stringRepresentation ==
+      user?.accountId?.stringRepresentation;
+
   return (
     <Container>
       <Left>
@@ -174,7 +181,7 @@ const StudyStatusSection: React.FC = () => {
             </StatusName>
           </Status>
           <GoLiveButton
-            disabled={currentStudyStatus !== "Ready"}
+            disabled={currentStudyStatus !== 'Ready'}
             onClick={() => setOpenStartStudyConfirmationModal(true)}
           >
             <PlayArrowRoundedIcon fontSize="small" />
@@ -194,12 +201,14 @@ const StudyStatusSection: React.FC = () => {
               {formatDateTime(studyStatus.createdOn.toEpochMilliseconds())}
             </Typography>
           </CreationInfoContainer>
-          <DeleteStudyButton
-            onClick={() => setOpenDeleteConfirmationModal(true)}
-          >
-            <DeleteForeverRoundedIcon fontSize="small" />
-            <Typography variant="h5">Delete Study</Typography>
-          </DeleteStudyButton>
+          {isStudyOwner && (
+            <DeleteStudyButton
+              onClick={() => setOpenDeleteConfirmationModal(true)}
+            >
+              <DeleteForeverRoundedIcon fontSize="small" />
+              <Typography variant="h5">Delete Study</Typography>
+            </DeleteStudyButton>
+          )}
         </InnerLeftContainer>
         {!isDownMd && <StyledDivider />}
         <IDsContainer>

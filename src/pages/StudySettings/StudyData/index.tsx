@@ -1,34 +1,36 @@
-import CarpErrorCardComponent from "@Components/CarpErrorCardComponent";
-import { useProtocols } from "@Utils/queries/protocols";
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import { useProtocols } from '@Utils/queries/protocols';
 import {
   useSetStudyDetails,
   useSetStudyProtocol,
   useStudyDetails,
   useStudyStatus,
-} from "@Utils/queries/studies";
+} from '@Utils/queries/studies';
+import { formatDateTime } from '@Utils/utility';
+import LinkIcon from '@mui/icons-material/Link';
 import {
   FormLabel,
+  InputAdornment,
   MenuItem,
   Select,
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import LinkIcon from "@mui/icons-material/Link";
-import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router";
-import * as yup from "yup";
-import { formatDateTime } from "@Utils/utility";
-import StudySetupSkeleton from "../StudySetupSkeleton";
+} from '@mui/material';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import * as yup from 'yup';
+import StudySetupSkeleton from '../StudySetupSkeleton';
 import {
   Heading,
   ProtocolInformation,
   StyledCard,
   Subheading,
-} from "../styles";
+} from '../styles';
 
 const studyDetailsValidationSchema = yup.object({
-  name: yup.string().required("Name is required"),
+  name: yup.string().required('Name is required'),
   description: yup.string(),
 });
 
@@ -59,8 +61,8 @@ const StudyData = () => {
 
   const studyDetailsFormik = useFormik({
     initialValues: {
-      name: studyDetails?.name ?? "",
-      description: studyDetails?.description ?? "",
+      name: studyDetails?.name ?? '',
+      description: studyDetails?.description ?? '',
     },
     validationSchema: studyDetailsValidationSchema,
     onSubmit: (values) => {
@@ -76,7 +78,7 @@ const StudyData = () => {
     initialValues: {
       protocolId: studyDetails?.protocolSnapshot
         ? studyDetails.protocolSnapshot.id
-        : "",
+        : '',
     },
     validationSchema: studyProtocolValidationSchema,
     onSubmit: (values) => {
@@ -86,6 +88,23 @@ const StudyData = () => {
       setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
     },
   });
+
+  useEffect(() => {
+    if (
+      studyDetails?.protocolSnapshot &&
+      protocols &&
+      studyStatus?.canSetStudyProtocol
+    ) {
+      const currentProtocol = protocols.find(
+        (protocol) =>
+          protocol.id.stringRepresentation ===
+          studyDetails.protocolSnapshot.id.stringRepresentation,
+      );
+      if (!currentProtocol) return;
+      if (studyDetails.protocolSnapshot.equals(currentProtocol)) return;
+      setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
+    }
+  }, [studyDetails, studyStatus, protocols]);
 
   const handleDetailsBlur = (e) => {
     studyDetailsFormik.handleBlur(e);
@@ -108,6 +127,8 @@ const StudyData = () => {
       />
     );
   }
+
+  const isProtocolSelectorEnabled = protocols && protocols.length > 0;
 
   return (
     <StyledCard elevation={2}>
@@ -162,34 +183,85 @@ const StudyData = () => {
           <LinkIcon sx={{ fontSize: 16 }} />
         </ProtocolInformation>
       </Stack>
-      <Select
-        disabled={!studyStatus.canSetStudyProtocol}
-        variant="outlined"
-        fullWidth
-        error={!!studyProtocolFormik.errors.protocolId}
-        name="protocolId"
-        value={studyProtocolFormik.values.protocolId}
-        onChange={handleProtocolChange}
-      >
-        {protocols?.map((protocol) => (
-          <MenuItem
-            key={protocol.id.stringRepresentation}
-            value={protocol.id.stringRepresentation}
-          >
-            <Stack
-              width="100%"
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography>{protocol.name}</Typography>
-              <Typography variant="caption">
-                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-              </Typography>
-            </Stack>
-          </MenuItem>
-        ))}
-      </Select>
+      {!isProtocolSelectorEnabled || !studyStatus.canSetStudyProtocol ? (
+        <TextField
+          variant="outlined"
+          fullWidth
+          disabled
+          sx={{ marginBottom: '8px' }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment
+                  position="start"
+                  sx={{ display: 'flex', width: '60%' }}
+                >
+                  <Typography noWrap>
+                    {studyDetails.protocolSnapshot?.name}
+                  </Typography>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end" sx={{ width: '35%' }}>
+                  <Typography variant="caption">
+                    {studyDetails.protocolSnapshot
+                      ? formatDateTime(
+                          studyDetails.protocolSnapshot?.createdOn.toEpochMilliseconds(),
+                        )
+                      : ''}
+                  </Typography>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      ) : (
+        <Select
+          variant="outlined"
+          fullWidth
+          error={!!studyProtocolFormik.errors.protocolId}
+          name="protocolId"
+          value={studyProtocolFormik.values.protocolId}
+          onChange={handleProtocolChange}
+          MenuProps={{
+            slotProps: {
+              paper: {
+                sx: {
+                  maxHeight: 400,
+                },
+              },
+            },
+          }}
+        >
+          {protocols
+            .toSorted(
+              (a, b) =>
+                b.createdOn.toEpochMilliseconds() -
+                a.createdOn.toEpochMilliseconds(),
+            )
+            .map((protocol) => (
+              <MenuItem
+                key={protocol.id.stringRepresentation}
+                value={protocol.id.stringRepresentation}
+              >
+                <Stack
+                  width="100%"
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                >
+                  <Typography width={'65%'} noWrap>
+                    {protocol.name}
+                  </Typography>
+                  <Typography variant="caption">
+                    {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                  </Typography>
+                </Stack>
+              </MenuItem>
+            ))}
+        </Select>
+      )}
     </StyledCard>
   );
 };

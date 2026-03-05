@@ -1,5 +1,7 @@
-import { useGenerateAnonymousAccounts } from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
+import { useRedirectURIs } from '@Utils/queries/auth';
+import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { patternToRegex } from '@Utils/utility';
 import {
   FormHelperText,
   FormLabel,
@@ -7,14 +9,15 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { enGB } from "date-fns/locale/en-GB";
-import { useFormik } from "formik";
-import { FormEvent, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
+} from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
+import { enGB } from 'date-fns/locale/en-GB';
+import { useFormik } from 'formik';
+import { FormEvent, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -24,10 +27,7 @@ import {
   ModalTitle,
   SecondaryCellText,
   Spinner,
-} from "../styles";
-import { useRedirectURIs } from "@Utils/queries/auth";
-import { addDays, endOfDay, startOfDay } from "date-fns";
-import { patternToRegex } from "@Utils/utility";
+} from '../styles';
 
 type Props = {
   open: boolean;
@@ -37,30 +37,29 @@ type Props = {
 const validationSchema = yup.object({
   numberOfParticipants: yup
     .number()
-    .required("Number of participants is required")
-    .min(1, "Number of participants must be at least 1")
-    .max(2500, "Number of participants must be at most 2500"),
+    .required('Number of participants is required')
+    .min(1, 'Number of participants must be at least 1')
+    .max(2500, 'Number of participants must be at most 2500'),
   expiryDate: yup
     .date()
-    .required("Expiry date is required")
+    .required('Expiry date is required')
     .min(
       addDays(startOfDay(new Date()), 1),
-      "Expiry date should be in the future"
+      'Expiry date should be in the future',
     ),
-  role: yup.string().required("Role is required"),
+  role: yup.string().required('Role is required'),
   redirectUri: yup
     .string()
-    .test("is-url", "Redirect URI must be a valid URL", (value) => {
+    .test('is-url', 'Redirect URI must be a valid URL', (value) => {
       try {
-        // eslint-disable-next-line no-new
         new URL(value);
       } catch {
         return false;
       }
       return true;
     })
-    .required("Redirect URI is required"),
-  clientId: yup.string().required("Application Type is required"),
+    .required('Redirect URI is required'),
+  clientId: yup.string().required('Application Type is required'),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
@@ -73,31 +72,36 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     useRedirectURIs();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
+  const [preDefinedUriMap, setPreDefinedUriMap] = useState({});
+  const [notMappedClientNames, setNotMappedClientNames] = useState<string[]>(
+    [],
+  );
+
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
       numberOfParticipants: 0,
       expiryDate: new Date(endOfDay(addDays(new Date(), 1))),
-      role: "",
-      redirectUri: "",
-      clientId: "",
+      role: '',
+      redirectUri: '',
+      clientId: '',
     },
     validationSchema,
     onSubmit: (values) => {
       if (
         !redirectURIs[values.clientId]?.some((uri) =>
-          patternToRegex(uri).test(values.redirectUri)
+          patternToRegex(uri).test(values.redirectUri),
         )
       ) {
         addAnonymousParticipantFormik.setFieldError(
-          "redirectUri",
-          "Redirect URI must contain one of the predefined URIs"
+          'redirectUri',
+          'Redirect URI must contain one of the predefined URIs',
         );
         return;
       }
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
-          (values.expiryDate.getTime() - new Date().getTime()) / 1000
+          (values.expiryDate.getTime() - Date.now()) / 1000,
         ),
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
@@ -123,6 +127,34 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       navigate(`/studies/${studyId}/export`);
     }
   }, [generateAnonymousAccounts.isSuccess]);
+
+  useEffect(() => {
+    if (!redirectURIs) return;
+    const studyAppClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('studies-app'),
+    );
+    const icatClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('icat'),
+    );
+    setNotMappedClientNames(
+      Object.keys(redirectURIs).filter(
+        (key) => key !== studyAppClientName && key !== icatClientName,
+      ),
+    );
+
+    if (globalThis.location.host.includes('localhost')) {
+      setPreDefinedUriMap({
+        [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
+        [icatClientName]: `http://localhost:3000/icat`,
+      });
+      return;
+    }
+
+    setPreDefinedUriMap({
+      [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
+      [icatClientName]: `http://${globalThis.location.host}/icat`,
+    });
+  }, [redirectURIs]);
 
   if (isStudyDetailsLoading || isRedirectURIsLoading) return null;
 
@@ -155,12 +187,12 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       </ModalDescription>
       <ModalContent>
         <form onSubmit={handleFormSubmit}>
-          <Grid container spacing={4} align-item="center">
+          <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
               <FormLabel required>Number of participants (max: 1000)</FormLabel>
               <TextField
                 autoFocus
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={
                   !!addAnonymousParticipantFormik.errors.numberOfParticipants
                 }
@@ -172,8 +204,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 }
                 onChange={(event) => {
                   const eventClone = event;
-                  if (parseInt(event.target.value, 10) < 1) {
-                    eventClone.target.value = "1";
+                  if (Number.parseInt(event.target.value, 10) < 1) {
+                    eventClone.target.value = '1';
                   }
                   addAnonymousParticipantFormik.handleChange(eventClone);
                 }}
@@ -188,7 +220,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
               <FormLabel required>Role</FormLabel>
               <TextField
                 select
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 variant="outlined"
                 id="role-select"
                 name="role"
@@ -220,8 +252,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 value={addAnonymousParticipantFormik.values.expiryDate}
                 onChange={(value) =>
                   addAnonymousParticipantFormik.setFieldValue(
-                    "expiryDate",
-                    value
+                    'expiryDate',
+                    value,
                   )
                 }
                 slotProps={{
@@ -236,16 +268,30 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 disablePast
               />
             </Grid>
-            <Grid size={{ xs: 6 }}>
+            <Grid
+              size={{
+                xs: !notMappedClientNames.includes(
+                  addAnonymousParticipantFormik.values.clientId,
+                )
+                  ? 12
+                  : 6,
+              }}
+            >
               <FormLabel required>Application Type</FormLabel>
               <Select
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={!!addAnonymousParticipantFormik.errors.clientId}
                 variant="outlined"
                 name="clientId"
                 type="url"
                 value={addAnonymousParticipantFormik.values.clientId}
-                onChange={addAnonymousParticipantFormik.handleChange}
+                onChange={async (value) => {
+                  await addAnonymousParticipantFormik.setFieldValue(
+                    'redirectUri',
+                    preDefinedUriMap[value.target.value] || '',
+                  );
+                  addAnonymousParticipantFormik.handleChange(value);
+                }}
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               >
                 {Object.keys(redirectURIs).map((uri) => (
@@ -261,10 +307,19 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                   </FormHelperText>
                 )}
             </Grid>
-            <Grid size={{ xs: 6 }}>
+            <Grid
+              size={{
+                xs: 6,
+              }}
+              hidden={
+                !notMappedClientNames.includes(
+                  addAnonymousParticipantFormik.values.clientId,
+                )
+              }
+            >
               <FormLabel required>Redirect URI</FormLabel>
               <TextField
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
                 error={!!addAnonymousParticipantFormik.errors.redirectUri}
                 variant="outlined"
                 name="redirectUri"

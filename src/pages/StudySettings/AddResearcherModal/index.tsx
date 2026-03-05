@@ -1,9 +1,9 @@
-import { FormLabel, Modal, TextField } from "@mui/material";
-import { useAddResearcherToStudy } from "@Utils/queries/studies";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import * as yup from "yup";
+import { FormLabel, Modal, TextField } from '@mui/material';
+import { useAddUserWithRole } from '@Utils/queries/studies';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import * as yup from 'yup';
 import {
   CancelButton,
   DoneButton,
@@ -12,7 +12,7 @@ import {
   ModalContent,
   ModalDescription,
   ModalTitle,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -20,20 +20,20 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  email: yup.string().required("Email is required"),
+  email: yup.string().required('Email is required'),
 });
 
 const AddResearcherModal = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
-  const addResearcher = useAddResearcherToStudy(studyId);
+  const addResearcher = useAddUserWithRole(studyId);
 
   const addResearcherFormik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema,
     onSubmit: (values) => {
-      addResearcher.mutate(values.email);
+      addResearcher.mutate({ email: values.email, role: 'RESEARCH_ASSISTANT' });
     },
   });
 

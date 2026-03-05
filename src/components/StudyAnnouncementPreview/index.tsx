@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import { formatDate } from "@Utils/utility";
+import { Button } from '@mui/material';
+import { formatDate } from '@Utils/utility';
 import {
   AnnouncementDate,
   AnnouncementHeader,
@@ -8,7 +8,7 @@ import {
   AnnouncementSubtitle,
   AnnouncementTitle,
   AnnouncementType,
-} from "./styles";
+} from './styles';
 
 type Props = {
   type: string;
@@ -22,8 +22,8 @@ type Props = {
 const extractHostname = (url: string) => {
   try {
     return new URL(url).hostname;
-  } catch (e) {
-    return "";
+  } catch {
+    return '';
   }
 };
 
@@ -53,7 +53,7 @@ const StudyAnnouncementPreview = ({
         <img src={file as string} alt="Announcement" />
       )}
       <AnnouncementTitle variant="h2">
-        {!title ? <i>No title yet</i> : title.trim()}
+        {title ? title.trim() : <i>No title yet</i>}
       </AnnouncementTitle>
       {subTitle && (
         <AnnouncementSubtitle variant="subtitle1">
@@ -61,7 +61,7 @@ const StudyAnnouncementPreview = ({
         </AnnouncementSubtitle>
       )}
       <AnnouncementMessage variant="body1">
-        {!message ? <i>No message yet</i> : message.trim()}
+        {message ? message.trim() : <i>No message yet</i>}
       </AnnouncementMessage>
       {url && extractHostname(url) && (
         <Button>View more ({extractHostname(url)})</Button>

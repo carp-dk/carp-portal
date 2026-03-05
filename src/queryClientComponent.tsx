@@ -1,11 +1,11 @@
-import carpApi from "@Utils/api/api";
-import { useSnackbar } from "@Utils/snackbar";
-import { getUser } from "@carp-dk/authentication-react";
-import { CarpServiceError } from "@carp-dk/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router";
+import carpApi from '@Utils/api/api';
+import { useSnackbar } from '@Utils/snackbar';
+import { getUser } from '@carp-dk/authentication-react';
+import { CarpServiceError } from '@carp-dk/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate } from 'react-router';
 
 let hasOngoingRefreshRequest = false;
 
@@ -25,6 +25,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
            *  We need to refresh the token to get the new claim.
            */
           retry: (failureCount, error) => {
+            // console.log(`Query failed with ${failureCount} failures.`);
             // if it's the first attempt at retrying and the status is 403, refresh the token
             if (
               failureCount === 0 &&
@@ -36,24 +37,25 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
 
               auth
                 .signinSilent()
-                .then(() => {
+                .then((user) => {
                   // we invalidate all active queries to let them refetch automatically
-                  if (!getUser()) {
+                  if (!user) {
                     queryClient.clear();
                     auth.signoutSilent();
-                    navigate("/", { replace: true });
+                    navigate('/', { replace: true });
 
                     return false;
                   }
-                  carpApi.setAuthToken(getUser()?.access_token);
-                  queryClient.invalidateQueries({ refetchType: "active" });
+                  carpApi.setAuthToken(user?.access_token);
+                  queryClient.invalidateQueries({ refetchType: 'active' });
                   return true;
                 })
                 .catch(() => {
+                  // console.log(`${failureCount} token refresing`);
                   // could not refresh token for some reason
                   queryClient.clear();
                   auth.signoutSilent();
-                  navigate("/", { replace: true });
+                  navigate('/', { replace: true });
 
                   return false;
                 })
@@ -66,17 +68,26 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
             ) {
               // we already tried refreshing the token. the user really shouldn't be able to access this
               // throw them back to the homepage
-              setSnackbarError("You do not have access to this resource.");
-              navigate("/", { replace: true });
+              setSnackbarError('You do not have access to this resource.');
+              navigate('/', { replace: true });
             }
             if (
               failureCount === 1 &&
               (error as unknown as CarpServiceError).code === 401
             ) {
+              console.log('Unauthorized access - redirecting to home page');
               setSnackbarError(
-                "You are not authorized to access this resource.",
+                'You are not authorized to access this resource.',
               );
-              navigate("/", { replace: true });
+              navigate('/', { replace: true });
+            }
+
+            if ((error as unknown as CarpServiceError).code === 400) {
+              console.log(
+                'Bad request:',
+                (error as unknown as CarpServiceError).message,
+              );
+              return false;
             }
             return failureCount < 3;
           },

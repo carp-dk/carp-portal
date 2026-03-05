@@ -1,37 +1,40 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+// @ts-check
+import eslintReact from '@eslint-react/eslint-plugin';
+import eslintJs from '@eslint/js';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-export default [
+export default tseslint.config(
   {
-    ignores: ["node_modules/*", "dist", "non_npm_dependencies/*"],
+    ignores: [
+      'node_modules/',
+      'non_npm_dependencies/',
+      'dist/',
+      'vite.config.ts',
+    ],
   },
-  ...compat.extends("@carp-dk/eslint-config"),
   {
+    files: ['**/*.ts', '**/*.tsx'],
+
+    extends: [
+      prettierRecommended,
+      eslintJs.configs.recommended,
+      tseslint.configs.recommended,
+      eslintReact.configs['recommended-typescript'],
+    ],
+
     languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: "module",
-
+      parser: tseslint.parser,
       parserOptions: {
-        project: "./tsconfig.json",
-
-        ecmaFeatures: {
-          jsx: true,
-        },
-
-        tsconfigRootDir: __dirname,
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
+
+    rules: {
+      '@eslint-react/no-missing-key': 'error',
+      '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
+      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+    },
   },
-];
+);

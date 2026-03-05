@@ -1,16 +1,16 @@
-import GeneratedAccountLabel from "@Components/GeneratedAccountLabel";
+import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import {
   useInviteParticipants,
   useParticipants,
-} from "@Utils/queries/participants";
-import { useStudyDetails } from "@Utils/queries/studies";
-import { getRandomNumber } from "@Utils/utility";
+} from '@Utils/queries/participants';
+import { useStudyDetails } from '@Utils/queries/studies';
+import { getRandomNumber } from '@Utils/utility';
 import {
   EmailAccountIdentity,
   ParticipantAccount,
   ParticipantWithRoles,
   UsernameAccountIdentity,
-} from "@carp-dk/client";
+} from '@carp-dk/client';
 import {
   FormControl,
   MenuItem,
@@ -21,10 +21,10 @@ import {
   TableBody,
   TableCell,
   TableHead,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import {
   CancelButton,
   DoneButton,
@@ -43,7 +43,7 @@ import {
   StyledSelect,
   StyledTableContainer,
   StyledTableRow,
-} from "./styles";
+} from './styles';
 
 type Props = {
   open: boolean;
@@ -84,22 +84,16 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     const participantsToAddRows = participants.filter((participant) =>
       participantIdentifiers.includes(
         (participant.accountIdentity instanceof EmailAccountIdentity &&
-          (
-            participant.accountIdentity as EmailAccountIdentity
-          ).emailAddress.address.toLowerCase()) ||
+          participant.accountIdentity.emailAddress.address.toLowerCase()) ||
           (participant.accountIdentity instanceof UsernameAccountIdentity &&
-            (
-              participant.accountIdentity as UsernameAccountIdentity
-            ).username.name.toLowerCase()),
+            participant.accountIdentity.username.name.toLowerCase()),
       ),
     );
     const participantsWithRoles: ParticipantWithRoles[] =
       participantsToAddRows.map((participant) => {
         const identity =
           participant.accountIdentity instanceof EmailAccountIdentity
-            ? (
-                participant.accountIdentity as EmailAccountIdentity
-              ).emailAddress.address.toLowerCase()
+            ? participant.accountIdentity.emailAddress.address.toLowerCase()
             : (
                 participant.accountIdentity as UsernameAccountIdentity
               ).username.name.toLowerCase();
@@ -140,7 +134,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
           <ModalContent>
             <StyledTableContainer>
               <Table
-                style={{ tableLayout: "fixed" }}
+                style={{ tableLayout: 'fixed' }}
                 stickyHeader
                 aria-label="sticky table"
               >
@@ -189,13 +183,13 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                             <TableCell>
                               <PrimaryCellText variant="h5">
                                 {participant.email ? (
-                                  `${participant.firstName ?? ""} ${participant.lastName ?? ""}`
+                                  `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
                                 ) : (
                                   <GeneratedAccountLabel />
                                 )}
                               </PrimaryCellText>
                             </TableCell>
-                            <TableCell sx={{ position: "relative" }}>
+                            <TableCell sx={{ position: 'relative' }}>
                               <FormControl fullWidth>
                                 <StyledSelect
                                   labelId="role-select-label"
@@ -203,7 +197,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                                   value={
                                     participantDeviceRoleNames[
                                       participant.email ?? participant.username
-                                    ] || ""
+                                    ] || ''
                                   }
                                   onChange={(event: SelectChangeEvent) =>
                                     handleRoleChange(

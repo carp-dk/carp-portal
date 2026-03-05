@@ -1,5 +1,5 @@
-import { ReactElement } from "react";
-import { useAuth } from "react-oidc-context";
+import { ReactElement } from 'react';
+import { useAuth } from 'react-oidc-context';
 
 interface ProtectedRouteProps {
   children: ReactElement;
@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (!auth.isAuthenticated) {
     auth.signinRedirect({
-      redirectMethod: "replace",
+      redirectMethod: 'replace',
     });
   }
 
