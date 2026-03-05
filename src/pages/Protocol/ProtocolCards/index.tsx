@@ -1,11 +1,11 @@
 import getInputDataName from '@Assets/inputTypeNames';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useLatestProtocol } from '@Utils/queries/protocols';
+import { useGetByVersion } from '@Utils/queries/protocols';
 import { Connection } from '@Utils/types';
 import { getRandomNumber } from '@Utils/utility';
 import carpCommon from '@cachet/carp-common';
 import { Skeleton, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import DeviceDropdown from '../DeviceDropdown';
 import {
@@ -56,11 +56,13 @@ const ProtocolCardSkeleton: React.FC = () => {
 
 const ProtocolCards = () => {
   const { id: protocolId } = useParams();
+  const [searchParams] = useSearchParams();
+  const version = searchParams.get('version');
   const {
     data: protocol,
     isLoading: protocolLoading,
     error: protocolError,
-  } = useLatestProtocol(protocolId);
+  } = useGetByVersion(protocolId, version);
   if (protocolLoading)
     return (
       <StyledContainer>
@@ -84,21 +86,21 @@ const ProtocolCards = () => {
     <StyledContainer>
       <StyledNameCard elevation={2}>
         <CardTitle variant="h2">Name</CardTitle>
-        <ProtocolName variant="h3">{protocol.snapshot.name}</ProtocolName>
+        <ProtocolName variant="h3">{protocol.name}</ProtocolName>
         <CardTitle variant="h2">Description</CardTitle>
         <ProtocolDescription variant="h4">
-          {protocol.snapshot.description}
+          {protocol.description}
         </ProtocolDescription>
       </StyledNameCard>
-      {protocol.snapshot.primaryDevices.size() > 0 &&
-        protocol.snapshot.connections.size() > 0 && (
+      {protocol.primaryDevices.size() > 0 &&
+        protocol.connections.size() > 0 && (
           <StyledCard elevation={2}>
             <CardTitle variant="h2">Devices</CardTitle>
-            {protocol.snapshot.primaryDevices.toArray().map((device) => {
+            {protocol.primaryDevices.toArray().map((device) => {
               return (
                 <DeviceDropdown
-                  connectedDevices={protocol.snapshot.connectedDevices.toArray()}
-                  connections={protocol.snapshot.connections
+                  connectedDevices={protocol.connectedDevices.toArray()}
+                  connections={protocol.connections
                     .toArray()
                     .filter((connection: Connection) => {
                       return connection.connectedToRoleName === device.roleName;
@@ -110,11 +112,11 @@ const ProtocolCards = () => {
             })}
           </StyledCard>
         )}
-      {protocol.snapshot.expectedParticipantData.size() > 0 && (
+      {protocol.expectedParticipantData.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant data</CardTitle>
           <ul>
-            {protocol.snapshot.expectedParticipantData.toArray().map((data) => {
+            {protocol.expectedParticipantData.toArray().map((data) => {
               return (
                 <li
                   key={data.inputDataType.toString()}
@@ -129,11 +131,11 @@ const ProtocolCards = () => {
           </ul>
         </StyledCard>
       )}
-      {protocol.snapshot.participantRoles.size() > 0 && (
+      {protocol.participantRoles.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Participant roles</CardTitle>
           <ul>
-            {protocol.snapshot.participantRoles
+            {protocol.participantRoles
               .toArray()
               .map((role: ParticipantRole) => {
                 return (
@@ -145,11 +147,11 @@ const ProtocolCards = () => {
           </ul>
         </StyledCard>
       )}
-      {protocol.snapshot.tasks.size() > 0 && (
+      {protocol.tasks.size() > 0 && (
         <StyledCard elevation={2}>
           <CardTitle variant="h2">Tasks</CardTitle>
           <ul>
-            {protocol.snapshot.tasks.toArray().map((task) => {
+            {protocol.tasks.toArray().map((task) => {
               return (
                 <li key={task.name} style={{ marginBottom: 10 }}>
                   <Typography variant="h4">{task.name}</Typography>
