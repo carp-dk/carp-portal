@@ -18,6 +18,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
     return new QueryClient({
       defaultOptions: {
         queries: {
+          experimental_prefetchInRender: true,
           /*
            *  This function is called when a query fails.
            *  When a researcher creates a new resource, they need a claim in their token to be able to access it.

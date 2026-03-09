@@ -1,5 +1,9 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import { useProtocols } from '@Utils/queries/protocols';
+import {
+  useGetByVersion,
+  useGetVersionHistory,
+  useProtocols,
+} from '@Utils/queries/protocols';
 import {
   useSetStudyDetails,
   useSetStudyProtocol,
@@ -41,23 +45,12 @@ const studyProtocolValidationSchema = yup.object({
 const StudyData = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
+
   const {
     data: studyDetails,
     isLoading: studyDetailsLoading,
     error: studyDetailsError,
   } = useStudyDetails(studyId);
-  const {
-    data: protocols,
-    isLoading: protocolsLoading,
-    error: protocolsError,
-  } = useProtocols();
-  const {
-    data: studyStatus,
-    isLoading: studyStatusIsLoading,
-    error: studyStatusError,
-  } = useStudyStatus(studyId);
-  const setStudyProtocol = useSetStudyProtocol();
-  const setStudyDetails = useSetStudyDetails();
 
   const studyDetailsFormik = useFormik({
     initialValues: {
@@ -74,49 +67,86 @@ const StudyData = () => {
     },
   });
 
+  const {
+    data: protocols,
+    isLoading: protocolsLoading,
+    error: protocolsError,
+  } = useProtocols();
+
+  const {
+    data: studyStatus,
+    isLoading: studyStatusIsLoading,
+    error: studyStatusError,
+  } = useStudyStatus(studyId);
+
   const studyProtocolFormik = useFormik({
     initialValues: {
-      protocolId: studyDetails?.protocolSnapshot
-        ? studyDetails.protocolSnapshot.id
-        : '',
+      protocolId: studyDetails?.protocolSnapshot?.id ?? '',
+      protocolVersion: studyDetails?.protocolSnapshot?.applicationData
+        ? JSON.parse(studyDetails?.protocolSnapshot?.applicationData)?.[
+            'protocolVersionTag'
+          ]
+        : null,
     },
     validationSchema: studyProtocolValidationSchema,
-    onSubmit: (values) => {
-      const currentProtocol = protocols.find(
-        (protocol) => protocol.id.stringRepresentation === values.protocolId,
-      );
-      setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
+    onSubmit: async (values) => {
+      if (values.protocolVersion == null) return;
+      if (protocolDetailsIsLoading) {
+        protocolDetailsPromise.then((value) =>
+          setStudyProtocol.mutate({ studyId, protocol: value }),
+        );
+      } else {
+        setStudyProtocol.mutate({ studyId, protocol: protocolDetails });
+      }
     },
   });
 
+  const {
+    data: protocolVersions,
+    isLoading: protocolVersionsLoading,
+    error: protocolVersionsError,
+  } = useGetVersionHistory(studyProtocolFormik.values.protocolId.toString());
+
+  const {
+    data: protocolDetails,
+    isLoading: protocolDetailsIsLoading,
+    error: protocolDetailsError,
+    promise: protocolDetailsPromise,
+  } = useGetByVersion(
+    studyProtocolFormik.values.protocolId.toString(),
+    studyProtocolFormik.values.protocolVersion,
+  );
+
+  const setStudyProtocol = useSetStudyProtocol();
+  const setStudyDetails = useSetStudyDetails();
+
   useEffect(() => {
     if (
-      studyDetails?.protocolSnapshot &&
-      protocols &&
+      protocolDetails &&
+      studyProtocolFormik &&
       studyStatus?.canSetStudyProtocol
     ) {
-      const currentProtocol = protocols.find(
-        (protocol) =>
-          protocol.id.stringRepresentation ===
-          studyDetails.protocolSnapshot.id.stringRepresentation,
-      );
-      if (!currentProtocol) return;
-      if (studyDetails.protocolSnapshot.equals(currentProtocol)) return;
-      setStudyProtocol.mutate({ studyId, protocol: currentProtocol });
+      if (!protocolDetails) return;
+      if (
+        studyProtocolFormik.values.protocolVersion !=
+        studyProtocolFormik.values.protocolVersion
+      )
+        return;
     }
-  }, [studyDetails, studyStatus, protocols]);
+  }, [protocolDetails, studyProtocolFormik, studyStatus]);
 
   const handleDetailsBlur = (e) => {
     studyDetailsFormik.handleBlur(e);
     studyDetailsFormik.handleSubmit();
   };
 
-  const handleProtocolChange = (e) => {
-    studyProtocolFormik.handleChange(e);
-    studyProtocolFormik.handleSubmit();
-  };
-
-  if (studyDetailsLoading || protocolsLoading || studyStatusIsLoading)
+  if (
+    studyDetailsLoading ||
+    protocolsLoading ||
+    studyStatusIsLoading ||
+    protocolDetailsIsLoading ||
+    protocolVersionsLoading
+  )
     return <StudySetupSkeleton />;
 
   if (studyDetailsError || protocolsError || studyStatusError) {
@@ -129,7 +159,18 @@ const StudyData = () => {
   }
 
   const isProtocolSelectorEnabled = protocols && protocols.length > 0;
-
+  if (
+    studyProtocolFormik.values.protocolId &&
+    !studyProtocolFormik.values.protocolVersion
+  ) {
+    studyProtocolFormik.setFieldValue(
+      'protocolVersion',
+      protocolVersions.toSorted(
+        (a, b) => b.date.toEpochMilliseconds() - a.date.toEpochMilliseconds(),
+      )[0].tag,
+    );
+    studyProtocolFormik.submitForm();
+  }
   return (
     <StyledCard elevation={2}>
       <Heading variant="h2">Study Data</Heading>
@@ -197,7 +238,12 @@ const StudyData = () => {
                   sx={{ display: 'flex', width: '60%' }}
                 >
                   <Typography noWrap>
-                    {studyDetails.protocolSnapshot?.name}
+                    {studyDetails.protocolSnapshot?.name +
+                      ' (' +
+                      (JSON.parse(
+                        studyDetails.protocolSnapshot?.applicationData,
+                      )?.['protocolVersion'] ?? 'latest') +
+                      ')'}
                   </Typography>
                 </InputAdornment>
               ),
@@ -216,51 +262,93 @@ const StudyData = () => {
           }}
         />
       ) : (
-        <Select
-          variant="outlined"
-          fullWidth
-          error={!!studyProtocolFormik.errors.protocolId}
-          name="protocolId"
-          value={studyProtocolFormik.values.protocolId}
-          onChange={handleProtocolChange}
-          MenuProps={{
-            slotProps: {
-              paper: {
-                sx: {
-                  maxHeight: 400,
+        <Stack direction={'column'} gap={1}>
+          <Select
+            variant="outlined"
+            fullWidth
+            error={!!studyProtocolFormik.errors.protocolId}
+            name="protocolId"
+            value={studyProtocolFormik.values.protocolId}
+            onChange={(e) => {
+              studyProtocolFormik.handleChange(e);
+              studyProtocolFormik.setFieldValue('protocolVersion', null);
+              studyProtocolFormik.handleSubmit();
+            }}
+            MenuProps={{
+              slotProps: {
+                paper: {
+                  sx: {
+                    maxHeight: 400,
+                  },
                 },
               },
-            },
-          }}
-        >
-          {protocols
-            .toSorted(
-              (a, b) =>
-                b.createdOn.toEpochMilliseconds() -
-                a.createdOn.toEpochMilliseconds(),
-            )
-            .map((protocol) => (
-              <MenuItem
-                key={protocol.id.stringRepresentation}
-                value={protocol.id.stringRepresentation}
-              >
-                <Stack
-                  width="100%"
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  spacing={2}
+            }}
+          >
+            {protocols
+              .toSorted(
+                (a, b) =>
+                  b.createdOn.toEpochMilliseconds() -
+                  a.createdOn.toEpochMilliseconds(),
+              )
+              .map((protocol) => (
+                <MenuItem
+                  key={protocol.id.stringRepresentation}
+                  value={protocol.id.stringRepresentation}
                 >
-                  <Typography width={'65%'} noWrap>
-                    {protocol.name}
-                  </Typography>
-                  <Typography variant="caption">
-                    {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
-                  </Typography>
-                </Stack>
-              </MenuItem>
-            ))}
-        </Select>
+                  <Stack
+                    width="100%"
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={2}
+                  >
+                    <Typography width={'65%'} noWrap>
+                      {protocol.name}
+                    </Typography>
+                    <Typography variant="caption">
+                      {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+          </Select>
+          {protocolVersions && (
+            <Select
+              variant="outlined"
+              fullWidth
+              error={!!studyProtocolFormik.errors.protocolVersion}
+              name="protocolVersion"
+              value={studyProtocolFormik.values.protocolVersion ?? ''}
+              onChange={(e) => {
+                studyProtocolFormik.handleChange(e);
+                studyProtocolFormik.handleSubmit();
+              }}
+              MenuProps={{
+                slotProps: {
+                  paper: {
+                    sx: {
+                      maxHeight: 400,
+                    },
+                  },
+                },
+              }}
+            >
+              {protocolVersions
+                .toSorted(
+                  (a, b) =>
+                    b.date.toEpochMilliseconds() - a.date.toEpochMilliseconds(),
+                )
+                .map((protocolVersion) => (
+                  <MenuItem
+                    key={protocolVersion.tag}
+                    value={protocolVersion.tag}
+                  >
+                    <Typography>{protocolVersion.tag}</Typography>
+                  </MenuItem>
+                ))}
+            </Select>
+          )}
+        </Stack>
       )}
     </StyledCard>
   );
