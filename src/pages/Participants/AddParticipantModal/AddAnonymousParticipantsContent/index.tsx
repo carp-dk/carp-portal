@@ -152,7 +152,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
 
     setPreDefinedUriMap({
       [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
-      [icatClientName]: `http://${globalThis.location.host}/icat`,
+      [icatClientName]: `https://${globalThis.location.host}/icat`,
     });
   }, [redirectURIs]);
 
