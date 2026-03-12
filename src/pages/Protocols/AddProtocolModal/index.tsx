@@ -100,7 +100,7 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
           ...protocol,
           ownerId: user.id,
         },
-        version: '1.0',
+        version: 'Initial',
       });
     },
   });

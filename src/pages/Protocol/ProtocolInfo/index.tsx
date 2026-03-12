@@ -130,7 +130,7 @@ const ProtocolInfo = () => {
                   labelId="protocol-version-select"
                   size="small"
                   label="Protocol version"
-                  value={version}
+                  value={version ?? ''}
                   onChange={(e) => {
                     setVersion(
                       e.target.value === '' ? undefined : e.target.value,

@@ -1,5 +1,8 @@
 import DragAndDrop from '@Components/DragAndDrop';
-import { useUpdateProtocol } from '@Utils/queries/protocols';
+import {
+  useProtocolDetails,
+  useUpdateProtocol,
+} from '@Utils/queries/protocols';
 import {
   DefaultSerializer,
   getSerializer,
@@ -10,6 +13,7 @@ import {
 import { FormLabel, Modal, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
+import LoadingSkeleton from 'src/pages/Deployment/LoadingSkeleton';
 import * as yup from 'yup';
 import {
   CancelButton,
@@ -71,18 +75,19 @@ const AddProtocolVersionModal = ({
   open,
   onClose,
 }: Props) => {
-  const nameRef = useRef<HTMLInputElement>(null);
   const versionTagRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
 
   const updateProtocol = useUpdateProtocol(originalProtocolId);
+  const { data: originalProtocol, isLoading: originalProtocolLoading } =
+    useProtocolDetails(originalProtocolId);
   const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const addProtocolFormik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
+      name: originalProtocol.name,
+      description: originalProtocol.description,
       versionTag: '',
       file: null,
     },
@@ -124,25 +129,7 @@ const AddProtocolVersionModal = ({
           await addProtocolFormik.setFieldTouched('protocol', true);
           addProtocolFormik.setFieldValue('protocol', text);
           // automatically populate the ``name`` field from the uploaded protocol if it's empty
-          const parsed = JSON.parse(text) as StudyProtocol;
           setFileName(theFile.name);
-          if (addProtocolFormik.values.name === '') {
-            if (parsed.name) {
-              await addProtocolFormik.setFieldTouched('name', true);
-              await addProtocolFormik.setFieldValue('name', parsed.name);
-            } else {
-              nameRef.current.focus();
-            }
-          }
-          if (addProtocolFormik.values.description === '') {
-            if (parsed.description) {
-              await addProtocolFormik.setFieldTouched('descrption', true);
-              await addProtocolFormik.setFieldValue(
-                'description',
-                parsed.description,
-              );
-            }
-          }
         });
       })
       .catch((err: yup.ValidationError) => {
@@ -152,6 +139,10 @@ const AddProtocolVersionModal = ({
         setUploading(false);
       });
   };
+
+  if (originalProtocolLoading) {
+    <LoadingSkeleton></LoadingSkeleton>;
+  }
 
   return (
     <Modal
@@ -169,20 +160,13 @@ const AddProtocolVersionModal = ({
         </ModalDescription>
         <ModalContainer>
           <ModalContent>
-            <FormLabel required>Name</FormLabel>
+            <FormLabel>Name</FormLabel>
             <TextField
-              error={!!addProtocolFormik.errors.name}
+              disabled
               variant="outlined"
               name="name"
               value={addProtocolFormik.values.name}
-              onChange={addProtocolFormik.handleChange}
               fullWidth
-              helperText={
-                addProtocolFormik.touched.name && addProtocolFormik.errors.name
-              }
-              onBlur={addProtocolFormik.handleBlur}
-              inputRef={nameRef}
-              autoFocus
             />
             <FormLabel required>Version Tag</FormLabel>
             <TextField
