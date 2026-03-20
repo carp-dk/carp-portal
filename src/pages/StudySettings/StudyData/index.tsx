@@ -22,7 +22,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 import StudySetupSkeleton from '../StudySetupSkeleton';
@@ -101,16 +100,12 @@ const StudyData = () => {
     },
   });
 
-  const {
-    data: protocolVersions,
-    isLoading: protocolVersionsLoading,
-    error: protocolVersionsError,
-  } = useGetVersionHistory(studyProtocolFormik.values.protocolId.toString());
+  const { data: protocolVersions, isLoading: protocolVersionsLoading } =
+    useGetVersionHistory(studyProtocolFormik.values.protocolId.toString());
 
   const {
     data: protocolDetails,
     isLoading: protocolDetailsIsLoading,
-    error: protocolDetailsError,
     promise: protocolDetailsPromise,
   } = useGetByVersion(
     studyProtocolFormik.values.protocolId.toString(),
@@ -119,21 +114,6 @@ const StudyData = () => {
 
   const setStudyProtocol = useSetStudyProtocol();
   const setStudyDetails = useSetStudyDetails();
-
-  useEffect(() => {
-    if (
-      protocolDetails &&
-      studyProtocolFormik &&
-      studyStatus?.canSetStudyProtocol
-    ) {
-      if (!protocolDetails) return;
-      if (
-        studyProtocolFormik.values.protocolVersion !=
-        studyProtocolFormik.values.protocolVersion
-      )
-        return;
-    }
-  }, [protocolDetails, studyProtocolFormik, studyStatus]);
 
   const handleDetailsBlur = (e) => {
     studyDetailsFormik.handleBlur(e);
@@ -163,13 +143,15 @@ const StudyData = () => {
     studyProtocolFormik.values.protocolId &&
     !studyProtocolFormik.values.protocolVersion
   ) {
-    studyProtocolFormik.setFieldValue(
-      'protocolVersion',
-      protocolVersions.toSorted(
-        (a, b) => b.date.toEpochMilliseconds() - a.date.toEpochMilliseconds(),
-      )[0].tag,
-    );
-    studyProtocolFormik.submitForm();
+    if (studyStatus.canSetStudyProtocol) {
+      studyProtocolFormik.setFieldValue(
+        'protocolVersion',
+        protocolVersions.toSorted(
+          (a, b) => b.date.toEpochMilliseconds() - a.date.toEpochMilliseconds(),
+        )[0].tag,
+      );
+      studyProtocolFormik.submitForm();
+    }
   }
   return (
     <StyledCard elevation={2}>

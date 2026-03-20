@@ -7,15 +7,18 @@ import {
   GenericEmailRequest,
   InactiveDeployment,
   InputDataType,
-  PaginatedParticipantAccounts,
   Participant,
-  ParticipantAccount,
   ParticipantGroups,
   ParticipantGroupStatus,
   ParticipantInfo,
   ParticipantWithRoles,
   StudyDeploymentStatus,
 } from '@carp-dk/client';
+import {
+  PaginatedResponseDto,
+  ParticipantAccountsRequestDto,
+  ParticipantAccountSummaryDto,
+} from '@carp-dk/client/endpoints/study/recruitment';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useParticipants = (studyId: string) => {
@@ -136,6 +139,9 @@ export const useAddParticipantByEmail = (studyId: string) => {
       queryClient.invalidateQueries({
         queryKey: ['participantsAccounts', studyId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['participantAccountSummary'],
+      });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -149,6 +155,7 @@ interface GenerateAnonymousAccountsParams {
   participantRoleName: string;
   redirectUri: string;
   clientId: string;
+  useFastPipeline: boolean;
 }
 
 export const useGenerateAnonymousAccounts = (studyId: string) => {
@@ -162,6 +169,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
       amountOfAccounts,
       expirationSeconds,
       participantRoleName,
+      useFastPipeline,
     }: GenerateAnonymousAccountsParams) => {
       return carpApi.study.recruitment.generateAnonymousAccounts({
         studyId,
@@ -170,6 +178,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
         amountOfAccounts,
         expirationSeconds,
         participantRoleName,
+        useFastPipeline,
       });
     },
     onSuccess: () => {
@@ -234,17 +243,6 @@ export const useParticipantsInfo = (studyId: string) => {
   return useQuery<ParticipantInfo[], CarpServiceError>({
     queryFn: () => carpApi.study.recruitment.getParticipantInfo({ studyId }),
     queryKey: ['participantsInfo', studyId],
-  });
-};
-
-export const useParticipantsAccounts = (studyId: string) => {
-  return useQuery<
-    ParticipantAccount[] | PaginatedParticipantAccounts,
-    CarpServiceError
-  >({
-    queryFn: () =>
-      carpApi.study.recruitment.getParticipantAccounts({ studyId }),
-    queryKey: ['participantsAccounts', studyId],
   });
 };
 
@@ -367,5 +365,25 @@ export const useDeviceDeployed = (studyId: string) => {
       setSnackbarError(error.message);
     },
     retry: 0,
+  });
+};
+
+export const useQueryParticipantAccounts = ({
+  studyId,
+  request,
+}: {
+  studyId: string;
+  request: ParticipantAccountsRequestDto;
+}) => {
+  return useQuery<
+    PaginatedResponseDto<ParticipantAccountSummaryDto>,
+    CarpServiceError
+  >({
+    queryFn: () =>
+      carpApi.study.recruitment.queryParticipantAccounts({
+        studyId,
+        request,
+      }),
+    queryKey: ['participantAccountSummary', { studyId, request }],
   });
 };

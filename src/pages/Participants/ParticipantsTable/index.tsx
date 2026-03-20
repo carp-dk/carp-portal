@@ -1,28 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import {
-  useParticipantsAccounts,
   useParticipantsStatus,
+  useQueryParticipantAccounts,
 } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
-import { formatDateTime } from '@Utils/utility';
-import {
-  EmailAccountIdentity,
-  ParticipantAccount,
-  ParticipantGroupStatus,
-  UsernameAccountIdentity,
-} from '@carp-dk/client';
+import { ParticipantAccountSummaryDto } from '@carp-dk/client/endpoints/study/recruitment';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
 import { Typography } from '@mui/material';
 import {
   MRT_ColumnDef,
+  MRT_ColumnFiltersState,
   MRT_RowSelectionState,
+  MRT_SortingState,
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   AddUserButton,
@@ -36,7 +32,7 @@ interface Props {
   openActionNeededModal: () => void;
   openAddParticipantModal: () => void;
   openImportParticipantModal: () => void;
-  setParticipantsToAdd: (participants: ParticipantAccount[]) => void;
+  setParticipantsToAdd: (participants: ParticipantAccountSummaryDto[]) => void;
 }
 
 const ParticipantsTable = ({
@@ -47,64 +43,42 @@ const ParticipantsTable = ({
   setParticipantsToAdd,
 }: Props) => {
   const { id: studyId } = useParams();
-  const {
-    data: participantsAccounts,
-    isLoading: participantsAccountsLoading,
-    isError: isParticipantsAccountsError,
-  } = useParticipantsAccounts(studyId);
   const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
     useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-  const [columns, setColumns] = useState<MRT_ColumnDef<ParticipantAccount>[]>(
+  const [columns, setColumns] = useState<
+    MRT_ColumnDef<ParticipantAccountSummaryDto>[]
+  >([]);
+  const [search, setSearch] = useState<string | null>(null);
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
   );
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const { data: study } = useStudyDetails(studyId);
-
-  const InvitedOnColumn = useCallback(
-    (cell: { row: { original: { email: string; username: string } } }) => {
-      if (!isDeploymentsStatusLoading) {
-        const deployment = deploymentsStatus.toArray().find(
-          (pg): pg is ParticipantGroupStatus.InDeployment =>
-            pg instanceof ParticipantGroupStatus.InDeployment &&
-            pg.participants.toArray().some((participant) => {
-              switch (participant.accountIdentity.constructor) {
-                case EmailAccountIdentity:
-                  return (
-                    (
-                      participant.accountIdentity as EmailAccountIdentity
-                    ).emailAddress.address.toLowerCase() ===
-                    cell.row.original.email?.toLowerCase()
-                  );
-                case UsernameAccountIdentity:
-                  return (
-                    (
-                      participant.accountIdentity as UsernameAccountIdentity
-                    ).username.name.toLowerCase() ===
-                    cell.row.original.username?.toLowerCase()
-                  );
-                default:
-                  console.error('Unknown account identity type');
-                  return false;
-              }
-            }),
-        );
-
-        if (deployment) {
-          return (
-            <Typography variant="h5">
-              {formatDateTime(deployment.invitedOn.toEpochMilliseconds(), {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-            </Typography>
-          );
-        }
-      }
-      return null;
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const {
+    data: participantsAccounts,
+    isLoading: participantsAccountsLoading,
+    error: isParticipantsAccountsError,
+  } = useQueryParticipantAccounts({
+    studyId,
+    request: {
+      page: pagination.pageIndex,
+      size: pagination.pageSize,
+      search: search,
+      isDeployed:
+        columnFilters.length !== 0 ? columnFilters?.[0]?.value === 'Yes' : null,
+      sortDirection: sorting?.[0]?.desc ? 'desc' : 'asc',
+      sortBy:
+        sorting?.[0]?.id === 'accountIdentity'
+          ? 'account_identity'
+          : 'is_deployed',
     },
-    [deploymentsStatus],
-  );
+  });
+
   const generatedAccountLabel = () => <GeneratedAccountLabel />;
 
   useEffect(() => {
@@ -114,14 +88,18 @@ const ParticipantsTable = ({
   useEffect(() => {
     setColumns([
       {
-        accessorFn: (row) => row.email ?? row.username,
+        accessorFn: (row) => row.accountIdentity,
         header: 'Identity',
+        id: 'accountIdentity',
+        enableColumnFilter: false,
       },
       {
         accessorFn: (row) => {
           if (row?.firstName !== undefined && row?.firstName !== null)
             return `${row?.firstName} ${row?.lastName}`;
-          if (!row.email) {
+          const uuidPattern =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+          if (uuidPattern.test(row.accountIdentity.toString())) {
             return generatedAccountLabel();
           }
 
@@ -130,19 +108,24 @@ const ParticipantsTable = ({
         id: 'fullName',
         header: 'Full name',
         enableSorting: false,
+        enableColumnFilter: false,
       },
       {
         accessorFn: (row) => {
-          return row?.id === null ? 'No' : 'Yes';
+          return row?.carpUser ? 'Yes' : 'No';
         },
         id: 'user_id',
-        header: 'Registered',
+        header: 'Is Carp User',
         enableSorting: false,
+        enableColumnFilter: false,
       },
       {
-        id: 'invitedOn',
-        header: 'Invited On',
-        Cell: ({ cell }) => InvitedOnColumn(cell),
+        id: 'isDeployed',
+        header: 'Is Deployed',
+        accessorFn: (row) => (row.isDeployed ? 'Yes' : 'No'),
+        filterSelectOptions: ['Yes', 'No'],
+        filterFn: 'equals',
+        filterVariant: 'select',
       },
     ]);
   }, [deploymentsStatus]);
@@ -154,9 +137,9 @@ const ParticipantsTable = ({
     }
     const participantsIdentifiers = Object.keys(rowSelection);
     setParticipantsToAdd(
-      participantsAccounts.filter((participant) =>
+      participantsAccounts.content.filter((participant) =>
         participantsIdentifiers.includes(
-          participant.email ?? participant.username,
+          participant.accountIdentity.toString(),
         ),
       ),
     );
@@ -167,16 +150,20 @@ const ParticipantsTable = ({
     openImportParticipantModal();
   };
 
-  const table = useMaterialReactTable<ParticipantAccount>({
-    columns: columns as MRT_ColumnDef<ParticipantAccount, any>[],
-    data: participantsAccounts ?? [],
+  const table = useMaterialReactTable<ParticipantAccountSummaryDto>({
+    columns: columns as MRT_ColumnDef<ParticipantAccountSummaryDto, any>[],
+    data: participantsAccounts?.content ?? [],
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     state: {
       rowSelection,
       showSkeletons: participantsAccountsLoading || isDeploymentsStatusLoading,
+      pagination,
+      sorting,
+      columnFilters,
     },
-    getRowId: (row) => row.email ?? row.username,
+    // TODO: change this to string
+    getRowId: (row) => row.accountIdentity?.toString(),
     muiSearchTextFieldProps: {
       variant: 'outlined',
       placeholder: '',
@@ -202,11 +189,12 @@ const ParticipantsTable = ({
     },
     initialState: {
       showGlobalFilter: true,
+      showColumnFilters: true,
     },
     positionGlobalFilter: 'left',
     enableFullScreenToggle: false,
     enableDensityToggle: false,
-    enableColumnFilters: false,
+    enableColumnFilters: true,
     enableStickyFooter: true,
     enableHiding: false,
     enableColumnActions: false,
@@ -223,6 +211,12 @@ const ParticipantsTable = ({
         cursor: 'pointer',
       },
     }),
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setSearch,
+    rowCount: participantsAccounts?.total ?? 0,
+    columnFilterDisplayMode: 'popover',
+    onColumnFiltersChange: setColumnFilters,
   });
 
   return (
