@@ -3,6 +3,8 @@ import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { patternToRegex } from '@Utils/utility';
 import {
+  Checkbox,
+  FormControlLabel,
   FormHelperText,
   FormLabel,
   Grid,
@@ -60,6 +62,7 @@ const validationSchema = yup.object({
     })
     .required('Redirect URI is required'),
   clientId: yup.string().required('Application Type is required'),
+  useFastPipeline: yup.boolean(),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
@@ -84,6 +87,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       role: '',
       redirectUri: '',
       clientId: '',
+      useFastPipeline: false,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -98,6 +102,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         );
         return;
       }
+      console.log(values.useFastPipeline);
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
@@ -106,6 +111,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
         clientId: values.clientId.toString(),
+        useFastPipeline: values.useFastPipeline,
       });
     },
   });
@@ -145,7 +151,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     if (globalThis.location.host.includes('localhost')) {
       setPreDefinedUriMap({
         [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
-        [icatClientName]: `http://localhost:3000/icat`,
+        [icatClientName]: `https://dev.carp.dk/icat`,
       });
       return;
     }
@@ -333,6 +339,16 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
             </Grid>
+            {process.env.NODE_ENV === 'development' && (
+              <FormControlLabel
+                label="Use fast pipeline"
+                value={addAnonymousParticipantFormik.values.useFastPipeline}
+                onChange={addAnonymousParticipantFormik.handleChange}
+                onBlur={addAnonymousParticipantFormik.handleBlur}
+                name="useFastPipeline"
+                control={<Checkbox />}
+              />
+            )}
           </Grid>
         </form>
       </ModalContent>
