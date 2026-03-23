@@ -18,8 +18,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(axios@1.13.6)(oidc-client-ts@3.5.0)(react-oidc-context@3.3.1(oidc-client-ts@3.5.0)(react@19.2.4))(react@19.2.4)
       '@carp-dk/client':
-        specifier: 2.1.0-dev.11
-        version: 2.1.0-dev.11
+        specifier: 2.1.0-dev.13
+        version: 2.1.0-dev.13
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.2.14)(react@19.2.4)
@@ -339,8 +339,8 @@ packages:
       react: '>=16.8.0'
       react-oidc-context: ^2.3.1
 
-  '@carp-dk/client@2.1.0-dev.11':
-    resolution: {integrity: sha512-fLITmmWbuoUrdKHSk4ug+VmMJI5ldiJdRRw4nNIf7g0LV9eASl+VDy0c8fjmndZxJ8mTH/Brf52gvwtZwUBSDw==}
+  '@carp-dk/client@2.1.0-dev.13':
+    resolution: {integrity: sha512-ZMWx8YJ3jwVrCRazWNAh01t4BQER+P+yNfHTN+06Zru4lB6beXqA3YGX3+FX5n02qat8t58H+2rNDUwhehXmWQ==}
 
   '@carp-dk/eslint-config@1.1.0':
     resolution: {integrity: sha512-vIz9PJZBaSadbe3rO9nTJQoa01c8h9judJv1uVDYjlApienWU8W22Yi8aBJLHil3wI9dFXTPcDvx1yqMpkOo+w==}
@@ -4146,7 +4146,7 @@ snapshots:
       react: 19.2.4
       react-oidc-context: 3.3.1(oidc-client-ts@3.5.0)(react@19.2.4)
 
-  '@carp-dk/client@2.1.0-dev.11':
+  '@carp-dk/client@2.1.0-dev.13':
     dependencies:
       axios: 1.7.9
       big.js: 6.2.2

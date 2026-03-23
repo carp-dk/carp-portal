@@ -5,7 +5,8 @@ import {
   useQueryParticipantAccounts,
 } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
-import { ParticipantAccountSummaryDto } from '@carp-dk/client/endpoints/study/recruitment';
+import { formatDateTime } from '@Utils/utility';
+import { ParticipantAccountSummaryDto } from '@carp-dk/client';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
@@ -99,7 +100,7 @@ const ParticipantsTable = ({
             return `${row?.firstName} ${row?.lastName}`;
           const uuidPattern =
             /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-          if (uuidPattern.test(row.accountIdentity.toString())) {
+          if (uuidPattern.test(row.accountIdentity)) {
             return generatedAccountLabel();
           }
 
@@ -114,15 +115,22 @@ const ParticipantsTable = ({
         accessorFn: (row) => {
           return row?.carpUser ? 'Yes' : 'No';
         },
-        id: 'user_id',
-        header: 'Is Carp User',
+        id: 'carpUser',
+        header: 'Carp User',
         enableSorting: false,
         enableColumnFilter: false,
       },
       {
-        id: 'isDeployed',
-        header: 'Is Deployed',
-        accessorFn: (row) => (row.isDeployed ? 'Yes' : 'No'),
+        id: 'invitedOn',
+        header: 'Invited On',
+        accessorFn: (row) =>
+          row.invitedOn
+            ? formatDateTime(row.invitedOn, {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+              })
+            : '',
         filterSelectOptions: ['Yes', 'No'],
         filterFn: 'equals',
         filterVariant: 'select',
@@ -138,9 +146,7 @@ const ParticipantsTable = ({
     const participantsIdentifiers = Object.keys(rowSelection);
     setParticipantsToAdd(
       participantsAccounts.content.filter((participant) =>
-        participantsIdentifiers.includes(
-          participant.accountIdentity.toString(),
-        ),
+        participantsIdentifiers.includes(participant.accountIdentity),
       ),
     );
     openNewDeploymentModal();
@@ -163,7 +169,7 @@ const ParticipantsTable = ({
       columnFilters,
     },
     // TODO: change this to string
-    getRowId: (row) => row.accountIdentity?.toString(),
+    getRowId: (row) => row.accountIdentity,
     muiSearchTextFieldProps: {
       variant: 'outlined',
       placeholder: '',
@@ -217,6 +223,9 @@ const ParticipantsTable = ({
     rowCount: participantsAccounts?.total ?? 0,
     columnFilterDisplayMode: 'popover',
     onColumnFiltersChange: setColumnFilters,
+    manualFiltering: true,
+    manualSorting: true,
+    manualPagination: true,
   });
 
   return (
