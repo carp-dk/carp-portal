@@ -19,7 +19,10 @@ type Props = {
 };
 
 const validationSchema = yup.object({
-  email: yup.string().required('Email is required'),
+  email: yup
+    .string()
+    .email('Must be a valid email')
+    .required('Email is required'),
 });
 
 const AddParticipantContent = ({ open, onClose }: Props) => {
