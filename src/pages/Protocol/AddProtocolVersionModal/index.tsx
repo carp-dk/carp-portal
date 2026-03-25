@@ -86,7 +86,7 @@ const AddProtocolVersionModal = ({
 
   const addProtocolFormik = useFormik({
     initialValues: {
-      name: originalProtocol.name,
+      name: originalProtocol?.name ?? '',
       description: originalProtocol.description,
       versionTag: '',
       file: null,

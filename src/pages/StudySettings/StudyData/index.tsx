@@ -224,7 +224,7 @@ const StudyData = () => {
                       ' (' +
                       (JSON.parse(
                         studyDetails.protocolSnapshot?.applicationData,
-                      )?.['protocolVersion'] ?? 'latest') +
+                      )?.['protocolVersionTag'] ?? 'latest') +
                       ')'}
                   </Typography>
                 </InputAdornment>

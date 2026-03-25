@@ -148,7 +148,7 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
 export function getListOfTasksFromProtocolSnapshot(
   protocolSnapshot: StudyProtocolSnapshot,
 ): object[] {
-  return protocolSnapshot.tasks
+  return protocolSnapshot?.tasks
     .toArray()
     .filter((x) => x?.['u21_1'] != null)
     .map((x) => JSON.parse(x['u21_1']));
@@ -158,7 +158,7 @@ export function getUniqueTaskTypesFromProtocolSnapshot(
   protocolSnapshot: StudyProtocolSnapshot,
 ): string[] {
   const tasks = getListOfTasksFromProtocolSnapshot(protocolSnapshot);
-  const uniqueTaskTypes = new Set<string>(tasks.map((task: any) => task.type));
+  const uniqueTaskTypes = new Set<string>(tasks?.map((task: any) => task.type));
 
   uniqueTaskTypes.delete('one_time_sensing');
   uniqueTaskTypes.delete('informed_consent');
