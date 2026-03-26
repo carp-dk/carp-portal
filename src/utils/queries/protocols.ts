@@ -104,6 +104,12 @@ export const useUpdateProtocol = (originalProtocolId: string) => {
       queryClient.invalidateQueries({
         queryKey: ['anonymousParticipant', originalProtocolId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['protocolVersionHistory', originalProtocolId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['protocolByVersion', originalProtocolId],
+      });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
