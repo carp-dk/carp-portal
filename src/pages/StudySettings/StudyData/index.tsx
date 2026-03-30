@@ -13,6 +13,7 @@ import {
 import { formatDateTime } from '@Utils/utility';
 import LinkIcon from '@mui/icons-material/Link';
 import {
+  Alert,
   FormLabel,
   InputAdornment,
   MenuItem,
@@ -91,11 +92,31 @@ const StudyData = () => {
     onSubmit: async (values) => {
       if (values.protocolVersion == null) return;
       if (protocolDetailsIsLoading) {
-        protocolDetailsPromise.then((value) =>
-          setStudyProtocol.mutate({ studyId, protocol: value }),
-        );
+        protocolDetailsPromise.then((value) => {
+          let oldApplicationData = JSON.parse(value.applicationData);
+          oldApplicationData = {
+            ...oldApplicationData,
+            protocolVersionTag: values.protocolVersion,
+          };
+          //@ts-expect-error applicationData is not read-only, but the type definition says it is
+          value.applicationData = JSON.stringify(oldApplicationData);
+          setStudyProtocol.mutate({
+            studyId,
+            protocol: value,
+          });
+        });
       } else {
-        setStudyProtocol.mutate({ studyId, protocol: protocolDetails });
+        let oldApplicationData = JSON.parse(protocolDetails.applicationData);
+        oldApplicationData = {
+          ...oldApplicationData,
+          protocolVersionTag: values.protocolVersion,
+        };
+        //@ts-expect-error applicationData is not read-only, but the type definition says it is
+        protocolDetails.applicationData = JSON.stringify(oldApplicationData);
+        setStudyProtocol.mutate({
+          studyId,
+          protocol: protocolDetails,
+        });
       }
     },
   });
@@ -330,6 +351,20 @@ const StudyData = () => {
                 ))}
             </Select>
           )}
+          {studyStatus.canSetStudyProtocol &&
+            protocolVersions &&
+            studyProtocolFormik.values.protocolVersion &&
+            studyProtocolFormik.values.protocolVersion !==
+              protocolVersions
+                .toSorted(
+                  (a, b) =>
+                    b.date.toEpochMilliseconds() - a.date.toEpochMilliseconds(),
+                )
+                .at(0)?.tag && (
+              <Alert severity="warning" sx={{ borderRadius: 2 }}>
+                The selected protocol version is not the latest.
+              </Alert>
+            )}
         </Stack>
       )}
     </StyledCard>
