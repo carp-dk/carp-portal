@@ -61,7 +61,6 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
   const [participantDeviceRoleNames, setParticipantDeviceRoleNames] = useState(
     {},
   );
-  console.log(participantsToAdd);
   const handleRoleChange = (participantId: string, assignedRoles: string[]) => {
     setParticipantDeviceRoleNames((prevState) => ({
       ...prevState,

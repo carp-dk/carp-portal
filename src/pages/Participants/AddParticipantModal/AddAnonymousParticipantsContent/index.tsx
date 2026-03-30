@@ -102,7 +102,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         );
         return;
       }
-      console.log(values.useFastPipeline);
+
       generateAnonymousAccounts.mutate({
         participantRoleName: values.role,
         expirationSeconds: Math.floor(
