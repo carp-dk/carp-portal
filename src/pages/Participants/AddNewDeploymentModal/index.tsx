@@ -76,8 +76,8 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     setParticipantDeviceRoleNames({});
   }, [open]);
   const createNewGroupHandler = () => {
-    const participantIdentifiers = participantsToAdd.map(
-      (participant) => participant.accountIdentity,
+    const participantIdentifiers = participantsToAdd.map((participant) =>
+      participant.accountIdentity.toLocaleLowerCase(),
     );
     const participantsToAddRows = participants.filter((participant) =>
       participantIdentifiers.includes(
