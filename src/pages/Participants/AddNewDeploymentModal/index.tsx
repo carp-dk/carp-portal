@@ -193,12 +193,12 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                                 id="role-select"
                                 value={
                                   participantDeviceRoleNames[
-                                    participant.accountIdentity
+                                    participant.accountIdentity.toLowerCase()
                                   ] || ''
                                 }
                                 onChange={(event: SelectChangeEvent) =>
                                   handleRoleChange(
-                                    participant.accountIdentity,
+                                    participant.accountIdentity.toLowerCase(),
                                     [event.target.value],
                                   )
                                 }
