@@ -2,6 +2,7 @@ import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useCurrentUser } from '@Utils/queries/auth';
 import {
   useResearcherAssistants,
+  useResearchers,
   useStudyDetails,
 } from '@Utils/queries/studies';
 import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
@@ -26,10 +27,15 @@ type Props = {
 const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
   const { id: studyId } = useParams();
   const {
+    data: researcherAssistants,
+    isLoading: researcherAssistantsLoading,
+    error: researcherAssistantsError,
+  } = useResearcherAssistants(studyId);
+  const {
     data: researchers,
     isLoading: researchersLoading,
     error: researchersError,
-  } = useResearcherAssistants(studyId);
+  } = useResearchers(studyId);
   const {
     data: studyDetails,
     isLoading: studyDetailsLoading,
@@ -37,11 +43,13 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
   } = useStudyDetails(studyId);
   const { data: user, isLoading: userLoading } = useCurrentUser();
 
-  if (researchersError || studyDetailsError) {
+  if (researchersError || researcherAssistantsError || studyDetailsError) {
     return (
       <CarpErrorCardComponent
         message="An error occurred while loading researchers"
-        error={researchersError ?? studyDetailsError}
+        error={
+          researchersError ?? researcherAssistantsError ?? studyDetailsError
+        }
       />
     );
   }
@@ -51,6 +59,21 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
     user?.accountId?.stringRepresentation &&
     studyDetails?.ownerId?.stringRepresentation ==
       user?.accountId?.stringRepresentation;
+
+  let researchersAndAssistants = [];
+  if (
+    !researchersLoading &&
+    !researcherAssistantsLoading &&
+    !studyDetailsLoading &&
+    !userLoading
+  ) {
+    researchersAndAssistants = [
+      ...researchers.filter(
+        (r) => r?.id !== studyDetails?.ownerId?.stringRepresentation,
+      ),
+      ...(researcherAssistants ?? []),
+    ];
+  }
 
   return (
     <StyledCard elevation={2}>
@@ -71,12 +94,15 @@ const StudyResearchers = ({ setOpenAddResearcherModal }: Props) => {
         )}
       </Top>
       <ResearchersContainer>
-        {researchersLoading || studyDetailsLoading || userLoading ? (
+        {researchersLoading ||
+        researcherAssistantsLoading ||
+        studyDetailsLoading ||
+        userLoading ? (
           [0, 1, 2].map(() => <ResearcherItemSkeleton key={uuidv4()} />)
-        ) : researchers?.length === 0 ? (
+        ) : researchersAndAssistants?.length === 0 ? (
           <EmptyText>No researchers found</EmptyText>
         ) : (
-          researchers.map((researcher) => (
+          researchersAndAssistants.map((researcher) => (
             <ResearcherItem
               disabled={
                 !isStudyOwner ||
