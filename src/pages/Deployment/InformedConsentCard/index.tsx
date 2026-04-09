@@ -145,11 +145,11 @@ const InformedConsentCard = () => {
       isExpanded={true}
       title={t('deployment:informed_consents_card.title')}
     >
-      <Stack gap="16px">
+      <Stack sx={{ gap: '16px' }}>
         {consents.map(({ participant, consent, consentFile }) => {
           return (
             <StyledStack key={participant.participantId} direction="row">
-              <Stack direction="row" gap="4px">
+              <Stack direction="row" sx={{ gap: '4px' }}>
                 <PersonIcon fontSize="small" />
                 <NameContainer>
                   {(participant.firstName && participant.lastName && (
@@ -167,9 +167,11 @@ const InformedConsentCard = () => {
                     <Stack>
                       <Stack
                         direction="row"
-                        gap="4px"
-                        alignItems="center"
-                        justifyContent="center"
+                        sx={{
+                          gap: '4px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
                       >
                         <FileDownloadOutlinedIcon />
                         <Typography variant="h6">
@@ -198,9 +200,11 @@ const InformedConsentCard = () => {
                     <Stack>
                       <Stack
                         direction="row"
-                        gap="4px"
-                        alignItems="center"
-                        justifyContent="center"
+                        sx={{
+                          gap: '4px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
                       >
                         <FileDownloadOutlinedIcon />
                         <Typography variant="h6">

@@ -116,9 +116,13 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
           <ModalTitle variant="h2" id="modal-modal-title">
             Add new deployment
           </ModalTitle>
-          <ModalDescription variant="h5" id="modal-modal-description">
-            The following participant roles are required in the protocol:
-          </ModalDescription>
+          {studyDetails.protocolSnapshot?.participantRoles
+            ?.toArray()
+            .some((role) => !role.isOptional) && (
+            <ModalDescription variant="h5" id="modal-modal-description">
+              The following participant roles are required in the protocol:
+            </ModalDescription>
+          )}
           <StyledList>
             {studyDetails.protocolSnapshot?.participantRoles
               .toArray()
@@ -126,9 +130,27 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                 if (!role.isOptional) {
                   return <li key={role.role}>{role.role}</li>;
                 }
-                return null; // or any other value you want to return for optional roles
+                return null;
               })}
           </StyledList>
+          {studyDetails.protocolSnapshot?.participantRoles
+            ?.toArray()
+            .some((role) => role.isOptional) && (
+            <ModalDescription variant="h5" id="modal-modal-description">
+              The following participant roles are optional in the protocol:
+            </ModalDescription>
+          )}
+          <StyledList>
+            {studyDetails.protocolSnapshot?.participantRoles
+              .toArray()
+              .map((role) => {
+                if (role.isOptional) {
+                  return <li key={role.role}>{role.role}</li>;
+                }
+                return null;
+              })}
+          </StyledList>
+
           <ModalContent>
             <StyledTableContainer>
               <Table

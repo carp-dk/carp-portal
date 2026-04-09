@@ -108,7 +108,7 @@ const ProtocolInfo = () => {
             Add version
           </AddVersionButton>
           <VersionContainer>
-            <Stack direction="row" gap={2} alignItems="center">
+            <Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
               <ProtocolVersion variant="h4">
                 Current version: {version ?? versions[0].tag}
               </ProtocolVersion>
