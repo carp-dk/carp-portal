@@ -2,7 +2,6 @@ import Snackbar from '@Components/Snackbar';
 import { SnackbarProvider } from '@Utils/snackbar';
 import { themeInstance } from '@Utils/theme';
 import { AuthenticationProvider } from '@carp-dk/authentication-react';
-import setupLocatorUI from '@locator/runtime';
 import { CssBaseline } from '@mui/material';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -14,9 +13,6 @@ import i18n from './i18n';
 import App from './pages/App';
 import QueryClientComponent from './queryClientComponent';
 
-if (process.env.NODE_ENV === 'development') {
-  setupLocatorUI();
-}
 validateEnv();
 const container = document.getElementById('root');
 const root = createRoot(container);
