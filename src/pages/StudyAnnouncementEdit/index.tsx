@@ -15,7 +15,7 @@ import DragAndDrop from '@Components/DragAndDrop';
 import StudyAnnouncementPreview from '@Components/StudyAnnouncementPreview';
 import MenuItem from '@mui/material/MenuItem';
 import { useAnnouncement, useUpdateAnnouncement } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
@@ -133,10 +133,10 @@ const StudyAnnouncementEdit = () => {
     <StudyPageLayout>
       <StudyHeader
         path={[
-          { name: 'Announcement', uri: getUri(PageType.ANNOUNCEMENTS) },
+          { name: 'Announcement', uri: useGetUri(PageType.ANNOUNCEMENTS) },
           {
             name: 'Edit announcement',
-            uri: getUri(PageType.EDIT_ANNOUNCEMENT),
+            uri: useGetUri(PageType.EDIT_ANNOUNCEMENT),
           },
         ]}
         description="Edit an announcement for this study"

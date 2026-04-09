@@ -87,7 +87,7 @@ function generateDateRange(startISO: string, endISO: string): string[] {
   const end = new Date(endISO);
 
   while (current <= end) {
-    dates.push(current.toISOString().split('T')[0]);
+    dates.push(current.toLocaleDateString('en-CA').split('T')[0]);
     current.setDate(current.getDate() + 1);
   }
 
@@ -117,7 +117,6 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
   );
 
   const dates = generateDateRange(dataStreamSummary.from, dataStreamSummary.to);
-
   const mappedData = dates.map((day) => {
     if (groupedData[day]) {
       isThereAnyData = true;

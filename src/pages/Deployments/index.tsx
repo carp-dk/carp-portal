@@ -4,7 +4,7 @@ import SiteUnavailable from '@Components/SiteUnavailable';
 import StudyHeader from '@Components/StudyHeader';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import { useStudyStatus } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -85,7 +85,7 @@ const Deployments = () => {
 
   const sectionName = {
     name: 'Deployments',
-    uri: getUri(PageType.DEPLOYMENTS),
+    uri: useGetUri(PageType.DEPLOYMENTS),
   };
   const description =
     'See all the deployments, expand them for more information.';

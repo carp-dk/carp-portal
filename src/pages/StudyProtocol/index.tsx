@@ -5,7 +5,7 @@ import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import SiteUnavailable from '@Components/SiteUnavailable';
 import StudyHeader from '@Components/StudyHeader';
 import { useStudyDetails } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { useParams } from 'react-router-dom';
 import ProtocolCards from './ProtocolCards';
 import ProtocolInfo from './ProtocolInfo';
@@ -19,7 +19,7 @@ const StudyProtocol = () => {
   } = useStudyDetails(studyId);
   const sectionName = {
     name: 'Study Protocol',
-    uri: getUri(PageType.PROTOCOL),
+    uri: useGetUri(PageType.PROTOCOL),
   };
   const description = 'See detailed information of Study Protocol.';
   const siteUnavailableDescription = [

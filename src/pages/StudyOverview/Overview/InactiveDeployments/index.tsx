@@ -62,15 +62,20 @@ const InactiveDeployments = () => {
 
   return (
     <StyledCard elevation={2}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+      <Stack
+        direction="row"
+        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+      >
         <StyledTitle variant="h2">Inactive Deployments</StyledTitle>
         <StyledSelect
           value={lastUpdateTime}
           MenuProps={{
-            PaperProps: {
-              sx: {
-                width: '116px',
-                borderRadius: '16px',
+            slotProps: {
+              paper: {
+                sx: {
+                  width: '116px',
+                  borderRadius: '16px',
+                },
               },
             },
           }}

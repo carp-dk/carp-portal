@@ -6,8 +6,8 @@ import { useDeleteResource, useStudyResources } from '@Utils/queries/studies';
 import {
   formatDateTime,
   getRandomNumber,
-  getUri,
   PageType,
+  useGetUri,
 } from '@Utils/utility';
 import { CarpDocument } from '@carp-dk/client';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -38,7 +38,9 @@ import {
 
 const Resources = () => {
   const { id: studyId } = useParams();
-  const sectionNames = [{ name: 'Resources', uri: getUri(PageType.RESOURCES) }];
+  const sectionNames = [
+    { name: 'Resources', uri: useGetUri(PageType.RESOURCES) },
+  ];
   const {
     data: resources,
     isLoading: resourcesLoading,

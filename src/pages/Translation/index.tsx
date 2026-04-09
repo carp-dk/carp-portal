@@ -15,8 +15,8 @@ import {
 import {
   formatDateTime,
   getRandomNumber,
-  getUri,
   PageType,
+  useGetUri,
 } from '@Utils/utility';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -48,7 +48,7 @@ const Translations = () => {
   const { id: studyId } = useParams();
   const sectionName = {
     name: 'Translations',
-    uri: getUri(PageType.TRANSLATION),
+    uri: useGetUri(PageType.TRANSLATION),
   };
   const {
     data: translations,

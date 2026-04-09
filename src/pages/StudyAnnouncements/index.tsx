@@ -3,7 +3,7 @@ import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import StyledTooltip from '@Components/StyledTooltip';
 import { useStudyAnnouncements } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { MessageData } from '@carp-dk/client';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,7 +17,7 @@ const StudyAnnouncements = () => {
   const { id: studyId } = useParams();
   const sectionName = {
     name: 'Announcement',
-    uri: getUri(PageType.ANNOUNCEMENTS),
+    uri: useGetUri(PageType.ANNOUNCEMENTS),
   };
   const {
     data: announcements,

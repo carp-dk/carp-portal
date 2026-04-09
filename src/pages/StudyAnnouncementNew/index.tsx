@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { useCreateAnnouncement } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -109,10 +109,10 @@ const StudyAnnouncementNew = () => {
     <StudyPageLayout>
       <StudyHeader
         path={[
-          { name: 'Announcement', uri: getUri(PageType.ANNOUNCEMENTS) },
+          { name: 'Announcement', uri: useGetUri(PageType.ANNOUNCEMENTS) },
           {
             name: 'New announcement',
-            uri: getUri(PageType.EDIT_ANNOUNCEMENT),
+            uri: useGetUri(PageType.EDIT_ANNOUNCEMENT),
           },
         ]}
         description="Create an announcement for this study"

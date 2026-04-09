@@ -160,15 +160,15 @@ const ProtocolInfo = () => {
             <CreationInfoContainer>
               <Typography variant="h6">Created on</Typography>
               <Typography variant="h6">
-                {formatDateTime(
-                  versions[versions.length - 1].date.toEpochMilliseconds(),
-                )}
+                {/** TODO: This should be toEpochMilliseconds */}
+                {formatDateTime(versions[versions.length - 1].date.d14())}
               </Typography>
             </CreationInfoContainer>
             <CreationInfoContainer>
               <Typography variant="h6">Last version</Typography>
               <Typography variant="h6">
-                {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                {/** TODO: This should be toEpochMilliseconds */}
+                {formatDateTime(protocol.createdOn.d14())}
               </Typography>
             </CreationInfoContainer>
           </InnerLeftContainer>

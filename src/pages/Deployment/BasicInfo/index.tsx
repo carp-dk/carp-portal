@@ -92,7 +92,13 @@ const BasicInfo = () => {
         onClose={confirmationModalProps.onClose}
         onConfirm={confirmationModalProps.onConfirm}
       />
-      <Box display="flex" justifyContent="flex-end" marginBottom="16px">
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginBottom: '16px',
+        }}
+      >
         <ExportButton
           onClick={() =>
             generateExport.mutate({ studyId, deploymentIds: [deploymentId] })
@@ -104,7 +110,7 @@ const BasicInfo = () => {
       </Box>
       <StyledCard elevation={2}>
         <Left>
-          <Stack direction="column" gap="8px" alignItems="center">
+          <Stack direction="column" spacing="8px" sx={{ alignItems: 'center' }}>
             <StyledStatusDot
               status={deployment.deploymentStatus.__type.split('.').pop()}
             />
@@ -133,9 +139,8 @@ const BasicInfo = () => {
           <Stack direction="column">
             <Stack
               direction="row"
-              gap="8px"
-              justifyContent="end"
-              marginRight="36px"
+              spacing="8px"
+              sx={{ marginRight: '36px', justifyContent: 'end' }}
             >
               <SecondaryText variant="h6">
                 {`${t('common:created_on', {
@@ -176,7 +181,11 @@ const BasicInfo = () => {
               )}
             </Stack>
             <StyledDivider />
-            <Stack direction="row" gap="16px" justifyContent="end">
+            <Stack
+              direction="row"
+              spacing="16px"
+              sx={{ justifyContent: 'end' }}
+            >
               <SecondaryText variant="h6">
                 {t('common:deployment_id', { id: deploymentId })}
               </SecondaryText>

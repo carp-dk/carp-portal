@@ -9,7 +9,7 @@ import StyledContainer from './styles';
 const Overview = () => {
   return (
     <StyledContainer>
-      <Stack gap="56px">
+      <Stack sx={{ gap: '56px' }}>
         <Status />
         <DeploymentStatus />
       </Stack>

@@ -62,7 +62,8 @@ const Status = () => {
         <div>
           <StyledTitle variant="h2">Status</StyledTitle>
           <StyledDescription variant="h6">
-            {`Created on ${formatDateTime(studyDetails.createdOn.toEpochMilliseconds())}`}
+            {/** This should be toEpochMilliseconds */}
+            {`Created on ${formatDateTime(studyDetails.createdOn.d14())}`}
           </StyledDescription>
         </div>
         <StyledStatus status={currentStudyStatus}>

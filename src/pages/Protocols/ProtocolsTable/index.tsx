@@ -68,6 +68,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
     }));
   };
 
+  // TODO: This should be epochMilliseconds()
   const sortedProtocols =
     protocolsLoading || !protocols
       ? []
@@ -75,8 +76,7 @@ const ProtocolsTable = ({ openModal }: Props) => {
           const compareResult =
             sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
-              : a.createdOn.toEpochMilliseconds() -
-                b.createdOn.toEpochMilliseconds();
+              : a.createdOn.d14() - b.createdOn.d14();
 
           return sortOrder.ascending ? compareResult : -compareResult;
         });
@@ -159,7 +159,8 @@ const ProtocolsTable = ({ openModal }: Props) => {
                   </TableCell>
                   <TableCell>
                     <TertiaryCellText variant="h5">
-                      {formatDateTime(protocol.createdOn.toEpochMilliseconds())}
+                      {/** TODO: This should be toEpochMilliseconds */}
+                      {formatDateTime(protocol.createdOn.d14())}
                     </TertiaryCellText>
                   </TableCell>
                 </StyledTableRow>

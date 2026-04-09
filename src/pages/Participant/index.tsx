@@ -1,6 +1,6 @@
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import BasicInfo from './BasicInfo';
 import DataVisualizationForParticipant from './DataVisualizationForParticipant';
 import Deployment from './Deployment';
@@ -9,9 +9,9 @@ import ParticipantDataCard from './ParticipantDataCard';
 
 const Participant = () => {
   const sectionName = [
-    { name: 'Deployments', uri: getUri(PageType.DEPLOYMENTS) },
-    { name: 'Deployment', uri: getUri(PageType.DEPLOYMENT) },
-    { name: 'Participant', uri: getUri(PageType.PARTICIPANT) },
+    { name: 'Deployments', uri: useGetUri(PageType.DEPLOYMENTS) },
+    { name: 'Deployment', uri: useGetUri(PageType.DEPLOYMENT) },
+    { name: 'Participant', uri: useGetUri(PageType.PARTICIPANT) },
   ];
   const description = 'See detailed data of the Participant.';
   return (

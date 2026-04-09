@@ -2,14 +2,14 @@ import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import { useExports } from '@Utils/queries/studies';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ExportsTable from './ExportsTable';
 
 const Export: React.FC = () => {
-  const sectionName = { name: 'Exports', uri: getUri(PageType.EXPORTS) };
+  const sectionName = { name: 'Exports', uri: useGetUri(PageType.EXPORTS) };
   const description =
     'In order to export study data, click on the New Export button.';
   const { id: studyId } = useParams();

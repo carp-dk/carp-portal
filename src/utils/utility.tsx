@@ -514,7 +514,7 @@ export enum PageType {
   EXPORTS,
 }
 
-export const getUri = (pageType: PageType) => {
+export const useGetUri = (pageType: PageType) => {
   const { id: studyId, deploymentId, participantId } = useParams();
 
   switch (pageType) {

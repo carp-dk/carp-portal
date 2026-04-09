@@ -1,6 +1,6 @@
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
-import { getUri, PageType } from '@Utils/utility';
+import { PageType, useGetUri } from '@Utils/utility';
 import { useTranslation } from 'react-i18next';
 import BasicInfo from './BasicInfo';
 import DataVisualizationForDeployment from './DataVisualizationForDeployment';
@@ -12,8 +12,8 @@ const Deployment = () => {
   const { t } = useTranslation();
 
   const sectionName = [
-    { name: 'Deployments', uri: getUri(PageType.DEPLOYMENTS) },
-    { name: 'Deployment', uri: getUri(PageType.DEPLOYMENT) },
+    { name: 'Deployments', uri: useGetUri(PageType.DEPLOYMENTS) },
+    { name: 'Deployment', uri: useGetUri(PageType.DEPLOYMENT) },
   ];
   const description = t('deployment:page_description');
 

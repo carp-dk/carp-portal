@@ -1,24 +1,24 @@
-import react from "@vitejs/plugin-react";
-import { defineConfig, loadEnv } from "vite";
-import { createHtmlPlugin } from "vite-plugin-html";
-import viteTsconfigPaths from "vite-tsconfig-paths";
-import pkg from "./package.json";
-import visualizer from "rollup-plugin-visualizer";
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite';
+import { createHtmlPlugin } from 'vite-plugin-html';
+import pkg from './package.json';
 
-const path = require("node:path");
+const path = require('node:path');
 const version = pkg.version;
 
-export default ({ mode }: { mode: string }) => {
+export default async ({ mode }: { mode: string }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
+  const { visualizer } = await import('rollup-plugin-visualizer');
 
   return defineConfig({
     build: {
       // Relative to the root
-      outDir: "../build",
-      assetsDir: "",
+      outDir: '../build',
+      assetsDir: '',
       rollupOptions: {
         onwarn: (warning, warn) => {
-          if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
             return;
           }
           warn(warning);
@@ -46,14 +46,14 @@ export default ({ mode }: { mode: string }) => {
         // },
 
         // Advanced tree shaking
-    //     treeshake: {
-    //       moduleSideEffects: false,
-    //       propertyReadSideEffects: false,
-    //     },
+        //     treeshake: {
+        //       moduleSideEffects: false,
+        //       propertyReadSideEffects: false,
+        //     },
       },
-    //   cssCodeSplit: true,
+      //   cssCodeSplit: true,
     },
-    
+
     // optimizeDeps: {
     //   include: ["react", "react-dom", "react-router-dom"],
     //   exclude: ["@mui/icons-material"],
@@ -63,44 +63,44 @@ export default ({ mode }: { mode: string }) => {
       // hmr: true,
       port: 3000,
       proxy: {
-        "/proxy": {
-          target: "https://dev.carp.dk",
+        '/proxy': {
+          target: 'https://dev.carp.dk',
           // target: "http://localhost:8080",
           changeOrigin: true,
           secure: false,
-          rewrite: (p) => p.replace(/^\/proxy/, ""),
+          rewrite: (p) => p.replace(/^\/proxy/, ''),
           headers: {
-            "ngrok-skip-browser-warning": "69420",
+            'ngrok-skip-browser-warning': '69420',
           },
         },
       },
     },
     resolve: {
+      tsconfigPaths: true,
       alias: {
-        "@Assets": path.resolve(__dirname, "./src/assets"),
-        "@Components": path.resolve(__dirname, "./src/components"),
-        "@Modules": path.resolve(__dirname, "./src/components/modules"),
-        "@Utils": path.resolve(__dirname, "./src/utils"),
+        '@Assets': path.resolve(__dirname, './src/assets'),
+        '@Components': path.resolve(__dirname, './src/components'),
+        '@Modules': path.resolve(__dirname, './src/components/modules'),
+        '@Utils': path.resolve(__dirname, './src/utils'),
       },
     },
     plugins: [
       react({
-        include: "**/*.{jsx,tsx}",
+        include: '**/*.{jsx,tsx}',
       }),
       createHtmlPlugin({
         inject: {
           data: {
             title:
-              process.env.NODE_ENV === "production"
-                ? "Copenhagen Research Platform"
+              process.env.NODE_ENV === 'production'
+                ? 'Copenhagen Research Platform'
                 : `🛠️ Copenhagen Research Platform`,
-            version: version
+            version: version,
           },
         },
       }),
-      viteTsconfigPaths(),
       visualizer({
-        filename: "dist/stats.html",
+        filename: 'dist/stats.html',
         open: false,
         gzipSize: true,
         brotliSize: true,
