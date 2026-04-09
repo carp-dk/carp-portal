@@ -9,7 +9,7 @@ type Props = {
 const OnboardingResearcherInput = ({ formik, editing }: Props) => {
   return (
     <FormControl fullWidth>
-      <Stack direction="column" gap={2}>
+      <Stack direction="column" sx={{ gap: 2 }}>
         <TextField
           fullWidth
           label="Researcher ID"

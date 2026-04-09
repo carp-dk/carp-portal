@@ -168,13 +168,16 @@ const ParticipantsTable = ({
       sorting,
       columnFilters,
     },
-    // TODO: change this to string
     getRowId: (row) => row.accountIdentity,
     muiSearchTextFieldProps: {
       variant: 'outlined',
       placeholder: '',
       label: 'Search',
-      InputLabelProps: { shrink: true },
+      slotProps: {
+        inputLabel: {
+          shrink: true,
+        },
+      },
     },
     renderTopToolbarCustomActions: () => {
       return (

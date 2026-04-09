@@ -121,7 +121,7 @@ const DeploymentStatus = () => {
           <Typography variant="h5">Manage</Typography>
         </StyledButton>
       </Top>
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" sx={{ alignItems: 'center' }}>
         <div style={{ width: '200px', height: '200px', display: 'flex' }}>
           <PieChart
             height={200}

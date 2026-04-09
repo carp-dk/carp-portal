@@ -162,14 +162,16 @@ const InformedConsent = () => {
       <StyledCard elevation={2}>
         <Title variant="h3">{t('participant:informed_consent.title')}</Title>
         <Right>
-          <Stack direction="column" alignItems="flex-start">
+          <Stack direction="column" sx={{ alignItems: 'flex-start' }}>
             <Stack
-              display="grid"
               direction="row"
-              alignItems="center"
-              gridTemplateColumns="310px 20px 100px 100px"
+              sx={{
+                display: 'grid',
+                alignItems: 'center',
+                gridTemplateColumns: '310px 20px 100px 100px',
+              }}
             >
-              <LastUploadText variant="h6" textAlign="end">
+              <LastUploadText variant="h6" sx={{ textAlign: 'end' }}>
                 {dateOfLastUpdateForUploadedFile}
               </LastUploadText>
               <StyledDivider />
@@ -186,12 +188,14 @@ const InformedConsent = () => {
               </ActionButton>
             </Stack>
             <Stack
-              display="grid"
               direction="row"
-              alignItems="center"
-              gridTemplateColumns="310px 20px 200px"
+              sx={{
+                display: 'grid',
+                alignItems: 'center',
+                gridTemplateColumns: '310px 20px 200px',
+              }}
             >
-              <LastUploadText variant="h6" textAlign="end">
+              <LastUploadText variant="h6" sx={{ textAlign: 'end' }}>
                 {dateOfLastUpdateForParticipantData}
               </LastUploadText>
               {consent && <StyledDivider />}

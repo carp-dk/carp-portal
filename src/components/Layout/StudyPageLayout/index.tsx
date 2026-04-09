@@ -27,7 +27,7 @@ const StudyPageLayout = ({ children }: Props) => {
       navigate('/studies', { replace: true });
       setSnackbarError('Study was not found!');
     }
-  }, [isError, error]);
+  }, [isError, error, navigate, setSnackbarError]);
 
   return (
     <PageWrapper>

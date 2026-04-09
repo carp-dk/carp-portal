@@ -10,7 +10,7 @@ import ParticipantsIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { List, useMediaQuery } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavigationBarItem from './NavigationBarItem';
 import {
@@ -27,23 +27,30 @@ const NavigationBar = () => {
   const { id: currentStudyId } = useParams();
   const isLarge = useMediaQuery('(min-width: 1540px)');
   const studyPath = `/studies/${currentStudyId}`;
-  let currentWidth = window.innerWidth;
-  let lastChangedWidth = currentWidth;
   const breakpoint = 1540;
-  const [open, setOpen] = useState(currentWidth >= breakpoint);
+  const [open, setOpen] = useState(window.innerWidth >= breakpoint);
 
-  const handleWidthChange = () => {
-    currentWidth = window.innerWidth;
-    if (currentWidth >= breakpoint && lastChangedWidth < breakpoint) {
-      setOpen(true);
-      lastChangedWidth = currentWidth;
-    } else if (currentWidth < breakpoint && lastChangedWidth >= breakpoint) {
-      setOpen(false);
-      lastChangedWidth = currentWidth;
-    }
-  };
+  useEffect(() => {
+    let currentWidth = window.innerWidth;
+    let lastChangedWidth = currentWidth;
 
-  window.addEventListener('resize', handleWidthChange);
+    const handleWidthChange = () => {
+      currentWidth = window.innerWidth;
+      if (currentWidth >= breakpoint && lastChangedWidth < breakpoint) {
+        setOpen(true);
+        lastChangedWidth = currentWidth;
+      } else if (currentWidth < breakpoint && lastChangedWidth >= breakpoint) {
+        setOpen(false);
+        lastChangedWidth = currentWidth;
+      }
+    };
+
+    window.addEventListener('resize', handleWidthChange);
+
+    return () => {
+      window.removeEventListener('resize', handleWidthChange);
+    };
+  }, [breakpoint]);
 
   return (
     <>

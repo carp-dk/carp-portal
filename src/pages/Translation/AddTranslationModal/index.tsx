@@ -176,22 +176,24 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                     {...params}
                     placeholder="Select Language"
                     size="small"
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <InputAdornment
-                          position="start"
-                          sx={{ marginRight: 0 }}
-                        >
-                          <CountryFlag
-                            name={formik.values.language}
-                            selected=""
-                            onSelect={undefined}
-                            width={25}
-                            style={{ marginLeft: '10px' }}
-                          />
-                        </InputAdornment>
-                      ),
+                    slotProps={{
+                      input: {
+                        ...params.slotProps?.input,
+                        startAdornment: (
+                          <InputAdornment
+                            position="start"
+                            sx={{ marginRight: 0 }}
+                          >
+                            <CountryFlag
+                              name={formik.values.language}
+                              selected=""
+                              onSelect={undefined}
+                              width={25}
+                              style={{ marginLeft: '10px' }}
+                            />
+                          </InputAdornment>
+                        ),
+                      },
                     }}
                   />
                 );
@@ -208,7 +210,10 @@ const AddTranslationModal = ({ open, onClose }: Props) => {
                 }
                 return (
                   <MenuItem key={key} {...optionProps}>
-                    <Stack direction="row" alignItems="center" gap={1}>
+                    <Stack
+                      direction="row"
+                      sx={{ alignItems: 'center', gap: 1 }}
+                    >
                       <CountryFlag
                         name={option}
                         selected=""

@@ -22,7 +22,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import getInputElement from './InputElements/selector';
-import getParticipantDataFormik from './InputElements/utils';
+import useParticipantDataFormik from './InputElements/utils';
 import {
   EditButton,
   Left,
@@ -96,7 +96,7 @@ const ParticipantDataCard = () => {
     }
   }, [participantGroupStatus]);
 
-  const participantDataFromik = getParticipantDataFormik(
+  const participantDataFromik = useParticipantDataFormik(
     study?.protocolSnapshot.expectedParticipantData
       ? study?.protocolSnapshot.expectedParticipantData.toArray()
       : [],
@@ -148,7 +148,7 @@ const ParticipantDataCard = () => {
         </Right>
       </Top>
       <FormControl>
-        <Stack gap={2}>
+        <Stack sx={{ gap: 2 }}>
           {study?.protocolSnapshot.expectedParticipantData
             .toArray()
             .map((data) => {
@@ -156,15 +156,17 @@ const ParticipantDataCard = () => {
               return (
                 <Stack
                   direction="column"
-                  gap={1}
-                  alignItems="left"
+                  sx={{
+                    gap: 1,
+                    alignItems: 'left',
+                    border: '1px solid',
+                    borderColor: '#ABABAB',
+                    borderRadius: 2,
+                    padding: 2,
+                  }}
                   key={data.inputDataType.name}
-                  border="1px solid"
-                  borderColor="#ABABAB"
-                  borderRadius={2}
-                  padding={2}
                 >
-                  <Title variant="h4" paddingBottom={2}>
+                  <Title variant="h4" sx={{ paddingBottom: 2 }}>
                     {getInputDataName(data.inputDataType.name)}
                   </Title>
                   {CarpInputDataTypes.inputElements.get(data.inputDataType) &&

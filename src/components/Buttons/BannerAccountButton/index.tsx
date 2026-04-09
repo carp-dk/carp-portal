@@ -1,6 +1,6 @@
 import { Link, Stack, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -31,9 +31,13 @@ const BannerAccountButton = () => {
     navigate('/', { replace: true });
   };
 
-  const portalVersion = document
-    .querySelector('meta[name="portal-version"]')
-    ?.getAttribute('content');
+  const portalVersion = useMemo(
+    () =>
+      document
+        .querySelector('meta[name="portal-version"]')
+        ?.getAttribute('content'),
+    [],
+  );
 
   return (
     <>
@@ -80,12 +84,11 @@ const BannerAccountButton = () => {
             {t('common:sign_out')}
           </Link>
         </StyledMenuItem>
-        <Stack marginTop={2} marginBottom={1} alignItems="center">
+        <Stack sx={{ marginTop: 2, marginBottom: 1, alignItems: 'center' }}>
           <Typography variant="h5_web">{`Portal:`}</Typography>
           <Typography
             variant="h5_web"
-            fontSize={'0.65rem'}
-            marginTop={-1}
+            sx={{ marginTop: -1, fontSize: '0.65rem' }}
           >{`v${portalVersion}`}</Typography>
           {/* <Typography variant="h5_web">{`CAWS:`}</Typography>
           <Typography variant="h5_web" fontSize={"0.65rem"} marginTop={-1}>{`v5.5.5-34556666`}</Typography> */}

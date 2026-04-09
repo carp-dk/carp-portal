@@ -18,7 +18,7 @@ type Props = {
 const LanguageInput = ({ formik, editing }: Props) => {
   return (
     <FormControl fullWidth>
-      <Stack direction="row" gap={2}>
+      <Stack direction="row" sx={{ gap: 2 }}>
         <div style={{ width: '100%' }}>
           <Autocomplete
             options={Object.keys(languageLabels)}
@@ -67,19 +67,24 @@ const LanguageInput = ({ formik, editing }: Props) => {
                   {...params}
                   placeholder="Select Language"
                   label="Language"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <InputAdornment position="start" sx={{ marginRight: 0 }}>
-                        <CountryFlag
-                          name={formik.values.language}
-                          selected=""
-                          onSelect={undefined}
-                          width={25}
-                          style={{ marginLeft: '10px' }}
-                        />
-                      </InputAdornment>
-                    ),
+                  slotProps={{
+                    input: {
+                      ...params.slotProps?.input,
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          sx={{ marginRight: 0 }}
+                        >
+                          <CountryFlag
+                            name={formik.values.language}
+                            selected=""
+                            onSelect={undefined}
+                            width={25}
+                            style={{ marginLeft: '10px' }}
+                          />
+                        </InputAdornment>
+                      ),
+                    },
                   }}
                 />
               );
@@ -96,7 +101,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
               }
               return (
                 <MenuItem key={key} {...optionProps}>
-                  <Stack direction="row" alignItems="center" gap={1}>
+                  <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
                     <CountryFlag
                       name={option}
                       selected=""

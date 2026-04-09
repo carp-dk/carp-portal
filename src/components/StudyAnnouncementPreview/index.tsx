@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
 import { formatDate } from '@Utils/utility';
+import { useMemo } from 'react';
 import {
   AnnouncementDate,
   AnnouncementHeader,
@@ -35,11 +36,20 @@ const StudyAnnouncementPreview = ({
   file,
   url,
 }: Props) => {
+  const currentDate = useMemo(() => new Date().toISOString(), []);
+  const imageUrl = useMemo(
+    () =>
+      file != null && file instanceof File
+        ? URL.createObjectURL(file)
+        : (file as string),
+    [file],
+  );
+
   return (
     <AnnouncementLeft>
       <AnnouncementHeader>
         <AnnouncementDate variant="h5">
-          {formatDate(new Date().toISOString())}
+          {formatDate(currentDate)}
         </AnnouncementDate>
         <AnnouncementType
           label={type || <i>no type yet</i>}
@@ -47,11 +57,7 @@ const StudyAnnouncementPreview = ({
           size="small"
         />
       </AnnouncementHeader>
-      {file != null && file instanceof File ? (
-        <img src={URL.createObjectURL(file)} alt="Announcement" />
-      ) : (
-        <img src={file as string} alt="Announcement" />
-      )}
+      <img src={imageUrl} alt="Announcement" />
       <AnnouncementTitle variant="h2">
         {title ? title.trim() : <i>No title yet</i>}
       </AnnouncementTitle>

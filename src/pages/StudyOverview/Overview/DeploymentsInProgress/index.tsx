@@ -80,7 +80,7 @@ const DeploymentsInProgress = () => {
         <StyledTooltip
           title={TooltipContent()}
           placement="right-start"
-          componentsProps={{
+          slotProps={{
             tooltip: {
               sx: {
                 color: 'text.primary',
@@ -142,8 +142,7 @@ const DeploymentsInProgress = () => {
                       {g.devices.map((d) => (
                         <Stack
                           direction="row"
-                          spacing={0.5}
-                          alignItems="center"
+                          sx={{ alignItems: 'center', gap: 0.5 }}
                           key={`${g.deploymentId}:${d.device.roleName}`}
                         >
                           <StyledStatusDot status={d.__type.split('.').pop()} />

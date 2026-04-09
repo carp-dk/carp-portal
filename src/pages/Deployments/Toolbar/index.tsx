@@ -36,21 +36,23 @@ const Toolbar = ({
         onChange={handleChange}
         value={searchText}
         placeholder="Search participant, ID number..."
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchOutlinedIcon />
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment
-              position="end"
-              style={{ display: showClearIcon }}
-              onClick={handleClear}
-            >
-              <ClearIcon />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchOutlinedIcon />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment
+                position="end"
+                style={{ display: showClearIcon }}
+                onClick={handleClear}
+              >
+                <ClearIcon />
+              </InputAdornment>
+            ),
+          },
         }}
       />
       <FormControlLabel

@@ -158,13 +158,13 @@ const Devices = () => {
             </Description>
           </DescriptionContainer>
           <Bottom>
-            <Stack direction="row" alignItems="center" gap="8px">
+            <Stack direction="row" sx={{ alignItems: 'center', gap: '8px' }}>
               <Checkbox onClick={() => setAllowDeploy(!allowDeploy)} />
               <Typography variant="h5">
                 {t('deployment:devices_card.device_deployment.submit')}
               </Typography>
             </Stack>
-            <Stack direction="row" gap="8px">
+            <Stack direction="row" sx={{ gap: '8px' }}>
               <CancelButton
                 onClick={() => {
                   setModalState({ open: false, roleName: '', deviceId: '' });
@@ -201,15 +201,15 @@ const Devices = () => {
                   });
                 }}
                 sx={
-                  primaryDevice.status !== 'Deployed' && {
+                  (primaryDevice.status !== 'Deployed' && {
                     '&:hover': {
                       backgroundColor: '#ededed',
                       borderRadius: '100px',
                       cursor: 'pointer',
                     },
-                  }
+                  },
+                  { justifyContent: 'center' })
                 }
-                justifyContent="center"
               >
                 <DeviceName direction="row">
                   {getDeviceIcon(primaryDevice.type)}
@@ -219,7 +219,7 @@ const Devices = () => {
                 </DeviceName>
                 <StyledStatusDot status={primaryDevice.status} />
               </DeviceRow>
-              <Stack gap="4px">
+              <Stack sx={{ gap: '4px' }}>
                 {connections.map((connection) => {
                   return (
                     <SubDeviceRow key={connection.name} direction="row">

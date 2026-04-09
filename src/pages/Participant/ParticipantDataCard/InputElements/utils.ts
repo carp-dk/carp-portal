@@ -212,7 +212,7 @@ const handedOutDeviceValidationSchema = yup
     },
   );
 
-const getParticipantDataFormik = (
+const useParticipantDataFormik = (
   participantData: ExpectedParticipantData[] | undefined,
   startingData: Data[],
   setParticipantData: UseMutationResult<any, unknown, any, unknown>,
@@ -359,4 +359,4 @@ const getParticipantDataFormik = (
   return formik;
 };
 
-export default getParticipantDataFormik;
+export default useParticipantDataFormik;

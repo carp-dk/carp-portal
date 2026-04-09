@@ -17,7 +17,7 @@ const CarpErrorCardComponent = ({ message, error }: Props) => {
 
   return (
     <ErrorCard>
-      <Stack direction="column" spacing={2} alignItems="center">
+      <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
         <StyledWarningIcon />
         <StyledMessage>{message}</StyledMessage>
         {error && (

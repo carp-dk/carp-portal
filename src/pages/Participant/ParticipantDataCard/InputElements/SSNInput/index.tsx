@@ -22,7 +22,7 @@ const SSNInput = ({ formik, editing }: Props) => {
 
   return (
     <FormControl fullWidth>
-      <Stack direction="row" gap={2}>
+      <Stack direction="row" sx={{ gap: 2 }}>
         <div>
           <InputLabel id="countryCodeLabel" required disabled={!editing}>
             Country
@@ -53,17 +53,17 @@ const SSNInput = ({ formik, editing }: Props) => {
             </MenuItem>
             <MenuItem id="Denmark" key="Denmark" value="DK">
               <Stack
-                gap={1}
                 direction="row"
-                alignItems="center"
-                justifyContent="start"
                 sx={{
                   display: 'grid',
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   textOverflow: 'ellipsis',
+                  gridTemplateColumns: '30px auto',
+                  gap: 1,
+                  alignItems: 'center',
+                  justifyContent: 'start',
                 }}
-                gridTemplateColumns="30px auto"
               >
                 <DanishFlag name="Denmark" onSelect={undefined} width={30} />{' '}
                 Denmark
@@ -87,17 +87,17 @@ const SSNInput = ({ formik, editing }: Props) => {
                   value={country.isoCode}
                 >
                   <Stack
-                    gap={1}
                     direction="row"
-                    alignItems="center"
-                    justifyContent="start"
                     sx={{
                       display: 'grid',
+                      gap: 1,
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
                       textOverflow: 'ellipsis',
+                      alignItems: 'center',
+                      justifyContent: 'start',
+                      gridTemplateColumns: '30px auto',
                     }}
-                    gridTemplateColumns="30px auto"
                   >
                     <CountryFlag
                       name={country.isoCode}

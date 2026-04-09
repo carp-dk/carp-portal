@@ -8,7 +8,7 @@ const ProtocolsHeader = () => {
     'See an overview of protocols. Select one protocol for further information.';
   return (
     <Container>
-      <Stack direction="row" marginLeft={-1}>
+      <Stack direction="row" sx={{ marginLeft: -1 }}>
         <BackButton to="/">
           <KeyboardArrowLeftRoundedIcon />
           <Title variant="h2">{title}</Title>

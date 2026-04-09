@@ -23,7 +23,7 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
 
   return (
     <FormControl fullWidth>
-      <Stack direction="row" gap={2}>
+      <Stack direction="row" sx={{ gap: 2 }}>
         <div>
           <InputLabel id="countryCodeLabel" required disabled={!editing}>
             Country
@@ -61,16 +61,16 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
             </MenuItem>
             <MenuItem id="Dk" key="Dk" value="Dk">
               <Stack
-                gap={1}
                 direction="row"
-                alignItems="center"
                 sx={{
                   display: 'grid',
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   textOverflow: 'ellipsis',
+                  gap: 1,
+                  alignItems: 'center',
+                  gridTemplateColumns: '30px 50px auto',
                 }}
-                gridTemplateColumns="30px 50px auto"
               >
                 <DanishFlag onSelect={undefined} width={30} />{' '}
                 <Typography>+45</Typography>
@@ -95,16 +95,16 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                   value={country.isoCode}
                 >
                   <Stack
-                    gap={1}
                     direction="row"
-                    alignItems="center"
                     sx={{
                       display: 'grid',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
                       textOverflow: 'ellipsis',
+                      gap: 1,
+                      alignItems: 'center',
+                      gridTemplateColumns: '30px 50px auto',
                     }}
-                    gridTemplateColumns="30px 50px auto"
                   >
                     <CountryFlag selected="" onSelect={undefined} width={30} />
                     <Typography>{country.dialCode}</Typography>
