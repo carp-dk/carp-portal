@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DateTooltip from '../DateTooltip';
 import ParticipantRecord from '../ParticipantRecord';
 import {
+  DeploymentTooltip,
   HorizontalStatusContainer,
   IdContainer,
   MinimizeButton,
@@ -108,15 +109,36 @@ const DeploymentCard = ({
             }
           />
         </HorizontalStatusContainer>
-        <IdContainer>
-          <Typography variant="h6">
-            Deployment ID: {deployment.participantGroupId}
-          </Typography>
-          <CopyButton
-            textToCopy={deployment.participantGroupId}
-            idType="Deployment"
-          />
-        </IdContainer>
+        <DeploymentTooltip
+          title={
+            <Typography variant="h6">
+              Deployment ID: {deployment.participantGroupId}
+            </Typography>
+          }
+          placement="top"
+          arrow
+        >
+          <IdContainer>
+            <Typography variant="h6">Deployment ID:</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                width: '105px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                direction: 'rtl',
+                textAlign: 'left',
+              }}
+            >
+              {deployment.participantGroupId}
+            </Typography>
+            <CopyButton
+              textToCopy={deployment.participantGroupId}
+              idType="Deployment"
+            />
+          </IdContainer>
+        </DeploymentTooltip>
         <MinimizeButton
           disableRipple
           onClick={(event) => handleCardToggle(event)}

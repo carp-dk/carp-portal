@@ -1,6 +1,8 @@
-import { Button, Card, Divider, Typography } from '@mui/material';
+import { Button, Card, Divider, Tooltip, Typography } from '@mui/material';
+import { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import { styled } from '@Utils/theme';
 import { getDeploymentStatusColor } from '@Utils/utility';
+import { createElement } from 'react';
 
 export const GreyText = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[500],
@@ -9,7 +11,7 @@ export const GreyText = styled(Typography)(({ theme }) => ({
 export const TopContainer = styled('div')({
   borderRadius: '16px',
   display: 'grid',
-  gridTemplateColumns: '1fr 40px 275px 400px 60px',
+  gridTemplateColumns: '1fr 40px 250px 250px 60px',
   alignItems: 'center',
   marginBottom: 16,
   width: '100%',
@@ -18,7 +20,6 @@ export const TopContainer = styled('div')({
 
 export const Names = styled(Typography)(({ theme }) => ({
   overflow: 'hidden',
-  minWidth: '200px',
   cursor: 'pointer',
   ':hover': {
     textDecoration: 'underline',
@@ -48,6 +49,26 @@ export const IdContainer = styled('div')({
   },
   justifyContent: 'flex-end',
 });
+
+export const DeploymentTooltip = styled((props: TooltipProps) =>
+  createElement(Tooltip, {
+    describeChild: true,
+    ...props,
+    classes: { popper: props.className },
+  }),
+)(({ theme }) => ({
+  [`& .${tooltipClasses.tooltipArrow}`]: {
+    backgroundColor: '#ededed',
+    color: theme.palette.text.primary,
+    padding: '8px 12px',
+    borderRadius: 6,
+    width: 'fit-content',
+    maxWidth: 'none',
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: '#ededed',
+  },
+}));
 
 export const StatusContainer = styled('div')({
   display: 'flex',
