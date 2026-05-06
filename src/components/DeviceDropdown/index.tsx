@@ -35,6 +35,7 @@ const DeviceDropdown = ({ device, connectedDevices, connections }: Props) => {
         </ExpandButton>
       </DropdownBar>
       <ConnectedDevicesContainer>
+        {/* TODO: CORE missing js type for this, so for now we will go with the HACK */}
         {connections.map((connection) => {
           const deviceType = (
             connectedDevices?.find((connectedDevice) => {
