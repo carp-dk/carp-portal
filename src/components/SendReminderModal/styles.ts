@@ -1,19 +1,15 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
+import { ModalBox as BaseModalBox } from '@Components/Modal/styles';
 
-export const ModalBox = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  backgroundColor: theme.palette.common.white,
-  borderRadius: 16,
+export { CancelButton, DoneButton, ModalActions } from '@Components/Modal/styles';
+
+export const ModalBox = styled(BaseModalBox)({
   padding: 24,
   maxWidth: 820,
-}));
+  display: 'flex',
+  flexDirection: 'column',
+});
 
 export const Title = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -46,30 +42,6 @@ export const Content = styled('div')({
   height: '100%',
   padding: '0px 0px 0px 12px',
 });
-
-export const ModalActions = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  gap: 8,
-  marginTop: 24,
-  width: '100%',
-  justifyContent: 'flex-end',
-});
-
-export const CancelButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  textTransform: 'none',
-  padding: '8px 24px',
-  borderRadius: 16,
-}));
-
-export const DoneButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.common.white,
-  textTransform: 'none',
-  padding: '8px 24px',
-  borderRadius: 16,
-}));
 
 export const TypographyVariant = styled(Typography)(() => ({
   marginTop: '10px',
