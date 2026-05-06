@@ -1,5 +1,5 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
-import ProtocolCardsView from '@Components/ProtocolCards';
+import ProtocolCardsContent from '@Components/ProtocolCards';
 import { StyledCard, StyledContainer, StyledNameCard } from '@Components/ProtocolCards/styles';
 import { useGetByVersion } from '@Utils/queries/protocols';
 import { getRandomNumber } from '@Utils/utility';
@@ -70,7 +70,7 @@ const ProtocolCards = () => {
     );
   }
 
-  return <ProtocolCardsView protocol={protocol} />;
+  return <ProtocolCardsContent protocol={protocol} />;
 };
 
 export default ProtocolCards;
