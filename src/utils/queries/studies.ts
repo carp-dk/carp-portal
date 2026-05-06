@@ -801,7 +801,7 @@ export const useCreateFile = () => {
       });
     },
     onSuccess: (
-      _: unknown,
+      _: CarpFile,
       variables: { studyId: string; formData: FormData },
     ) => {
       setSnackbarSuccess('File uploaded!');
