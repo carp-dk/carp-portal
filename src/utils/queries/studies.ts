@@ -800,9 +800,12 @@ export const useCreateFile = () => {
         formData: props.formData,
       });
     },
-    onSuccess: () => {
+    onSuccess: (
+      _: unknown,
+      variables: { studyId: string; formData: FormData },
+    ) => {
       setSnackbarSuccess('File uploaded!');
-      queryClient.invalidateQueries({ queryKey: ['files'] });
+      queryClient.invalidateQueries({ queryKey: ['files', variables.studyId] });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);
@@ -813,7 +816,7 @@ export const useCreateFile = () => {
 export const useGetFiles = (studyId: string) => {
   return useQuery<CarpFile[], CarpServiceError>({
     queryFn: async () => carpApi.study.files.getFiles({ studyId }),
-    queryKey: ['files'],
+    queryKey: ['files', studyId],
   });
 };
 
