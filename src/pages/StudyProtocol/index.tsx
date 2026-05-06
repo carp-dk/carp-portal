@@ -7,7 +7,7 @@ import StudyHeader from '@Components/StudyHeader';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { useParams } from 'react-router-dom';
-import ProtocolCards from './ProtocolCards';
+import ProtocolCards from '@Components/ProtocolCards';
 import ProtocolInfo from './ProtocolInfo';
 
 const StudyProtocol = () => {

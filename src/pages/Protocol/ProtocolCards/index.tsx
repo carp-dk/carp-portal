@@ -1,24 +1,11 @@
-import getInputDataName from '@Assets/inputTypeNames';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
+import ProtocolCardsView from '@Components/ProtocolCards';
+import { StyledCard, StyledContainer, StyledNameCard } from '@Components/ProtocolCards/styles';
 import { useGetByVersion } from '@Utils/queries/protocols';
-import { Connection } from '@Utils/types';
 import { getRandomNumber } from '@Utils/utility';
-import carpCommon from '@cachet/carp-common';
-import { Skeleton, Typography } from '@mui/material';
+import { Skeleton } from '@mui/material';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import DeviceDropdown from '../DeviceDropdown';
-import {
-  CardTitle,
-  ProtocolDescription,
-  ProtocolName,
-  StyledCard,
-  StyledContainer,
-  StyledNameCard,
-} from './styles';
-
-type ParticipantRole =
-  carpCommon.dk.cachet.carp.common.application.users.ParticipantRole;
 
 const ProtocolNameCardSkeleton: React.FC = () => {
   return (
@@ -63,6 +50,7 @@ const ProtocolCards = () => {
     isLoading: protocolLoading,
     error: protocolError,
   } = useGetByVersion(protocolId, version);
+
   if (protocolLoading)
     return (
       <StyledContainer>
@@ -82,87 +70,7 @@ const ProtocolCards = () => {
     );
   }
 
-  return (
-    <StyledContainer>
-      <StyledNameCard elevation={2}>
-        <CardTitle variant="h2">Name</CardTitle>
-        <ProtocolName variant="h3">{protocol.name}</ProtocolName>
-        <CardTitle variant="h2">Description</CardTitle>
-        <ProtocolDescription variant="h4">
-          {protocol.description}
-        </ProtocolDescription>
-      </StyledNameCard>
-      {protocol.primaryDevices.size() > 0 &&
-        protocol.connections.size() > 0 && (
-          <StyledCard elevation={2}>
-            <CardTitle variant="h2">Devices</CardTitle>
-            {protocol.primaryDevices.toArray().map((device) => {
-              return (
-                <DeviceDropdown
-                  connectedDevices={protocol.connectedDevices.toArray()}
-                  connections={protocol.connections
-                    .toArray()
-                    .filter((connection: Connection) => {
-                      return connection.connectedToRoleName === device.roleName;
-                    })}
-                  key={device.roleName}
-                  device={device}
-                />
-              );
-            })}
-          </StyledCard>
-        )}
-      {protocol.expectedParticipantData.size() > 0 && (
-        <StyledCard elevation={2}>
-          <CardTitle variant="h2">Participant data</CardTitle>
-          <ul>
-            {protocol.expectedParticipantData.toArray().map((data) => {
-              return (
-                <li
-                  key={data.inputDataType.toString()}
-                  style={{ marginBottom: 10 }}
-                >
-                  <Typography variant="h4">
-                    {getInputDataName(data.attribute.inputDataType.name)}
-                  </Typography>
-                </li>
-              );
-            })}
-          </ul>
-        </StyledCard>
-      )}
-      {protocol.participantRoles.size() > 0 && (
-        <StyledCard elevation={2}>
-          <CardTitle variant="h2">Participant roles</CardTitle>
-          <ul>
-            {protocol.participantRoles
-              .toArray()
-              .map((role: ParticipantRole) => {
-                return (
-                  <li key={role.role} style={{ marginBottom: 10 }}>
-                    <Typography variant="h4">{role.role}</Typography>
-                  </li>
-                );
-              })}
-          </ul>
-        </StyledCard>
-      )}
-      {protocol.tasks.size() > 0 && (
-        <StyledCard elevation={2}>
-          <CardTitle variant="h2">Tasks</CardTitle>
-          <ul>
-            {protocol.tasks.toArray().map((task) => {
-              return (
-                <li key={task.name} style={{ marginBottom: 10 }}>
-                  <Typography variant="h4">{task.name}</Typography>
-                </li>
-              );
-            })}
-          </ul>
-        </StyledCard>
-      )}
-    </StyledContainer>
-  );
+  return <ProtocolCardsView protocol={protocol} />;
 };
 
 export default ProtocolCards;

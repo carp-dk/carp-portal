@@ -23,7 +23,7 @@ type Props = {
   connectedDevices?: DeviceConfiguration<any, any>[];
 };
 
-const DeviceDropdown = ({ device, connections, connectedDevices }: Props) => {
+const DeviceDropdown = ({ device, connectedDevices, connections }: Props) => {
   const [open, setOpen] = useState(false);
   return (
     <StyledContainer numberOfConnections={connections.length} open={open}>
@@ -36,13 +36,11 @@ const DeviceDropdown = ({ device, connections, connectedDevices }: Props) => {
       </DropdownBar>
       <ConnectedDevicesContainer>
         {connections.map((connection) => {
-          const deviceType =
-            // TODO: CORE missing js type for i20_1, so for now we will go with the HACK
-            (
-              connectedDevices.find((connectedDevice) => {
-                return connectedDevice.roleName === connection.roleName;
-              }) as any
-            ).i20_1;
+          const deviceType = (
+            connectedDevices?.find((connectedDevice) => {
+              return connectedDevice.roleName === connection.roleName;
+            }) as any
+          ).i20_1;
           return (
             <ConnectedDeviceItem key={uuidv4()}>
               {getDeviceIcon(deviceType, true)}
