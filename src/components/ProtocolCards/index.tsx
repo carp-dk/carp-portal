@@ -1,9 +1,9 @@
 import getInputDataName from '@Assets/inputTypeNames';
+import DeviceDropdown from '@Components/DeviceDropdown';
 import carpCommon from '@cachet/carp-common';
 import carpProtocols from '@cachet/carp-protocols-core';
 import { StudyProtocolSnapshot } from '@carp-dk/client';
 import { Typography } from '@mui/material';
-import DeviceDropdown from '../DeviceDropdown';
 import {
   CardTitle,
   ProtocolDescription,
