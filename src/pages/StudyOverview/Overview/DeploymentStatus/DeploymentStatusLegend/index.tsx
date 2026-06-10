@@ -8,10 +8,10 @@ const DeploymentStatusLegend = ({ data }: { data: PieValueType[] }) => {
     <Stack direction="column">
       {data.map((entry) => (
         <ParticipantsRow key={entry.id}>
-          <Typography variant="h3" color={entry.color} display="flex">
+          <Typography variant="h3" sx={{ color: entry.color }} display="flex">
             {entry.value}
           </Typography>
-          <Typography variant="h3" color={entry.color} display="flex">
+          <Typography variant="h3" sx={{ color: entry.color }} display="flex">
             {`${entry.label}`}
           </Typography>
         </ParticipantsRow>
