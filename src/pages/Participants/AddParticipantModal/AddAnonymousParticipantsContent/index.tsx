@@ -189,7 +189,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         Generate participant invitation links
       </ModalTitle>
       <ModalDescription variant="h6" id="modal-modal-description">
-        Enter the details of how mow many accounts to generate.
+        Enter the details of how many accounts to generate.
       </ModalDescription>
       <ModalContent>
         <form onSubmit={handleFormSubmit}>
