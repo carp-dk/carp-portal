@@ -6,6 +6,7 @@ import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participan
 import { useStudyStatus } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
+import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DeploymentCard, { DeploymentSkeletonCard } from './DeploymentCard';
@@ -17,6 +18,7 @@ const PageSize = 8;
 const Deployments = () => {
   const { id: studyId } = useParams();
   const [searchText, setSearchText] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const [deployments, setDeployments] = useState([] as ParticipantGroup[]);
   const [paginatedDeployments, setPaginatedDeployments] = useState(
     [] as ParticipantGroup[],
@@ -41,7 +43,7 @@ const Deployments = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchText]);
+  }, [searchText, selectedStatus]);
 
   useEffect(() => {
     setOpenCardCount(0);
@@ -50,38 +52,36 @@ const Deployments = () => {
       deploymentsData?.groups !== undefined &&
       deploymentsData?.groups.length !== 0
     ) {
-      if (searchText === '') {
-        setDeployments(deploymentsData?.groups);
-        setPaginatedDeployments(
-          deploymentsData?.groups.slice(
-            (currentPage - 1) * PageSize,
-            currentPage * PageSize,
-          ),
-        );
-      } else {
-        const newDeployments = deploymentsData?.groups.filter(
-          (deployment) =>
-            deployment?.participantGroupId.includes(searchText) ||
-            deployment?.participants?.some(
-              (participant) =>
-                (participant.firstName &&
-                  participant.lastName &&
-                  `${participant.firstName} ${participant.lastName}`
-                    .toLowerCase()
-                    .includes(searchText)) ||
-                participant.email?.toLowerCase().includes(searchText),
-            ),
-        );
-        setDeployments(newDeployments);
-        setPaginatedDeployments(
-          newDeployments.slice(
-            (currentPage - 1) * PageSize,
-            currentPage * PageSize,
-          ),
-        );
-      }
+      const newDeployments = deploymentsData.groups.filter((deployment) => {
+        const status =
+          deployment.deploymentStatus.__type.split('.').pop() ?? '';
+        const matchesStatus =
+          selectedStatus === 'all' || status === selectedStatus;
+        const matchesSearch =
+          searchText === '' ||
+          deployment.participantGroupId.includes(searchText) ||
+          deployment.participants.some(
+            (participant) =>
+              (participant.firstName &&
+                participant.lastName &&
+                `${participant.firstName} ${participant.lastName}`
+                  .toLowerCase()
+                  .includes(searchText)) ||
+              participant.email?.toLowerCase().includes(searchText),
+          );
+
+        return matchesStatus && matchesSearch;
+      });
+
+      setDeployments(newDeployments);
+      setPaginatedDeployments(
+        newDeployments.slice(
+          (currentPage - 1) * PageSize,
+          currentPage * PageSize,
+        ),
+      );
     }
-  }, [searchText, currentPage, deploymentsData, studyStatus]);
+  }, [searchText, selectedStatus, currentPage, deploymentsData, studyStatus]);
 
   const sectionName = {
     name: 'Deployments',
@@ -108,6 +108,8 @@ const Deployments = () => {
         <StudyHeader path={[sectionName]} description={description} />
         <Toolbar
           searchDeployments={() => {}}
+          filterDeploymentsByStatus={() => {}}
+          selectedStatus="all"
           toggleAllCards={() => {}}
           isAllCardsOpen={false} // error here: length of undefined
         />
@@ -154,7 +156,9 @@ const Deployments = () => {
     <StudyPageLayout>
       <StudyHeader path={[sectionName]} description={description} />
       <Toolbar
-        searchDeployments={(text) => setSearchText(text)}
+        searchDeployments={setSearchText}
+        filterDeploymentsByStatus={setSelectedStatus}
+        selectedStatus={selectedStatus}
         toggleAllCards={toggleAllCards}
         isAllCardsOpen={
           openCardCount === paginatedDeployments.length &&
@@ -170,6 +174,11 @@ const Deployments = () => {
           key={deployment.participantGroupId}
         />
       ))}
+      {deployments.length === 0 && (
+        <Typography variant="h5">
+          No deployments match the current filters.
+        </Typography>
+      )}
       <Pagination
         currentPage={currentPage}
         totalCount={deployments.length}

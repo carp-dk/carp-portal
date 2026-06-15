@@ -1,17 +1,35 @@
+import { getDeploymentStatusColor } from '@Utils/utility';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { FormControlLabel, InputAdornment, Switch } from '@mui/material';
+import {
+  FormControlLabel,
+  InputAdornment,
+  MenuItem,
+  Switch,
+  Typography,
+} from '@mui/material';
 import { useState } from 'react';
-import { StyledContainer, StyledTextField } from './styles';
+import { StyledContainer, StyledSelect, StyledTextField } from './styles';
+
+const statusOptions = [
+  { value: 'Invited', label: 'Invited' },
+  { value: 'DeployingDevices', label: 'Deploying' },
+  { value: 'Running', label: 'Running' },
+  { value: 'Stopped', label: 'Stopped' },
+];
 
 type Props = {
   searchDeployments: (searchText: string) => void;
+  filterDeploymentsByStatus: (status: string) => void;
+  selectedStatus: string;
   toggleAllCards: () => void;
   isAllCardsOpen: boolean;
 };
 
 const Toolbar = ({
   searchDeployments,
+  filterDeploymentsByStatus,
+  selectedStatus,
   toggleAllCards,
   isAllCardsOpen,
 }: Props) => {
@@ -55,6 +73,48 @@ const Toolbar = ({
           },
         }}
       />
+      <StyledSelect
+        value={selectedStatus}
+        inputProps={{ 'aria-label': 'Filter deployments by status' }}
+        onChange={(event) =>
+          filterDeploymentsByStatus(event.target.value as string)
+        }
+        renderValue={(value) => {
+          const selectedOption = statusOptions.find(
+            (status) => status.value === value,
+          );
+
+          return (
+            <Typography
+              variant="h5"
+              sx={{
+                color:
+                  value === 'all'
+                    ? 'text.primary'
+                    : getDeploymentStatusColor(value as string),
+              }}
+            >
+              {selectedOption?.label ?? 'All statuses'}
+            </Typography>
+          );
+        }}
+      >
+        <MenuItem value="all">
+          <Typography variant="h5" color="text.primary">
+            All statuses
+          </Typography>
+        </MenuItem>
+        {statusOptions.map((status) => (
+          <MenuItem key={status.value} value={status.value}>
+            <Typography
+              variant="h5"
+              sx={{ color: getDeploymentStatusColor(status.value) }}
+            >
+              {status.label}
+            </Typography>
+          </MenuItem>
+        ))}
+      </StyledSelect>
       <FormControlLabel
         control={<Switch />}
         checked={isAllCardsOpen}
