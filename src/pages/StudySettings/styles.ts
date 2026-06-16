@@ -1,4 +1,4 @@
-import { Card, Stack, Typography } from '@mui/material';
+import { Button, Card, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const StyledContainer = styled('div', {
@@ -40,8 +40,19 @@ export const Subheading = styled(Typography, {
   opacity: disabled ? '0.5' : 1,
 }));
 
-export const ProtocolInformation = styled(Stack)(({ theme }) => ({
-  gap: '8px',
+export const ProtocolInformation = styled(Button)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 16,
   color: theme.palette.primary.main,
-  cursor: 'pointer',
+  fontSize: '0.8125rem',
+  lineHeight: 1.4,
+  minHeight: 30,
+  padding: '4px 10px',
+  textTransform: 'none',
+  '& .MuiButton-endIcon': {
+    marginLeft: 4,
+  },
+  '& svg': {
+    fontSize: 16,
+  },
 }));

@@ -3,7 +3,6 @@ import AnnouncementRoundedIcon from '@mui/icons-material/AnnouncementRounded';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 import DeploymentsIcon from '@mui/icons-material/Groups';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
 import LanguageIcon from '@mui/icons-material/Language';
 import ParticipantsIcon from '@mui/icons-material/Person';
@@ -75,12 +74,6 @@ const NavigationBar = () => {
             text="Settings"
             path={`${studyPath}/settings`}
             icon={<SettingsIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Protocol"
-            path={`${studyPath}/protocol`}
-            icon={<InsertDriveFileIcon />}
             showTooltip={!open}
           />
           <NavigationBarItem

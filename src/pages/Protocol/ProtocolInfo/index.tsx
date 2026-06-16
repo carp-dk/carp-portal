@@ -1,4 +1,5 @@
 import CopyButton from '@Components/Buttons/CopyButton';
+import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import {
   useGetByVersion,
   useGetVersionHistory,
@@ -15,8 +16,8 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import AddProtocolVersionModal from '../AddProtocolVersionModal';
 import {
   AddVersionButton,
@@ -73,17 +74,49 @@ const ProtocolInfoSkeleton: React.FC = () => {
 const ProtocolInfo = () => {
   const isDownMd = useMediaQuery('(max-width:1250px)');
   const { id: protocolId } = useParams();
-  const navigate = useNavigate();
-  const [version, setVersion] = useState(null);
-  const { data: protocol, isLoading: protocolLoading } = useGetByVersion(
-    protocolId,
-    version,
-  );
-  const { data: versions, isLoading: versionsLoading } =
-    useGetVersionHistory(protocolId);
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const version = searchParams.get('version');
+  const {
+    data: protocol,
+    isLoading: protocolLoading,
+    error: protocolError,
+  } = useGetByVersion(protocolId, version);
+  const {
+    data: versions,
+    isLoading: versionsLoading,
+    error: versionsError,
+  } = useGetVersionHistory(protocolId);
   const [modalOpen, setModalOpen] = useState(false);
-  if (protocolLoading || versionsLoading || !protocol)
-    return <ProtocolInfoSkeleton />;
+  const latestVersion = versions
+    ?.toSorted((a, b) => b.date.d14() - a.date.d14())
+    .at(0)?.tag;
+
+  useEffect(() => {
+    if (!version && latestVersion) {
+      setSearchParams(
+        { version: latestVersion },
+        { replace: true, state: location.state },
+      );
+    }
+  }, [latestVersion, location.state, setSearchParams, version]);
+
+  if (protocolLoading || versionsLoading) return <ProtocolInfoSkeleton />;
+  if (versionsError) {
+    return (
+      <CarpErrorCardComponent
+        message="An error occurred while loading protocol versions"
+        error={versionsError}
+      />
+    );
+  }
+  if (!versions?.length) {
+    return (
+      <CarpErrorCardComponent message="No protocol versions are available" />
+    );
+  }
+  if (protocolError || !protocol || !version) return null;
+
   return (
     <>
       <DownloadButtonContainer>
@@ -110,7 +143,7 @@ const ProtocolInfo = () => {
           <VersionContainer>
             <Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
               <ProtocolVersion variant="h4">
-                Current version: {version ?? versions[0].tag}
+                Current version: {version}
               </ProtocolVersion>
               <FormControl sx={{ width: '175px' }}>
                 <InputLabel
@@ -132,11 +165,10 @@ const ProtocolInfo = () => {
                   label="Protocol version"
                   value={version ?? ''}
                   onChange={(e) => {
-                    setVersion(
-                      e.target.value === '' ? undefined : e.target.value,
-                    );
-                    navigate(
-                      `/protocols/${protocolId}?version=${e.target.value}`,
+                    const selectedVersion = e.target.value;
+                    setSearchParams(
+                      selectedVersion ? { version: selectedVersion } : {},
+                      { state: location.state },
                     );
                   }}
                   sx={{ maxHeight: '32px' }}

@@ -15,10 +15,10 @@ import StudyAnnouncementEdit from '../StudyAnnouncementEdit';
 import StudyAnnouncementNew from '../StudyAnnouncementNew';
 import StudyAnnouncements from '../StudyAnnouncements';
 import StudyOverview from '../StudyOverview';
-import StudyProtocol from '../StudyProtocol';
 import StudySettings from '../StudySettings';
 import Translations from '../Translation';
 import ProtectedRoute from './ProtectedRoute';
+import StudyProtocolRedirect from './StudyProtocolRedirect';
 
 const App = () => {
   const auth = useAuth();
@@ -79,7 +79,7 @@ const App = () => {
           path="/studies/:id/protocol"
           element={
             <ProtectedRoute>
-              <StudyProtocol />
+              <StudyProtocolRedirect />
             </ProtectedRoute>
           }
         />

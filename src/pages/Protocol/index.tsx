@@ -62,7 +62,7 @@ const Protocol = () => {
     <PrivatePageLayout>
       <Header />
       <ProtocolInfo />
-      {protocolLoading ? (
+      {!version || protocolLoading ? (
         <StyledContainer>
           <ProtocolNameCardSkeleton />
           <ProtocolCardSkeleton />
@@ -74,9 +74,9 @@ const Protocol = () => {
           message="An error occurred while loading protocol"
           error={protocolError}
         />
-      ) : (
+      ) : protocol ? (
         <ProtocolCards protocol={protocol} />
-      )}
+      ) : null}
     </PrivatePageLayout>
   );
 };

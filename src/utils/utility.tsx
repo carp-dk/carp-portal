@@ -293,6 +293,17 @@ export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   link.remove();
 };
 
+export const getProtocolVersionTag = (applicationData?: string | null) => {
+  if (!applicationData) return null;
+
+  try {
+    const protocolVersionTag = JSON.parse(applicationData)?.protocolVersionTag;
+    return typeof protocolVersionTag === 'string' ? protocolVersionTag : null;
+  } catch {
+    return null;
+  }
+};
+
 export const getParticipantDataName = (dataType: string) => {
   switch (dataType) {
     case 'dk.cachet.carp.input.sex':
@@ -502,7 +513,6 @@ export const convertICToReactPdf = async (consent: ConsentObject) => {
 export enum PageType {
   OVERVIEW,
   SETTINGS,
-  PROTOCOL,
   RESOURCES,
   TRANSLATION,
   PARTICIPANTS,
@@ -522,8 +532,6 @@ export const useGetUri = (pageType: PageType) => {
       return `/studies/${studyId}/overview`;
     case PageType.SETTINGS:
       return `/studies/${studyId}/settings`;
-    case PageType.PROTOCOL:
-      return `/studies/${studyId}/protocol`;
     case PageType.RESOURCES:
       return `/studies/${studyId}/resources`;
     case PageType.TRANSLATION:

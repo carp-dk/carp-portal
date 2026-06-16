@@ -124,9 +124,14 @@ export const useGetVersionHistory = (protocolId: string) => {
   });
 };
 
-export const useGetByVersion = (protocolId: string, versionTag: string) => {
+export const useGetByVersion = (
+  protocolId?: string,
+  versionTag?: string | null,
+) => {
   return useQuery<StudyProtocolSnapshot, CarpServiceError>({
-    queryFn: async () => carpApi.protocols.getBy({ protocolId, versionTag }),
+    queryFn: async () =>
+      carpApi.protocols.getBy({ protocolId: protocolId!, versionTag }),
     queryKey: ['protocolByVersion', protocolId, versionTag],
+    enabled: !!protocolId && !!versionTag,
   });
 };

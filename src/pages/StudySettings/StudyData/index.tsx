@@ -10,7 +10,7 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from '@Utils/queries/studies';
-import { formatDateTime } from '@Utils/utility';
+import { formatDateTime, getProtocolVersionTag } from '@Utils/utility';
 import LinkIcon from '@mui/icons-material/Link';
 import {
   Alert,
@@ -82,11 +82,9 @@ const StudyData = () => {
   const studyProtocolFormik = useFormik({
     initialValues: {
       protocolId: studyDetails?.protocolSnapshot?.id ?? '',
-      protocolVersion: studyDetails?.protocolSnapshot?.applicationData
-        ? JSON.parse(studyDetails?.protocolSnapshot?.applicationData)?.[
-            'protocolVersionTag'
-          ]
-        : null,
+      protocolVersion: getProtocolVersionTag(
+        studyDetails?.protocolSnapshot?.applicationData,
+      ),
     },
     validationSchema: studyProtocolValidationSchema,
     onSubmit: async (values) => {
@@ -160,6 +158,16 @@ const StudyData = () => {
   }
 
   const isProtocolSelectorEnabled = protocols && protocols.length > 0;
+  const assignedProtocolVersion = getProtocolVersionTag(
+    studyDetails.protocolSnapshot?.applicationData,
+  );
+  const assignedProtocolVersionQuery = assignedProtocolVersion
+    ? `?${new URLSearchParams({ version: assignedProtocolVersion })}`
+    : '';
+  const protocolDetailsPath = studyDetails.protocolSnapshot
+    ? `/protocols/${studyDetails.protocolSnapshot.id.stringRepresentation}${assignedProtocolVersionQuery}`
+    : null;
+
   if (
     studyProtocolFormik.values.protocolId &&
     !studyProtocolFormik.values.protocolVersion
@@ -220,13 +228,21 @@ const StudyData = () => {
         <FormLabel disabled={!studyStatus.canSetStudyProtocol} required>
           Protocol
         </FormLabel>
-        <ProtocolInformation
-          direction="row"
-          onClick={() => navigate(`/studies/${studyId}/protocol`)}
-        >
-          <Typography variant="h6">See detailed information</Typography>
-          <LinkIcon sx={{ fontSize: 16 }} />
-        </ProtocolInformation>
+        {protocolDetailsPath && (
+          <ProtocolInformation
+            variant="outlined"
+            endIcon={<LinkIcon />}
+            onClick={() =>
+              navigate(protocolDetailsPath, {
+                state: {
+                  returnTo: `/studies/${studyId}/settings`,
+                },
+              })
+            }
+          >
+            View protocol details
+          </ProtocolInformation>
+        )}
       </Stack>
       {!isProtocolSelectorEnabled || !studyStatus.canSetStudyProtocol ? (
         <TextField
@@ -244,9 +260,9 @@ const StudyData = () => {
                   <Typography noWrap>
                     {studyDetails.protocolSnapshot?.name +
                       ' (' +
-                      (JSON.parse(
+                      (getProtocolVersionTag(
                         studyDetails.protocolSnapshot?.applicationData,
-                      )?.['protocolVersionTag'] ?? 'latest') +
+                      ) ?? 'latest') +
                       ')'}
                   </Typography>
                 </InputAdornment>
