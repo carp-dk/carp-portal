@@ -1,4 +1,4 @@
-import { Card, Fab, TableCell, TableRow, Typography } from '@mui/material';
+import { Box, Card, Fab, TableCell, TableRow, Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export const HeaderTableCell = styled(TableCell)(({ theme }) => ({
@@ -8,12 +8,15 @@ export const HeaderTableCell = styled(TableCell)(({ theme }) => ({
   zIndex: 0,
   '&:nth-of-type(1)': {
     paddingLeft: 56,
-    width: '52%',
+    width: '40%',
   },
   '&:nth-of-type(2)': {
-    width: '48%',
+    width: 180,
   },
   '&:nth-of-type(3)': {
+    width: '36%',
+  },
+  '&:nth-of-type(4)': {
     textAlign: 'center',
     paddingRight: 56,
     width: 220,
@@ -25,6 +28,20 @@ export const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: 16,
   position: 'relative',
   padding: 16,
+  '& + &': {
+    marginTop: 24,
+  },
+}));
+
+export const ResourceSectionHeader = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '8px 32px 0 32px',
+});
+
+export const ResourceSectionTitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.primary,
 }));
 
 export const PrimaryCellText = styled(Typography)(({ theme }) => ({
@@ -48,7 +65,7 @@ export const StyledTableRow = styled(TableRow)({
     '&:nth-of-type(1)': {
       paddingLeft: 56,
     },
-    '&:nth-of-type(3)': {
+    '&:nth-of-type(4)': {
       textAlign: 'center',
       paddingRight: 56,
     },
@@ -61,10 +78,7 @@ export const StyledTableRow = styled(TableRow)({
 });
 
 export const AddResourceButton = styled(Fab)(({ theme }) => ({
-  position: 'absolute',
   boxShadow: theme.shadows[2],
-  bottom: 36,
-  right: 36,
   backgroundColor: theme.palette.secondary.light,
   borderRadius: 16,
   width: 72,
@@ -83,3 +97,24 @@ export const AddResourceButton = styled(Fab)(({ theme }) => ({
   },
   zIndex: 0,
 }));
+
+export const AddResourceButtonGroup = styled(Box)({
+  position: 'absolute',
+  right: 36,
+  bottom: 36,
+  display: 'flex',
+  gap: 12,
+});
+
+export const CountryFlagIcon = styled('div')({
+  fontSize: 24,
+});
+
+export const LanguageWrapper = styled('div')({
+  display: 'flex',
+  columnGap: 8,
+});
+
+export const CountryLanguage = styled('div')({
+  lineHeight: '1.75em',
+});

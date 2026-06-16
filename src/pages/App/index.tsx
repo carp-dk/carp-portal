@@ -1,6 +1,6 @@
 import LoadingLandingPage from '@Components/Layout/LoadingLandingPage';
 import { useAuth } from 'react-oidc-context';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import Account from '../Account';
 import Deployment from '../Deployment';
 import Deployments from '../Deployments';
@@ -16,9 +16,14 @@ import StudyAnnouncementNew from '../StudyAnnouncementNew';
 import StudyAnnouncements from '../StudyAnnouncements';
 import StudyOverview from '../StudyOverview';
 import StudySettings from '../StudySettings';
-import Translations from '../Translation';
 import ProtectedRoute from './ProtectedRoute';
 import StudyProtocolRedirect from './StudyProtocolRedirect';
+
+const TranslationsRedirect = () => {
+  const { id: studyId } = useParams();
+
+  return <Navigate to={`/studies/${studyId}/resources`} replace />;
+};
 
 const App = () => {
   const auth = useAuth();
@@ -95,7 +100,7 @@ const App = () => {
           path="/studies/:id/translations"
           element={
             <ProtectedRoute>
-              <Translations />
+              <TranslationsRedirect />
             </ProtectedRoute>
           }
         />

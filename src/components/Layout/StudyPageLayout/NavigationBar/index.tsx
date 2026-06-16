@@ -3,10 +3,9 @@ import AnnouncementRoundedIcon from '@mui/icons-material/AnnouncementRounded';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DownloadForOfflineRoundedIcon from '@mui/icons-material/DownloadForOfflineRounded';
 import DeploymentsIcon from '@mui/icons-material/Groups';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
-import LanguageIcon from '@mui/icons-material/Language';
 import ParticipantsIcon from '@mui/icons-material/Person';
-import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { List, useMediaQuery } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -79,13 +78,7 @@ const NavigationBar = () => {
           <NavigationBarItem
             text="Resources"
             path={`${studyPath}/resources`}
-            icon={<SecurityIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Translation"
-            path={`${studyPath}/translations`}
-            icon={<LanguageIcon />}
+            icon={<InsertDriveFileIcon />}
             showTooltip={!open}
           />
         </List>

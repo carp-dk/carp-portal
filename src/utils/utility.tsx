@@ -535,7 +535,7 @@ export const useGetUri = (pageType: PageType) => {
     case PageType.RESOURCES:
       return `/studies/${studyId}/resources`;
     case PageType.TRANSLATION:
-      return `/studies/${studyId}/translations`;
+      return `/studies/${studyId}/resources`;
     case PageType.PARTICIPANTS:
       return `/studies/${studyId}/participants`;
     case PageType.PARTICIPANT:

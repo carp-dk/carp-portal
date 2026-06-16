@@ -1,15 +1,23 @@
+import { languageLabels } from '@Assets/languageMap';
 import DragAndDrop from '@Components/DragAndDrop';
-import { useCreateResource } from '@Utils/queries/studies';
 import {
+  useCreateResource,
+  useCreateTranslation,
+} from '@Utils/queries/studies';
+import {
+  Autocomplete,
+  Box,
   FormLabel,
   MenuItem,
   Modal,
   Select,
   SelectChangeEvent,
+  Stack,
   TextField,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import * as flags from 'react-flags-select';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
@@ -29,14 +37,25 @@ interface Props {
 }
 
 const resourceTypes = {
-  'Consent Document': 'informed_consent',
+  Translation: 'translation',
+  'Informed Consent': 'informed_consent',
 };
 
 const validationSchema = yup.object({
   type: yup.string().required('Type is required'),
-  // if type is other, require 'name'
   name: yup.string().when('type', (type: string | string[], schema) => {
-    return type === 'other' ? schema.required('Name is required') : schema;
+    const selectedType = Array.isArray(type) ? type[0] : type;
+
+    return selectedType === 'other'
+      ? schema.required('Name is required')
+      : schema;
+  }),
+  language: yup.string().when('type', (type: string | string[], schema) => {
+    const selectedType = Array.isArray(type) ? type[0] : type;
+
+    return selectedType === 'Translation'
+      ? schema.required('Language is required')
+      : schema;
   }),
   file: yup
     .mixed()
@@ -61,40 +80,53 @@ const validationSchema = yup.object({
 const AddResourceModal = ({ open, onClose }: Props) => {
   const { id: studyId } = useParams();
   const createResource = useCreateResource();
+  const createTranslation = useCreateTranslation();
   const [fileName, setFileName] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: '',
+      language: '',
       file: null,
       type: '',
     },
     validationSchema,
     onSubmit: async (values) => {
-      const resourceString = await (values.file as File).text();
-      createResource.mutate({
-        studyId,
-        resource: JSON.parse(resourceString),
-        name: formik.values.name.replace('.json', ''),
-      });
+      const fileString = await (values.file as File).text();
+      const document = JSON.parse(fileString);
+
+      if (values.type === 'Translation') {
+        createTranslation.mutate({
+          studyId,
+          translation: document,
+          name: languageLabels[values.language].secondary,
+        });
+      } else {
+        createResource.mutate({
+          studyId,
+          resource: document,
+          name: formik.values.name.replace('.json', ''),
+        });
+      }
     },
   });
 
   const handleTypeChange = (e: SelectChangeEvent) => {
-    if (e.target.value === 'other') {
+    if (e.target.value === 'other' || e.target.value === 'Translation') {
       formik.setFieldValue('name', '');
     } else {
       formik.setFieldValue('name', resourceTypes[e.target.value]);
     }
+    formik.setFieldValue('language', '');
     formik.setFieldValue('type', e.target.value);
   };
 
   useEffect(() => {
-    if (createResource.isSuccess) {
+    if (createResource.isSuccess || createTranslation.isSuccess) {
       onClose();
     }
-  }, [createResource.isSuccess]);
+  }, [createResource.isSuccess, createTranslation.isSuccess]);
 
   useEffect(() => {
     return () => {
@@ -128,10 +160,10 @@ const AddResourceModal = ({ open, onClose }: Props) => {
     >
       <ModalBox sx={{ boxShadow: 24 }}>
         <ModalTitle variant="h2" id="modal-modal-title">
-          Add Resource
+          Add File
         </ModalTitle>
         <ModalDescription variant="h5" id="modal-modal-description">
-          Give a name and upload resource. The file must be a JSON file.
+          Choose a type and upload a JSON file.
         </ModalDescription>
         <ModalContainer>
           <ModalContent>
@@ -149,6 +181,76 @@ const AddResourceModal = ({ open, onClose }: Props) => {
               ))}
               <MenuItem value="other">Other...</MenuItem>
             </Select>
+            {formik.values.type === 'Translation' && (
+              <>
+                <FormLabel id="languageLabel" required>
+                  Language
+                </FormLabel>
+                <Autocomplete
+                  options={Object.keys(languageLabels)}
+                  value={formik.values.language}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  onChange={(_, newValue) => {
+                    formik.setFieldTouched('language', true);
+                    formik.setFieldValue('language', newValue || '', true);
+                  }}
+                  filterOptions={(options, params) => {
+                    return options.filter((option) =>
+                      languageLabels[option].primary
+                        .toLowerCase()
+                        .includes(params.inputValue.toLowerCase()),
+                    );
+                  }}
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  getOptionLabel={(option) => {
+                    if (!option || !languageLabels[option]) return '';
+                    return `${languageLabels[option].primary} ${
+                      languageLabels[option].secondary
+                    }`;
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Select Language"
+                      size="small"
+                    />
+                  )}
+                  renderOption={(props, option) => {
+                    const { key } = props;
+                    const optionProps = {
+                      ...props,
+                    } as typeof props & { key?: unknown; override?: unknown };
+                    delete optionProps.key;
+                    delete optionProps.override;
+                    const countryCode =
+                      option[0].toUpperCase() + option[1].toLowerCase();
+                    let CountryFlag;
+                    if (countryCode in flags) {
+                      CountryFlag = flags[countryCode];
+                    } else {
+                      CountryFlag = 'div';
+                    }
+                    return (
+                      <Box component="li" key={key} {...optionProps}>
+                        <Stack
+                          direction="row"
+                          sx={{ alignItems: 'center', gap: 1 }}
+                        >
+                          <CountryFlag
+                            name={option}
+                            selected=""
+                            onSelect={undefined}
+                            width={30}
+                          />
+                          {languageLabels[option].primary}
+                        </Stack>
+                      </Box>
+                    );
+                  }}
+                />
+              </>
+            )}
             {formik.values.type === 'other' && (
               <>
                 <FormLabel required>Name</FormLabel>
@@ -164,9 +266,10 @@ const AddResourceModal = ({ open, onClose }: Props) => {
                 />
               </>
             )}
-            <FormLabel required> Upload Resource</FormLabel>
+            <FormLabel required>Upload JSON File</FormLabel>
             <DragAndDrop
               handleChange={handleChange}
+              fileTypes={['application/json']}
               name="file"
               formik={formik}
               uploading={uploading}

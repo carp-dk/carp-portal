@@ -1,9 +1,8 @@
 import { languageLabels } from '@Assets/languageMap';
 import {
   Autocomplete,
+  Box,
   FormControl,
-  InputAdornment,
-  MenuItem,
   Stack,
   TextField,
 } from '@mui/material';
@@ -42,55 +41,20 @@ const LanguageInput = ({ formik, editing }: Props) => {
                 languageLabels[option].secondary
               }`;
             }}
-            renderInput={(params) => {
-              if (!formik.values.language) {
-                return (
-                  <TextField
-                    {...params}
-                    placeholder="Select Language"
-                    size="small"
-                  />
-                );
-              }
-              const countryCode = formik.values.language.languageCode
-                ? formik.values.language.languageCode[0].toUpperCase() +
-                  formik.values.language.languageCode[1].toLowerCase()
-                : '';
-              let CountryFlag;
-              if (countryCode in flags) {
-                CountryFlag = flags[countryCode];
-              } else {
-                CountryFlag = 'div';
-              }
-              return (
-                <TextField
-                  {...params}
-                  placeholder="Select Language"
-                  label="Language"
-                  slotProps={{
-                    input: {
-                      ...params.slotProps?.input,
-                      startAdornment: (
-                        <InputAdornment
-                          position="start"
-                          sx={{ marginRight: 0 }}
-                        >
-                          <CountryFlag
-                            name={formik.values.language}
-                            selected=""
-                            onSelect={undefined}
-                            width={25}
-                            style={{ marginLeft: '10px' }}
-                          />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-                />
-              );
-            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder="Select Language"
+                label="Language"
+              />
+            )}
             renderOption={(props, option) => {
-              const { key, ...optionProps } = props;
+              const { key } = props;
+              const optionProps = {
+                ...props,
+              } as typeof props & { key?: unknown; override?: unknown };
+              delete optionProps.key;
+              delete optionProps.override;
               const countryCode =
                 option[0].toUpperCase() + option[1].toLowerCase();
               let CountryFlag;
@@ -100,7 +64,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
                 CountryFlag = 'div';
               }
               return (
-                <MenuItem key={key} {...optionProps}>
+                <Box component="li" key={key} {...optionProps}>
                   <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
                     <CountryFlag
                       name={option}
@@ -110,7 +74,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
                     />
                     {languageLabels[option].primary}
                   </Stack>
-                </MenuItem>
+                </Box>
               );
             }}
           />
