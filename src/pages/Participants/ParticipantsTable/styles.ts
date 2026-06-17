@@ -52,7 +52,7 @@ export const StyledContainer = styled('div')(({ theme }) => ({
   '& .MuiFormControl-root': {
     display: 'flex',
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 420,
   },
   '& thead tr': {
     boxShadow: 'none',
@@ -103,12 +103,20 @@ export const TopToolbarButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.grey[700]}`,
   borderRadius: 16,
   textTransform: 'none',
-  padding: '8px 16px',
+  padding: '8px 12px',
   color: theme.palette.primary.main,
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
-  gap: 8,
+  flexShrink: 0,
+  gap: 6,
+  whiteSpace: 'nowrap',
+  '& .MuiTypography-root': {
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
   '&:disabled': {
     color: theme.palette.primary.main,
     opacity: '0.4',
@@ -120,7 +128,8 @@ export const CustomTopToolbar = styled('div')({
   flexDirection: 'row',
   gap: 16,
   justifyContent: 'flex-end',
-  minWidth: 350,
+  flexWrap: 'nowrap',
+  minWidth: 400,
   alignSelf: 'center',
 });
 

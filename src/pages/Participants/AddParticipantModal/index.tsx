@@ -1,22 +1,17 @@
-import { TabContext, TabPanel } from '@mui/lab';
-import { Modal, Tab, Tabs } from '@mui/material';
-import { useState } from 'react';
+import { Modal } from '@mui/material';
 import AddAnonymousParticipantsContent from './AddAnonymousParticipantsContent';
 import AddParticipantContent from './AddParticipantContent';
 import { ModalBox } from './styles';
 
+export type AddParticipantModalMode = 'participant' | 'anonymous';
+
 type Props = {
   open: boolean;
   onClose: () => void;
+  mode: AddParticipantModalMode;
 };
 
-const AddParticipantModal = ({ open, onClose }: Props) => {
-  const [value, setValue] = useState('Participant');
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
+const AddParticipantModal = ({ open, onClose, mode }: Props) => {
   return (
     <Modal
       open={open}
@@ -25,18 +20,11 @@ const AddParticipantModal = ({ open, onClose }: Props) => {
       onClose={onClose}
     >
       <ModalBox sx={{ boxShadow: 24 }}>
-        <TabContext value={value}>
-          <Tabs value={value} onChange={handleChange}>
-            <Tab label="Add participant" value="Participant" />
-            <Tab label="Add anonymous participants" value="Anonymous" />
-          </Tabs>
-          <TabPanel value="Participant">
-            <AddParticipantContent open={open} onClose={onClose} />
-          </TabPanel>
-          <TabPanel value="Anonymous">
-            <AddAnonymousParticipantsContent open={open} onClose={onClose} />
-          </TabPanel>
-        </TabContext>
+        {mode === 'participant' ? (
+          <AddParticipantContent open={open} onClose={onClose} />
+        ) : (
+          <AddAnonymousParticipantsContent open={open} onClose={onClose} />
+        )}
       </ModalBox>
     </Modal>
   );

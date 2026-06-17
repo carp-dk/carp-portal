@@ -32,6 +32,7 @@ interface Props {
   openNewDeploymentModal: () => void;
   openActionNeededModal: () => void;
   openAddParticipantModal: () => void;
+  openAddAnonymousParticipantModal: () => void;
   openImportParticipantModal: () => void;
   setParticipantsToAdd: (participants: ParticipantAccountSummaryDto[]) => void;
 }
@@ -39,6 +40,7 @@ interface Props {
 const ParticipantsTable = ({
   openNewDeploymentModal,
   openAddParticipantModal,
+  openAddAnonymousParticipantModal,
   openImportParticipantModal,
   openActionNeededModal,
   setParticipantsToAdd,
@@ -182,6 +184,10 @@ const ParticipantsTable = ({
     renderTopToolbarCustomActions: () => {
       return (
         <CustomTopToolbar>
+          <TopToolbarButton onClick={openAddAnonymousParticipantModal}>
+            <AddRoundedIcon fontSize="small" />
+            <Typography variant="h5">Anonymous</Typography>
+          </TopToolbarButton>
           <TopToolbarButton onClick={handleImportList}>
             <FileUploadOutlinedIcon fontSize="small" />
             <Typography variant="h5">Import list</Typography>

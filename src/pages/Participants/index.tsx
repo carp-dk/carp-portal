@@ -5,12 +5,15 @@ import { PageType, useGetUri } from '@Utils/utility';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddNewDeploymentModal from './AddNewDeploymentModal';
+import type { AddParticipantModalMode } from './AddParticipantModal';
 import AddParticipantModal from './AddParticipantModal';
 import ImportParticipantsModal from './ImportParticipantsModal';
 import ParticipantsTable from './ParticipantsTable';
 
 const Participants = () => {
   const [addParticipantModalOpen, setAddParticipantModalOpen] = useState(false);
+  const [addParticipantModalMode, setAddParticipantModalMode] =
+    useState<AddParticipantModalMode>('participant');
   const [importParticipantsModalOpen, setImportParticipantsModalOpen] =
     useState(false);
   const [newDeploymentModalOpen, setNewDeploymentModalOpen] = useState(false);
@@ -24,6 +27,11 @@ const Participants = () => {
   const navigate = useNavigate();
   const { id: studyId } = useParams();
   const openAddParticipantModal = () => {
+    setAddParticipantModalMode('participant');
+    setAddParticipantModalOpen(true);
+  };
+  const openAddAnonymousParticipantModal = () => {
+    setAddParticipantModalMode('anonymous');
     setAddParticipantModalOpen(true);
   };
   const closeAddParticipantModal = () => {
@@ -54,6 +62,7 @@ const Participants = () => {
         openActionNeededModal={openActionNeededModal}
         setParticipantsToAdd={handleSetParticipantsToAdd}
         openAddParticipantModal={openAddParticipantModal}
+        openAddAnonymousParticipantModal={openAddAnonymousParticipantModal}
         openNewDeploymentModal={openNewDeploymentModal}
         openImportParticipantModal={openImportParticipantsModal}
       />
@@ -64,6 +73,7 @@ const Participants = () => {
       <AddParticipantModal
         open={addParticipantModalOpen}
         onClose={closeAddParticipantModal}
+        mode={addParticipantModalMode}
       />
       <AddNewDeploymentModal
         participantsToAdd={participantsToAdd}
