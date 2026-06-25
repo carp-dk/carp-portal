@@ -8,17 +8,28 @@ import { PageType, useGetUri } from '@Utils/utility';
 import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
 import { Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import DeploymentCard, { DeploymentSkeletonCard } from './DeploymentCard';
 import Pagination from './Pagination';
 import Toolbar from './Toolbar';
 
 const PageSize = 8;
+const deploymentStatuses = [
+  'Invited',
+  'DeployingDevices',
+  'Running',
+  'Stopped',
+];
 
 const Deployments = () => {
   const { id: studyId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusParam = searchParams.get('status');
   const [searchText, setSearchText] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const selectedStatus =
+    statusParam && deploymentStatuses.includes(statusParam)
+      ? statusParam
+      : 'all';
   const [deployments, setDeployments] = useState([] as ParticipantGroup[]);
   const [paginatedDeployments, setPaginatedDeployments] = useState(
     [] as ParticipantGroup[],
@@ -32,6 +43,18 @@ const Deployments = () => {
   const { data: studyStatus, isLoading: isStudyStatusLoading } =
     useStudyStatus(studyId);
   const [openCardCount, setOpenCardCount] = useState(0);
+
+  const filterDeploymentsByStatus = (status: string) => {
+    setSearchParams((params) => {
+      const nextParams = new URLSearchParams(params);
+      if (status === 'all') {
+        nextParams.delete('status');
+      } else {
+        nextParams.set('status', status);
+      }
+      return nextParams;
+    });
+  };
 
   const toggleAllCards = () => {
     setOpenCardCount((prevOpenCardCount) =>
@@ -157,7 +180,7 @@ const Deployments = () => {
       <StudyHeader path={[sectionName]} description={description} />
       <Toolbar
         searchDeployments={setSearchText}
-        filterDeploymentsByStatus={setSelectedStatus}
+        filterDeploymentsByStatus={filterDeploymentsByStatus}
         selectedStatus={selectedStatus}
         toggleAllCards={toggleAllCards}
         isAllCardsOpen={

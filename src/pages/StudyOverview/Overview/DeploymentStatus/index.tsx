@@ -148,7 +148,14 @@ const DeploymentStatus = () => {
             <PieCenterLabel>{participantStatus.size()}</PieCenterLabel>
           </PieChart>
         </div>
-        <DeploymentStatusLegend data={statuses} />
+        <DeploymentStatusLegend
+          data={statuses}
+          onStatusClick={(status) =>
+            navigate(
+              `/studies/${studyId}/deployments?status=${encodeURIComponent(status)}`,
+            )
+          }
+        />
       </Stack>
     </StyledCard>
   );
