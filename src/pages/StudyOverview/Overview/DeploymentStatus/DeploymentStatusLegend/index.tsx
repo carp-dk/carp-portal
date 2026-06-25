@@ -1,7 +1,8 @@
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { PieValueType } from '@mui/x-charts';
-import ParticipantsRow from './styles';
+import ParticipantsRow, { StyledArrow } from './styles';
 
 type Props = {
   data: PieValueType[];
@@ -17,7 +18,7 @@ const statusByLabel: Record<string, string> = {
 
 const DeploymentStatusLegend = ({ data, onStatusClick }: Props) => {
   return (
-    <Stack direction="column">
+    <Stack direction="column" sx={{ flex: 1, minWidth: 0, marginLeft: 2 }}>
       {data.map((entry) => {
         const label = String(entry.label);
 
@@ -44,6 +45,9 @@ const DeploymentStatusLegend = ({ data, onStatusClick }: Props) => {
             >
               {label}
             </Typography>
+            <StyledArrow aria-hidden="true" sx={{ color: entry.color }}>
+              <ArrowForwardRoundedIcon fontSize="small" />
+            </StyledArrow>
           </ParticipantsRow>
         );
       })}
