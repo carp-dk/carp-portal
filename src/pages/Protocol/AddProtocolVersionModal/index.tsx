@@ -30,6 +30,7 @@ interface Props {
   open: boolean;
   originalProtocolId: string;
   onClose: () => void;
+  onVersionAdded?: (versionTag: string) => void;
 }
 const fileTypes = ['application/json'];
 
@@ -74,6 +75,7 @@ const AddProtocolVersionModal = ({
   originalProtocolId,
   open,
   onClose,
+  onVersionAdded,
 }: Props) => {
   const versionTagRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
@@ -96,20 +98,22 @@ const AddProtocolVersionModal = ({
       const protocol = JSON.parse(
         await (values.file as File).text(),
       ) as StudyProtocol;
-      updateProtocol.mutate({
-        name: values.name,
-        description: values.description,
-        protocol,
-        versionTag: values.versionTag,
-      });
+      updateProtocol.mutate(
+        {
+          name: values.name,
+          description: values.description,
+          protocol,
+          versionTag: values.versionTag,
+        },
+        {
+          onSuccess: () => {
+            onVersionAdded?.(values.versionTag);
+            onClose();
+          },
+        },
+      );
     },
   });
-
-  useEffect(() => {
-    if (updateProtocol.isSuccess) {
-      onClose();
-    }
-  }, [updateProtocol.isSuccess]);
 
   useEffect(() => {
     return () => {

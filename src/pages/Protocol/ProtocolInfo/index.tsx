@@ -232,6 +232,12 @@ const ProtocolInfo = () => {
       <AddProtocolVersionModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        onVersionAdded={(newVersion) => {
+          setSearchParams(
+            { version: newVersion },
+            { replace: true, state: location.state },
+          );
+        }}
         originalProtocolId={protocol.id.stringRepresentation ?? ''}
       />
     </>
