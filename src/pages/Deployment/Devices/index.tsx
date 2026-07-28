@@ -200,16 +200,16 @@ const Devices = () => {
                     deviceId: v4(),
                   });
                 }}
-                sx={
-                  (primaryDevice.status !== 'Deployed' && {
+                sx={[
+                  primaryDevice.status !== 'Deployed' && {
                     '&:hover': {
                       backgroundColor: '#ededed',
                       borderRadius: '100px',
                       cursor: 'pointer',
                     },
                   },
-                  { justifyContent: 'center' })
-                }
+                  { justifyContent: 'center' },
+                ]}
               >
                 <DeviceName direction="row">
                   {getDeviceIcon(primaryDevice.type)}
