@@ -794,15 +794,20 @@ export const useCreateFile = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (props: { studyId: string; formData: FormData }) => {
+    mutationFn: async (props: {
+      studyId: string;
+      deploymentId: string;
+      formData: FormData;
+    }) => {
       return carpApi.study.files.createFile({
         studyId: props.studyId,
+        deploymentId: props.deploymentId,
         formData: props.formData,
       });
     },
     onSuccess: (
       _: CarpFile,
-      variables: { studyId: string; formData: FormData },
+      variables: { studyId: string; deploymentId: string; formData: FormData },
     ) => {
       setSnackbarSuccess('File uploaded!');
       queryClient.invalidateQueries({ queryKey: ['files', variables.studyId] });

@@ -89,7 +89,11 @@ const ProtocolInfo = () => {
   } = useGetVersionHistory(protocolId);
   const [modalOpen, setModalOpen] = useState(false);
   const latestVersion = versions
-    ?.toSorted((a, b) => b.date.d14() - a.date.d14())
+    ?.toSorted(
+      (a, b) =>
+        Number(b.date.toEpochMilliseconds()) -
+        Number(a.date.toEpochMilliseconds()),
+    )
     .at(0)?.tag;
 
   useEffect(() => {
@@ -192,15 +196,19 @@ const ProtocolInfo = () => {
             <CreationInfoContainer>
               <Typography variant="h6">Created on</Typography>
               <Typography variant="h6">
-                {/** TODO: This should be toEpochMilliseconds */}
-                {formatDateTime(versions[versions.length - 1].date.d14())}
+                {formatDateTime(
+                  Number(
+                    versions[versions.length - 1].date.toEpochMilliseconds(),
+                  ),
+                )}
               </Typography>
             </CreationInfoContainer>
             <CreationInfoContainer>
               <Typography variant="h6">Last version</Typography>
               <Typography variant="h6">
-                {/** TODO: This should be toEpochMilliseconds */}
-                {formatDateTime(protocol.createdOn.d14())}
+                {formatDateTime(
+                  Number(protocol.createdOn.toEpochMilliseconds()),
+                )}
               </Typography>
             </CreationInfoContainer>
           </InnerLeftContainer>

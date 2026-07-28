@@ -1,7 +1,6 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import { useStudyDetails, useStudyStatus } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
-import kotlinx from '@cachet/carp-kotlinx-datetime';
 import { StudyStatus } from '@carp-dk/client';
 import LinkIcon from '@mui/icons-material/Link';
 import { Typography } from '@mui/material';
@@ -18,9 +17,6 @@ import {
   StyledTitle,
   Top,
 } from './styles';
-// HACK toEpochMilliseconds is not a function if Insant is not imported
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Instant = kotlinx.datetime.Instant;
 
 const Status = () => {
   const { id: studyId } = useParams();
@@ -62,8 +58,7 @@ const Status = () => {
         <div>
           <StyledTitle variant="h2">Status</StyledTitle>
           <StyledDescription variant="h6">
-            {/** This should be toEpochMilliseconds */}
-            {`Created on ${formatDateTime(studyDetails.createdOn.d14())}`}
+            {`Created on ${formatDateTime(Number(studyDetails.createdOn.toEpochMilliseconds()))}`}
           </StyledDescription>
         </div>
         <StyledStatus status={currentStudyStatus}>

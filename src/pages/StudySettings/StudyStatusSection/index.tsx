@@ -198,8 +198,9 @@ const StudyStatusSection: React.FC = () => {
           <CreationInfoContainer>
             <Typography variant="h6">Created on</Typography>
             <Typography variant="h6">
-              {/** TODO: This should be toEpochMilliseconds */}
-              {formatDateTime(studyStatus.createdOn.d14())}
+              {formatDateTime(
+                Number(studyStatus.createdOn.toEpochMilliseconds()),
+              )}
             </Typography>
           </CreationInfoContainer>
           {isStudyOwner && (

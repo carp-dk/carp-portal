@@ -62,9 +62,9 @@ const UploadInformedConsentModal = ({ open, onClose }: Props) => {
           'participant-id': participantId,
         }),
       );
-      formData.append('deployment_id', deploymentId);
       await createFile.mutateAsync({
         studyId,
+        deploymentId,
         formData,
       });
       addInformedConsentFormik.resetForm();

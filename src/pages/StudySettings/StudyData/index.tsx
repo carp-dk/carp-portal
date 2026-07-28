@@ -176,7 +176,11 @@ const StudyData = () => {
       // TODO: d14() should be toEpochMilliseconds() when the core is fixed to return the correct type
       studyProtocolFormik.setFieldValue(
         'protocolVersion',
-        protocolVersions.toSorted((a, b) => b.date.d14() - a.date.d14())[0].tag,
+        protocolVersions.toSorted(
+          (a, b) =>
+            Number(b.date.toEpochMilliseconds()) -
+            Number(a.date.toEpochMilliseconds()),
+        )[0].tag,
       );
       studyProtocolFormik.submitForm();
     }
@@ -270,10 +274,11 @@ const StudyData = () => {
               endAdornment: (
                 <InputAdornment position="end" sx={{ width: '35%' }}>
                   <Typography variant="caption">
-                    {/** TODO: This should be toEpochMilliseconds */}
                     {studyDetails.protocolSnapshot
                       ? formatDateTime(
-                          studyDetails.protocolSnapshot?.createdOn.d14(),
+                          Number(
+                            studyDetails.protocolSnapshot?.createdOn.toEpochMilliseconds(),
+                          ),
                         )
                       : ''}
                   </Typography>
@@ -307,7 +312,11 @@ const StudyData = () => {
           >
             {/** TODO: This should be toEpochMilliseconds */}
             {protocols
-              .toSorted((a, b) => b.createdOn.d14() - a.createdOn.d14())
+              .toSorted(
+                (a, b) =>
+                  Number(b.createdOn.toEpochMilliseconds()) -
+                  Number(a.createdOn.toEpochMilliseconds()),
+              )
               .map((protocol) => (
                 <MenuItem
                   key={protocol.id.stringRepresentation}
@@ -327,7 +336,9 @@ const StudyData = () => {
                     </Typography>
                     <Typography variant="caption">
                       {/** TODO: This should be toEpochMilliseconds */}
-                      {formatDateTime(protocol.createdOn.d14())}
+                      {formatDateTime(
+                        Number(protocol.createdOn.toEpochMilliseconds()),
+                      )}
                     </Typography>
                   </Stack>
                 </MenuItem>
@@ -356,7 +367,11 @@ const StudyData = () => {
             >
               {/** TODO: This should be toEpochMilliseconds */}
               {protocolVersions
-                .toSorted((a, b) => b.date.d14() - a.date.d14())
+                .toSorted(
+                  (a, b) =>
+                    Number(b.date.toEpochMilliseconds()) -
+                    Number(a.date.toEpochMilliseconds()),
+                )
                 .map((protocolVersion) => (
                   <MenuItem
                     key={protocolVersion.tag}
@@ -373,7 +388,11 @@ const StudyData = () => {
             studyProtocolFormik.values.protocolVersion &&
             studyProtocolFormik.values.protocolVersion !==
               protocolVersions
-                .toSorted((a, b) => b.date.d14() - a.date.d14())
+                .toSorted(
+                  (a, b) =>
+                    Number(b.date.toEpochMilliseconds()) -
+                    Number(a.date.toEpochMilliseconds()),
+                )
                 .at(0)?.tag && (
               <Alert severity="warning" sx={{ borderRadius: 2 }}>
                 The selected protocol version is not the latest.

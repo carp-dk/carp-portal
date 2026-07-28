@@ -76,7 +76,8 @@ const ProtocolsTable = ({ openModal }: Props) => {
           const compareResult =
             sortOrder.field === 'name'
               ? a.name.localeCompare(b.name)
-              : a.createdOn.d14() - b.createdOn.d14();
+              : Number(a.createdOn.toEpochMilliseconds()) -
+                Number(b.createdOn.toEpochMilliseconds());
 
           return sortOrder.ascending ? compareResult : -compareResult;
         });
@@ -160,7 +161,9 @@ const ProtocolsTable = ({ openModal }: Props) => {
                   <TableCell>
                     <TertiaryCellText variant="h5">
                       {/** TODO: This should be toEpochMilliseconds */}
-                      {formatDateTime(protocol.createdOn.d14())}
+                      {formatDateTime(
+                        Number(protocol.createdOn.toEpochMilliseconds()),
+                      )}
                     </TertiaryCellText>
                   </TableCell>
                 </StyledTableRow>

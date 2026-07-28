@@ -7,7 +7,7 @@ import { useStudyStatus } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
 import { Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import DeploymentCard, { DeploymentSkeletonCard } from './DeploymentCard';
 import Pagination from './Pagination';
@@ -43,6 +43,19 @@ const Deployments = () => {
   const { data: studyStatus, isLoading: isStudyStatusLoading } =
     useStudyStatus(studyId);
   const [openCardCount, setOpenCardCount] = useState(0);
+
+  // carp.core 1.3 exposes an optional group representation name on the
+  // groupStatuses entries; map it by deployment id (falls back when null).
+  const representationNameById = useMemo(() => {
+    const map = new Map<string, string | null>();
+    (
+      deploymentsData?.groupStatuses as
+        { id: string; representation?: { name: string | null } }[] | undefined
+    )?.forEach((status) => {
+      map.set(status.id, status.representation?.name ?? null);
+    });
+    return map;
+  }, [deploymentsData]);
 
   const filterDeploymentsByStatus = (status: string) => {
     setSearchParams((params) => {
@@ -191,6 +204,9 @@ const Deployments = () => {
       {paginatedDeployments.map((deployment) => (
         <DeploymentCard
           deployment={deployment}
+          representationName={representationNameById.get(
+            deployment.participantGroupId,
+          )}
           openCardCount={openCardCount}
           setOpenCardCount={setOpenCardCount}
           allDeploymentCount={paginatedDeployments.length}

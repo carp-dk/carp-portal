@@ -109,7 +109,7 @@ const InformedConsent = () => {
 
       const participantRoleData =
         participantData.roles[
-          participant.assignedParticipantRoles.roleNames[0]
+          participant.assignedParticipantRoles?.roleNames?.[0]
         ];
       if (participantRoleData) {
         const roleConsent = participantRoleData[InformedConsentType.type];

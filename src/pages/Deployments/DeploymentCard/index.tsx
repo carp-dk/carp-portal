@@ -21,6 +21,7 @@ import {
 
 interface Props {
   deployment: ParticipantGroup;
+  representationName?: string | null;
   openCardCount: number;
   allDeploymentCount: number;
   setOpenCardCount: (count: number) => void;
@@ -28,6 +29,7 @@ interface Props {
 
 const DeploymentCard = ({
   deployment,
+  representationName,
   openCardCount,
   setOpenCardCount,
   allDeploymentCount,
@@ -67,6 +69,13 @@ const DeploymentCard = ({
 
   if (names.startsWith(',') || names === '') names = 'Names not available';
   else if (names.length > 30) names = `${names.slice(0, 30)}...`;
+
+  // In carp.core 1.3, a participant group may carry an explicit representation
+  // name. When set, it replaces the participant-derived / generated name below.
+  const displayName =
+    representationName && representationName.length > 30
+      ? `${representationName.slice(0, 30)}...`
+      : representationName;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
       <TopContainer>
@@ -79,7 +88,9 @@ const DeploymentCard = ({
             )
           }
         >
-          {deployment.participants.every((p) => p.email == null) ? (
+          {displayName ? (
+            displayName
+          ) : deployment.participants.every((p) => p.email == null) ? (
             <i>Generated deployment</i>
           ) : (
             names

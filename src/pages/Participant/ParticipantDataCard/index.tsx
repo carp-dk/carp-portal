@@ -63,12 +63,12 @@ const ParticipantDataCard = () => {
     if (!participantData || !participant) return iv;
     if (
       participantData?.roles?.[
-        participant?.assignedParticipantRoles.roleNames[0]
+        participant?.assignedParticipantRoles?.roleNames?.[0]
       ]
     ) {
       Object.entries(
         participantData?.roles[
-          participant?.assignedParticipantRoles.roleNames[0]
+          participant?.assignedParticipantRoles?.roleNames?.[0]
         ],
       ).forEach(([key, value]) => {
         iv.push({ [key]: value });
@@ -102,7 +102,7 @@ const ParticipantDataCard = () => {
       : [],
     initalValues,
     setParticipantData,
-    participant?.assignedParticipantRoles.roleNames[0],
+    participant?.assignedParticipantRoles?.roleNames?.[0],
     setEditing,
   );
 

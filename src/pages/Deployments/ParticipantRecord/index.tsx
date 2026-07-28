@@ -43,7 +43,7 @@ const ParticipantRecord = ({
   const { id: studyId } = useParams();
 
   const participantRole =
-    participantStatus.assignedParticipantRoles.roleNames[0];
+    participantStatus.assignedParticipantRoles?.roleNames?.[0];
   const participantDeviceRoleName =
     participantStatus.assignedPrimaryDeviceRoleNames[0];
   const primaryDevice = deviceStatusList.find(

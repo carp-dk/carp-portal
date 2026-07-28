@@ -92,7 +92,7 @@ const Participants = () => {
                 {
                   group.deploymentStatus.participantStatusList.find(
                     (ps) => ps.participantId === p.participantId,
-                  ).assignedParticipantRoles.roleNames[0]
+                  ).assignedParticipantRoles?.roleNames?.[0]
                 }
               </Typography>
             </RoleContainer>

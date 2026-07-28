@@ -88,7 +88,7 @@ const Deployment = () => {
               (psl) => psl.participantId === p.participantId,
             );
           const roleName =
-            participantStatus.assignedParticipantRoles.roleNames[0];
+            participantStatus.assignedParticipantRoles?.roleNames?.[0];
           const deviceRole =
             participantStatus.assignedPrimaryDeviceRoleNames[0];
           const device = group.deploymentStatus.deviceStatusList.find(
