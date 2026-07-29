@@ -24,6 +24,15 @@ export default async ({ mode }: { mode: string }) => {
           }
           warn(warning);
         },
+        // The vendored @cachet carp.core (Kotlin/JS) installs its public JS API
+        // as prototype extensions applied as module-load side effects
+        // (e.g. Instant.toEpochMilliseconds, KtSet.toArray/size). Production
+        // tree-shaking strips these statements, so the methods become undefined
+        // at runtime (blank pages / failing cards). Keep @cachet modules intact.
+        treeshake: {
+          moduleSideEffects: (id) =>
+            id.includes('/@cachet/') ? true : undefined,
+        },
         // output: {
         //   // Efficient chunk splitting
         //   manualChunks: {
