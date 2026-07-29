@@ -17,6 +17,17 @@ export default async ({ mode }: { mode: string }) => {
       // Relative to the root
       outDir: '../build',
       assetsDir: '',
+      // The vendored @cachet carp.core (Kotlin/JS) uses kotlinx.serialization,
+      // which resolves serializers via class/function names at runtime. The
+      // default (rolldown) minifier — like terser without these flags — renames
+      // them, so Json.decodeFromString throws ("cannot read properties of
+      // undefined") in production and every core-backed query errors (blank
+      // study pages). Use terser and keep class/function names.
+      minify: 'terser',
+      terserOptions: {
+        compress: { keep_classnames: true, keep_fnames: true },
+        mangle: { keep_classnames: true, keep_fnames: true },
+      },
       rollupOptions: {
         onwarn: (warning, warn) => {
           if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
@@ -24,11 +35,12 @@ export default async ({ mode }: { mode: string }) => {
           }
           warn(warning);
         },
-        // The vendored @cachet carp.core (Kotlin/JS) installs its public JS API
-        // as prototype extensions applied as module-load side effects
-        // (e.g. Instant.toEpochMilliseconds, KtSet.toArray/size). Production
-        // tree-shaking strips these statements, so the methods become undefined
-        // at runtime (blank pages / failing cards). Keep @cachet modules intact.
+        // The vendored @cachet carp.core (Kotlin/JS) exposes its public JS API
+        // via prototype extensions applied as module-load side effects (e.g.
+        // Instant.toEpochMilliseconds, KtSet.toArray/size). rolldown (vite 8.1.x,
+        // used by both the pnpm and bun toolchains here) tree-shakes these
+        // statements in production, leaving the methods undefined at runtime.
+        // Keep @cachet modules intact so the extensions survive.
         treeshake: {
           moduleSideEffects: (id) =>
             id.includes('/@cachet/') ? true : undefined,
