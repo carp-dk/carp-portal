@@ -73,16 +73,21 @@ const StudyData = () => {
   });
 
   const {
-    data: protocols,
-    isLoading: protocolsLoading,
-    error: protocolsError,
-  } = useProtocols();
-
-  const {
     data: studyStatus,
     isLoading: studyStatusIsLoading,
     error: studyStatusError,
   } = useStudyStatus(studyId);
+
+  // The protocol list, version history and current-protocol snapshot are only
+  // needed to render/change the protocol, which is only possible while the study
+  // is still configurable. Once it's live we skip these calls entirely.
+  const canSetProtocol = !!studyStatus?.canSetStudyProtocol;
+
+  const {
+    data: protocols,
+    isLoading: protocolsLoading,
+    error: protocolsError,
+  } = useProtocols(canSetProtocol);
 
   const studyProtocolFormik = useFormik({
     initialValues: {
@@ -127,7 +132,10 @@ const StudyData = () => {
   });
 
   const { data: protocolVersions, isLoading: protocolVersionsLoading } =
-    useGetVersionHistory(studyProtocolFormik.values.protocolId.toString());
+    useGetVersionHistory(
+      studyProtocolFormik.values.protocolId.toString(),
+      canSetProtocol,
+    );
 
   const {
     data: protocolDetails,
@@ -136,6 +144,7 @@ const StudyData = () => {
   } = useGetByVersion(
     studyProtocolFormik.values.protocolId.toString(),
     studyProtocolFormik.values.protocolVersion,
+    canSetProtocol,
   );
 
   const setStudyProtocol = useSetStudyProtocol();
@@ -146,12 +155,13 @@ const StudyData = () => {
     studyDetailsFormik.handleSubmit();
   };
 
+  // Only block on the dropdown data when the protocol is actually editable.
+  // `protocolDetails` (useGetByVersion) is never rendered — it's read only in
+  // onSubmit, which handles its own loading — so it must never gate first paint.
   if (
     studyDetailsLoading ||
-    protocolsLoading ||
     studyStatusIsLoading ||
-    protocolDetailsIsLoading ||
-    protocolVersionsLoading
+    (canSetProtocol && (protocolsLoading || protocolVersionsLoading))
   )
     return <StudySetupSkeleton />;
 
@@ -179,7 +189,7 @@ const StudyData = () => {
     studyProtocolFormik.values.protocolId &&
     !studyProtocolFormik.values.protocolVersion
   ) {
-    if (studyStatus.canSetStudyProtocol) {
+    if (studyStatus.canSetStudyProtocol && protocolVersions?.length) {
       // TODO: d14() should be toEpochMilliseconds() when the core is fixed to return the correct type
       studyProtocolFormik.setFieldValue(
         'protocolVersion',

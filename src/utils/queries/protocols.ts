@@ -11,7 +11,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
 
-export const useProtocols = () => {
+export const useProtocols = (enabled = true) => {
   const { data: currentUser } = useCurrentUser();
   return useQuery<StudyProtocolSnapshot[], CarpServiceError>({
     queryFn: async () =>
@@ -19,7 +19,7 @@ export const useProtocols = () => {
         ownerId: currentUser.accountId.stringRepresentation,
       }),
     queryKey: ['protocols'],
-    enabled: !!currentUser,
+    enabled: !!currentUser && enabled,
   });
 };
 
@@ -117,21 +117,23 @@ export const useUpdateProtocol = (originalProtocolId: string) => {
   });
 };
 
-export const useGetVersionHistory = (protocolId: string) => {
+export const useGetVersionHistory = (protocolId: string, enabled = true) => {
   return useQuery<ProtocolVersion[], CarpServiceError>({
     queryFn: async () => carpApi.protocols.getVersionHistory({ protocolId }),
     queryKey: ['protocolVersionHistory', protocolId],
+    enabled,
   });
 };
 
 export const useGetByVersion = (
   protocolId?: string,
   versionTag?: string | null,
+  enabled = true,
 ) => {
   return useQuery<StudyProtocolSnapshot, CarpServiceError>({
     queryFn: async () =>
       carpApi.protocols.getBy({ protocolId: protocolId!, versionTag }),
     queryKey: ['protocolByVersion', protocolId, versionTag],
-    enabled: !!protocolId && !!versionTag,
+    enabled: !!protocolId && !!versionTag && enabled,
   });
 };
