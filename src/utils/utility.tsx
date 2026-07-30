@@ -3,6 +3,7 @@ import ecgHeartIconBlue from '@Assets/images/ecg_heart_blue.png';
 import { Day, Record } from '@Components/RecentDataChart';
 import { customPalette as palette } from '@Utils/theme';
 import {
+  ApplicationData,
   DefaultSerializer,
   getSerializer,
   Json,
@@ -293,11 +294,26 @@ export const downloadProtocolAsJSONFile = (protocol: StudyProtocolSnapshot) => {
   link.remove();
 };
 
-export const getProtocolVersionTag = (applicationData?: string | null) => {
+// A protocol/invitation `applicationData` is a carp.core `ApplicationData`
+// object (its JSON payload lives in `.data`). Older data and some call sites
+// still hand us a plain JSON string, so accept both and return the raw JSON.
+export const getApplicationDataJson = (
+  applicationData?: ApplicationData | string | null,
+): string | null => {
   if (!applicationData) return null;
+  if (typeof applicationData === 'string') return applicationData;
+  const { data } = applicationData;
+  return typeof data === 'string' ? data : null;
+};
+
+export const getProtocolVersionTag = (
+  applicationData?: ApplicationData | string | null,
+) => {
+  const json = getApplicationDataJson(applicationData);
+  if (!json) return null;
 
   try {
-    const protocolVersionTag = JSON.parse(applicationData)?.protocolVersionTag;
+    const protocolVersionTag = JSON.parse(json)?.protocolVersionTag;
     return typeof protocolVersionTag === 'string' ? protocolVersionTag : null;
   } catch {
     return null;

@@ -4,6 +4,7 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from '@Utils/queries/studies';
+import { getApplicationDataJson } from '@Utils/utility';
 import { StudyStatus } from '@carp-dk/client';
 import { FormLabel, TextField } from '@mui/material';
 import { useFormik } from 'formik';
@@ -38,27 +39,25 @@ const Invitations = () => {
     },
     validationSchema: studyInvitationValidationSchema,
     onSubmit: (values) => {
-      let parsedApplicaitonData;
+      // `invitation.applicationData` is a carp.core `ApplicationData` object
+      // (JSON in `.data`), so read it via the helper and preserve its payload
+      // while keeping the authoritative studyId.
+      const applicationDataJson = getApplicationDataJson(
+        studyDetails?.invitation.applicationData,
+      );
+      let applicationData: { studyId: string; [key: string]: string };
       try {
-        parsedApplicaitonData = JSON.parse(
-          studyDetails?.invitation.applicationData,
-        );
+        applicationData = applicationDataJson
+          ? { ...JSON.parse(applicationDataJson), studyId }
+          : { studyId };
       } catch {
-        setStudyInvitation.mutate({
-          studyId,
-          invitationName: values.invitationName,
-          invitationDescription: values.invitationDescription,
-          applicationData: {
-            studyId: studyDetails?.invitation.applicationData,
-          },
-        });
-        return;
+        applicationData = { studyId };
       }
       setStudyInvitation.mutate({
         studyId,
         invitationName: values.invitationName,
         invitationDescription: values.invitationDescription,
-        applicationData: parsedApplicaitonData,
+        applicationData,
       });
     },
   });

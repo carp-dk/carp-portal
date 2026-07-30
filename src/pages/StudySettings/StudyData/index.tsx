@@ -10,7 +10,12 @@ import {
   useStudyDetails,
   useStudyStatus,
 } from '@Utils/queries/studies';
-import { formatDateTime, getProtocolVersionTag } from '@Utils/utility';
+import {
+  formatDateTime,
+  getApplicationDataJson,
+  getProtocolVersionTag,
+} from '@Utils/utility';
+import { ApplicationData, StudyProtocolSnapshot } from '@carp-dk/client';
 import LinkIcon from '@mui/icons-material/Link';
 import {
   Alert,
@@ -89,31 +94,33 @@ const StudyData = () => {
     validationSchema: studyProtocolValidationSchema,
     onSubmit: async (values) => {
       if (values.protocolVersion == null) return;
+      // `applicationData` is a carp.core `ApplicationData` object (JSON in
+      // `.data`), so parse defensively and write back a proper object.
+      const withProtocolVersionTag = (protocol: StudyProtocolSnapshot) => {
+        const json = getApplicationDataJson(protocol.applicationData);
+        let data: Record<string, unknown>;
+        try {
+          data = json ? JSON.parse(json) : {};
+        } catch {
+          data = {};
+        }
+        const merged = { ...data, protocolVersionTag: values.protocolVersion };
+        //@ts-expect-error applicationData is read-only in the type definition, but not at runtime
+        protocol.applicationData = new ApplicationData(JSON.stringify(merged));
+        return protocol;
+      };
+
       if (protocolDetailsIsLoading) {
         protocolDetailsPromise.then((value) => {
-          let oldApplicationData = JSON.parse(value.applicationData);
-          oldApplicationData = {
-            ...oldApplicationData,
-            protocolVersionTag: values.protocolVersion,
-          };
-          //@ts-expect-error applicationData is not read-only, but the type definition says it is
-          value.applicationData = JSON.stringify(oldApplicationData);
           setStudyProtocol.mutate({
             studyId,
-            protocol: value,
+            protocol: withProtocolVersionTag(value),
           });
         });
       } else {
-        let oldApplicationData = JSON.parse(protocolDetails.applicationData);
-        oldApplicationData = {
-          ...oldApplicationData,
-          protocolVersionTag: values.protocolVersion,
-        };
-        //@ts-expect-error applicationData is not read-only, but the type definition says it is
-        protocolDetails.applicationData = JSON.stringify(oldApplicationData);
         setStudyProtocol.mutate({
           studyId,
-          protocol: protocolDetails,
+          protocol: withProtocolVersionTag(protocolDetails),
         });
       }
     },
