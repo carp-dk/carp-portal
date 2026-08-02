@@ -41,7 +41,7 @@ const validationSchema = yup.object({
     .number()
     .required('Number of participants is required')
     .min(1, 'Number of participants must be at least 1')
-    .max(2500, 'Number of participants must be at most 2500'),
+    .max(5000, 'Number of participants must be at most 5000'),
   expiryDate: yup
     .date()
     .required('Expiry date is required')
@@ -195,7 +195,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <form onSubmit={handleFormSubmit}>
           <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
-              <FormLabel required>Number of participants (max: 1000)</FormLabel>
+              <FormLabel required>Number of participants (max: 5000)</FormLabel>
               <TextField
                 autoFocus
                 sx={{ width: '100%' }}
@@ -339,16 +339,14 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
             </Grid>
-            {process.env.NODE_ENV === 'development' && (
-              <FormControlLabel
-                label="Use fast pipeline"
-                value={addAnonymousParticipantFormik.values.useFastPipeline}
-                onChange={addAnonymousParticipantFormik.handleChange}
-                onBlur={addAnonymousParticipantFormik.handleBlur}
-                name="useFastPipeline"
-                control={<Checkbox />}
-              />
-            )}
+            <FormControlLabel
+              label="Use fast pipeline"
+              value={addAnonymousParticipantFormik.values.useFastPipeline}
+              onChange={addAnonymousParticipantFormik.handleChange}
+              onBlur={addAnonymousParticipantFormik.handleBlur}
+              name="useFastPipeline"
+              control={<Checkbox />}
+            />
           </Grid>
         </form>
       </ModalContent>
