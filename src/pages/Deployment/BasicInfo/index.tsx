@@ -2,22 +2,24 @@ import { ParticipantGroup } from '@carp-dk/client';
 import CopyButton from '@Components/Buttons/CopyButton';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
-import { Stop } from '@mui/icons-material';
+import { Check, Close, EditOutlined, Stop } from '@mui/icons-material';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, TextField, Typography } from '@mui/material';
 import {
   useParticipantGroupsAccountsAndStatus,
   useStopParticipantGroup,
+  useUpdateParticipantGroup,
 } from '@Utils/queries/participants';
 import { useCreateSummary } from '@Utils/queries/studies';
-import { formatDateTime } from '@Utils/utility';
-import { useEffect, useState } from 'react';
+import { formatDateTime, getDeploymentDisplayName } from '@Utils/utility';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
   ExportButton,
   Left,
+  NameAction,
   Right,
   SecondaryText,
   StyledButton,
@@ -25,6 +27,7 @@ import {
   StyledDivider,
   StyledStatusDot,
   StyledStatusText,
+  Title,
 } from './styles';
 
 const BasicInfo = () => {
@@ -37,10 +40,13 @@ const BasicInfo = () => {
     error: participantError,
   } = useParticipantGroupsAccountsAndStatus(studyId);
   const stopDeployment = useStopParticipantGroup(studyId);
+  const updateDeployment = useUpdateParticipantGroup(studyId);
 
   const [deployment, setDeployment] = useState<ParticipantGroup | null>(null);
   const [openStopConfirmationModal, setOpenStopConfirmationModal] =
     useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState('');
 
   const handleStopDeployment = () => {
     setOpenStopConfirmationModal(false);
@@ -69,6 +75,40 @@ const BasicInfo = () => {
       );
     }
   }, [participantData, participantDataLoading, deploymentId]);
+
+  // carp.core 1.3 exposes an optional group representation name on the
+  // untyped groupStatuses entries; look it up by deployment id (may be null).
+  const representationName = useMemo(() => {
+    const statuses = participantData?.groupStatuses as
+      { id: string; representation?: { name: string | null } }[] | undefined;
+    return (
+      statuses?.find((s) => s.id === deploymentId)?.representation?.name ?? null
+    );
+  }, [participantData, deploymentId]);
+
+  const displayName = useMemo(
+    () => getDeploymentDisplayName(deployment, representationName),
+    [deployment, representationName],
+  );
+
+  const handleStartEditName = () => {
+    setNameInput(representationName ?? '');
+    setIsEditingName(true);
+  };
+
+  const handleCancelEditName = () => setIsEditingName(false);
+
+  const handleSaveName = () => {
+    const trimmed = nameInput.trim();
+    if (!trimmed || trimmed === representationName) {
+      setIsEditingName(false);
+      return;
+    }
+    updateDeployment.mutate(
+      { groupId: deployment.participantGroupId, representationName: trimmed },
+      { onSuccess: () => setIsEditingName(false) },
+    );
+  };
 
   if (participantDataLoading || !deployment) return <LoadingSkeleton />;
 
@@ -125,15 +165,70 @@ const BasicInfo = () => {
                 .replaceAll(/([a-z])([A-Z])/g, '$1 $2')}
             </StyledStatusText>
           </Stack>
-          {!deployment.deploymentStatus.__type.includes('Stopped') && (
-            <StyledButton
-              variant="outlined"
-              onClick={() => setOpenStopConfirmationModal(true)}
-            >
-              <Stop fontSize="small" />
-              {t('deployment:stop_deployment.title')}
-            </StyledButton>
-          )}
+          <NameAction>
+            {isEditingName ? (
+              <Stack
+                direction="row"
+                spacing="4px"
+                sx={{ alignItems: 'center' }}
+              >
+                <TextField
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveName();
+                    if (e.key === 'Escape') handleCancelEditName();
+                  }}
+                  placeholder={t('deployment:deployment_name')}
+                  size="small"
+                  variant="standard"
+                  autoFocus
+                  disabled={updateDeployment.isPending}
+                  sx={{ minWidth: 220 }}
+                />
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={handleSaveName}
+                  disabled={updateDeployment.isPending}
+                >
+                  <Check fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={handleCancelEditName}
+                  disabled={updateDeployment.isPending}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </Stack>
+            ) : (
+              <Stack
+                direction="row"
+                spacing="4px"
+                sx={{ alignItems: 'center' }}
+              >
+                {displayName.name && <Title noWrap>{displayName.name}</Title>}
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={handleStartEditName}
+                  aria-label={t('deployment:deployment_name')}
+                >
+                  <EditOutlined fontSize="small" />
+                </IconButton>
+              </Stack>
+            )}
+            {!deployment.deploymentStatus.__type.includes('Stopped') && (
+              <StyledButton
+                variant="outlined"
+                onClick={() => setOpenStopConfirmationModal(true)}
+              >
+                <Stop fontSize="small" />
+                {t('deployment:stop_deployment.title')}
+              </StyledButton>
+            )}
+          </NameAction>
         </Left>
         <Right>
           <Stack direction="column">

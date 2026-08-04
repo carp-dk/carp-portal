@@ -7,6 +7,7 @@ import {
   DefaultSerializer,
   getSerializer,
   Json,
+  ParticipantGroup,
   StudyProtocolSnapshot,
   User,
 } from '@carp-dk/client';
@@ -242,6 +243,29 @@ export const getDeploymentStatusColor = (deploymentStatus: string) => {
     default:
       return '#000000';
   }
+};
+
+// Resolves the display name for a deployment / staged participant group,
+// keeping the fallback order consistent across the list and detail views:
+// explicit carp.core 1.3 representation name → joined participant names →
+// "Generated deployment" (no contactable participants) / "Names not available".
+// `isGenerated` is true only for the generated-deployment case, so callers can
+// render it as italic placeholder text.
+export const getDeploymentDisplayName = (
+  deployment: ParticipantGroup | null | undefined,
+  representationName?: string | null,
+): { name: string; isGenerated: boolean } => {
+  if (representationName)
+    return { name: representationName, isGenerated: false };
+  if (!deployment) return { name: '', isGenerated: false };
+  if (deployment.participants.every((p) => p.email == null))
+    return { name: 'Generated deployment', isGenerated: true };
+  const names = deployment.participants
+    .map((p) => (p.firstName ? `${p.firstName} ${p.lastName}` : ''))
+    .join(', ');
+  if (names.startsWith(',') || names === '')
+    return { name: 'Names not available', isGenerated: false };
+  return { name: names, isGenerated: false };
 };
 
 export const getSummaryStatusColor = (deploymentStatus: string) => {

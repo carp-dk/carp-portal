@@ -61,6 +61,36 @@ export const useStopParticipantGroup = (studyId: string) => {
   });
 };
 
+export const useUpdateParticipantGroup = (studyId: string) => {
+  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      groupId,
+      representationName,
+    }: {
+      groupId: string;
+      representationName: string;
+    }) =>
+      carpApi.study.recruitment.updateParticipantGroup({
+        groupId,
+        representationName,
+      }),
+    onSuccess: () => {
+      setSnackbarSuccess('Deployment name updated successfuly');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['deployments', studyId],
+      });
+    },
+    onError: (error: CarpServiceError) => {
+      setSnackbarError(error.message);
+    },
+  });
+};
+
 export const useInactiveDeployments = (studyId: string, lastUpdate: number) => {
   return useQuery<InactiveDeployment[], CarpServiceError>({
     queryFn: () =>

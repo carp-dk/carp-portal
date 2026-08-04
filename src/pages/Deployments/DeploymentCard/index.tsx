@@ -1,7 +1,8 @@
-import CopyButton from '@Components/Buttons/CopyButton';
 import { ParticipantGroup } from '@carp-dk/client';
+import CopyButton from '@Components/Buttons/CopyButton';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Skeleton, Typography } from '@mui/material';
+import { getDeploymentDisplayName } from '@Utils/utility';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DateTooltip from '../DateTooltip';
@@ -55,27 +56,14 @@ const DeploymentCard = ({
     });
   };
 
-  let names = useMemo(
-    () =>
-      deployment.participants
-        .map((participant) =>
-          participant.firstName
-            ? `${participant.firstName} ${participant.lastName}`
-            : '',
-        )
-        .join(', '),
-    [deployment.participants],
+  // Resolve the name (representation name → participant names → generated)
+  // via the shared helper so the list and detail views stay consistent, then
+  // truncate for the card layout.
+  const { name, isGenerated } = useMemo(
+    () => getDeploymentDisplayName(deployment, representationName),
+    [deployment, representationName],
   );
-
-  if (names.startsWith(',') || names === '') names = 'Names not available';
-  else if (names.length > 30) names = `${names.slice(0, 30)}...`;
-
-  // In carp.core 1.3, a participant group may carry an explicit representation
-  // name. When set, it replaces the participant-derived / generated name below.
-  const displayName =
-    representationName && representationName.length > 30
-      ? `${representationName.slice(0, 30)}...`
-      : representationName;
+  const displayName = name.length > 30 ? `${name.slice(0, 30)}...` : name;
   return (
     <StyledCard open={isCardOpen} elevation={2}>
       <TopContainer>
@@ -88,13 +76,7 @@ const DeploymentCard = ({
             )
           }
         >
-          {displayName ? (
-            displayName
-          ) : deployment.participants.every((p) => p.email == null) ? (
-            <i>Generated deployment</i>
-          ) : (
-            names
-          )}
+          {isGenerated ? <i>{displayName}</i> : displayName}
         </Names>
         <StyledDivider />
         <HorizontalStatusContainer>

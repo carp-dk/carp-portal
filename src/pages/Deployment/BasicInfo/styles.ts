@@ -13,14 +13,29 @@ export const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 export const Left = styled('div')({
-  display: 'grid',
-  gridTemplateColumns: '48px 1fr auto auto auto',
+  display: 'flex',
+  flexDirection: 'row',
   alignItems: 'center',
-  gap: 16,
+  gap: 24,
+});
+
+export const Title = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  fontSize: '1.25rem',
+  lineHeight: '1.75rem',
+  fontWeight: 700,
+}));
+
+export const NameAction = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: 8,
 });
 
 export const Right = styled('div')({
   display: 'flex',
+  alignItems: 'flex-end',
   '& button': {
     paddingBottom: 10,
   },
