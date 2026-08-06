@@ -3,6 +3,7 @@ import { useSnackbar } from '@Utils/snackbar';
 import {
   ArrayList,
   CarpServiceError,
+  DeploymentStatusCountsDto,
   ExpectedParticipantData,
   GenericEmailRequest,
   InactiveDeployment,
@@ -19,7 +20,12 @@ import {
   ParticipantAccountsRequestDto,
   ParticipantAccountSummaryDto,
 } from '@carp-dk/client/endpoints/study/recruitment';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export const useParticipants = (studyId: string) => {
   return useQuery<Participant[], CarpServiceError>({
@@ -284,13 +290,35 @@ export const useParticipantsStatus = (studyId: string) => {
   });
 };
 
-export const useParticipantGroupsAccountsAndStatus = (studyId: string) => {
+export const useParticipantGroupsAccountsAndStatus = (
+  studyId: string,
+  // Pagination is all-or-nothing: pass page and size together, or neither.
+  params?:
+    | { page: number; size: number; search?: string; status?: string }
+    | { page?: undefined; size?: undefined; search?: string; status?: string },
+) => {
   return useQuery<ParticipantGroups, CarpServiceError>({
     queryFn: async () =>
       carpApi.study.recruitment.getParticipantGroupAccountsAndStatus({
         studyId,
+        ...params,
       }),
-    queryKey: ['deployments', studyId],
+    // Paged calls (Deployments page) get their own cache entry keyed by the params; the unpaged
+    // call (single-deployment cards, overview) keeps the original key so nothing else changes.
+    queryKey: params
+      ? ['deployments', studyId, params]
+      : ['deployments', studyId],
+    // Keep the previous page visible while the next one loads so paging/search doesn't flash the
+    // whole page back to a skeleton (and drop the toolbar). Only applies to paged calls.
+    placeholderData: params ? keepPreviousData : undefined,
+  });
+};
+
+export const useDeploymentStatusCounts = (studyId: string) => {
+  return useQuery<DeploymentStatusCountsDto, CarpServiceError>({
+    queryFn: () =>
+      carpApi.study.recruitment.getParticipantGroupStatusCounts({ studyId }),
+    queryKey: ['deploymentStatusCounts', studyId],
   });
 };
 

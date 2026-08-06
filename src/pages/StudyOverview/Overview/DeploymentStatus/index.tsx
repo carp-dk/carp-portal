@@ -1,15 +1,13 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import PieCenterLabel from '@Components/PieCenterLabel';
-import { useParticipantsStatus } from '@Utils/queries/participants';
+import { useDeploymentStatusCounts } from '@Utils/queries/participants';
 import { getDeploymentStatusColor } from '@Utils/utility';
-import { ParticipantGroupStatus, StudyDeploymentStatus } from '@carp-dk/client';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { PieValueType } from '@mui/x-charts';
 import { PieChart } from '@mui/x-charts/PieChart';
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import LoadingSkeleton from '../LoadingSkeleton';
 import DeploymentStatusLegend from './DeploymentStatusLegend';
@@ -26,71 +24,47 @@ const DeploymentStatus = () => {
   const navigate = useNavigate();
   const { id: studyId } = useParams();
   const {
-    data: participantStatus,
-    isLoading: participantStatusLoading,
-    error: participantStatusError,
-  } = useParticipantsStatus(studyId);
+    data: counts,
+    isLoading: countsLoading,
+    error: countsError,
+  } = useDeploymentStatusCounts(studyId);
 
-  const [statuses, setStatuses] = useState<PieValueType[]>([]);
-
-  useEffect(() => {
-    if (!participantStatus) return;
-    const data = participantStatus.toArray().reduce(
-      (acc, curr) => {
-        if (curr instanceof ParticipantGroupStatus.InDeployment) {
-          const depStatus = curr.studyDeploymentStatus;
-          if (depStatus instanceof StudyDeploymentStatus.Invited) {
-            acc.invited.value += 1;
-          } else if (depStatus instanceof StudyDeploymentStatus.Running) {
-            acc.running.value += 1;
-          } else if (depStatus instanceof StudyDeploymentStatus.Stopped) {
-            acc.stopped.value += 1;
-          } else if (
-            depStatus instanceof StudyDeploymentStatus.DeployingDevices
-          ) {
-            acc.deploying.value += 1;
-          }
-        }
-        return acc;
-      },
-      {
-        invited: {
-          id: 0,
-          value: 0,
-          label: 'Invited',
-          color: getDeploymentStatusColor('Invited'),
-        },
-        deploying: {
-          id: 1,
-          value: 0,
-          label: 'Deploying',
-          color: getDeploymentStatusColor('DeployingDevices'),
-        },
-        running: {
-          id: 2,
-          value: 0,
-          label: 'Running',
-          color: getDeploymentStatusColor('Running'),
-        },
-        stopped: {
-          id: 3,
-          value: 0,
-          label: 'Stopped',
-          color: getDeploymentStatusColor('Stopped'),
-        },
-      },
-    );
-    setStatuses(Object.values(data));
-  }, [participantStatus]);
-
-  if (participantStatusLoading) return <LoadingSkeleton />;
-  if (participantStatusError)
+  if (countsLoading) return <LoadingSkeleton />;
+  if (countsError)
     return (
       <CarpErrorCardComponent
         message="An error occurred while loading study status"
-        error={participantStatusError}
+        error={countsError}
       />
     );
+
+  // Counts arrive pre-aggregated from the server, so there is no full status list to fetch and reduce.
+  const statuses: PieValueType[] = [
+    {
+      id: 0,
+      value: counts.invited,
+      label: 'Invited',
+      color: getDeploymentStatusColor('Invited'),
+    },
+    {
+      id: 1,
+      value: counts.deployingDevices,
+      label: 'Deploying',
+      color: getDeploymentStatusColor('DeployingDevices'),
+    },
+    {
+      id: 2,
+      value: counts.running,
+      label: 'Running',
+      color: getDeploymentStatusColor('Running'),
+    },
+    {
+      id: 3,
+      value: counts.stopped,
+      label: 'Stopped',
+      color: getDeploymentStatusColor('Stopped'),
+    },
+  ];
 
   return (
     <StyledCard>
@@ -145,7 +119,7 @@ const DeploymentStatus = () => {
               },
             }}
           >
-            <PieCenterLabel>{participantStatus.size()}</PieCenterLabel>
+            <PieCenterLabel>{counts.total}</PieCenterLabel>
           </PieChart>
         </div>
         <DeploymentStatusLegend

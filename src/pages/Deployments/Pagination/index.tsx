@@ -48,10 +48,15 @@ const Pagination = ({
         disabled={currentPage === 1}
         onClick={onPrevious}
       />
-      {paginationRange.map((pageNumber) => {
+      {paginationRange.map((pageNumber, index) => {
         if (pageNumber === '...') {
+          // The range can contain two '...' entries; the left one is always at
+          // index 1, so distinguish them to keep React keys unique.
           return (
-            <Typography key={pageNumber} variant="h4">
+            <Typography
+              key={index === 1 ? 'dots-left' : 'dots-right'}
+              variant="h4"
+            >
               &#8230;
             </Typography>
           );

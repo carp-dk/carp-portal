@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@carp-dk/authentication-react": "^1.0.1",
-    "@carp-dk/client": "2.1.0-dev.14",
+    "@carp-dk/client": "2.1.0-dev.15",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@js-joda/core": "^6.1.0",

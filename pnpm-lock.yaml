@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(oidc-client-ts@3.5.0)(react-oidc-context@3.3.1(oidc-client-ts@3.5.0)(react@19.2.8))(react@19.2.8)
       '@carp-dk/client':
-        specifier: 2.1.0-dev.14
-        version: 2.1.0-dev.14(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: 2.1.0-dev.15
+        version: 2.1.0-dev.15(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.2.17)(react@19.2.8)(supports-color@7.2.0)
@@ -332,8 +332,8 @@ packages:
       react: '>=16.8.0'
       react-oidc-context: ^2.3.1
 
-  '@carp-dk/client@2.1.0-dev.14':
-    resolution: {integrity: sha512-76KgQl0VIi0SvlSce7C/ydI+WgDNMVaLnTA+gHjeeCZYkSUlpqv+TpgT2Cphkbtxlml29NBgcpuqQFVldXHoMA==}
+  '@carp-dk/client@2.1.0-dev.15':
+    resolution: {integrity: sha512-1CHcd7MrN7C+1cEIeJ7+7C2VL/WW2OnlnREh/XkPllTza6ffU1LK4RNrOMtf79UDP0Q9bXfyyRO+MqPQUDgh8Q==}
 
   '@carp-dk/eslint-config@1.1.0':
     resolution: {integrity: sha512-vIz9PJZBaSadbe3rO9nTJQoa01c8h9judJv1uVDYjlApienWU8W22Yi8aBJLHil3wI9dFXTPcDvx1yqMpkOo+w==}
@@ -4716,7 +4716,7 @@ snapshots:
       react: 19.2.8
       react-oidc-context: 3.3.1(oidc-client-ts@3.5.0)(react@19.2.8)
 
-  '@carp-dk/client@2.1.0-dev.14(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@carp-dk/client@2.1.0-dev.15(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
       axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       big.js: 6.2.2

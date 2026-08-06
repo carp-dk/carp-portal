@@ -5,7 +5,7 @@ import StudyHeader from '@Components/StudyHeader';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
 import { useStudyStatus } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
-import { ParticipantGroup, StudyStatus } from '@carp-dk/client';
+import { StudyStatus } from '@carp-dk/client';
 import { Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -25,24 +25,41 @@ const Deployments = () => {
   const { id: studyId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const statusParam = searchParams.get('status');
-  const [searchText, setSearchText] = useState('');
   const selectedStatus =
     statusParam && deploymentStatuses.includes(statusParam)
       ? statusParam
       : 'all';
-  const [deployments, setDeployments] = useState([] as ParticipantGroup[]);
-  const [paginatedDeployments, setPaginatedDeployments] = useState(
-    [] as ParticipantGroup[],
-  );
+
+  const [searchText, setSearchText] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openCardCount, setOpenCardCount] = useState(0);
+
+  // Debounce the search box so we don't fire a request on every keystroke.
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(searchText), 300);
+    return () => clearTimeout(timeout);
+  }, [searchText]);
+
+  // Server-side paging/filtering/search: only the current page is fetched and enriched, so this
+  // scales to studies with thousands of deployments.
   const {
     data: deploymentsData,
     isLoading: isdeploymentsLoading,
     error: deploymentsError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
-  const [currentPage, setCurrentPage] = useState(1);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: currentPage - 1,
+    size: PageSize,
+    search: debouncedSearch || undefined,
+    status: selectedStatus === 'all' ? undefined : selectedStatus,
+  });
+
   const { data: studyStatus, isLoading: isStudyStatusLoading } =
     useStudyStatus(studyId);
-  const [openCardCount, setOpenCardCount] = useState(0);
+
+  const deployments = deploymentsData?.groups ?? [];
+  const totalCount = deploymentsData?.total ?? 0;
+  const hasFilters = debouncedSearch !== '' || selectedStatus !== 'all';
 
   // carp.core 1.3 exposes an optional group representation name on the
   // groupStatuses entries; map it by deployment id (falls back when null).
@@ -71,53 +88,19 @@ const Deployments = () => {
 
   const toggleAllCards = () => {
     setOpenCardCount((prevOpenCardCount) =>
-      prevOpenCardCount === paginatedDeployments.length
-        ? 0
-        : paginatedDeployments.length,
+      prevOpenCardCount === deployments.length ? 0 : deployments.length,
     );
   };
 
+  // Reset to the first page whenever the filter or (debounced) search changes.
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchText, selectedStatus]);
+  }, [debouncedSearch, selectedStatus]);
 
+  // Collapse any expanded cards when the visible page of deployments changes.
   useEffect(() => {
     setOpenCardCount(0);
-    if (
-      studyStatus instanceof StudyStatus.Live &&
-      deploymentsData?.groups !== undefined &&
-      deploymentsData?.groups.length !== 0
-    ) {
-      const newDeployments = deploymentsData.groups.filter((deployment) => {
-        const status =
-          deployment.deploymentStatus.__type.split('.').pop() ?? '';
-        const matchesStatus =
-          selectedStatus === 'all' || status === selectedStatus;
-        const matchesSearch =
-          searchText === '' ||
-          deployment.participantGroupId.includes(searchText) ||
-          deployment.participants.some(
-            (participant) =>
-              (participant.firstName &&
-                participant.lastName &&
-                `${participant.firstName} ${participant.lastName}`
-                  .toLowerCase()
-                  .includes(searchText)) ||
-              participant.email?.toLowerCase().includes(searchText),
-          );
-
-        return matchesStatus && matchesSearch;
-      });
-
-      setDeployments(newDeployments);
-      setPaginatedDeployments(
-        newDeployments.slice(
-          (currentPage - 1) * PageSize,
-          currentPage * PageSize,
-        ),
-      );
-    }
-  }, [searchText, selectedStatus, currentPage, deploymentsData, studyStatus]);
+  }, [deploymentsData]);
 
   const sectionName = {
     name: 'Deployments',
@@ -147,7 +130,7 @@ const Deployments = () => {
           filterDeploymentsByStatus={() => {}}
           selectedStatus="all"
           toggleAllCards={() => {}}
-          isAllCardsOpen={false} // error here: length of undefined
+          isAllCardsOpen={false}
         />
         <DeploymentSkeletonCard />
       </StudyPageLayout>
@@ -177,7 +160,9 @@ const Deployments = () => {
     );
   }
 
-  if (deploymentsData?.groups.length === 0) {
+  // No filters/search and nothing came back → the study genuinely has no deployments yet.
+  // (Also require an empty page so a backend that doesn't return `total` degrades gracefully.)
+  if (totalCount === 0 && !hasFilters && deployments.length === 0) {
     return (
       <StudyPageLayout>
         <SiteUnavailable
@@ -188,6 +173,7 @@ const Deployments = () => {
       </StudyPageLayout>
     );
   }
+
   return (
     <StudyPageLayout>
       <StudyHeader path={[sectionName]} description={description} />
@@ -197,11 +183,10 @@ const Deployments = () => {
         selectedStatus={selectedStatus}
         toggleAllCards={toggleAllCards}
         isAllCardsOpen={
-          openCardCount === paginatedDeployments.length &&
-          paginatedDeployments.length !== 0
-        } // error here: length of undefined
+          openCardCount === deployments.length && deployments.length !== 0
+        }
       />
-      {paginatedDeployments.map((deployment) => (
+      {deployments.map((deployment) => (
         <DeploymentCard
           deployment={deployment}
           representationName={representationNameById.get(
@@ -209,18 +194,18 @@ const Deployments = () => {
           )}
           openCardCount={openCardCount}
           setOpenCardCount={setOpenCardCount}
-          allDeploymentCount={paginatedDeployments.length}
+          allDeploymentCount={deployments.length}
           key={deployment.participantGroupId}
         />
       ))}
-      {deployments.length === 0 && (
+      {totalCount === 0 && deployments.length === 0 && (
         <Typography variant="h5">
           No deployments match the current filters.
         </Typography>
       )}
       <Pagination
         currentPage={currentPage}
-        totalCount={deployments.length}
+        totalCount={totalCount}
         pageSize={PageSize}
         onPageChange={(page) => setCurrentPage(page)}
       />

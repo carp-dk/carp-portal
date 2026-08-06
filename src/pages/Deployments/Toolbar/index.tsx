@@ -75,7 +75,7 @@ const Toolbar = ({
       />
       <StyledSelect
         value={selectedStatus}
-        inputProps={{ 'aria-label': 'Filter deployments by status' }}
+        slotProps={{ input: { 'aria-label': 'Filter deployments by status' } }}
         onChange={(event) =>
           filterDeploymentsByStatus(event.target.value as string)
         }
