@@ -1,0 +1,7 @@
+allowBuilds:
+  '@parcel/watcher': false
+  '@carp-dk/client': true
+  esbuild: true
+minimumReleaseAgeExclude:
+  - react-router-dom@7.18.2
+  - react-router@7.18.2
