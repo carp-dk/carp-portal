@@ -8,7 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import {
+  useDeploymentStatusCounts,
+  useParticipantGroupsAccountsAndStatus,
+} from '@Utils/queries/participants';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -26,14 +29,26 @@ import {
 } from './styles';
 import TooltipContent from './TooltipContent';
 
+// This card fetches every participant group's full status, which is wasteful and not useful for
+// large studies — skip the fetch entirely past this many participant groups.
+const LARGE_STUDY_THRESHOLD = 1000;
+
 const DeploymentsInProgress = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
+  const { data: counts, isLoading: countsLoading } =
+    useDeploymentStatusCounts(studyId);
+  const isLargeStudy = (counts?.total ?? 0) > LARGE_STUDY_THRESHOLD;
   const {
     data: deploymentsAccountAndStatus,
     isLoading: isDeploymentsAccountAndStatusLoading,
     error: deploymentsAccountAndStatusError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(
+    studyId,
+    undefined,
+    // Only fetch once we know it's a small study, so large studies never trigger the full fetch.
+    !countsLoading && !isLargeStudy,
+  );
   const [deploymentProgress, setDeploymentProgress] = useState<
     {
       deploymentId: string;
@@ -59,6 +74,23 @@ const DeploymentsInProgress = () => {
       setDeploymentProgress(deployments);
     }
   }, [deploymentsAccountAndStatus]);
+
+  if (countsLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  if (isLargeStudy) {
+    return (
+      <StyledCard elevation={2}>
+        <StyledTitle variant="h2">Deployments in Progress</StyledTitle>
+        <StyledDescription variant="h6">
+          Not shown for studies with more than {LARGE_STUDY_THRESHOLD}{' '}
+          participants. Use the Deployments page to browse and filter
+          deployments.
+        </StyledDescription>
+      </StyledCard>
+    );
+  }
 
   if (isDeploymentsAccountAndStatusLoading) {
     return <LoadingSkeleton />;

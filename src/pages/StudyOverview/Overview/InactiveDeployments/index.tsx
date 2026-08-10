@@ -8,7 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useInactiveDeployments } from '@Utils/queries/participants';
+import {
+  useDeploymentStatusCounts,
+  useInactiveDeployments,
+} from '@Utils/queries/participants';
 import { formatDateTime } from '@Utils/utility';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,6 +27,10 @@ import {
   StyledTableRow,
   StyledTitle,
 } from './styles';
+
+// This card fetches all inactive deployments, which isn't useful for large studies — skip the
+// fetch entirely past this many participant groups.
+const LARGE_STUDY_THRESHOLD = 1000;
 
 const InactiveDeployments = () => {
   const { id: studyId } = useParams();
@@ -41,11 +48,37 @@ const InactiveDeployments = () => {
     menuItems[0].value,
   );
 
+  const { data: counts, isLoading: countsLoading } =
+    useDeploymentStatusCounts(studyId);
+  const isLargeStudy = (counts?.total ?? 0) > LARGE_STUDY_THRESHOLD;
+
   const {
     data: inactiveDeployments,
     isLoading: isInactiveDeploymentsLoading,
     error: inactiveDeploymentsError,
-  } = useInactiveDeployments(studyId, lastUpdateTime);
+  } = useInactiveDeployments(
+    studyId,
+    lastUpdateTime,
+    // Only fetch once we know it's a small study, so large studies never trigger the full fetch.
+    !countsLoading && !isLargeStudy,
+  );
+
+  if (countsLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  if (isLargeStudy) {
+    return (
+      <StyledCard elevation={2}>
+        <StyledTitle variant="h2">Inactive Deployments</StyledTitle>
+        <StyledDescription variant="h6">
+          Not shown for studies with more than {LARGE_STUDY_THRESHOLD}{' '}
+          participants. Use the Deployments page to browse and filter
+          deployments.
+        </StyledDescription>
+      </StyledCard>
+    );
+  }
 
   if (isInactiveDeploymentsLoading) {
     return <LoadingSkeleton />;

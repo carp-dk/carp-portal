@@ -97,11 +97,16 @@ export const useUpdateParticipantGroup = (studyId: string) => {
   });
 };
 
-export const useInactiveDeployments = (studyId: string, lastUpdate: number) => {
+export const useInactiveDeployments = (
+  studyId: string,
+  lastUpdate: number,
+  enabled = true,
+) => {
   return useQuery<InactiveDeployment[], CarpServiceError>({
     queryFn: () =>
       carpApi.study.recruitment.getInactiveDeployments({ studyId, lastUpdate }),
     queryKey: ['inactiveDeployments', { studyId, lastUpdate }],
+    enabled,
   });
 };
 
@@ -296,6 +301,7 @@ export const useParticipantGroupsAccountsAndStatus = (
   params?:
     | { page: number; size: number; search?: string; status?: string }
     | { page?: undefined; size?: undefined; search?: string; status?: string },
+  enabled = true,
 ) => {
   return useQuery<ParticipantGroups, CarpServiceError>({
     queryFn: async () =>
@@ -311,6 +317,7 @@ export const useParticipantGroupsAccountsAndStatus = (
     // Keep the previous page visible while the next one loads so paging/search doesn't flash the
     // whole page back to a skeleton (and drop the toolbar). Only applies to paged calls.
     placeholderData: params ? keepPreviousData : undefined,
+    enabled,
   });
 };
 
