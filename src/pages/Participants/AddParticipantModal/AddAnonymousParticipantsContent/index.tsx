@@ -3,8 +3,6 @@ import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { patternToRegex } from '@Utils/utility';
 import {
-  Checkbox,
-  FormControlLabel,
   FormHelperText,
   FormLabel,
   Grid,
@@ -41,7 +39,7 @@ const validationSchema = yup.object({
     .number()
     .required('Number of participants is required')
     .min(1, 'Number of participants must be at least 1')
-    .max(5000, 'Number of participants must be at most 5000'),
+    .max(10000, 'Number of participants must be at most 10000'),
   expiryDate: yup
     .date()
     .required('Expiry date is required')
@@ -62,7 +60,6 @@ const validationSchema = yup.object({
     })
     .required('Redirect URI is required'),
   clientId: yup.string().required('Application Type is required'),
-  useFastPipeline: yup.boolean(),
 });
 
 const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
@@ -87,7 +84,6 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       role: '',
       redirectUri: '',
       clientId: '',
-      useFastPipeline: false,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -111,7 +107,6 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
         clientId: values.clientId.toString(),
-        useFastPipeline: values.useFastPipeline,
       });
     },
   });
@@ -195,7 +190,9 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         <form onSubmit={handleFormSubmit}>
           <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
-              <FormLabel required>Number of participants (max: 5000)</FormLabel>
+              <FormLabel required>
+                Number of participants (max: 10000)
+              </FormLabel>
               <TextField
                 autoFocus
                 sx={{ width: '100%' }}
@@ -339,14 +336,6 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               />
             </Grid>
-            <FormControlLabel
-              label="Use fast pipeline"
-              value={addAnonymousParticipantFormik.values.useFastPipeline}
-              onChange={addAnonymousParticipantFormik.handleChange}
-              onBlur={addAnonymousParticipantFormik.handleBlur}
-              name="useFastPipeline"
-              control={<Checkbox />}
-            />
           </Grid>
         </form>
       </ModalContent>

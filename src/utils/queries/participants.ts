@@ -196,7 +196,6 @@ interface GenerateAnonymousAccountsParams {
   participantRoleName: string;
   redirectUri: string;
   clientId: string;
-  useFastPipeline: boolean;
 }
 
 export const useGenerateAnonymousAccounts = (studyId: string) => {
@@ -210,7 +209,6 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
       amountOfAccounts,
       expirationSeconds,
       participantRoleName,
-      useFastPipeline,
     }: GenerateAnonymousAccountsParams) => {
       return carpApi.study.recruitment.generateAnonymousAccounts({
         studyId,
@@ -219,7 +217,6 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
         amountOfAccounts,
         expirationSeconds,
         participantRoleName,
-        useFastPipeline,
       });
     },
     onSuccess: () => {
