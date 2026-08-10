@@ -47,7 +47,11 @@ const ParticipantDataCard = () => {
     data: participantGroupStatus,
     isLoading: participantGroupStatusLoading,
     error: participantGroupStatusError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
   const setParticipantData = useSetParticipantData(deploymentId);
   const {
     data: participantData,

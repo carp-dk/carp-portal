@@ -43,7 +43,11 @@ const Devices = () => {
     data: participantGroupsAndStatuses,
     isLoading: participantGroupsAndStatusesLoading,
     error: participantGroupsAndStatusesError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
 
   const registerDevice = useRegisterDevice(studyId);
   const deviceDeployed = useDeviceDeployed(studyId);

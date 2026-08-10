@@ -15,8 +15,14 @@ const Deployment = () => {
   const { t } = useTranslation();
   const { deploymentId, id: studyId } = useParams();
 
-  const { data: participantData } =
-    useParticipantGroupsAccountsAndStatus(studyId);
+  const { data: participantData } = useParticipantGroupsAccountsAndStatus(
+    studyId,
+    {
+      page: 0,
+      size: 1,
+      search: deploymentId,
+    },
+  );
 
   // Resolve the deployment name for the breadcrumb using the same fallback as
   // the list and detail views; falls back to the generic label until loaded.

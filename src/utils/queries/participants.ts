@@ -315,8 +315,9 @@ export const useParticipantGroupsAccountsAndStatus = (
       ? ['deployments', studyId, params]
       : ['deployments', studyId],
     // Keep the previous page visible while the next one loads so paging/search doesn't flash the
-    // whole page back to a skeleton (and drop the toolbar). Only applies to paged calls.
-    placeholderData: params ? keepPreviousData : undefined,
+    // whole page back to a skeleton (and drop the toolbar). Only for multi-row list pages — a
+    // single-deployment read (size 1) must NOT show a stale deployment while switching.
+    placeholderData: (params?.size ?? 0) > 1 ? keepPreviousData : undefined,
     enabled,
   });
 };

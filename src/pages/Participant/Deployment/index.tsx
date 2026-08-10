@@ -41,7 +41,11 @@ const Deployment = () => {
     data: deployment,
     isLoading: deploymentIsLoading,
     error: deploymentError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
   const createSummary = useCreateSummary();
   const [deploymentInformation, setDeploymentInformation] = useState<{
     groupStatus: string;

@@ -27,7 +27,11 @@ const Participants = () => {
     data: statuses,
     isLoading,
     error,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
   const [group, setGroup] = useState<ParticipantGroup>(null);
 
   useEffect(() => {

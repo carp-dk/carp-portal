@@ -36,7 +36,11 @@ const InformedConsentCard = () => {
     data: statuses,
     isLoading: statusesLoading,
     error: statusesError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
 
   const {
     data: participantData,

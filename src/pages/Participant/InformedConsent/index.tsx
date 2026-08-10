@@ -38,7 +38,11 @@ const InformedConsent = () => {
     data: participantGroupStatus,
     isLoading: participantGroupStatusLoading,
     error: participantGroupStatusError,
-  } = useParticipantGroupsAccountsAndStatus(studyId);
+  } = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: 1,
+    search: deploymentId,
+  });
   const {
     data: files,
     isLoading: filesLoading,
