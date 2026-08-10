@@ -1,22 +1,15 @@
 import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
-import {
-  useInviteParticipants,
-  useParticipants,
-} from '@Utils/queries/participants';
+import { useInviteParticipants } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
-import { getRandomNumber } from '@Utils/utility';
 import {
-  EmailAccountIdentity,
   ParticipantAccountSummaryDto,
   ParticipantWithRoles,
-  UsernameAccountIdentity,
 } from '@carp-dk/client';
 import {
   FormControl,
   MenuItem,
   Modal,
   SelectChangeEvent,
-  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -24,7 +17,6 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import {
   CancelButton,
   DoneButton,
@@ -54,8 +46,6 @@ type Props = {
 const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
   const { id: studyId } = useParams();
   const inviteParticipants = useInviteParticipants(studyId);
-  const { data: participants, isLoading: isParticipantsLoading } =
-    useParticipants(studyId);
   const { data: studyDetails, isLoading: isStudyDetailsLoading } =
     useStudyDetails(studyId);
   const [participantDeviceRoleNames, setParticipantDeviceRoleNames] = useState(
@@ -76,30 +66,15 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     setParticipantDeviceRoleNames({});
   }, [open]);
   const createNewGroupHandler = () => {
-    const participantIdentifiers = participantsToAdd.map((participant) =>
-      participant.accountIdentity.toLocaleLowerCase(),
+    // participantsToAdd already carries participantId (= the core Participant id) and the
+    // account identity, so no separate full-participant fetch is needed to build the invite.
+    const participantsWithRoles: ParticipantWithRoles[] = participantsToAdd.map(
+      (participant) => ({
+        id: participant.participantId,
+        assignedRoles:
+          participantDeviceRoleNames[participant.accountIdentity.toLowerCase()],
+      }),
     );
-    const participantsToAddRows = participants.filter((participant) =>
-      participantIdentifiers.includes(
-        (participant.accountIdentity instanceof EmailAccountIdentity &&
-          participant.accountIdentity.emailAddress.address.toLowerCase()) ||
-          (participant.accountIdentity instanceof UsernameAccountIdentity &&
-            participant.accountIdentity.username.name.toLowerCase()),
-      ),
-    );
-    const participantsWithRoles: ParticipantWithRoles[] =
-      participantsToAddRows.map((participant) => {
-        const identity =
-          participant.accountIdentity instanceof EmailAccountIdentity
-            ? participant.accountIdentity.emailAddress.address.toLowerCase()
-            : (
-                participant.accountIdentity as UsernameAccountIdentity
-              ).username.name.toLowerCase();
-        return {
-          id: participant.id.stringRepresentation,
-          assignedRoles: participantDeviceRoleNames[identity],
-        };
-      });
     inviteParticipants.mutate(participantsWithRoles);
   };
   if (isStudyDetailsLoading) return null;
@@ -173,75 +148,58 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
                 </TableHead>
 
                 <TableBody>
-                  {isParticipantsLoading || isStudyDetailsLoading
-                    ? [1, 2, 3].map(() => (
-                        <StyledTableRow key={uuidv4()}>
-                          <TableCell>
-                            <Skeleton
-                              animation="wave"
-                              width={`${getRandomNumber(40, 70)}%`}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Skeleton
-                              animation="wave"
-                              width={`${getRandomNumber(40, 90)}%`}
-                            />
-                          </TableCell>
-                        </StyledTableRow>
-                      ))
-                    : participantsToAdd.map((participant) => (
-                        <StyledTableRow key={participant.accountIdentity}>
-                          <TableCell>
-                            <PrimaryCellText variant="h5">
-                              {participant.accountIdentity}
-                            </PrimaryCellText>
-                          </TableCell>
-                          <TableCell>
-                            <PrimaryCellText variant="h5">
-                              {/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-                                participant.accountIdentity,
-                              ) ? (
-                                <GeneratedAccountLabel />
-                              ) : (
-                                `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
-                              )}
-                            </PrimaryCellText>
-                          </TableCell>
-                          <TableCell sx={{ position: 'relative' }}>
-                            <FormControl fullWidth>
-                              <StyledSelect
-                                labelId="role-select-label"
-                                id="role-select"
-                                value={
-                                  participantDeviceRoleNames[
-                                    participant.accountIdentity.toLowerCase()
-                                  ] || ''
-                                }
-                                onChange={(event: SelectChangeEvent) =>
-                                  handleRoleChange(
-                                    participant.accountIdentity.toLowerCase(),
-                                    [event.target.value],
-                                  )
-                                }
-                              >
-                                {studyDetails.protocolSnapshot.participantRoles
-                                  .toArray()
-                                  .map((participantRole) => (
-                                    <MenuItem
-                                      key={participantRole.role}
-                                      value={participantRole.role}
-                                    >
-                                      <SecondaryCellText variant="h5">
-                                        {participantRole.role}
-                                      </SecondaryCellText>
-                                    </MenuItem>
-                                  ))}
-                              </StyledSelect>
-                            </FormControl>
-                          </TableCell>
-                        </StyledTableRow>
-                      ))}
+                  {participantsToAdd.map((participant) => (
+                    <StyledTableRow key={participant.accountIdentity}>
+                      <TableCell>
+                        <PrimaryCellText variant="h5">
+                          {participant.accountIdentity}
+                        </PrimaryCellText>
+                      </TableCell>
+                      <TableCell>
+                        <PrimaryCellText variant="h5">
+                          {/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+                            participant.accountIdentity,
+                          ) ? (
+                            <GeneratedAccountLabel />
+                          ) : (
+                            `${participant.firstName ?? ''} ${participant.lastName ?? ''}`
+                          )}
+                        </PrimaryCellText>
+                      </TableCell>
+                      <TableCell sx={{ position: 'relative' }}>
+                        <FormControl fullWidth>
+                          <StyledSelect
+                            labelId="role-select-label"
+                            id="role-select"
+                            value={
+                              participantDeviceRoleNames[
+                                participant.accountIdentity.toLowerCase()
+                              ] || ''
+                            }
+                            onChange={(event: SelectChangeEvent) =>
+                              handleRoleChange(
+                                participant.accountIdentity.toLowerCase(),
+                                [event.target.value],
+                              )
+                            }
+                          >
+                            {studyDetails.protocolSnapshot.participantRoles
+                              .toArray()
+                              .map((participantRole) => (
+                                <MenuItem
+                                  key={participantRole.role}
+                                  value={participantRole.role}
+                                >
+                                  <SecondaryCellText variant="h5">
+                                    {participantRole.role}
+                                  </SecondaryCellText>
+                                </MenuItem>
+                              ))}
+                          </StyledSelect>
+                        </FormControl>
+                      </TableCell>
+                    </StyledTableRow>
+                  ))}
                 </TableBody>
               </Table>
               <StyledDivider />
