@@ -3,6 +3,8 @@ import { StackedBarChartWrapperProps } from '@Components/DataVisualizationTableW
 import {
   DataStreamSummary,
   DataStreamType,
+  DefaultSerializer,
+  getSerializer,
   StudyProtocolSnapshot,
 } from '@carp-dk/client';
 import { LocalDateTime } from '@js-joda/core';
@@ -144,13 +146,34 @@ export function mapDataToChartData(dataStreamSummary: DataStreamSummary) {
   return { mappedData: mappedDataWithFancyDates, isThereAnyData };
 }
 
+// User-facing tasks (AppTask / RPAppTask) carry their `type`
+// (survey/cognition/health/…) and `name` as direct fields on the task; plain
+// background sensing tasks (BackgroundTask) have no `type` and are ignored.
+//
+// We can't read those fields off the Kotlin task objects directly — their JS
+// property names are compiler-mangled and shift on every core rebuild. That is
+// what silently blanked the tables after the carp.core 1.3 upgrade: the old
+// `x['u21_1']` key no longer resolved, so every task was dropped and the cards
+// (and their /data-stream-service/summary calls) disappeared. Serialize the
+// snapshot to canonical JSON instead and read the stable `type`/`name` fields.
 export function getListOfTasksFromProtocolSnapshot(
   protocolSnapshot: StudyProtocolSnapshot,
-): object[] {
-  return protocolSnapshot?.tasks
-    .toArray()
-    .filter((x) => x?.['u21_1'] != null)
-    .map((x) => JSON.parse(x['u21_1']));
+): { type: string; name: string }[] {
+  if (!protocolSnapshot) return [];
+
+  let parsedSnapshot: any;
+  try {
+    const snapshotJson = DefaultSerializer.encodeToString(
+      getSerializer(StudyProtocolSnapshot),
+      protocolSnapshot,
+    );
+    parsedSnapshot = JSON.parse(snapshotJson);
+  } catch {
+    return [];
+  }
+
+  const tasks: any[] = parsedSnapshot?.tasks ?? [];
+  return tasks.filter((task) => task?.type != null);
 }
 
 export function getUniqueTaskTypesFromProtocolSnapshot(
