@@ -37,6 +37,7 @@ const LanguageInput = ({ formik, editing }: Props) => {
             disabled={!editing}
             getOptionLabel={(option) => {
               if (!option) return '';
+              if (!languageLabels[option]) return option;
               return `${languageLabels[option].primary} ${
                 languageLabels[option].secondary
               }`;
