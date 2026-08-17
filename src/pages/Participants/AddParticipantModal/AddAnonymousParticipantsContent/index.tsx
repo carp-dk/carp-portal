@@ -39,7 +39,7 @@ const validationSchema = yup.object({
     .number()
     .required('Number of participants is required')
     .min(1, 'Number of participants must be at least 1')
-    .max(10000, 'Number of participants must be at most 10000'),
+    .max(100000, 'Number of participants must be at most 100000'),
   expiryDate: yup
     .date()
     .required('Expiry date is required')
@@ -191,7 +191,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
           <Grid container columnSpacing={4} rowSpacing={1} align-item="center">
             <Grid size={{ xs: 7 }}>
               <FormLabel required>
-                Number of participants (max: 10000)
+                Number of participants (max: 100000)
               </FormLabel>
               <TextField
                 autoFocus
