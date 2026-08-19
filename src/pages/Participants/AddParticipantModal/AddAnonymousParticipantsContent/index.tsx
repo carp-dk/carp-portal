@@ -137,16 +137,28 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     const icatClientName = Object.keys(redirectURIs).find((key) =>
       key.includes('icat'),
     );
+    const neuropathyAppClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('neuropathy-app'),
+    );
+    const mcatClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('mcat'),
+    );
     setNotMappedClientNames(
       Object.keys(redirectURIs).filter(
-        (key) => key !== studyAppClientName && key !== icatClientName,
+        (key) =>
+          key !== studyAppClientName &&
+          key !== icatClientName &&
+          key !== neuropathyAppClientName &&
+          key !== mcatClientName,
       ),
     );
 
     if (globalThis.location.host.includes('localhost')) {
       setPreDefinedUriMap({
         [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
+        [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
         [icatClientName]: `https://dev.carp.dk/icat`,
+        [mcatClientName]: `https://mcat.dev.carp.dk/anonymous`,
       });
       return;
     }
@@ -154,6 +166,8 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     setPreDefinedUriMap({
       [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
       [icatClientName]: `https://${globalThis.location.host}/icat`,
+      [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
+      [mcatClientName]: `https://mcat.${globalThis.location.host}/anonymous`,
     });
   }, [redirectURIs]);
 
