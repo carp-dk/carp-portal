@@ -5,10 +5,12 @@ import {
   CarpFile,
   CarpServiceError,
   Collection,
+  EnableSelfSignupRequest,
   Export,
   MessageData,
   ResourceData,
   Role,
+  SelfSignupConfig,
   StudyDetails,
   StudyOverview,
   StudyProtocolSnapshot,
@@ -853,6 +855,69 @@ export const useDownloadFile = (studyId: string) => {
     },
     onSuccess: () => {
       setSnackbarSuccess('File will start downloading shortly');
+    },
+    onError: (error: CarpServiceError) => {
+      setSnackbarError(error.message);
+    },
+  });
+};
+
+export const useSelfSignupConfig = (studyId: string, enabled: boolean) => {
+  return useQuery<SelfSignupConfig, CarpServiceError>({
+    // `null` when self-signup has never been enabled for this study.
+    queryFn: () => carpApi.study.selfSignup.getConfig({ studyId }),
+    queryKey: ['selfSignup', studyId],
+    // The service only serves a config for a live study.
+    enabled,
+  });
+};
+
+export const useEnableSelfSignup = (studyId: string) => {
+  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      participantRoleName,
+      clientId,
+      redirectUri,
+      maxParticipants,
+      expirationSeconds,
+    }: Omit<EnableSelfSignupRequest, 'studyId'>) => {
+      return carpApi.study.selfSignup.enable({
+        studyId,
+        participantRoleName,
+        clientId,
+        redirectUri,
+        maxParticipants,
+        expirationSeconds,
+      });
+    },
+    onSuccess: (config: SelfSignupConfig) => {
+      queryClient.setQueryData(['selfSignup', studyId], config);
+      setSnackbarSuccess('Self sign-up enabled');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['selfSignup', studyId] });
+    },
+    onError: (error: CarpServiceError) => {
+      setSnackbarError(error.message);
+    },
+  });
+};
+
+export const useEndSelfSignup = (studyId: string) => {
+  const { setSnackbarSuccess, setSnackbarError } = useSnackbar();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => carpApi.study.selfSignup.end({ studyId }),
+    onSuccess: (config: SelfSignupConfig) => {
+      queryClient.setQueryData(['selfSignup', studyId], config);
+      setSnackbarSuccess('Self sign-up ended');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['selfSignup', studyId] });
     },
     onError: (error: CarpServiceError) => {
       setSnackbarError(error.message);

@@ -3,6 +3,7 @@ import { CarpServiceError, parseUser, User } from '@carp-dk/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import carpApi from '@Utils/api/api';
 import { useSnackbar } from '@Utils/snackbar';
+import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 
 export const useInviteResearcher = () => {
@@ -44,4 +45,62 @@ export const useRedirectURIs = () => {
     },
     retry: false,
   });
+};
+
+/**
+ * Resolves the Keycloak clients that can receive magic links into a default
+ * redirect URI per client, and reports the clients we have no default for so
+ * the caller can ask for the redirect URI manually.
+ */
+export const useRedirectUriMap = () => {
+  const { data: redirectURIs, isLoading } = useRedirectURIs();
+
+  const [preDefinedUriMap, setPreDefinedUriMap] = useState({});
+  const [notMappedClientNames, setNotMappedClientNames] = useState<string[]>(
+    [],
+  );
+
+  useEffect(() => {
+    if (!redirectURIs) return;
+    const studyAppClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('studies-app'),
+    );
+    const icatClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('icat'),
+    );
+    const neuropathyAppClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('neuropathy-app'),
+    );
+    const mcatClientName = Object.keys(redirectURIs).find((key) =>
+      key.includes('mcat'),
+    );
+    setNotMappedClientNames(
+      Object.keys(redirectURIs).filter(
+        (key) =>
+          key !== studyAppClientName &&
+          key !== icatClientName &&
+          key !== neuropathyAppClientName &&
+          key !== mcatClientName,
+      ),
+    );
+
+    if (globalThis.location.host.includes('localhost')) {
+      setPreDefinedUriMap({
+        [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
+        [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
+        [icatClientName]: `https://dev.carp.dk/icat`,
+        [mcatClientName]: `https://mcat.dev.carp.dk/anonymous`,
+      });
+      return;
+    }
+
+    setPreDefinedUriMap({
+      [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
+      [icatClientName]: `https://${globalThis.location.host}/icat`,
+      [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
+      [mcatClientName]: `https://mcat.${globalThis.location.host}/anonymous`,
+    });
+  }, [redirectURIs]);
+
+  return { redirectURIs, preDefinedUriMap, notMappedClientNames, isLoading };
 };

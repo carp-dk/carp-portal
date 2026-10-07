@@ -1,4 +1,4 @@
-import { useRedirectURIs } from '@Utils/queries/auth';
+import { useRedirectUriMap } from '@Utils/queries/auth';
 import { useGenerateAnonymousAccounts } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { patternToRegex } from '@Utils/utility';
@@ -15,7 +15,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { enGB } from 'date-fns/locale/en-GB';
 import { useFormik } from 'formik';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
@@ -68,14 +68,13 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
 
   const { data: studyDetails, isLoading: isStudyDetailsLoading } =
     useStudyDetails(studyId);
-  const { data: redirectURIs, isLoading: isRedirectURIsLoading } =
-    useRedirectURIs();
+  const {
+    redirectURIs,
+    preDefinedUriMap,
+    notMappedClientNames,
+    isLoading: isRedirectURIsLoading,
+  } = useRedirectUriMap();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
-
-  const [preDefinedUriMap, setPreDefinedUriMap] = useState({});
-  const [notMappedClientNames, setNotMappedClientNames] = useState<string[]>(
-    [],
-  );
 
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
@@ -158,7 +157,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
         [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
         [icatClientName]: `https://dev.carp.dk/icat`,
-        [mcatClientName]: `https://mcat.app.dev.carp.dk/auth`,
+        [mcatClientName]: `https://mcat.app.dev.carp.dk/anonymous`,
       });
       return;
     }
@@ -167,7 +166,7 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
       [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
       [icatClientName]: `https://${globalThis.location.host}/icat`,
       [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
-      [mcatClientName]: `https://mcat.app.${globalThis.location.host}/auth`,
+      [mcatClientName]: `https://mcat.app.${globalThis.location.host}/anonymous`,
     });
   }, [redirectURIs]);
 

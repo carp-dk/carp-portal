@@ -344,6 +344,20 @@ export const getProtocolVersionTag = (
   }
 };
 
+export const getApplicationName = (
+  applicationData?: ApplicationData | string | null,
+) => {
+  const json = getApplicationDataJson(applicationData);
+  if (!json) return null;
+
+  try {
+    const applicationName = JSON.parse(json)?.applicationName;
+    return typeof applicationName === 'string' ? applicationName : null;
+  } catch {
+    return null;
+  }
+};
+
 export const getParticipantDataName = (dataType: string) => {
   switch (dataType) {
     case 'dk.cachet.carp.input.sex':

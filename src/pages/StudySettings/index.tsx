@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddResearcherModal from './AddResearcherModal';
 import Invitations from './Invitations';
+import SelfSignup from './SelfSignup';
 import StudyData from './StudyData';
 import StudyOwner from './StudyOwner';
 import StudyResearchers from './StudyResearchers';
@@ -35,6 +36,7 @@ const Studies: React.FC = () => {
       <StyledContainer>
         <StudyData />
         <Invitations />
+        <SelfSignup />
         <StudyOwner />
         <StudyResearchers
           setOpenAddResearcherModal={() => setOpenAddResearcherModal(true)}
