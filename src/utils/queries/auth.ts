@@ -89,7 +89,7 @@ export const useRedirectUriMap = () => {
         [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
         [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
         [icatClientName]: `https://dev.carp.dk/icat`,
-        [mcatClientName]: `https://mcat.dev.carp.dk/anonymous`,
+        [mcatClientName]: `https://mcat.app.dev.carp.dk/anonymous`,
       });
       return;
     }
@@ -98,7 +98,7 @@ export const useRedirectUriMap = () => {
       [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
       [icatClientName]: `https://${globalThis.location.host}/icat`,
       [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
-      [mcatClientName]: `https://mcat.${globalThis.location.host}/anonymous`,
+      [mcatClientName]: `https://mcat.app.${globalThis.location.host}/anonymous`,
     });
   }, [redirectURIs]);
 
