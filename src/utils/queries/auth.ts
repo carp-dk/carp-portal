@@ -3,7 +3,7 @@ import { CarpServiceError, parseUser, User } from '@carp-dk/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import carpApi from '@Utils/api/api';
 import { useSnackbar } from '@Utils/snackbar';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useAuth } from 'react-oidc-context';
 
 export const useInviteResearcher = () => {
@@ -55,13 +55,13 @@ export const useRedirectURIs = () => {
 export const useRedirectUriMap = () => {
   const { data: redirectURIs, isLoading } = useRedirectURIs();
 
-  const [preDefinedUriMap, setPreDefinedUriMap] = useState({});
-  const [notMappedClientNames, setNotMappedClientNames] = useState<string[]>(
-    [],
-  );
-
-  useEffect(() => {
-    if (!redirectURIs) return;
+  const { preDefinedUriMap, notMappedClientNames } = useMemo(() => {
+    if (!redirectURIs) {
+      return {
+        preDefinedUriMap: {} as Record<string, string>,
+        notMappedClientNames: [] as string[],
+      };
+    }
     const studyAppClientName = Object.keys(redirectURIs).find((key) =>
       key.includes('studies-app'),
     );
@@ -74,32 +74,35 @@ export const useRedirectUriMap = () => {
     const mcatClientName = Object.keys(redirectURIs).find((key) =>
       key.includes('mcat'),
     );
-    setNotMappedClientNames(
-      Object.keys(redirectURIs).filter(
-        (key) =>
-          key !== studyAppClientName &&
-          key !== icatClientName &&
-          key !== neuropathyAppClientName &&
-          key !== mcatClientName,
-      ),
+    const notMapped = Object.keys(redirectURIs).filter(
+      (key) =>
+        key !== studyAppClientName &&
+        key !== icatClientName &&
+        key !== neuropathyAppClientName &&
+        key !== mcatClientName,
     );
 
     if (globalThis.location.host.includes('localhost')) {
-      setPreDefinedUriMap({
-        [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
-        [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
-        [icatClientName]: `https://dev.carp.dk/icat`,
-        [mcatClientName]: `https://mcat.app.dev.carp.dk/anonymous`,
-      });
-      return;
+      return {
+        preDefinedUriMap: {
+          [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
+          [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
+          [icatClientName]: `https://dev.carp.dk/icat`,
+          [mcatClientName]: `https://mcat.app.dev.carp.dk/anonymous`,
+        },
+        notMappedClientNames: notMapped,
+      };
     }
 
-    setPreDefinedUriMap({
-      [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
-      [icatClientName]: `https://${globalThis.location.host}/icat`,
-      [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
-      [mcatClientName]: `https://mcat.app.${globalThis.location.host}/anonymous`,
-    });
+    return {
+      preDefinedUriMap: {
+        [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
+        [icatClientName]: `https://${globalThis.location.host}/icat`,
+        [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
+        [mcatClientName]: `https://mcat.app.${globalThis.location.host}/anonymous`,
+      },
+      notMappedClientNames: notMapped,
+    };
   }, [redirectURIs]);
 
   return { redirectURIs, preDefinedUriMap, notMappedClientNames, isLoading };

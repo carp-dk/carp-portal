@@ -196,6 +196,7 @@ interface GenerateAnonymousAccountsParams {
   participantRoleName: string;
   redirectUri: string;
   clientId: string;
+  subdomain?: string;
 }
 
 export const useGenerateAnonymousAccounts = (studyId: string) => {
@@ -206,6 +207,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
     mutationFn: async ({
       clientId,
       redirectUri,
+      subdomain,
       amountOfAccounts,
       expirationSeconds,
       participantRoleName,
@@ -214,6 +216,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
         studyId,
         clientId,
         redirectUri,
+        subdomain,
         amountOfAccounts,
         expirationSeconds,
         participantRoleName,
