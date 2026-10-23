@@ -71,13 +71,9 @@ const SelfSignup = () => {
     );
   }
 
-  // Only apps that declare an `applicationName` on their protocol support self
-  // sign-up. No protocol means no application data, so this also covers the
-  // "protocol not set" case.
   const applicationName = getApplicationName(
     studyDetails.protocolSnapshot?.applicationData,
   );
-  if (!applicationName) return null;
 
   // The service only accepts a self-signup config once the study is live.
   const canConfigure = isLive;
