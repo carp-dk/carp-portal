@@ -106,7 +106,11 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
         clientId: values.clientId.toString(),
-        subdomain: values.clientId.includes('mcat') ? 'mcat.app' : undefined,
+        subdomain: values.clientId.includes('mcat')
+          ? 'mcat.app'
+          : values.clientId.includes('neuropathy-app')
+            ? 'neuropathy.app'
+            : undefined,
       });
     },
   });
