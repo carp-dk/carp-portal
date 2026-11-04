@@ -7,6 +7,7 @@
 // points nowhere.
 const APPSITE_SUBDOMAINS: Record<string, string> = {
   mcat: 'mcat.app',
+  'neuropathy-app': 'neuropathy.app',
 };
 
 // Same host convention as the anonymous-participant redirect URIs.
