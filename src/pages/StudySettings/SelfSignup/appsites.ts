@@ -2,9 +2,9 @@
 // sign-up code deep link lives at `<appsite>/code/<shortCode>`.
 //
 // Add an entry when a new app gains self sign-up support. An app that is not
-// listed here simply gets no QR code — the short code itself still works, and
-// that is deliberate: guessing a subdomain would render a QR that silently
-// points nowhere.
+// listed here (e.g. the study app) gets a QR pointing straight at the service,
+// `https://<server>/api/self-signup/<shortCode>`, rather than a guessed
+// subdomain that would silently point nowhere.
 const APPSITE_SUBDOMAINS: Record<string, string> = {
   mcat: 'mcat.app',
   'neuropathy-app': 'neuropathy.app',
@@ -26,10 +26,8 @@ export const getSignupCodeUrl = (
   applicationName: string | null,
   shortCode: string,
 ) => {
-  // The study app has no appsite, so its QR points straight at the service.
-  if (applicationName?.toLowerCase().includes('studies-app')) {
-    return `https://${getServer()}/api/self-signup/${shortCode}`;
-  }
   const appsite = getAppsite(applicationName);
-  return appsite ? `${appsite}/code/${shortCode}` : null;
+  return appsite
+    ? `${appsite}/code/${shortCode}`
+    : `https://${getServer()}/api/self-signup/${shortCode}`;
 };
