@@ -34,6 +34,10 @@ type Props = {
   onClose: () => void;
 };
 
+// Neuropathy app is listed twice; this option sends the same client without a subdomain.
+const NO_SUBDOMAIN_SUFFIX = ' (no subdomain)';
+const toClientId = (option: string) => option.replace(NO_SUBDOMAIN_SUFFIX, '');
+
 const validationSchema = yup.object({
   numberOfParticipants: yup
     .number()
@@ -86,8 +90,10 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
+      const clientId = toClientId(values.clientId);
+      const noSubdomain = clientId !== values.clientId;
       if (
-        !redirectURIs[values.clientId]?.some((uri) =>
+        !redirectURIs[clientId]?.some((uri) =>
           patternToRegex(uri).test(values.redirectUri),
         )
       ) {
@@ -105,12 +111,14 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         ),
         amountOfAccounts: values.numberOfParticipants,
         redirectUri: values.redirectUri.toString(),
-        clientId: values.clientId.toString(),
-        subdomain: values.clientId.includes('mcat')
-          ? 'mcat.app'
-          : values.clientId.includes('neuropathy-app')
-            ? 'neuropathy.app'
-            : undefined,
+        clientId,
+        subdomain: noSubdomain
+          ? undefined
+          : clientId.includes('mcat')
+            ? 'mcat.app'
+            : clientId.includes('neuropathy-app')
+              ? 'neuropathy.app'
+              : undefined,
       });
     },
   });
@@ -267,17 +275,23 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
                 onChange={async (value) => {
                   await addAnonymousParticipantFormik.setFieldValue(
                     'redirectUri',
-                    preDefinedUriMap[value.target.value] || '',
+                    preDefinedUriMap[toClientId(value.target.value)] || '',
                   );
                   addAnonymousParticipantFormik.handleChange(value);
                 }}
                 onBlur={addAnonymousParticipantFormik.handleBlur}
               >
-                {Object.keys(redirectURIs).map((uri) => (
-                  <MenuItem key={uri} value={uri}>
-                    {uri}
-                  </MenuItem>
-                ))}
+                {Object.keys(redirectURIs)
+                  .flatMap((name) =>
+                    name.includes('neuropathy-app')
+                      ? [name, `${name}${NO_SUBDOMAIN_SUFFIX}`]
+                      : [name],
+                  )
+                  .map((uri) => (
+                    <MenuItem key={uri} value={uri}>
+                      {uri}
+                    </MenuItem>
+                  ))}
               </Select>
               {addAnonymousParticipantFormik.touched.clientId &&
                 addAnonymousParticipantFormik.errors.clientId && (
