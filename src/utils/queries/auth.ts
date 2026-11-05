@@ -85,7 +85,7 @@ export const useRedirectUriMap = () => {
     if (globalThis.location.host.includes('localhost')) {
       return {
         preDefinedUriMap: {
-          [studyAppClientName]: `https://study.app.dev.carp.dk/anonymous`,
+          [studyAppClientName]: `carp-studies-anonymous:/`,
           [neuropathyAppClientName]: `https://neuropathy.app.dev.carp.dk/anonymous`,
           [icatClientName]: `https://dev.carp.dk/icat`,
           [mcatClientName]: `https://mcat.app.dev.carp.dk/anonymous`,
@@ -96,7 +96,7 @@ export const useRedirectUriMap = () => {
 
     return {
       preDefinedUriMap: {
-        [studyAppClientName]: `https://study.app.${globalThis.location.host}/anonymous`,
+        [studyAppClientName]: `carp-studies-anonymous:/`,
         [icatClientName]: `https://${globalThis.location.host}/icat`,
         [neuropathyAppClientName]: `https://neuropathy.app.${globalThis.location.host}/anonymous`,
         [mcatClientName]: `https://mcat.app.${globalThis.location.host}/anonymous`,
