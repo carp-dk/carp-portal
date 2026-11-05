@@ -26,6 +26,10 @@ export const getSignupCodeUrl = (
   applicationName: string | null,
   shortCode: string,
 ) => {
+  // The study app has no appsite, so its QR points straight at the service.
+  if (applicationName?.toLowerCase().includes('studies-app')) {
+    return `https://${getServer()}/api/self-signup/${shortCode}`;
+  }
   const appsite = getAppsite(applicationName);
   return appsite ? `${appsite}/code/${shortCode}` : null;
 };
