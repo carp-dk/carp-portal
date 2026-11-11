@@ -39,6 +39,7 @@ const BannerEditor = () => {
         multiline
         minRows={3}
         placeholder="CARP will be unavailable on Saturday 08:00–10:00 CET for maintenance."
+        helperText="Supports **bold**, *italic*, `code` and [link text](https://…)."
         value={currentMessage}
         onChange={(e) => setMessage(e.target.value)}
       />

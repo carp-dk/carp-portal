@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useBanner } from '@Utils/queries/banner';
+import { renderSimpleMarkdown } from '@Utils/simpleMarkdown';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -88,6 +89,22 @@ export const BannerAlert = ({
         px: 2,
         transition: 'padding 250ms cubic-bezier(0.22, 1, 0.36, 1)',
         '& .MuiAlert-message': { width: '100%', py: 0, overflow: 'visible' },
+        // Markdown in the message; currentColor keeps it readable on every
+        // severity colour (dark text on warning, white on the others).
+        '& a': {
+          color: 'inherit',
+          fontWeight: 700,
+          textDecoration: 'underline',
+          textUnderlineOffset: '3px',
+        },
+        '& strong': { fontWeight: 700 },
+        '& code': {
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+          fontSize: '0.9em',
+          px: 0.5,
+          borderRadius: 1,
+          backgroundColor: 'color-mix(in srgb, currentColor 15%, transparent)',
+        },
       }}
     >
       <Box
@@ -159,7 +176,7 @@ export const BannerAlert = ({
             noWrap
             sx={{ fontSize: '1rem', lineHeight: '1.5rem', fontWeight: 400 }}
           >
-            {firstLine}
+            {renderSimpleMarkdown(firstLine)}
           </Typography>
           {hasMore && onToggleMinimized && (
             <Link
@@ -199,7 +216,7 @@ export const BannerAlert = ({
             textWrap: 'pretty',
           }}
         >
-          {message}
+          {renderSimpleMarkdown(message)}
         </Typography>
       </Collapse>
     </Alert>
