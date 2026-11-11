@@ -27,7 +27,18 @@ const DeviceDropdown = ({ device, connectedDevices, connections }: Props) => {
   const [open, setOpen] = useState(false);
   return (
     <StyledContainer numberOfConnections={connections.length} open={open}>
-      <DropdownBar onClick={() => setOpen(!open)}>
+      <DropdownBar
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setOpen(!open);
+          }
+        }}
+      >
         <DeviceIcon color="primary" fontSize="small" />
         <DeviceName variant="h3">{device.roleName}</DeviceName>
         <ExpandButton open={open}>

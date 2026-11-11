@@ -12,8 +12,8 @@ export const StyledContainer = styled('div', {
     height: open ? `calc(${numberOfConnections}*52px)+42px` : '42px',
     overflow: 'hidden',
     transition: theme.transitions.create(['height'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      duration: open ? 400 : 350,
     }),
   }),
 );
@@ -40,8 +40,8 @@ export const ExpandButton = styled('div', {
   minWidth: 'auto',
   display: 'block',
   transition: theme.transitions.create('transform', {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+    easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    duration: 250,
   }),
   transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
 }));

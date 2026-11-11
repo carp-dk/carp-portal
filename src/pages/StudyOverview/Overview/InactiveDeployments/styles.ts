@@ -35,15 +35,15 @@ export const HeaderText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-export const StyledTableRow = styled(TableRow)({
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   paddingLeft: 0,
   '&:hover': {
-    backgroundColor: '#EDEDED',
+    backgroundColor: theme.palette.surface.hover,
     transition: 'background-color 0.2s ease-in-out',
     cursor: 'pointer',
     borderRadius: '16px',
   },
-});
+}));
 
 export const StyledTableCell = styled(TableCell)({
   paddingLeft: 0,

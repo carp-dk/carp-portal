@@ -1,7 +1,7 @@
 import { styled } from '@Utils/theme';
 
-const TooltipContainer = styled('div')({
-  backgroundColor: '#ededed',
+const TooltipContainer = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.surface.hover,
   display: 'none',
   flexDirection: 'column',
   position: 'absolute',
@@ -11,7 +11,7 @@ const TooltipContainer = styled('div')({
   width: '85%',
   bottom: '155%',
   maxWidth: 240,
-});
+}));
 
 export const HorizontalContainer = styled('div')({
   display: 'flex',

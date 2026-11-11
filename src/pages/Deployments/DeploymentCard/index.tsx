@@ -70,11 +70,20 @@ const DeploymentCard = ({
         <Names
           variant="h6"
           noWrap
+          role="link"
+          tabIndex={0}
           onClick={() =>
             navigate(
               `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
             )
           }
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              navigate(
+                `/studies/${studyId}/deployments/${deployment.participantGroupId}`,
+              );
+            }
+          }}
         >
           {isGenerated ? <i>{displayName}</i> : displayName}
         </Names>
@@ -136,11 +145,13 @@ const DeploymentCard = ({
           disableRipple
           onClick={(event) => handleCardToggle(event)}
           open={isCardOpen}
+          aria-label={isCardOpen ? 'Hide participants' : 'Show participants'}
+          aria-expanded={isCardOpen}
         >
           <KeyboardArrowDownRoundedIcon
             sx={{
-              transform: isCardOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-              transition: 'transform 0.3s ease',
+              transform: isCardOpen ? 'rotate(-180deg)' : 'rotate(-90deg)',
+              transition: 'transform 250ms cubic-bezier(0.22, 1, 0.36, 1)',
             }}
           />
         </MinimizeButton>
@@ -190,7 +201,12 @@ export const DeploymentSkeletonCard = () => {
             height={19}
           />
         </IdContainer>
-        <MinimizeButton disableRipple onClick={() => {}} open={false}>
+        <MinimizeButton
+          disableRipple
+          disabled
+          open={false}
+          aria-label="Show participants"
+        >
           <KeyboardArrowDownRoundedIcon
             sx={{
               transform: 'rotate(-90deg)',

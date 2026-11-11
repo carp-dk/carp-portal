@@ -6,6 +6,7 @@ export const CardWrapper = styled(Card)(({ theme }) => ({
   height: 220,
   border: `1px ${theme.palette.grey[500]} solid`,
   width: 648,
+  maxWidth: '100%',
   [theme.breakpoints.down('sm')]: {
     width: '100%',
   },

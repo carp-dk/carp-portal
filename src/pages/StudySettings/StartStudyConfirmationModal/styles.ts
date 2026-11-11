@@ -13,6 +13,11 @@ export const ModalBox = styled('div')(({ theme }) => ({
   borderRadius: 16,
   padding: 24,
   maxWidth: 550,
+  maxHeight: 'calc(100dvh - 32px)',
+  overflowY: 'auto',
+  [theme.breakpoints.down('sm')]: {
+    width: 'calc(100% - 32px)',
+  },
 }));
 
 export const Title = styled(Typography)(({ theme }) => ({

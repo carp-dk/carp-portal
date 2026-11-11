@@ -116,7 +116,7 @@ const DeploymentsInProgress = () => {
             tooltip: {
               sx: {
                 color: 'text.primary',
-                backgroundColor: '#FFF',
+                backgroundColor: 'common.white',
                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
               },
             },
@@ -158,7 +158,7 @@ const DeploymentsInProgress = () => {
                     }
                     sx={{
                       '&:hover': {
-                        backgroundColor: '#EDEDED',
+                        backgroundColor: 'surface.hover',
                         transition: 'background-color 0.2s ease-in-out',
                         cursor: 'pointer',
                         borderRadius: '16px',

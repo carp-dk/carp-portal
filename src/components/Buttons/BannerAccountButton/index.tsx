@@ -45,6 +45,9 @@ const BannerAccountButton = () => {
         onClick={handleClick}
         data-testid="account-icon-button"
         size="large"
+        aria-label={t('common:account_menu')}
+        aria-haspopup="menu"
+        aria-expanded={Boolean(anchorEl)}
       >
         <AccountIcon fontSize="large" />
       </StyledIconButton>

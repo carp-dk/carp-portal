@@ -1,10 +1,3 @@
-import {
-  opensans100,
-  opensans300,
-  opensans500,
-  opensans700,
-  opensans900,
-} from '@Assets/fonts';
 import { createTheme } from '@mui/material/styles';
 import { createStyled } from '@mui/system';
 
@@ -36,6 +29,14 @@ declare module '@mui/material/styles/createPalette' {
     };
     drawer: {
       active: string;
+      divider: string;
+      hover: string;
+      pressed: string;
+    };
+    surface: {
+      hover: string;
+      subtleHover: string;
+      selected: string;
     };
   }
   interface PaletteOptions {
@@ -52,6 +53,14 @@ declare module '@mui/material/styles/createPalette' {
     };
     drawer: {
       active: string;
+      divider: string;
+      hover: string;
+      pressed: string;
+    };
+    surface: {
+      hover: string;
+      subtleHover: string;
+      selected: string;
     };
   }
 }
@@ -91,7 +100,7 @@ export const customPalette = {
     light: '#CDE5FF',
   },
   secondary: {
-    main: '#5E7F97',
+    main: '#56778E',
     dark: '#233240',
     light: '#D6E8F4',
   },
@@ -99,13 +108,13 @@ export const customPalette = {
     main: '#BA1A1A',
   },
   info: {
-    main: '#5E7F97',
+    main: '#56778E',
   },
   grey: {
     100: '#FCFCFF',
     200: '#E3E3E4',
     300: '#AAABAE',
-    500: '#76777A',
+    500: '#727376',
     700: '#45474A',
     900: '#1A1C1E',
   },
@@ -138,6 +147,14 @@ export const customPalette = {
   },
   drawer: {
     active: '#E7F2FF',
+    divider: '#CAC4D0',
+    hover: '#FCFCFF20',
+    pressed: '#FCFCFF40',
+  },
+  surface: {
+    hover: '#EDEDED',
+    subtleHover: '#F5F5F5',
+    selected: '#C7D7E4',
   },
 };
 
@@ -149,22 +166,21 @@ export const themeInstance = createTheme({
           fontSize: '0.875rem',
           lineHeight: '1.25rem',
           fontWeight: 300,
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+          fontVariantNumeric: 'tabular-nums',
         },
-        '@font-face': opensans100,
-        fallbacks: [
-          {
-            '@font-face': opensans300,
+        // Reduced motion: keep fades and color changes so state changes stay
+        // visible, but drop movement (transforms, size, position).
+        '@media (prefers-reduced-motion: reduce)': {
+          '*, *::before, *::after': {
+            transitionProperty:
+              'opacity, color, background-color, border-color !important',
           },
-          {
-            '@font-face': opensans500,
+          '.MuiSkeleton-root, .MuiSkeleton-root::after': {
+            animation: 'none !important',
           },
-          {
-            '@font-face': opensans700,
-          },
-          {
-            '@font-face': opensans900,
-          },
-        ],
+        },
       },
     },
     MuiListItemText: {
@@ -255,6 +271,9 @@ export const themeInstance = createTheme({
           h3_web: 'h3',
           h4_web: 'h4',
           h5_web: 'h5',
+          // h5/h6 are used for body and caption text, not document headings
+          h5: 'p',
+          h6: 'p',
         },
       },
     },
@@ -265,21 +284,25 @@ export const themeInstance = createTheme({
       fontSize: '2.8125rem',
       lineHeight: '3.25rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h2: {
       fontSize: '1.5rem',
       lineHeight: '2rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h3: {
       fontSize: '1.375rem',
       lineHeight: '1.75rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h4: {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h5: {
       fontSize: '0.875rem',
@@ -306,11 +329,13 @@ export const themeInstance = createTheme({
       fontSize: '2.8125rem',
       lineHeight: '3.25rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h2_web: {
       fontSize: '1.375rem',
       lineHeight: '1.75rem',
       fontWeight: 700,
+      textWrap: 'balance',
     },
     h3_web: {
       fontSize: '1.375rem',
@@ -326,11 +351,6 @@ export const themeInstance = createTheme({
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
       fontWeight: 300,
-    },
-  },
-  transitions: {
-    duration: {
-      leavingScreen: 500,
     },
   },
   palette: customPalette,

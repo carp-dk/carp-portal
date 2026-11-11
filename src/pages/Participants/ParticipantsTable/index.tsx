@@ -206,6 +206,15 @@ const ParticipantsTable = ({
       showGlobalFilter: true,
       showColumnFilters: true,
     },
+    // On phones, let the search field and the action buttons wrap onto
+    // separate lines instead of squeezing into one row
+    muiTopToolbarProps: {
+      sx: (theme) => ({
+        [theme.breakpoints.down('sm')]: {
+          '& > .MuiBox-root': { flexWrap: 'wrap' },
+        },
+      }),
+    },
     positionGlobalFilter: 'left',
     enableFullScreenToggle: false,
     enableDensityToggle: false,

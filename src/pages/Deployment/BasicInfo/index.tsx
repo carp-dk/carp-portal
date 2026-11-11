@@ -195,6 +195,7 @@ const BasicInfo = () => {
                   color="primary"
                   onClick={handleSaveName}
                   disabled={updateDeployment.isPending}
+                  aria-label={t('common:save')}
                 >
                   <Check fontSize="small" />
                 </IconButton>
@@ -202,6 +203,7 @@ const BasicInfo = () => {
                   size="small"
                   onClick={handleCancelEditName}
                   disabled={updateDeployment.isPending}
+                  aria-label={t('common:cancel')}
                 >
                   <Close fontSize="small" />
                 </IconButton>

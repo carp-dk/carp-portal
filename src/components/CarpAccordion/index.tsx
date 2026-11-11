@@ -35,7 +35,7 @@ const CarpAccordion = ({
           <KeyboardArrowRightIcon
             sx={{
               transform: expanded ? 'rotate(-270deg)' : 'rotate(0deg)',
-              transition: 'transform 0.3s ease',
+              transition: 'transform 250ms cubic-bezier(0.22, 1, 0.36, 1)',
             }}
           />
         }

@@ -7,13 +7,13 @@ export const StyledContainer = styled('div')({
   gap: 24,
 });
 
-export const DataContainer = styled('div')({
+export const DataContainer = styled('div')(({ theme }) => ({
   padding: '16px 10px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-end',
-  borderBottom: '1px solid #76777A',
-});
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
+}));
 
 export const ProfilePicture = styled('div')(({ theme }) => ({
   borderRadius: '50%',

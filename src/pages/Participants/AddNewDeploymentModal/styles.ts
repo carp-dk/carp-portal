@@ -93,11 +93,11 @@ export const StyledSelect = styled(Select)({
   },
 });
 
-export const StyledDivider = styled(Divider)({
+export const StyledDivider = styled(Divider)(({ theme }) => ({
   marginTop: 8,
   marginBottom: 8,
-  borderColor: '#76777A',
-});
+  borderColor: theme.palette.grey[500],
+}));
 
 export const Hint = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,

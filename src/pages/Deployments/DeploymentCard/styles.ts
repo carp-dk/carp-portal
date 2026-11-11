@@ -21,7 +21,7 @@ export const TopContainer = styled('div')({
 export const Names = styled(Typography)(({ theme }) => ({
   overflow: 'hidden',
   cursor: 'pointer',
-  ':hover': {
+  '&:hover, &:focus-visible': {
     textDecoration: 'underline',
     color: theme.palette.primary.main,
   },
@@ -58,7 +58,7 @@ export const DeploymentTooltip = styled((props: TooltipProps) =>
   }),
 )(({ theme }) => ({
   [`& .${tooltipClasses.tooltipArrow}`]: {
-    backgroundColor: '#ededed',
+    backgroundColor: theme.palette.surface.hover,
     color: theme.palette.text.primary,
     padding: '8px 12px',
     borderRadius: 6,
@@ -66,7 +66,7 @@ export const DeploymentTooltip = styled((props: TooltipProps) =>
     maxWidth: 'none',
   },
   [`& .${tooltipClasses.arrow}`]: {
-    color: '#ededed',
+    color: theme.palette.surface.hover,
   },
 }));
 
@@ -132,15 +132,10 @@ export const StyledStatusDot = styled('div', {
 
 export const MinimizeButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<{ open?: boolean }>(({ theme, open }) => ({
+})<{ open?: boolean }>(({ theme }) => ({
   minWidth: 36,
   color: theme.palette.grey[700],
   justifyContent: 'flex-end',
-  transition: theme.transitions.create('transform', {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  transform: open ? 'rotateX(180deg)' : 'rotateX(0deg)',
   '& svg': {
     fontSize: 36,
   },

@@ -35,9 +35,13 @@ export const StyledListItemButton = styled(ListItemButton, {
     color: active ? theme.palette.primary.dark : theme.palette.primary.light,
   },
   '&:hover': {
-    backgroundColor: active ? theme.palette.drawer.active : '#FCFCFF20',
+    backgroundColor: active
+      ? theme.palette.drawer.active
+      : theme.palette.drawer.hover,
   },
   '&:active': {
-    backgroundColor: active ? theme.palette.drawer.active : '#FCFCFF40',
+    backgroundColor: active
+      ? theme.palette.drawer.active
+      : theme.palette.drawer.pressed,
   },
 }));

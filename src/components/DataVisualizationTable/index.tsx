@@ -41,7 +41,10 @@ const DataVisualizationTable = ({
     <Table>
       <TableHead>
         <TableHeadLeftmostCell>
-          <StyledControlButton onClick={() => handleLeftButtonClick()}>
+          <StyledControlButton
+            onClick={() => handleLeftButtonClick()}
+            aria-label="Previous period"
+          >
             <ChevronLeft></ChevronLeft>
           </StyledControlButton>
         </TableHeadLeftmostCell>
@@ -64,6 +67,7 @@ const DataVisualizationTable = ({
           <StyledControlButton
             disabled={isToDateSetToTheCurrentDay}
             onClick={() => handleRightButtonClick()}
+            aria-label="Next period"
           >
             <ChevronRight></ChevronRight>
           </StyledControlButton>

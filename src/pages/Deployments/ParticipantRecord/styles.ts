@@ -3,7 +3,7 @@ import { styled } from '@Utils/theme';
 import { getDeviceStatusColor } from '@Utils/utility';
 import { Link } from 'react-router-dom';
 
-export const StyledContainer = styled(Link)({
+export const StyledContainer = styled(Link)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '185px 150px 1fr 2fr 3fr 2fr',
   overflow: 'hidden',
@@ -15,12 +15,12 @@ export const StyledContainer = styled(Link)({
   marginRight: '16px',
   borderRadius: '16px',
   ':hover': {
-    backgroundColor: '#EDEDED',
+    backgroundColor: theme.palette.surface.hover,
     transition: 'background-color 0.2s ease-in-out',
     cursor: 'pointer',
     borderRadius: '16px',
   },
-});
+}));
 
 export const EmailContainer = styled('div')({
   display: 'flex',

@@ -1,12 +1,14 @@
 import BannerAccountButton from '@Components/Buttons/BannerAccountButton';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { useSnackbar } from '@Utils/snackbar';
-import { ReactNode, useEffect } from 'react';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
 import {
   ContentWrapper,
   CustomContainer,
+  MenuButton,
   PageWrapper,
   StudyPageBanner,
 } from './styles';
@@ -20,6 +22,7 @@ const StudyPageLayout = ({ children }: Props) => {
   const { error, isError } = useStudyDetails(studyId);
   const navigate = useNavigate();
   const { setSnackbarError } = useSnackbar();
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     // TODO: 404 check?
@@ -31,9 +34,21 @@ const StudyPageLayout = ({ children }: Props) => {
 
   return (
     <PageWrapper>
-      <NavigationBar />
+      <NavigationBar
+        phoneOpen={navOpen}
+        onPhoneClose={() => setNavOpen(false)}
+      />
       <ContentWrapper component="main">
         <StudyPageBanner>
+          <MenuButton
+            size="large"
+            onClick={() => setNavOpen(true)}
+            aria-label="Open navigation"
+            aria-controls="study-navigation"
+            aria-expanded={navOpen}
+          >
+            <MenuRoundedIcon />
+          </MenuButton>
           <BannerAccountButton />
         </StudyPageBanner>
         <CustomContainer maxWidth="xl">{children}</CustomContainer>

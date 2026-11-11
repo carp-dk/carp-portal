@@ -7,7 +7,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import KeyboardArrowLeftRoundedIcon from '@mui/icons-material/KeyboardArrowLeftRounded';
 import ParticipantsIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { List, useMediaQuery } from '@mui/material';
+import { List, useMediaQuery, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavigationBarItem from './NavigationBarItem';
@@ -16,13 +16,21 @@ import {
   LogoWrapper,
   MinimizeButton,
   MinimizeWrapper,
+  PhoneContainer,
   SectionTitle,
   StyledBackdrop,
   StyledDivider,
 } from './styles';
 
-const NavigationBar = () => {
+type Props = {
+  phoneOpen: boolean;
+  onPhoneClose: () => void;
+};
+
+const NavigationBar = ({ phoneOpen, onPhoneClose }: Props) => {
   const { id: currentStudyId } = useParams();
+  const theme = useTheme();
+  const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
   const isLarge = useMediaQuery('(min-width: 1540px)');
   const studyPath = `/studies/${currentStudyId}`;
   const breakpoint = 1540;
@@ -50,6 +58,89 @@ const NavigationBar = () => {
     };
   }, [breakpoint]);
 
+  const renderLinks = (expanded: boolean, onNavigate?: () => void) => (
+    <>
+      <LogoWrapper open={expanded}>
+        <Logo type="flat-white" />
+      </LogoWrapper>
+      <SectionTitle open={expanded}>Study</SectionTitle>
+      <List>
+        <NavigationBarItem
+          text="Overview"
+          path={`${studyPath}/overview`}
+          icon={<DashboardIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+        <NavigationBarItem
+          text="Settings"
+          path={`${studyPath}/settings`}
+          icon={<SettingsIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+        <NavigationBarItem
+          text="Resources"
+          path={`${studyPath}/resources`}
+          icon={<InsertDriveFileIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+      </List>
+      <StyledDivider open={expanded} />
+      <SectionTitle open={expanded}>Recruitment</SectionTitle>
+      <List>
+        <NavigationBarItem
+          text="Participants"
+          path={`${studyPath}/participants`}
+          exact
+          icon={<ParticipantsIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+      </List>
+      <StyledDivider open={expanded} />
+      <SectionTitle open={expanded}>Run</SectionTitle>
+      <List>
+        <NavigationBarItem
+          text="Deployments"
+          path={`${studyPath}/deployments`}
+          icon={<DeploymentsIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+        <NavigationBarItem
+          text="Announcements"
+          path={`${studyPath}/announcements`}
+          icon={<AnnouncementRoundedIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+        <NavigationBarItem
+          text="Exports"
+          path={`${studyPath}/export`}
+          icon={<DownloadForOfflineRoundedIcon />}
+          showTooltip={!expanded}
+          onClick={onNavigate}
+        />
+      </List>
+    </>
+  );
+
+  if (isPhone) {
+    return (
+      <PhoneContainer
+        id="study-navigation"
+        variant="temporary"
+        anchor="left"
+        open={phoneOpen}
+        onClose={onPhoneClose}
+      >
+        {renderLinks(true, onPhoneClose)}
+      </PhoneContainer>
+    );
+  }
+
   return (
     <>
       <Container
@@ -58,65 +149,14 @@ const NavigationBar = () => {
         open={open}
         onClose={() => setOpen(false)}
       >
-        <LogoWrapper open={open}>
-          <Logo type="flat-white" />
-        </LogoWrapper>
-        <SectionTitle open={open}>Study</SectionTitle>
-        <List>
-          <NavigationBarItem
-            text="Overview"
-            path={`${studyPath}/overview`}
-            icon={<DashboardIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Settings"
-            path={`${studyPath}/settings`}
-            icon={<SettingsIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Resources"
-            path={`${studyPath}/resources`}
-            icon={<InsertDriveFileIcon />}
-            showTooltip={!open}
-          />
-        </List>
-        <StyledDivider open={open} />
-        <SectionTitle open={open}>Recruitment</SectionTitle>
-        <List>
-          <NavigationBarItem
-            text="Participants"
-            path={`${studyPath}/participants`}
-            exact
-            icon={<ParticipantsIcon />}
-            showTooltip={!open}
-          />
-        </List>
-        <StyledDivider open={open} />
-        <SectionTitle open={open}>Run</SectionTitle>
-        <List>
-          <NavigationBarItem
-            text="Deployments"
-            path={`${studyPath}/deployments`}
-            icon={<DeploymentsIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Announcements"
-            path={`${studyPath}/announcements`}
-            icon={<AnnouncementRoundedIcon />}
-            showTooltip={!open}
-          />
-          <NavigationBarItem
-            text="Exports"
-            path={`${studyPath}/export`}
-            icon={<DownloadForOfflineRoundedIcon />}
-            showTooltip={!open}
-          />
-        </List>
+        {renderLinks(open)}
         <MinimizeWrapper open={open}>
-          <MinimizeButton onClick={() => setOpen(!open)} open={open}>
+          <MinimizeButton
+            onClick={() => setOpen(!open)}
+            open={open}
+            aria-label={open ? 'Collapse navigation' : 'Expand navigation'}
+            aria-expanded={open}
+          >
             <KeyboardArrowLeftRoundedIcon />
           </MinimizeButton>
         </MinimizeWrapper>

@@ -13,7 +13,7 @@ export const StyledContainer = styled('div')(({ theme }) => ({
 }));
 
 export const StyledTextField = styled(TextField)({
-  minWidth: 500,
+  minWidth: 'min(500px, 100%)',
 });
 
 export const StyledSelect = styled(Select)({

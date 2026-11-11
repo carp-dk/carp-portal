@@ -30,13 +30,13 @@ export const RoleContainer = styled('div')({
   gap: 6,
 });
 
-export const ParticipantRow = styled(Stack)({
+export const ParticipantRow = styled(Stack)(({ theme }) => ({
   gap: 16,
   display: 'grid',
   gridTemplateColumns: '25% 20% 20%',
   cursor: 'pointer',
   borderRadius: 16,
   ':hover': {
-    backgroundColor: '#EDEDED',
+    backgroundColor: theme.palette.surface.hover,
   },
-});
+}));

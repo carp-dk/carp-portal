@@ -26,12 +26,13 @@ const StudyCard = ({ onClick, study, status, description }: Props) => {
       <CardWrapper elevation={2} onClick={onClick}>
         <StyledCard>
           <StatusDotContainer>
-            <StyledStatusDot status={status} />
+            <StyledStatusDot status={status} aria-hidden />
           </StatusDotContainer>
           <InfoContainer>
             <CardTitle variant="h2">{study.name}</CardTitle>
             <CardDescription variant="body2">{description}</CardDescription>
             <Bottom>
+              <CreationText variant="h5">{status}</CreationText>
               <CreationText variant="h5">
                 {formatDateTime(study.createdOn.toString())}
               </CreationText>

@@ -207,7 +207,7 @@ const Devices = () => {
                 sx={[
                   primaryDevice.status !== 'Deployed' && {
                     '&:hover': {
-                      backgroundColor: '#ededed',
+                      backgroundColor: 'surface.hover',
                       borderRadius: '100px',
                       cursor: 'pointer',
                     },

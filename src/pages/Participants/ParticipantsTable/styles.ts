@@ -32,13 +32,19 @@ export const StyledContainer = styled('div')(({ theme }) => ({
     borderBottomRightRadius: 12,
   },
   '& .MuiPaper-root': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
   },
   '& > .MuiPaper-root': {
     padding: '40px 40px 0 40px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '16px 16px 0 16px',
+    },
   },
   '& .MuiTableContainer-root': {
     padding: '0 20px',
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    },
     boxShadow: 'none',
     maxHeight: '52vh',
   },
@@ -67,10 +73,10 @@ export const StyledContainer = styled('div')(({ theme }) => ({
   },
   '& td': {
     border: 'none',
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
   },
   '& th': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
     verticalAlign: 'middle',
   },
   '& .MuiCollapse-wrapper, & .MuiCollapse-wrapperInner, & .MuiCollapse-root': {
@@ -89,7 +95,7 @@ export const StyledContainer = styled('div')(({ theme }) => ({
     padding: 8,
   },
   '& .MuiBox-root': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
     boxShadow: 'none',
   },
   '& .MuiPaper-root > div.MuiBox-root:last-of-type > div > div': {
@@ -123,15 +129,20 @@ export const TopToolbarButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export const CustomTopToolbar = styled('div')({
+export const CustomTopToolbar = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   gap: 16,
   justifyContent: 'flex-end',
   flexWrap: 'nowrap',
-  minWidth: 400,
+  minWidth: 'min(400px, 100%)',
   alignSelf: 'center',
-});
+  [theme.breakpoints.down('sm')]: {
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: 8,
+  },
+}));
 
 export const StatusCell = styled('div')({
   display: 'flex',
@@ -150,6 +161,9 @@ export const AddUserButton = styled(Fab)(({ theme }) => ({
   borderRadius: 16,
   width: 72,
   height: 72,
+  [theme.breakpoints.down('sm')]: {
+    right: 16,
+  },
   '& > svg': {
     color: theme.palette.primary.main,
     fontSize: 48,
@@ -157,9 +171,9 @@ export const AddUserButton = styled(Fab)(({ theme }) => ({
     strokeWidth: '0.50px',
   },
   '&:hover': {
-    backgroundColor: '#C7D7E4',
+    backgroundColor: theme.palette.surface.selected,
     '& > svg': {
-      stroke: '#C7D7E4',
+      stroke: theme.palette.surface.selected,
     },
   },
 }));

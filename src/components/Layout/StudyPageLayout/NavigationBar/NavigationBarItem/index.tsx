@@ -9,6 +9,7 @@ type NavigationBarItemProps = {
   path: string;
   showTooltip: boolean;
   exact?: boolean;
+  onClick?: () => void;
 };
 
 const NavigationBarItem = ({
@@ -17,10 +18,11 @@ const NavigationBarItem = ({
   path,
   showTooltip,
   exact,
+  onClick,
 }: NavigationBarItemProps) => {
   const location = useLocation();
   const children = (
-    <StyledNavLink to={path || ''}>
+    <StyledNavLink to={path || ''} onClick={onClick}>
       <ListItem disablePadding>
         <StyledListItemButton
           active={

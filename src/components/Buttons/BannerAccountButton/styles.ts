@@ -15,7 +15,7 @@ export const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   height: 48,
   width: 96,
   '&:hover': {
-    backgroundColor: '#ededed',
+    backgroundColor: theme.palette.surface.hover,
   },
   '&:first-of-type': {
     borderBottom: `1px solid ${theme.palette.grey[200]}`,

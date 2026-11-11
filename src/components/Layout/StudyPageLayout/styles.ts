@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material';
+import { Box, Container, IconButton } from '@mui/material';
 import { styled } from '@Utils/theme';
 import { ElementType } from 'react';
 
@@ -8,6 +8,8 @@ export const PageWrapper = styled(Box)({
 
 export const ContentWrapper = styled(Box)<{ component: ElementType }>({
   flexGrow: 1,
+  // Let wide content (tables) scroll inside the page instead of widening it
+  minWidth: 0,
 });
 
 export const StudyPageBanner = styled('div')(({ theme }) => ({
@@ -15,7 +17,18 @@ export const StudyPageBanner = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
   padding: '2.6rem 80px 2rem',
   [theme.breakpoints.down('sm')]: {
-    padding: '1rem 2rem 2rem',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '1rem 1rem 1.5rem',
+  },
+}));
+
+// Only shown on phones, where the navigation rail is replaced by a drawer
+export const MenuButton = styled(IconButton)(({ theme }) => ({
+  display: 'none',
+  color: theme.palette.text.heading,
+  [theme.breakpoints.down('sm')]: {
+    display: 'inline-flex',
   },
 }));
 

@@ -11,6 +11,12 @@ export const ModalBox = styled(Box)(({ theme }) => ({
   borderRadius: 16,
   padding: 36,
   maxWidth: 1100,
+  maxHeight: 'calc(100dvh - 32px)',
+  overflowY: 'auto',
+  [theme.breakpoints.down('sm')]: {
+    width: 'calc(100% - 32px)',
+    padding: 24,
+  },
 }));
 
 export const ModalTitle = styled(Typography)(({ theme }) => ({
@@ -22,11 +28,15 @@ export const ModalDescription = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const ModalContainer = styled('div')({
+export const ModalContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   gap: 36,
-});
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column',
+    gap: 24,
+  },
+}));
 
 export const ModalContent = styled('div')({
   flexGrow: 1,

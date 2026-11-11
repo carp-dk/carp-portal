@@ -1,6 +1,25 @@
 import { Backdrop, Button, Divider, Drawer } from '@mui/material';
 import { styled } from '@Utils/theme';
 
+const panelEasing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const panelDuration = (open?: boolean) => (open ? 400 : 350);
+
+// On phones the drawer is a temporary overlay: MUI positions its root, so only
+// the paper is styled and it opens at a fixed width.
+export const PhoneContainer = styled(Drawer)(({ theme }) => ({
+  '& .MuiDrawer-paper': {
+    padding: 24,
+    width: 'min(320px, 85vw)',
+    boxSizing: 'border-box',
+    backgroundColor: theme.palette.text.heading,
+    overflowX: 'hidden',
+  },
+  '& span': {
+    fontSize: theme.typography.h5.fontSize,
+    fontWeight: theme.typography.h5.fontWeight,
+  },
+}));
+
 export const Container = styled(Drawer)(({ theme, open }) => ({
   position: 'relative',
   width: open ? 360 : 88,
@@ -9,8 +28,8 @@ export const Container = styled(Drawer)(({ theme, open }) => ({
   whiteSpace: 'nowrap',
   overflowX: 'hidden',
   transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+    easing: panelEasing,
+    duration: panelDuration(open),
   }),
   '& .MuiDrawer-paper': {
     padding: open ? 24 : 16,
@@ -19,8 +38,8 @@ export const Container = styled(Drawer)(({ theme, open }) => ({
     backgroundColor: theme.palette.text.heading,
     overflowX: 'hidden',
     transition: theme.transitions.create(['width', 'padding'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: panelEasing,
+      duration: panelDuration(open),
     }),
   },
   '& span': {
@@ -37,8 +56,8 @@ export const LogoWrapper = styled('div', {
 })<{ open?: boolean }>(({ theme, open }) => ({
   padding: open ? '24px 14px' : '24px 3px',
   transition: theme.transitions.create(['padding', 'margin'], {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+    easing: panelEasing,
+    duration: panelDuration(open),
   }),
   marginBottom: 24,
   '& img': {
@@ -56,20 +75,20 @@ export const SectionTitle = styled('span', {
   height: open ? 'initial' : 0,
   padding: open ? '10px 16px' : '0 16px 0 8px',
   opacity: open ? 1 : 0,
-  transition: theme.transitions.create(['opacity', 'height', 'padding'], {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+  transition: theme.transitions.create(['opacity', 'padding'], {
+    easing: panelEasing,
+    duration: panelDuration(open),
   }),
 }));
 
 export const StyledDivider = styled(Divider, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{ open?: boolean }>(({ theme, open }) => ({
-  borderColor: '#CAC4D0',
+  borderColor: theme.palette.drawer.divider,
   margin: open ? '8px 16px' : '8px 12px',
   transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+    easing: panelEasing,
+    duration: panelDuration(open),
   }),
 }));
 
@@ -82,18 +101,18 @@ export const MinimizeButton = styled(Button, {
   padding: 0,
   color: theme.palette.primary.light,
   transition: theme.transitions.create('transform', {
-    easing: theme.transitions.easing.easeOut,
-    duration: theme.transitions.duration.leavingScreen,
+    easing: panelEasing,
+    duration: 250,
   }),
   transform: open ? 'rotateY(0deg)' : 'rotateY(180deg)',
   '& svg': {
     fontSize: 36,
   },
   '&:hover': {
-    backgroundColor: '#FCFCFF20',
+    backgroundColor: theme.palette.drawer.hover,
   },
   '&:active': {
-    backgroundColor: '#FCFCFF40',
+    backgroundColor: theme.palette.drawer.pressed,
   },
 }));
 

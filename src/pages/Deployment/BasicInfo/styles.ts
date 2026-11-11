@@ -45,6 +45,7 @@ export const StyledDivider = styled(Divider)(({ theme }) => ({
   borderColor: theme.palette.grey[300],
   borderWidth: 1,
   width: 400,
+  maxWidth: '100%',
   marginTop: 10,
   marginBottom: 10,
   marginRight: 36,

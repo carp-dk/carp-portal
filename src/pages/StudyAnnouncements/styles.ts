@@ -31,9 +31,9 @@ export const StyledFab = styled(Fab)(({ theme }) => ({
     strokeWidth: '0.50px',
   },
   '&:hover': {
-    backgroundColor: '#C7D7E4',
+    backgroundColor: theme.palette.surface.selected,
     '& > svg': {
-      stroke: '#C7D7E4',
+      stroke: theme.palette.surface.selected,
     },
   },
 }));

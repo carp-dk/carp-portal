@@ -10,6 +10,8 @@
   "export_data": "Export Data",
   "last_uploaded": "Last Uploaded: {{- date}}",
   "cancel": "Cancel",
+  "save": "Save",
+  "account_menu": "Account menu",
   "deploy": "Deploy",
   "last_data_zero": "Last data: Today",
   "last_data_one": "Last data: {{count}} day ago",

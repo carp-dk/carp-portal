@@ -13,21 +13,24 @@ export const StyledContainer = styled('div')(({ theme }) => ({
     borderSpacing: '0 4px',
   },
   '& .MuiPaper-root': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
     borderRadius: 16,
   },
   '& > .MuiPaper-root': {
     padding: '20px 40px 0 40px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '16px 16px 0 16px',
+    },
   },
   '& .MuiTableContainer-root table': {
     borderBottom: `1px solid ${theme.palette.grey[500]}`,
   },
   '& td': {
     border: 'none',
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
   },
   '& MuiTableRow-root:hover td': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
   },
   '& tr > td:first-of-type': {
     color: theme.palette.primary.main,
@@ -36,7 +39,7 @@ export const StyledContainer = styled('div')(({ theme }) => ({
     boxShadow: 'none',
   },
   '& th': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
     verticalAlign: 'middle',
   },
   '& tfoot': {
@@ -52,7 +55,7 @@ export const StyledContainer = styled('div')(({ theme }) => ({
     height: 40,
   },
   '& .MuiBox-root': {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.common.white,
     boxShadow: 'none',
   },
   '& .MuiPaper-root > div.MuiBox-root:last-of-type > div > div': {

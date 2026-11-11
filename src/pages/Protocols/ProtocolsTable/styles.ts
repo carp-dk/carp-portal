@@ -48,13 +48,13 @@ export const HeaderCellContainer = styled('div')({
   gap: 6,
 });
 
-export const StyledTableRow = styled(TableRow)({
+export const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:hover': {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: theme.palette.surface.subtleHover,
     transition: 'background-color 0.2s ease-in-out',
     cursor: 'pointer',
   },
-});
+}));
 
 export const AddProtocolButton = styled(Fab)(({ theme }) => ({
   position: 'absolute',
@@ -72,9 +72,9 @@ export const AddProtocolButton = styled(Fab)(({ theme }) => ({
     strokeWidth: '0.50px',
   },
   '&:hover': {
-    backgroundColor: '#C7D7E4',
+    backgroundColor: theme.palette.surface.selected,
     '& > svg': {
-      stroke: '#C7D7E4',
+      stroke: theme.palette.surface.selected,
     },
   },
 }));
