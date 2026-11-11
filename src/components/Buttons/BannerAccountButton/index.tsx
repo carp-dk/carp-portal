@@ -1,5 +1,7 @@
 import { Link, Stack, Typography } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
+import { useCurrentUser } from '@Utils/queries/auth';
+import { isUserAdmin } from '@Utils/utility';
 import { MouseEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
@@ -17,6 +19,7 @@ const BannerAccountButton = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const auth = useAuth();
+  const { data: currentUser } = useCurrentUser();
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -77,6 +80,18 @@ const BannerAccountButton = () => {
             </Link>
           </StyledMenuItem>
         */}
+        {isUserAdmin(currentUser) && (
+          <StyledMenuItem onClick={handleClose}>
+            <Link
+              component={RouterLink}
+              variant="h4"
+              to="/admin"
+              data-testid="admin"
+            >
+              Admin
+            </Link>
+          </StyledMenuItem>
+        )}
         <StyledMenuItem onClick={handleLogOut}>
           <Link
             component={RouterLink}

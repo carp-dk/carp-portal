@@ -626,3 +626,6 @@ export const isUserResearcher = (user?: User | null) => {
     user.role.includes('SYSTEM_ADMIN')
   );
 };
+
+export const isUserAdmin = (user?: User | null) =>
+  !!user && user.role.includes('SYSTEM_ADMIN');

@@ -1,4 +1,5 @@
 import BannerAccountButton from '@Components/Buttons/BannerAccountButton';
+import MaintenanceBanner from '@Components/MaintenanceBanner';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { useSnackbar } from '@Utils/snackbar';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
@@ -39,6 +40,7 @@ const StudyPageLayout = ({ children }: Props) => {
         onPhoneClose={() => setNavOpen(false)}
       />
       <ContentWrapper component="main">
+        <MaintenanceBanner />
         <StudyPageBanner>
           <MenuButton
             size="large"

@@ -2,6 +2,7 @@ import LoadingLandingPage from '@Components/Layout/LoadingLandingPage';
 import { useAuth } from 'react-oidc-context';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import Account from '../Account';
+import Admin from '../Admin';
 import Deployment from '../Deployment';
 import Deployments from '../Deployments';
 import Export from '../Export';
@@ -16,6 +17,7 @@ import StudyAnnouncementNew from '../StudyAnnouncementNew';
 import StudyAnnouncements from '../StudyAnnouncements';
 import StudyOverview from '../StudyOverview';
 import StudySettings from '../StudySettings';
+import AdminRoute from './AdminRoute';
 import ProtectedRoute from './ProtectedRoute';
 import StudyProtocolRedirect from './StudyProtocolRedirect';
 
@@ -36,6 +38,16 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
             </ProtectedRoute>
           }
         />

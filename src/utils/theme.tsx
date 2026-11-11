@@ -195,6 +195,15 @@ export const themeInstance = createTheme({
         underline: 'hover',
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        // Chips inherit the light body weight (300), which is too thin to
+        // read as small text on a coloured background.
+        label: {
+          fontWeight: 600,
+        },
+      },
+    },
     MuiBackdrop: {
       styleOverrides: {
         root: {
