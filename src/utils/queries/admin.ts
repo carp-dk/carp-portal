@@ -8,6 +8,8 @@ import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import carpApi from '@Utils/api/api';
 import { useSnackbar } from '@Utils/snackbar';
 
+const EMAIL_BATCH_SIZE = 5;
+
 export const useAdminResearchers = () => {
   return useQuery<AdminResearcher[], CarpServiceError>({
     queryKey: ['admin', 'researchers'],
@@ -46,13 +48,19 @@ export const useEmailResearchers = () => {
     { recipients: string[]; subject: string; message: string }
   >({
     mutationFn: async ({ recipients, subject, message }) => {
+      // Send in small parallel batches: one at a time is slow for many
+      // recipients, all at once could flood the email service.
       const failed: string[] = [];
-      for (const recipient of recipients) {
-        try {
-          await carpApi.email.sendEmail({ recipient, subject, message });
-        } catch {
-          failed.push(recipient);
-        }
+      for (let i = 0; i < recipients.length; i += EMAIL_BATCH_SIZE) {
+        const batch = recipients.slice(i, i + EMAIL_BATCH_SIZE);
+        const results = await Promise.allSettled(
+          batch.map((recipient) =>
+            carpApi.email.sendEmail({ recipient, subject, message }),
+          ),
+        );
+        results.forEach((result, j) => {
+          if (result.status === 'rejected') failed.push(batch[j]);
+        });
       }
       return { sent: recipients.length - failed.length, failed };
     },

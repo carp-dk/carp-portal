@@ -4,12 +4,11 @@ import {
   useParticipantGroupsAccountsAndStatus,
 } from '@Utils/queries/participants';
 import { useDownloadFile, useGetFiles } from '@Utils/queries/studies';
-import { convertICToReactPdf, formatDateTime } from '@Utils/utility';
+import { formatDateTime } from '@Utils/utility';
 import { CarpFile, InformedConsentType } from '@carp-dk/client';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { Stack, Typography } from '@mui/material';
-import { pdf } from '@react-pdf/renderer';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -58,9 +57,9 @@ const InformedConsent = () => {
   };
 
   const downloadPdf = async () => {
-    const blob = await pdf(
-      await convertICToReactPdf(JSON.parse(consent.consent)),
-    ).toBlob();
+    const { informedConsentToPdfBlob } =
+      await import('@Utils/informedConsentPdf');
+    const blob = await informedConsentToPdfBlob(JSON.parse(consent.consent));
     const a = document.createElement('a');
     a.download = 'informedConsent.pdf';
     a.href = globalThis.URL.createObjectURL(blob);

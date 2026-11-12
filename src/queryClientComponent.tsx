@@ -19,6 +19,9 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
       defaultOptions: {
         queries: {
           experimental_prefetchInRender: true,
+          // Reuse cached data for 30s instead of refetching on every mount and
+          // window focus; mutations invalidate the queries they change.
+          staleTime: 30_000,
           /*
            *  This function is called when a query fails.
            *  When a researcher creates a new resource, they need a claim in their token to be able to access it.

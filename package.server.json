@@ -1,6 +1,7 @@
 {
   "name": "@carp-dk/portal",
   "dependencies": {
+    "compression": "^1.8.2",
     "connect-history-api-fallback": "^1.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

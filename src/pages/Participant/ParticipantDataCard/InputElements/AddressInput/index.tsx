@@ -1,4 +1,5 @@
 import { countryInfos } from '@Assets/languageMap';
+import Flag from '@Components/Flag';
 import {
   Divider,
   FormControl,
@@ -9,7 +10,6 @@ import {
   TextField,
 } from '@mui/material';
 import { getIn, useFormik } from 'formik';
-import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -17,7 +17,6 @@ type Props = {
 };
 
 const AddressInput = ({ formik, editing }: Props) => {
-  const DanishFlag = flags.Dk;
   return (
     <Stack direction="column" gap={2}>
       <TextField
@@ -126,21 +125,11 @@ const AddressInput = ({ formik, editing }: Props) => {
               }}
               gridTemplateColumns="30px auto"
             >
-              <DanishFlag name="Denmark" onSelect={undefined} width={30} />{' '}
-              Denmark
+              <Flag code="DK" width={30} /> Denmark
             </Stack>
           </MenuItem>
           <Divider />
           {countryInfos.map((country) => {
-            const countryCode =
-              country.isoCode[0].toUpperCase() +
-              country.isoCode[1].toLowerCase();
-            let CountryFlag;
-            if (countryCode in flags) {
-              CountryFlag = flags[countryCode];
-            } else {
-              CountryFlag = 'div';
-            }
             return (
               <MenuItem
                 id={country.isoCode}
@@ -160,12 +149,7 @@ const AddressInput = ({ formik, editing }: Props) => {
                   }}
                   gridTemplateColumns="30px auto"
                 >
-                  <CountryFlag
-                    name={country.isoCode}
-                    selected=""
-                    onSelect={undefined}
-                    width={30}
-                  />
+                  <Flag code={country.isoCode} width={30} />
                   {country.name}
                 </Stack>
               </MenuItem>

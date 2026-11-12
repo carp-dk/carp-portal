@@ -1,12 +1,8 @@
 import isoCountries from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';
 import { getCountries, getCountryCallingCode } from 'libphonenumber-js';
-import * as flags from 'react-flags-select';
 
 isoCountries.registerLocale(en);
-
-type Flags = typeof flags;
-type FlagKey = keyof Flags;
 
 type LanguageLabelCountries =
   | 'BG'
@@ -62,31 +58,18 @@ export const languageLabels: LanguageLabelsMapping = {
   SE: { primary: 'Swedish', secondary: 'sv' },
 };
 
-export const countryCodeToPascalCase = (countryCode: string): string => {
-  return `${countryCode.slice(0, 1)}${countryCode.charAt(1).toLowerCase()}`;
-};
-
-export const getFlag = (key: string): Flags[FlagKey] => {
+// Country code (e.g. 'DK') of the flag to show for a translation's language code.
+export const getFlag = (key: string): string => {
   const countryCode = Object.keys(languageLabels).find(
-    (code) => languageLabels[code].secondary === (key as FlagKey),
+    (code) => languageLabels[code].secondary === key,
   );
 
-  if (countryCode) {
-    const code = countryCodeToPascalCase(countryCode);
-
-    if (code in flags) {
-      return flags[code];
-    }
-
-    return flags.Gb;
-  }
-
-  return flags.Gb;
+  return countryCode ?? 'GB';
 };
 
 export const getCountry = (key: string): string => {
   const countryCode = Object.keys(languageLabels).find(
-    (code) => languageLabels[code].secondary === (key as FlagKey),
+    (code) => languageLabels[code].secondary === key,
   );
 
   if (countryCode) {

@@ -1,7 +1,6 @@
 import carpApi from '@Utils/api/api';
 import { useSnackbar } from '@Utils/snackbar';
 import {
-  ArrayList,
   CarpServiceError,
   DeploymentStatusCountsDto,
   ExpectedParticipantData,
@@ -10,7 +9,6 @@ import {
   InputDataType,
   Participant,
   ParticipantGroups,
-  ParticipantGroupStatus,
   ParticipantInfo,
   ParticipantWithRoles,
   StudyDeploymentStatus,
@@ -53,9 +51,6 @@ export const useStopParticipantGroup = (studyId: string) => {
       });
       queryClient.invalidateQueries({
         queryKey: ['participantsInfo', studyId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
         queryKey: ['deployments', studyId],
@@ -132,7 +127,7 @@ export const useInviteParticipants = (studyId: string) => {
         queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['participantsStatus', studyId],
+        queryKey: ['participantAccountSummary'],
       });
     },
     onError: (error: CarpServiceError) => {
@@ -173,9 +168,6 @@ export const useAddParticipantByEmail = (studyId: string) => {
       });
       queryClient.invalidateQueries({
         queryKey: ['participantsInfo', studyId],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['participantsStatus', studyId],
       });
       queryClient.invalidateQueries({
         queryKey: ['participantsAccounts', studyId],
@@ -235,7 +227,7 @@ export const useGenerateAnonymousAccounts = (studyId: string) => {
         queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['participantsStatus', studyId],
+        queryKey: ['participantAccountSummary'],
       });
       queryClient.invalidateQueries({
         queryKey: ['participantsAccounts', studyId],
@@ -268,7 +260,7 @@ export const useAddParticipants = (studyId: string) => {
         queryKey: ['participantsInfo', studyId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['participantsStatus', studyId],
+        queryKey: ['participantAccountSummary'],
       });
       queryClient.invalidateQueries({
         queryKey: ['participantsAccounts', studyId],
@@ -284,14 +276,6 @@ export const useParticipantsInfo = (studyId: string) => {
   return useQuery<ParticipantInfo[], CarpServiceError>({
     queryFn: () => carpApi.study.recruitment.getParticipantInfo({ studyId }),
     queryKey: ['participantsInfo', studyId],
-  });
-};
-
-export const useParticipantsStatus = (studyId: string) => {
-  return useQuery<ArrayList<ParticipantGroupStatus>, CarpServiceError>({
-    queryFn: async () =>
-      carpApi.study.recruitment.getParticipantGroupStatusList({ studyId }),
-    queryKey: ['participantsStatus', studyId],
   });
 };
 

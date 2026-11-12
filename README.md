@@ -6,10 +6,9 @@ The website is using React v18, Material-UI v5, [Carp Client TS (1.0.0)](https:/
 
 ## Setup
 
-1. Install node `v18.16.0`
-2. Install `pnpm`
+1. Install [bun](https://bun.sh) `v1.3+`
 
-3. Run `pnpm i` in the root folder of the project.
+2. Run `bun install` in the root folder of the project.
 
 4. Create an `.env.` file in the root of the project:
 
@@ -22,10 +21,10 @@ VITE_KEYCLOAK_CLIENT_ID= <Keycloak clientID>
 VITE_KEYCLOAK_REDIRECT_URI= <Valid Keycloak redirect URL to redirect after login>
 ```
 
-4. You can now start the portal with `pnpm start` and you can access the portal at `http://localhost:3000`.
+4. You can now start the portal with `bun start` and you can access the portal at `http://localhost:3000`.
 
 > **Note**
-> Every time a developer uses the `pnpm add`, `pnpm install`, `pnpm rm` (or similar npm commands), `pnpm` will remove the `non_npm_dependencies` from `node_modules/`. There is a post-install script that links the dependencies again, but this only works on UNIX-based systems. On Windows, you must manually copy the `non_npm_dependencies` to `node_modules/`.
+> Every time a developer uses the `bun add`, `bun install`, `bun remove` (or similar commands), `bun` may remove the `non_npm_dependencies` from `node_modules/`. There is a post-install script that links the dependencies again, but this only works on UNIX-based systems. On Windows, you must manually copy the `non_npm_dependencies` to `node_modules/`.
 
 ---
 

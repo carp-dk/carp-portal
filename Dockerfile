@@ -1,21 +1,21 @@
-FROM node:24-alpine
+FROM oven/bun:1-alpine
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+RUN mkdir -p /home/bun/app/node_modules && chown -R bun:bun /home/bun/app
 
-WORKDIR /home/node/app
+WORKDIR /home/bun/app
 
 COPY package.server.json ./package.json
 
-USER node
+USER bun
 
-RUN npm install
+RUN bun install
 
-COPY --chown=node:node app.js ./
-COPY --chown=node:node .env ./
-COPY --chown=node:node build/ ./build/
+COPY --chown=bun:bun app.js ./
+COPY --chown=bun:bun .env ./
+COPY --chown=bun:bun build/ ./build/
 
 ENV PORT=8080
 
 EXPOSE 8080
 
-CMD [ "node", "app.js" ]
+CMD [ "bun", "app.js" ]

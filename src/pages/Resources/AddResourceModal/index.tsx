@@ -1,5 +1,6 @@
 import { languageLabels } from '@Assets/languageMap';
 import DragAndDrop from '@Components/DragAndDrop';
+import Flag from '@Components/Flag';
 import {
   useCreateResource,
   useCreateTranslation,
@@ -17,7 +18,6 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import * as flags from 'react-flags-select';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
@@ -223,26 +223,13 @@ const AddResourceModal = ({ open, onClose }: Props) => {
                     } as typeof props & { key?: unknown; override?: unknown };
                     delete optionProps.key;
                     delete optionProps.override;
-                    const countryCode =
-                      option[0].toUpperCase() + option[1].toLowerCase();
-                    let CountryFlag;
-                    if (countryCode in flags) {
-                      CountryFlag = flags[countryCode];
-                    } else {
-                      CountryFlag = 'div';
-                    }
                     return (
                       <Box component="li" key={key} {...optionProps}>
                         <Stack
                           direction="row"
                           sx={{ alignItems: 'center', gap: 1 }}
                         >
-                          <CountryFlag
-                            name={option}
-                            selected=""
-                            onSelect={undefined}
-                            width={30}
-                          />
+                          <Flag code={option} width={30} />
                           {languageLabels[option].primary}
                         </Stack>
                       </Box>

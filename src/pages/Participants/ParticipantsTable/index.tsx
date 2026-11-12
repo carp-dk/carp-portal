@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
-import {
-  useParticipantsStatus,
-  useQueryParticipantAccounts,
-} from '@Utils/queries/participants';
+import { useQueryParticipantAccounts } from '@Utils/queries/participants';
 import { useStudyDetails } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
 import { ParticipantAccountSummaryDto } from '@carp-dk/client';
@@ -46,8 +43,6 @@ const ParticipantsTable = ({
   setParticipantsToAdd,
 }: Props) => {
   const { id: studyId } = useParams();
-  const { data: deploymentsStatus, isLoading: isDeploymentsStatusLoading } =
-    useParticipantsStatus(studyId);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [columns, setColumns] = useState<
     MRT_ColumnDef<ParticipantAccountSummaryDto>[]
@@ -86,7 +81,7 @@ const ParticipantsTable = ({
 
   useEffect(() => {
     setRowSelection({});
-  }, [participantsAccounts, deploymentsStatus]);
+  }, [participantsAccounts]);
 
   useEffect(() => {
     setColumns([
@@ -138,7 +133,7 @@ const ParticipantsTable = ({
         filterVariant: 'select',
       },
     ]);
-  }, [deploymentsStatus]);
+  }, []);
 
   const handleCreateNewDeployment = () => {
     if (study.protocolSnapshot === null) {
@@ -165,7 +160,7 @@ const ParticipantsTable = ({
     onRowSelectionChange: setRowSelection,
     state: {
       rowSelection,
-      showSkeletons: participantsAccountsLoading || isDeploymentsStatusLoading,
+      showSkeletons: participantsAccountsLoading,
       pagination,
       sorting,
       columnFilters,

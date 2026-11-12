@@ -1,4 +1,5 @@
 import { countryInfos } from '@Assets/languageMap';
+import Flag from '@Components/Flag';
 import {
   Divider,
   FormControl,
@@ -11,7 +12,6 @@ import {
   Typography,
 } from '@mui/material';
 import { getIn, useFormik } from 'formik';
-import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -19,8 +19,6 @@ type Props = {
 };
 
 const PhoneNumberInput = ({ formik, editing }: Props) => {
-  const DanishFlag = flags.Dk;
-
   return (
     <FormControl fullWidth>
       <Stack direction="row" sx={{ gap: 2 }}>
@@ -72,22 +70,12 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                   gridTemplateColumns: '30px 50px auto',
                 }}
               >
-                <DanishFlag onSelect={undefined} width={30} />{' '}
-                <Typography>+45</Typography>
+                <Flag code="DK" width={30} /> <Typography>+45</Typography>
                 <Typography>Denmark</Typography>
               </Stack>
             </MenuItem>
             <Divider />
             {countryInfos.map((country) => {
-              const countryCode =
-                country.isoCode[0].toUpperCase() +
-                country.isoCode[1].toLowerCase();
-              let CountryFlag;
-              if (countryCode in flags) {
-                CountryFlag = flags[countryCode];
-              } else {
-                CountryFlag = 'div';
-              }
               return (
                 <MenuItem
                   id={country.isoCode}
@@ -106,7 +94,7 @@ const PhoneNumberInput = ({ formik, editing }: Props) => {
                       gridTemplateColumns: '30px 50px auto',
                     }}
                   >
-                    <CountryFlag selected="" onSelect={undefined} width={30} />
+                    <Flag code={country.isoCode} width={30} />
                     <Typography>{country.dialCode}</Typography>
                     <Typography>{country.name}</Typography>
                   </Stack>

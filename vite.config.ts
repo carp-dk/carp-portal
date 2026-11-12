@@ -16,6 +16,8 @@ export default async ({ mode }: { mode: string }) => {
     build: {
       // Relative to the root
       outDir: '../build',
+      // outDir is outside the root, so Vite won't clear old builds by default
+      emptyOutDir: true,
       assetsDir: '',
       // The vendored @cachet carp.core (Kotlin/JS) uses kotlinx.serialization,
       // which resolves serializers via class/function names at runtime. The

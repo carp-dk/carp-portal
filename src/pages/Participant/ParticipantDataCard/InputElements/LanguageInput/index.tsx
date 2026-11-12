@@ -1,4 +1,5 @@
 import { languageLabels } from '@Assets/languageMap';
+import Flag from '@Components/Flag';
 import {
   Autocomplete,
   Box,
@@ -7,7 +8,6 @@ import {
   TextField,
 } from '@mui/material';
 import { getIn, useFormik } from 'formik';
-import * as flags from 'react-flags-select';
 
 type Props = {
   formik: ReturnType<typeof useFormik>;
@@ -56,23 +56,10 @@ const LanguageInput = ({ formik, editing }: Props) => {
               } as typeof props & { key?: unknown; override?: unknown };
               delete optionProps.key;
               delete optionProps.override;
-              const countryCode =
-                option[0].toUpperCase() + option[1].toLowerCase();
-              let CountryFlag;
-              if (countryCode in flags) {
-                CountryFlag = flags[countryCode];
-              } else {
-                CountryFlag = 'div';
-              }
               return (
                 <Box component="li" key={key} {...optionProps}>
                   <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
-                    <CountryFlag
-                      name={option}
-                      selected=""
-                      onSelect={undefined}
-                      width={30}
-                    />
+                    <Flag code={option} width={30} />
                     {languageLabels[option].primary}
                   </Stack>
                 </Box>

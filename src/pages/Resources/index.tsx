@@ -1,6 +1,7 @@
 import { getCountry, getFlag } from '@Assets/languageMap';
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import DeleteConfirmationModal from '@Components/DeleteConfirmationModal';
+import Flag from '@Components/Flag';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
 import {
@@ -55,12 +56,10 @@ type ResourceRow = {
 const FileNameCell = ({ row }: { row: ResourceRow }) => {
   if (row.type === 'resource') return row.document.name;
 
-  const CountryFlag = getFlag(row.document.name);
-
   return (
     <LanguageWrapper>
       <CountryFlagIcon>
-        <CountryFlag selected="" onSelect={undefined} />
+        <Flag code={getFlag(row.document.name)} />
       </CountryFlagIcon>
       <CountryLanguage>{getCountry(row.document.name)}</CountryLanguage>
     </LanguageWrapper>
