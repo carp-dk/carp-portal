@@ -38,7 +38,7 @@ const Export: React.FC = () => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [exports]);
+  }, [exports, exportsLoading, queryClient, studyId]);
 
   if (exportsError) {
     return (

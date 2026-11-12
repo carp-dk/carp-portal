@@ -2,32 +2,34 @@
   "compilerOptions": {
     "outDir": "./build/",
     "allowJs": false,
+    "strict": false,
     "skipLibCheck": false,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "ESNext",
     "target": "ES6",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
+      "src/*": [
+        "./src/*"
+      ],
       "@Assets/*": [
-        "src/assets/*"
+        "./src/assets/*"
       ],
       "@Components/*": [
-        "src/components/*"
+        "./src/components/*"
       ],
       "@Modules/*": [
-        "src/components/modules/*"
+        "./src/components/modules/*"
       ],
       "@Utils/*": [
-        "src/utils/*"
+        "./src/utils/*"
       ],
     }
   },

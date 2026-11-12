@@ -15,7 +15,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 import { enGB } from 'date-fns/locale/en-GB';
 import { useFormik } from 'formik';
-import { FormEvent, useEffect } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import {
@@ -80,10 +80,15 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
   } = useRedirectUriMap();
   const generateAnonymousAccounts = useGenerateAnonymousAccounts(studyId);
 
+  // Formik only reads initial values on mount, so compute the date once.
+  const [defaultExpiryDate] = useState(
+    () => new Date(endOfDay(addDays(new Date(), 1))),
+  );
+
   const addAnonymousParticipantFormik = useFormik({
     initialValues: {
       numberOfParticipants: 0,
-      expiryDate: new Date(endOfDay(addDays(new Date(), 1))),
+      expiryDate: defaultExpiryDate,
       role: '',
       redirectUri: '',
       clientId: '',

@@ -43,7 +43,7 @@ const DeploymentCard = ({
   useEffect(() => {
     if (openCardCount === allDeploymentCount) setIsCardOpen(true);
     if (openCardCount === 0) setIsCardOpen(false);
-  }, [openCardCount]);
+  }, [openCardCount, allDeploymentCount]);
 
   const handleCardToggle = (event) => {
     event.stopPropagation();

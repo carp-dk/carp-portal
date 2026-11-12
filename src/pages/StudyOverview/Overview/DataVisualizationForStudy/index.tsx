@@ -19,7 +19,6 @@ const DataVisualizationForStudy = () => {
   const { id: studyId } = useParams();
 
   const [toDate, setToDate] = React.useState(LocalDate.now());
-  const fromDate = toDate.minusDays(13);
 
   const isToDateSetToTheCurrentDay = toDate.equals(LocalDate.now());
 
@@ -49,16 +48,11 @@ const DataVisualizationForStudy = () => {
   const summaries = useDataStreamsSummaries(requests);
 
   useEffect(() => {
-    if (studyDetails) {
-      if (studyDetails.protocolSnapshot == null) {
-        setDisplayBlank(true);
-      } else {
-        updateRequestsForQuery();
-      }
+    if (!studyDetails) return;
+    if (studyDetails.protocolSnapshot == null) {
+      setDisplayBlank(true);
+      return;
     }
-  }, [studyDetails, toDate]);
-
-  function updateRequestsForQuery() {
     const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       studyDetails.protocolSnapshot as any,
@@ -67,6 +61,9 @@ const DataVisualizationForStudy = () => {
       setDisplayBlank(true);
       return;
     }
+    // Computed here, not per render: a new LocalDate each render would make
+    // this effect run on every render.
+    const fromDate = toDate.minusDays(13);
     const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map(
       (type) => ({
         study_id: studyId,
@@ -77,7 +74,7 @@ const DataVisualizationForStudy = () => {
       }),
     );
     setRequests(requests);
-  }
+  }, [studyDetails, toDate, studyId]);
 
   const summariesError = summaries.find((summary) => summary.isError);
   const error = studyDetailsError || summariesError;

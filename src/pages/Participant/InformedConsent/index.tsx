@@ -94,7 +94,7 @@ const InformedConsent = () => {
         setConsentFile(c);
       }
     }
-  }, [files]);
+  }, [files, participantId]);
 
   useEffect(() => {
     if (!isLoading && !participantGroupStatusLoading) {
@@ -119,7 +119,14 @@ const InformedConsent = () => {
         setConsent(roleConsent);
       }
     }
-  }, [participantGroupStatus, participantData]);
+  }, [
+    participantGroupStatus,
+    participantData,
+    isLoading,
+    participantGroupStatusLoading,
+    deploymentId,
+    participantId,
+  ]);
 
   const dateOfLastUpdateForParticipantData = useMemo(() => {
     if (consent) {
@@ -132,7 +139,7 @@ const InformedConsent = () => {
       });
     }
     return t('participant:informed_consent.data_not_found');
-  }, [consent]);
+  }, [consent, t]);
 
   const dateOfLastUpdateForUploadedFile = useMemo(() => {
     if (consentFile) {
@@ -145,7 +152,7 @@ const InformedConsent = () => {
       });
     }
     return t('participant:informed_consent.file_not_found');
-  }, [consentFile]);
+  }, [consentFile, t]);
 
   if (isLoading || filesLoading || participantGroupStatusLoading)
     return <LoadingSkeleton />;

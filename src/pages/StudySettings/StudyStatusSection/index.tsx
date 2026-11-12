@@ -115,7 +115,7 @@ const StudyStatusSection: React.FC = () => {
     if (deleteStudy.isSuccess) {
       navigate('/studies');
     }
-  }, [deleteStudy.isSuccess]);
+  }, [deleteStudy.isSuccess, navigate]);
 
   if (studyStatusIsLoading || studyDetailsIsLoading || userLoading) {
     return <StudyStatusSectionSkeleton />;

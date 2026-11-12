@@ -127,7 +127,7 @@ const Devices = () => {
         });
       setDevices(connectedDevices);
     }
-  }, [participantGroupsAndStatuses, deploymentId]);
+  }, [participantGroupsAndStatuses, deploymentId, study]);
 
   if (studyLoading || participantGroupsAndStatusesLoading)
     return <LoadingSkeleton />;

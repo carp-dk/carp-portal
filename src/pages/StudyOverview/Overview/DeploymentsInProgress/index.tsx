@@ -1,6 +1,7 @@
 import CarpErrorCardComponent from '@Components/CarpErrorCardComponent';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
+  Link,
   Table,
   TableBody,
   TableContainer,
@@ -8,11 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Stack } from '@mui/system';
-import {
-  useDeploymentStatusCounts,
-  useParticipantGroupsAccountsAndStatus,
-} from '@Utils/queries/participants';
-import { useEffect, useState } from 'react';
+import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import {
@@ -29,78 +27,60 @@ import {
 } from './styles';
 import TooltipContent from './TooltipContent';
 
-// This card fetches every participant group's full status, which is wasteful and not useful for
-// large studies — skip the fetch entirely past this many participant groups.
-const LARGE_STUDY_THRESHOLD = 1000;
+// Rows fetched per in-progress status. Each status is its own paged request (the API filters by
+// one status at a time), so the card loads straight away at any study size instead of waiting
+// for the counts and then downloading every deployment.
+const PAGE_SIZE = 20;
 
 const DeploymentsInProgress = () => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
-  const { data: counts, isLoading: countsLoading } =
-    useDeploymentStatusCounts(studyId);
-  const isLargeStudy = (counts?.total ?? 0) > LARGE_STUDY_THRESHOLD;
-  const {
-    data: deploymentsAccountAndStatus,
-    isLoading: isDeploymentsAccountAndStatusLoading,
-    error: deploymentsAccountAndStatusError,
-  } = useParticipantGroupsAccountsAndStatus(
-    studyId,
-    undefined,
-    // Only fetch once we know it's a small study, so large studies never trigger the full fetch.
-    !countsLoading && !isLargeStudy,
+  const invited = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: PAGE_SIZE,
+    status: 'Invited',
+  });
+  const deploying = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: PAGE_SIZE,
+    status: 'DeployingDevices',
+  });
+  const running = useParticipantGroupsAccountsAndStatus(studyId, {
+    page: 0,
+    size: PAGE_SIZE,
+    status: 'Running',
+  });
+  const queries = [invited, deploying, running];
+  const isLoading = queries.some((q) => q.isLoading);
+  const error = queries.find((q) => q.error)?.error;
+
+  const deploymentProgress = useMemo(
+    () =>
+      [invited.data, deploying.data, running.data].flatMap(
+        (page) =>
+          page?.groups.map((g) => ({
+            deploymentId: g.participantGroupId,
+            devices: g.deploymentStatus.deviceStatusList.filter(
+              (dl) => dl.device.isPrimaryDevice,
+            ),
+          })) ?? [],
+      ),
+    [invited.data, deploying.data, running.data],
   );
-  const [deploymentProgress, setDeploymentProgress] = useState<
-    {
-      deploymentId: string;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      devices: any[];
-    }[]
-  >([]);
+  const totalInProgress = [invited.data, deploying.data, running.data].reduce(
+    (sum, page) => sum + (page?.total ?? page?.groups.length ?? 0),
+    0,
+  );
 
-  useEffect(() => {
-    if (
-      deploymentsAccountAndStatus?.groups !== undefined &&
-      deploymentsAccountAndStatus?.groups.length !== 0
-    ) {
-      const deployments = deploymentsAccountAndStatus.groups
-        .filter((g) => !g.deploymentStatus.__type.includes('Stopped'))
-        .map((g) => {
-          const devices = g.deploymentStatus.deviceStatusList.filter(
-            (dl) => dl.device.isPrimaryDevice,
-          );
-          return { deploymentId: g.participantGroupId, devices };
-        })
-        .flat();
-      setDeploymentProgress(deployments);
-    }
-  }, [deploymentsAccountAndStatus]);
-
-  if (countsLoading) {
+  if (isLoading) {
     return <LoadingSkeleton />;
   }
 
-  if (isLargeStudy) {
-    return (
-      <StyledCard elevation={2}>
-        <StyledTitle variant="h2">Deployments in Progress</StyledTitle>
-        <StyledDescription variant="h6">
-          Not shown for studies with more than {LARGE_STUDY_THRESHOLD}{' '}
-          participants. Use the Deployments page to browse and filter
-          deployments.
-        </StyledDescription>
-      </StyledCard>
-    );
-  }
-
-  if (isDeploymentsAccountAndStatusLoading) {
-    return <LoadingSkeleton />;
-  }
-
-  if (deploymentsAccountAndStatusError) {
+  if (error) {
     return (
       <CarpErrorCardComponent
         message="An error occurred while loading participants"
-        error={deploymentsAccountAndStatusError}
+        error={error}
       />
     );
   }
@@ -191,6 +171,18 @@ const DeploymentsInProgress = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      {totalInProgress > deploymentProgress.length && (
+        <StyledDescription variant="h6">
+          Showing {deploymentProgress.length} of {totalInProgress}.{' '}
+          <Link
+            component="button"
+            variant="h6"
+            onClick={() => navigate(`/studies/${studyId}/deployments`)}
+          >
+            See all on the Deployments page
+          </Link>
+        </StyledDescription>
+      )}
     </StyledCard>
   );
 };

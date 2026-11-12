@@ -1,6 +1,6 @@
+import { ModalBox as BaseModalBox } from '@Components/Modal/styles';
 import { Typography } from '@mui/material';
 import { styled } from '@Utils/theme';
-import { ModalBox as BaseModalBox } from '@Components/Modal/styles';
 
 export {
   CancelButton,

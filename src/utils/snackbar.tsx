@@ -1,5 +1,12 @@
 import { SnackbarType } from '@Components/Snackbar';
-import { createContext, ReactNode, use, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  use,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 
 type ProviderProps = {
   children: ReactNode;
@@ -24,21 +31,21 @@ export const SnackbarProvider = ({ children }: ProviderProps) => {
     snackbarType: 'error',
     snackbarMessage: 'Unexpected error',
   });
-  const setSnackbarSuccess = (message: string) => {
+  const setSnackbarSuccess = useCallback((message: string) => {
     setSnackbarState({
       snackbarOpen: true,
       snackbarType: 'success',
       snackbarMessage: message,
     });
-  };
+  }, []);
 
-  const setSnackbarError = (message: string) => {
+  const setSnackbarError = useCallback((message: string) => {
     setSnackbarState({
       snackbarOpen: true,
       snackbarType: 'error',
       snackbarMessage: message,
     });
-  };
+  }, []);
 
   const config = useMemo(() => {
     return {
@@ -51,6 +58,6 @@ export const SnackbarProvider = ({ children }: ProviderProps) => {
 
   return useMemo(
     () => <SnackbarContext value={config}>{children}</SnackbarContext>,
-    [snackbarState, setSnackbarState, setSnackbarSuccess, setSnackbarError],
+    [children, config],
   );
 };

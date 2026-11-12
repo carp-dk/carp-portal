@@ -3,7 +3,7 @@ import { useSnackbar } from '@Utils/snackbar';
 import { getUser } from '@carp-dk/authentication-react';
 import { CarpServiceError } from '@carp-dk/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router';
 
@@ -14,7 +14,8 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { setSnackbarError } = useSnackbar();
 
-  const queryClient = useMemo(() => {
+  // Created once; a new client would drop the whole query cache.
+  const [queryClient] = useState(() => {
     return new QueryClient({
       defaultOptions: {
         queries: {
@@ -98,7 +99,7 @@ const QueryClientComponent = ({ children }: { children: React.ReactNode }) => {
         },
       },
     });
-  }, []);
+  });
 
   carpApi.setAuthToken(getUser()?.access_token);
 

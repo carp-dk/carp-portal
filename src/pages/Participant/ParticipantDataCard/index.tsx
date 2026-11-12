@@ -98,7 +98,7 @@ const ParticipantDataCard = () => {
           ),
       );
     }
-  }, [participantGroupStatus]);
+  }, [participantGroupStatus, deploymentId, participantId]);
 
   const participantDataFromik = useParticipantDataFormik(
     study?.protocolSnapshot.expectedParticipantData

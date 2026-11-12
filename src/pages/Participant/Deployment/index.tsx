@@ -119,7 +119,7 @@ const Deployment = () => {
         participants,
       });
     }
-  }, [deployment, deploymentIsLoading]);
+  }, [deployment, deploymentIsLoading, deploymentId]);
 
   const getParticipantInitials = (participant: ParticipantDataInput) => {
     if (

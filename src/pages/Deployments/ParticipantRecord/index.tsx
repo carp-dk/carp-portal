@@ -59,7 +59,7 @@ const ParticipantRecord = ({
     }
     const elapsedDays = calculateDaysPassedFromDate(lastData.toString());
     return t('common:last_data', { count: elapsedDays });
-  }, [participantData.dateOfLastDataUpload]);
+  }, [participantData.dateOfLastDataUpload, t]);
 
   return (
     <StyledContainer

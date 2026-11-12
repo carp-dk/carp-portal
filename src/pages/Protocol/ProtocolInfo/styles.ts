@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import { styled } from '@Utils/theme';
 
 export {

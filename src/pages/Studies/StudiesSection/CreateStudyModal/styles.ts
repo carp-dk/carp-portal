@@ -1,5 +1,5 @@
-import { styled } from '@Utils/theme';
 import { ModalBox as BaseModalBox } from '@Components/Modal/styles';
+import { styled } from '@Utils/theme';
 
 export {
   CancelButton,

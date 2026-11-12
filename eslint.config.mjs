@@ -1,7 +1,6 @@
 // @ts-check
 import eslintReact from '@eslint-react/eslint-plugin';
 import eslintJs from '@eslint/js';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
@@ -17,7 +16,6 @@ export default tseslint.config(
     files: ['**/*.ts', '**/*.tsx'],
 
     extends: [
-      prettierRecommended,
       eslintJs.configs.recommended,
       tseslint.configs.recommended,
       eslintReact.configs['recommended-typescript'],
@@ -34,7 +32,6 @@ export default tseslint.config(
     rules: {
       '@eslint-react/no-missing-key': 'error',
       '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
-      'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     },
   },
 );

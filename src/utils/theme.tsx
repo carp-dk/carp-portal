@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { createStyled } from '@mui/system';
 
-declare module '@mui/material/styles/createPalette' {
+declare module '@mui/material/styles' {
   interface TypeText {
     primary: string;
     secondary: string;
