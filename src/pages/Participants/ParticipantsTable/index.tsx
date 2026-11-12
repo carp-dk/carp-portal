@@ -16,7 +16,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   AddUserButton,
@@ -44,9 +44,6 @@ const ParticipantsTable = ({
 }: Props) => {
   const { id: studyId } = useParams();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-  const [columns, setColumns] = useState<
-    MRT_ColumnDef<ParticipantAccountSummaryDto>[]
-  >([]);
   const [search, setSearch] = useState<string | null>(null);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
@@ -80,11 +77,17 @@ const ParticipantsTable = ({
   const generatedAccountLabel = () => <GeneratedAccountLabel />;
 
   useEffect(() => {
-    setRowSelection({});
+    // Keep the same object when nothing is selected, so new data doesn't
+    // cause an extra render of the whole table.
+    setRowSelection((selection) =>
+      Object.keys(selection).length === 0 ? selection : {},
+    );
   }, [participantsAccounts]);
 
-  useEffect(() => {
-    setColumns([
+  // Built during the first render (not in an effect), so the table doesn't
+  // render once without columns and then again with them.
+  const columns = useMemo<MRT_ColumnDef<ParticipantAccountSummaryDto>[]>(
+    () => [
       {
         accessorFn: (row) => row.accountIdentity,
         header: 'Identity',
@@ -132,8 +135,9 @@ const ParticipantsTable = ({
         filterFn: 'equals',
         filterVariant: 'select',
       },
-    ]);
-  }, []);
+    ],
+    [],
+  );
 
   const handleCreateNewDeployment = () => {
     if (study.protocolSnapshot === null) {

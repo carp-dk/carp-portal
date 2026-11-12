@@ -23,6 +23,7 @@ import {
   InputAdornment,
   MenuItem,
   Select,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -155,14 +156,11 @@ const StudyData = () => {
     studyDetailsFormik.handleSubmit();
   };
 
-  // Only block on the dropdown data when the protocol is actually editable.
+  // The protocol dropdowns load separately (see `protocolSelectorLoading`), so
+  // the large protocol list doesn't hold back the name and description.
   // `protocolDetails` (useGetByVersion) is never rendered — it's read only in
   // onSubmit, which handles its own loading — so it must never gate first paint.
-  if (
-    studyDetailsLoading ||
-    studyStatusIsLoading ||
-    (canSetProtocol && (protocolsLoading || protocolVersionsLoading))
-  )
+  if (studyDetailsLoading || studyStatusIsLoading)
     return <StudySetupSkeleton />;
 
   if (studyDetailsError || protocolsError || studyStatusError) {
@@ -174,6 +172,8 @@ const StudyData = () => {
     );
   }
 
+  const protocolSelectorLoading =
+    canSetProtocol && (protocolsLoading || protocolVersionsLoading);
   const isProtocolSelectorEnabled = protocols && protocols.length > 0;
   const assignedProtocolVersion = getProtocolVersionTag(
     studyDetails.protocolSnapshot?.applicationData,
@@ -265,7 +265,9 @@ const StudyData = () => {
           </ProtocolInformation>
         )}
       </Stack>
-      {!isProtocolSelectorEnabled || !studyStatus.canSetStudyProtocol ? (
+      {protocolSelectorLoading ? (
+        <Skeleton variant="rounded" animation="wave" width="100%" height={56} />
+      ) : !isProtocolSelectorEnabled || !studyStatus.canSetStudyProtocol ? (
         <TextField
           variant="outlined"
           fullWidth

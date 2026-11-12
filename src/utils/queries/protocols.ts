@@ -121,7 +121,8 @@ export const useGetVersionHistory = (protocolId: string, enabled = true) => {
   return useQuery<ProtocolVersion[], CarpServiceError>({
     queryFn: async () => carpApi.protocols.getVersionHistory({ protocolId }),
     queryKey: ['protocolVersionHistory', protocolId],
-    enabled,
+    // An empty id fails and is retried with backoff (~7s of loading).
+    enabled: !!protocolId && enabled,
   });
 };
 

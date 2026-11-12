@@ -1,7 +1,12 @@
 import LoadingLandingPage from '@Components/Layout/LoadingLandingPage';
 import StudyPageLayout from '@Components/Layout/StudyPageLayout';
 import StudyHeader from '@Components/StudyHeader';
-import { useStudyDetails } from '@Utils/queries/studies';
+import {
+  useResearcherAssistants,
+  useResearchers,
+  useStudyDetails,
+  useStudyStatus,
+} from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,6 +18,16 @@ import StudyOwner from './StudyOwner';
 import StudyResearchers from './StudyResearchers';
 import StudyStatusSection from './StudyStatusSection';
 import { StyledContainer } from './styles';
+
+// The sections only mount once the study details have loaded, so this starts
+// their queries alongside the details instead of after them. It's a separate
+// component so each result re-renders only this, not the whole page.
+const PrefetchSections = ({ studyId }: { studyId: string }) => {
+  useStudyStatus(studyId);
+  useResearchers(studyId);
+  useResearcherAssistants(studyId);
+  return null;
+};
 
 const Studies: React.FC = () => {
   const sectionName = {
@@ -26,11 +41,17 @@ const Studies: React.FC = () => {
   const [openAddResearcherModal, setOpenAddResearcherModal] = useState(false);
 
   if (studyLoading) {
-    return <LoadingLandingPage />;
+    return (
+      <>
+        <PrefetchSections studyId={studyId} />
+        <LoadingLandingPage />
+      </>
+    );
   }
 
   return (
     <StudyPageLayout>
+      <PrefetchSections studyId={studyId} />
       <StudyHeader path={[sectionName]} description={description} />
       <StudyStatusSection />
       <StyledContainer>
