@@ -101,15 +101,20 @@ const SelfSignupModal = ({
         return;
       }
 
-      enableSelfSignup.mutate({
-        participantRoleName: values.role,
-        clientId: values.clientId.toString(),
-        redirectUri: values.redirectUri.toString(),
-        // An empty field means no lifetime cap on how many can sign up.
-        maxParticipants:
-          values.maxParticipants === '' ? null : Number(values.maxParticipants),
-        expirationSeconds: values.linkLifetimeDays * 24 * 60 * 60,
-      });
+      enableSelfSignup.mutate(
+        {
+          participantRoleName: values.role,
+          clientId: values.clientId.toString(),
+          redirectUri: values.redirectUri.toString(),
+          // An empty field means no lifetime cap on how many can sign up.
+          maxParticipants:
+            values.maxParticipants === ''
+              ? null
+              : Number(values.maxParticipants),
+          expirationSeconds: values.linkLifetimeDays * 24 * 60 * 60,
+        },
+        { onSuccess: onClose },
+      );
     },
   });
 
@@ -118,17 +123,12 @@ const SelfSignupModal = ({
     selfSignupFormik.handleSubmit();
   };
 
+  const { resetForm } = selfSignupFormik;
   useEffect(() => {
     return () => {
-      selfSignupFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    if (enableSelfSignup.isSuccess) {
-      onClose();
-    }
-  }, [enableSelfSignup.isSuccess]);
+  }, [open, resetForm]);
 
   if (isLoading) return null;
 

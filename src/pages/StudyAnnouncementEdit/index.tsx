@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useAnnouncement, useUpdateAnnouncement } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { StyledButton, StyledCard, StyledContainer } from './styles';
 
@@ -54,11 +54,10 @@ const validationSchema = yup.object({
 const StudyAnnouncementEdit = () => {
   const { id: studyId } = useParams();
   const { annId: studyAnnouncementId } = useParams();
-  const {
-    data: announcement,
-    isFetched,
-    isLoading,
-  } = useAnnouncement(studyId, studyAnnouncementId);
+  const { data: announcement, isLoading } = useAnnouncement(
+    studyId,
+    studyAnnouncementId,
+  );
   const updateAnnouncement = useUpdateAnnouncement();
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
@@ -74,33 +73,46 @@ const StudyAnnouncementEdit = () => {
       url: '',
     },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       let newImage: File;
       if (values.image && typeof values.image !== 'string') {
         newImage = values.image as File;
       }
 
-      updateAnnouncement.mutate({
-        studyId,
-        announcementId: studyAnnouncementId,
-        announcement: {
-          id: studyAnnouncementId,
-          title: values.title.trim(),
-          sub_title: values.subTitle.trim(),
-          message: values.message.trim(),
-          type: values.type as 'announcement' | 'article' | 'news',
-          timestamp: new Date().toISOString(),
-          image: values.image,
-          url: values.url,
-        } as MessageData,
-        newImage,
-      });
+      updateAnnouncement.mutate(
+        {
+          studyId,
+          announcementId: studyAnnouncementId,
+          announcement: {
+            id: studyAnnouncementId,
+            title: values.title.trim(),
+            sub_title: values.subTitle.trim(),
+            message: values.message.trim(),
+            type: values.type as 'announcement' | 'article' | 'news',
+            timestamp: new Date().toISOString(),
+            image: values.image,
+            url: values.url,
+          } as MessageData,
+          newImage,
+        },
+        {
+          onSuccess: () => {
+            resetForm();
+            navigate(`/studies/${studyId}/announcements`);
+          },
+        },
+      );
     },
   });
 
+  // Fill the form once, when the announcement first loads; a later refetch
+  // must not overwrite what the user is typing.
+  const { setValues } = formik;
+  const filledFromAnnouncementRef = useRef(false);
   useEffect(() => {
-    if (announcement) {
-      formik.setValues({
+    if (announcement && !filledFromAnnouncementRef.current) {
+      filledFromAnnouncementRef.current = true;
+      setValues({
         title: announcement.title,
         subTitle: announcement.sub_title,
         message: announcement.message,
@@ -109,7 +121,7 @@ const StudyAnnouncementEdit = () => {
         url: announcement.url,
       });
     }
-  }, [isFetched]);
+  }, [announcement, setValues]);
 
   const handleChange = (theFile: File) => {
     if (!theFile) {
@@ -121,13 +133,6 @@ const StudyAnnouncementEdit = () => {
     setFileName(theFile.name);
     setUploading(false);
   };
-
-  useEffect(() => {
-    if (updateAnnouncement.isSuccess) {
-      formik.resetForm();
-      navigate(`/studies/${studyId}/announcements`);
-    }
-  }, [updateAnnouncement.isSuccess]);
 
   return (
     <StudyPageLayout>

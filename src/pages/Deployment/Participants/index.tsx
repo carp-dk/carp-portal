@@ -6,7 +6,7 @@ import { ParticipantGroup } from '@carp-dk/client';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import PersonIcon from '@mui/icons-material/Person';
 import { Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -32,15 +32,13 @@ const Participants = () => {
     size: 1,
     search: deploymentId,
   });
-  const [group, setGroup] = useState<ParticipantGroup>(null);
 
-  useEffect(() => {
-    if (statuses) {
-      setGroup(
-        statuses.groups.find((s) => s.participantGroupId === deploymentId),
-      );
-    }
-  }, [statuses, deploymentId]);
+  const group = useMemo<ParticipantGroup | null>(
+    () =>
+      statuses?.groups.find((s) => s.participantGroupId === deploymentId) ??
+      null,
+    [statuses, deploymentId],
+  );
 
   if (isLoading) return <LoadingSkeleton />;
 

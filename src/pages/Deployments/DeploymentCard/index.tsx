@@ -3,7 +3,7 @@ import CopyButton from '@Components/Buttons/CopyButton';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Skeleton, Typography } from '@mui/material';
 import { getDeploymentDisplayName } from '@Utils/utility';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DateTooltip from '../DateTooltip';
 import ParticipantRecord from '../ParticipantRecord';
@@ -23,37 +23,22 @@ import {
 interface Props {
   deployment: ParticipantGroup;
   representationName?: string | null;
-  openCardCount: number;
-  allDeploymentCount: number;
-  setOpenCardCount: (count: number) => void;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 const DeploymentCard = ({
   deployment,
   representationName,
-  openCardCount,
-  setOpenCardCount,
-  allDeploymentCount,
+  isOpen: isCardOpen,
+  onToggle,
 }: Props) => {
   const { id: studyId } = useParams();
   const navigate = useNavigate();
 
-  const [isCardOpen, setIsCardOpen] = useState(false);
-
-  useEffect(() => {
-    if (openCardCount === allDeploymentCount) setIsCardOpen(true);
-    if (openCardCount === 0) setIsCardOpen(false);
-  }, [openCardCount, allDeploymentCount]);
-
   const handleCardToggle = (event) => {
     event.stopPropagation();
-    setIsCardOpen((prevIsCardOpen) => {
-      const newOpenCardCount = prevIsCardOpen
-        ? openCardCount - 1
-        : openCardCount + 1;
-      setOpenCardCount(newOpenCardCount);
-      return !prevIsCardOpen;
-    });
+    onToggle();
   };
 
   // Resolve the name (representation name → participant names → generated)

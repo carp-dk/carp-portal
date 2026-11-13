@@ -14,7 +14,7 @@ import {
 } from '@Utils/queries/participants';
 import { useDownloadFile, useGetFiles } from '@Utils/queries/studies';
 import { formatDateTime } from '@Utils/utility';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -55,14 +55,6 @@ const InformedConsentCard = () => {
 
   const downloadFileMutation = useDownloadFile(studyId);
 
-  const [consents, setConsents] = useState<
-    {
-      participant: ParticipantDataInput;
-      consent: InformedConsentType;
-      consentFile: CarpFile;
-    }[]
-  >();
-
   const downloadPdf = async (consent: InformedConsentType) => {
     const { informedConsentToPdfBlob } =
       await import('@Utils/informedConsentPdf');
@@ -83,50 +75,53 @@ const InformedConsentCard = () => {
     await downloadFileMutation.mutateAsync(consentFile);
   };
 
-  useEffect(() => {
-    if (statuses && participantData) {
-      const participantGroup = statuses.groups.find(
-        (s) => s.participantGroupId === deploymentId,
-      );
-      const commonConsent = participantData.common[
-        InformedConsentType.type
-      ] as InformedConsentType;
-      const roleConsents = Object.entries(participantData.roles).map(
-        ([role, v]) => {
-          const c = v[InformedConsentType.type] as InformedConsentType;
-          return { role, c };
-        },
-      );
+  const consents = useMemo<
+    {
+      participant: ParticipantDataInput;
+      consent: InformedConsentType;
+      consentFile: CarpFile;
+    }[]
+  >(() => {
+    if (!(statuses && participantData)) return undefined;
+    const participantGroup = statuses.groups.find(
+      (s) => s.participantGroupId === deploymentId,
+    );
+    const commonConsent = participantData.common[
+      InformedConsentType.type
+    ] as InformedConsentType;
+    const roleConsents = Object.entries(participantData.roles).map(
+      ([role, v]) => {
+        const c = v[InformedConsentType.type] as InformedConsentType;
+        return { role, c };
+      },
+    );
 
-      const participantsWithConsent = participantGroup.participants.map((p) => {
-        const consent = roleConsents.find((rc) =>
-          p.role.localeCompare(rc.role),
+    const participantsWithConsent = participantGroup.participants.map((p) => {
+      const consent = roleConsents.find((rc) => p.role.localeCompare(rc.role));
+      if (consent)
+        return { participant: p, consent: consent.c, consentFile: null };
+      if (commonConsent)
+        return { participant: p, consent: commonConsent, consentFile: null };
+      return { participant: p, consent: null, consentFile: null };
+    });
+
+    if (files) {
+      const sortedFiles = files.toSorted((a, b) => {
+        return (
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
         );
-        if (consent)
-          return { participant: p, consent: consent.c, consentFile: null };
-        if (commonConsent)
-          return { participant: p, consent: commonConsent, consentFile: null };
-        return { participant: p, consent: null, consentFile: null };
       });
-
-      if (files) {
-        const sortedFiles = files.toSorted((a, b) => {
-          return (
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-          );
-        });
-        participantsWithConsent.forEach((p, i) => {
-          const file = sortedFiles.find(
-            (f) =>
-              f.metadata['participant-id'] === p.participant.participantId &&
-              f.metadata['document-type'] === 'informed_consent',
-          );
-          participantsWithConsent[i].consentFile = file;
-        });
-      }
-
-      setConsents(participantsWithConsent);
+      participantsWithConsent.forEach((p, i) => {
+        const file = sortedFiles.find(
+          (f) =>
+            f.metadata['participant-id'] === p.participant.participantId &&
+            f.metadata['document-type'] === 'informed_consent',
+        );
+        participantsWithConsent[i].consentFile = file;
+      });
     }
+
+    return participantsWithConsent;
   }, [statuses, deploymentId, participantData, files]);
 
   if (participatnDataLoading || statusesLoading || filesLoading)

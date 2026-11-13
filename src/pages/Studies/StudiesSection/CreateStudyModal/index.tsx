@@ -33,23 +33,23 @@ const CreateStudyModal = ({ open, onClose }: Props) => {
     validationSchema,
     onSubmit: (values) => {
       if (!createStudy.isLoading) {
-        createStudy.mutate({
-          name: values.name,
-          description: values.description,
-        });
+        createStudy.mutate(
+          {
+            name: values.name,
+            description: values.description,
+          },
+          { onSuccess: onClose },
+        );
       }
     },
   });
 
+  const { resetForm } = createStudyFormik;
   useEffect(() => {
     return () => {
-      createStudyFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    onClose();
-  }, [createStudy.isSuccess]);
+  }, [open, resetForm]);
 
   return (
     <Modal

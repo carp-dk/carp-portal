@@ -12,8 +12,10 @@ import { LocalDate } from '@js-joda/core';
 import { Skeleton } from '@mui/material';
 import { useDataStreamsSummaries } from '@Utils/queries/dataStreams';
 import { useStudyDetails } from '@Utils/queries/studies';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+
+const NO_REQUESTS: DataStreamSummaryRequest[] = [];
 
 const DataVisualizationForStudy = () => {
   const { id: studyId } = useParams();
@@ -36,33 +38,29 @@ const DataVisualizationForStudy = () => {
     setToDate(newToDate.isAfter(today) ? today : newToDate);
   }
 
-  const [requests, setRequests] = React.useState([]);
-  const [displayBlank, setDisplayBlank] = React.useState(false);
-
   const {
     data: studyDetails,
     isLoading: studyDetailsIsLoading,
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const summaries = useDataStreamsSummaries(requests);
-
-  useEffect(() => {
-    if (!studyDetails) return;
+  // The summary requests for the selected two weeks; blank when the protocol
+  // has nothing to chart.
+  const { requests, displayBlank } = React.useMemo<{
+    requests: DataStreamSummaryRequest[];
+    displayBlank: boolean;
+  }>(() => {
+    if (!studyDetails) return { requests: NO_REQUESTS, displayBlank: false };
     if (studyDetails.protocolSnapshot == null) {
-      setDisplayBlank(true);
-      return;
+      return { requests: NO_REQUESTS, displayBlank: true };
     }
     const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       studyDetails.protocolSnapshot as any,
     );
     if (listOfTaskTypes.length === 0) {
-      setDisplayBlank(true);
-      return;
+      return { requests: NO_REQUESTS, displayBlank: true };
     }
-    // Computed here, not per render: a new LocalDate each render would make
-    // this effect run on every render.
     const fromDate = toDate.minusDays(13);
     const requests: DataStreamSummaryRequest[] = listOfTaskTypes.map(
       (type) => ({
@@ -73,8 +71,10 @@ const DataVisualizationForStudy = () => {
         to: toUTCDate(toDate.atTime(23, 59, 59, 999_000_000)).toISOString(),
       }),
     );
-    setRequests(requests);
+    return { requests, displayBlank: false };
   }, [studyDetails, toDate, studyId]);
+
+  const summaries = useDataStreamsSummaries(requests);
 
   const summariesError = summaries.find((summary) => summary.isError);
   const error = studyDetailsError || summariesError;

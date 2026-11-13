@@ -4,7 +4,7 @@ import GeneratedAccountLabel from '@Components/GeneratedAccountLabel';
 import SendReminderModal from '@Components/SendReminderModal';
 import NotificationsIcon from '@mui/icons-material/NotificationsSharp';
 import { useParticipantGroupsAccountsAndStatus } from '@Utils/queries/participants';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getUser } from '@carp-dk/authentication-react';
@@ -47,19 +47,13 @@ const BasicInfo = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const [participant, setParticipant] = useState<ParticipantDataInput | null>(
-    null,
+  const participant = useMemo<ParticipantDataInput | null>(
+    () =>
+      participantData?.groups
+        ?.find((g) => g.participantGroupId === deploymentId)
+        ?.participants.find((p) => p.participantId === participantId) ?? null,
+    [participantData, participantId, deploymentId],
   );
-
-  useEffect(() => {
-    if (!participantDataLoading && participantData && participantData.groups) {
-      setParticipant(
-        participantData.groups
-          .find((g) => g.participantGroupId === deploymentId)
-          .participants.find((p) => p.participantId === participantId),
-      );
-    }
-  }, [participantData, participantDataLoading, participantId, deploymentId]);
 
   const initials = useMemo(() => {
     if (participant && (participant.firstName || participant.lastName)) {

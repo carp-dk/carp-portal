@@ -36,7 +36,7 @@ const AddParticipantContent = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      addParticipant.mutate(values.email);
+      addParticipant.mutate(values.email, { onSuccess: onClose });
     },
   });
 
@@ -45,17 +45,12 @@ const AddParticipantContent = ({ open, onClose }: Props) => {
     addParticipantFormik.handleSubmit();
   };
 
+  const { resetForm } = addParticipantFormik;
   useEffect(() => {
     return () => {
-      addParticipantFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    if (addParticipant.isSuccess) {
-      onClose();
-    }
-  }, [addParticipant.isSuccess]);
+  }, [open, resetForm]);
 
   return (
     <>

@@ -9,7 +9,7 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import { Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import DateTooltip from '../../Deployments/DateTooltip';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -47,20 +47,6 @@ const Deployment = () => {
     search: deploymentId,
   });
   const createSummary = useCreateSummary();
-  const [deploymentInformation, setDeploymentInformation] = useState<{
-    groupStatus: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    deploymentStatus: any;
-    participants: {
-      participant: ParticipantDataInput & { lastUpload: string };
-      roleName: string;
-      deviceInfo: {
-        deviceStatus: string;
-        deviceRole: string;
-        deviceType: string;
-      };
-    }[];
-  } | null>(null);
 
   const createAndDownloadSummary = async (event) => {
     event.stopPropagation();
@@ -77,48 +63,59 @@ const Deployment = () => {
     return `Last data: ${calculateDaysPassedFromDate(lastData.toString())} days ago`;
   };
 
-  useEffect(() => {
-    if (!deploymentIsLoading && deployment?.groups) {
-      const deploymentStatus = deployment.groupStatuses.find(
-        (gs) => gs.id === deploymentId,
-      );
-      const group = deployment.groups.find(
-        (g) => g.participantGroupId === deploymentId,
-      );
-      const participants = group.participants.map(
-        (p) => {
-          const participantStatus =
-            group.deploymentStatus.participantStatusList.find(
-              (psl) => psl.participantId === p.participantId,
-            );
-          const roleName =
-            participantStatus.assignedParticipantRoles?.roleNames?.[0];
-          const deviceRole =
-            participantStatus.assignedPrimaryDeviceRoleNames[0];
-          const device = group.deploymentStatus.deviceStatusList.find(
-            (d) => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
+  const deploymentInformation = useMemo<{
+    groupStatus: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    deploymentStatus: any;
+    participants: {
+      participant: ParticipantDataInput & { lastUpload: string };
+      roleName: string;
+      deviceInfo: {
+        deviceStatus: string;
+        deviceRole: string;
+        deviceType: string;
+      };
+    }[];
+  } | null>(() => {
+    if (!(!deploymentIsLoading && deployment?.groups)) return null;
+    const deploymentStatus = deployment.groupStatuses.find(
+      (gs) => gs.id === deploymentId,
+    );
+    const group = deployment.groups.find(
+      (g) => g.participantGroupId === deploymentId,
+    );
+    const participants = group.participants.map(
+      (p) => {
+        const participantStatus =
+          group.deploymentStatus.participantStatusList.find(
+            (psl) => psl.participantId === p.participantId,
           );
-          const lastUpload = lastDataUpload(p.dateOfLastDataUpload);
-          return {
-            participant: { ...p, lastUpload },
-            roleName,
-            deviceInfo: {
-              deviceStatus: device.__type.split('.').pop(),
-              deviceRole,
+        const roleName =
+          participantStatus.assignedParticipantRoles?.roleNames?.[0];
+        const deviceRole = participantStatus.assignedPrimaryDeviceRoleNames[0];
+        const device = group.deploymentStatus.deviceStatusList.find(
+          (d) => d.device.roleName === deviceRole && d.device.isPrimaryDevice,
+        );
+        const lastUpload = lastDataUpload(p.dateOfLastDataUpload);
+        return {
+          participant: { ...p, lastUpload },
+          roleName,
+          deviceInfo: {
+            deviceStatus: device.__type.split('.').pop(),
+            deviceRole,
 
-              deviceType: device.device.__type,
-            },
-          };
-        },
-        [deploymentId, deployment, deploymentIsLoading],
-      );
+            deviceType: device.device.__type,
+          },
+        };
+      },
+      [deploymentId, deployment, deploymentIsLoading],
+    );
 
-      setDeploymentInformation({
-        groupStatus: group.deploymentStatus.__type.split('.').pop(),
-        deploymentStatus,
-        participants,
-      });
-    }
+    return {
+      groupStatus: group.deploymentStatus.__type.split('.').pop(),
+      deploymentStatus,
+      participants,
+    };
   }, [deployment, deploymentIsLoading, deploymentId]);
 
   const getParticipantInitials = (participant: ParticipantDataInput) => {

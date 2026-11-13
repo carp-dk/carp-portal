@@ -93,29 +93,27 @@ const AddProtocolModal = ({ open, onClose }: Props) => {
         await (values.file as File).text(),
       ) as StudyProtocol;
 
-      createProtocol.mutate({
-        name: values.name,
-        description: values.description,
-        protocol: {
-          ...protocol,
-          ownerId: user.id,
+      createProtocol.mutate(
+        {
+          name: values.name,
+          description: values.description,
+          protocol: {
+            ...protocol,
+            ownerId: user.id,
+          },
+          version: 'Initial',
         },
-        version: 'Initial',
-      });
+        { onSuccess: onClose },
+      );
     },
   });
 
-  useEffect(() => {
-    if (createProtocol.isSuccess) {
-      onClose();
-    }
-  }, [createProtocol.isSuccess]);
-
+  const { resetForm } = addProtocolFormik;
   useEffect(() => {
     return () => {
-      addProtocolFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     // validate file with yup, and if it passes, set it to state

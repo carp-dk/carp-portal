@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, Collapse, IconButton, Skeleton } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DeletionPrompt from '../../../components/Dialogs/DeletionPrompt';
 import {
@@ -48,17 +48,11 @@ const StudyAnnouncment = ({ studyId, announcement, announcementId }: Props) => {
   };
 
   const doDelete = () => {
-    deleteAnnouncement.mutate({
-      studyId,
-      announcementId,
-    });
+    deleteAnnouncement.mutate(
+      { studyId, announcementId },
+      { onSuccess: hideDeleteModal },
+    );
   };
-
-  useEffect(() => {
-    if (deleteAnnouncement.isSuccess) {
-      hideDeleteModal();
-    }
-  }, [deleteAnnouncement.isSuccess]);
 
   return (
     <StyledAlert elevation={2} variant="outlined">

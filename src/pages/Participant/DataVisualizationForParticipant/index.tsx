@@ -8,7 +8,7 @@ import {
 import { Skeleton } from '@mui/material';
 import { Box } from '@mui/system';
 import { useStudyDetails } from '@Utils/queries/studies';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import DataVisualizationTableWrapper from 'src/components/DataVisualizationTableWrapper';
 import { StyledContainer, StyledTitle } from './styles';
@@ -22,19 +22,13 @@ const DataVisualizationForParticipant = () => {
     error: studyDetailsError,
   } = useStudyDetails(studyId);
 
-  const [chartConfigs, setChartConfigs] = React.useState(configs);
-
-  useEffect(() => {
-    if (studyDetails) {
-      const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
-        studyDetails.protocolSnapshot,
-      );
-      const newChartConfigs = configs.filter((cfg) =>
-        listOfTaskTypes.includes(cfg.type),
-      );
-
-      setChartConfigs(newChartConfigs);
-    }
+  // All charts until the protocol is known, then only its task types.
+  const chartConfigs = React.useMemo(() => {
+    if (!studyDetails) return configs;
+    const listOfTaskTypes = getUniqueTaskTypesFromProtocolSnapshot(
+      studyDetails.protocolSnapshot,
+    );
+    return configs.filter((cfg) => listOfTaskTypes.includes(cfg.type));
   }, [studyDetails]);
 
   if (studyDetailsIsLoading)

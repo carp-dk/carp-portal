@@ -97,17 +97,23 @@ const AddResourceModal = ({ open, onClose }: Props) => {
       const document = JSON.parse(fileString);
 
       if (values.type === 'Translation') {
-        createTranslation.mutate({
-          studyId,
-          translation: document,
-          name: languageLabels[values.language].secondary,
-        });
+        createTranslation.mutate(
+          {
+            studyId,
+            translation: document,
+            name: languageLabels[values.language].secondary,
+          },
+          { onSuccess: onClose },
+        );
       } else {
-        createResource.mutate({
-          studyId,
-          resource: document,
-          name: formik.values.name.replace('.json', ''),
-        });
+        createResource.mutate(
+          {
+            studyId,
+            resource: document,
+            name: formik.values.name.replace('.json', ''),
+          },
+          { onSuccess: onClose },
+        );
       }
     },
   });
@@ -122,17 +128,12 @@ const AddResourceModal = ({ open, onClose }: Props) => {
     formik.setFieldValue('type', e.target.value);
   };
 
-  useEffect(() => {
-    if (createResource.isSuccess || createTranslation.isSuccess) {
-      onClose();
-    }
-  }, [createResource.isSuccess, createTranslation.isSuccess]);
-
+  const { resetForm } = formik;
   useEffect(() => {
     return () => {
-      formik.resetForm();
+      resetForm();
     };
-  }, [open]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     // validate file with yup, and if it passes, set it to state

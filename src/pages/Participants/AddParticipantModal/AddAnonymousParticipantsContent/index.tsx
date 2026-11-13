@@ -109,22 +109,30 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
         return;
       }
 
-      generateAnonymousAccounts.mutate({
-        participantRoleName: values.role,
-        expirationSeconds: Math.floor(
-          (values.expiryDate.getTime() - Date.now()) / 1000,
-        ),
-        amountOfAccounts: values.numberOfParticipants,
-        redirectUri: values.redirectUri.toString(),
-        clientId,
-        subdomain: noSubdomain
-          ? undefined
-          : clientId.includes('mcat')
-            ? 'mcat.app'
-            : clientId.includes('neuropathy-app')
-              ? 'neuropathy.app'
-              : undefined,
-      });
+      generateAnonymousAccounts.mutate(
+        {
+          participantRoleName: values.role,
+          expirationSeconds: Math.floor(
+            (values.expiryDate.getTime() - Date.now()) / 1000,
+          ),
+          amountOfAccounts: values.numberOfParticipants,
+          redirectUri: values.redirectUri.toString(),
+          clientId,
+          subdomain: noSubdomain
+            ? undefined
+            : clientId.includes('mcat')
+              ? 'mcat.app'
+              : clientId.includes('neuropathy-app')
+                ? 'neuropathy.app'
+                : undefined,
+        },
+        {
+          onSuccess: () => {
+            onClose();
+            navigate(`/studies/${studyId}/export`);
+          },
+        },
+      );
     },
   });
 
@@ -133,18 +141,12 @@ const AddAnonymousParticipantsContent = ({ open, onClose }: Props) => {
     addAnonymousParticipantFormik.handleSubmit();
   };
 
+  const { resetForm } = addAnonymousParticipantFormik;
   useEffect(() => {
     return () => {
-      addAnonymousParticipantFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    if (generateAnonymousAccounts.isSuccess) {
-      onClose();
-      navigate(`/studies/${studyId}/export`);
-    }
-  }, [generateAnonymousAccounts.isSuccess]);
+  }, [open, resetForm]);
 
   if (isStudyDetailsLoading || isRedirectURIsLoading) return null;
 

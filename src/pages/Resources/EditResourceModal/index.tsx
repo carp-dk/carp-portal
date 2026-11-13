@@ -57,26 +57,24 @@ const EditResourceModal = ({ open, onClose, resource }: Props) => {
     validationSchema,
     onSubmit: async (values) => {
       const resourceString = await (values.file as File).text();
-      updateResource.mutate({
-        studyId,
-        resourceId: resource.id as string,
-        resource: JSON.parse(resourceString),
-        name: resource.name as string,
-      });
+      updateResource.mutate(
+        {
+          studyId,
+          resourceId: resource.id as string,
+          resource: JSON.parse(resourceString),
+          name: resource.name as string,
+        },
+        { onSuccess: onClose },
+      );
     },
   });
 
-  useEffect(() => {
-    if (updateResource.isSuccess) {
-      onClose();
-    }
-  }, [updateResource.isSuccess]);
-
+  const { resetForm } = formik;
   useEffect(() => {
     return () => {
-      formik.resetForm();
+      resetForm();
     };
-  }, [open]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     // validate file with yup, and if it passes, set it to state

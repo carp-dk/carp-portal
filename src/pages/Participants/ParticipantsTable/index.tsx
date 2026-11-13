@@ -16,7 +16,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   AddUserButton,
@@ -34,6 +34,8 @@ interface Props {
   setParticipantsToAdd: (participants: ParticipantAccountSummaryDto[]) => void;
 }
 
+const NO_SELECTION: MRT_RowSelectionState = {};
+
 const ParticipantsTable = ({
   openNewDeploymentModal,
   openAddParticipantModal,
@@ -43,7 +45,6 @@ const ParticipantsTable = ({
   setParticipantsToAdd,
 }: Props) => {
   const { id: studyId } = useParams();
-  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [search, setSearch] = useState<string | null>(null);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
@@ -76,13 +77,25 @@ const ParticipantsTable = ({
 
   const generatedAccountLabel = () => <GeneratedAccountLabel />;
 
-  useEffect(() => {
-    // Keep the same object when nothing is selected, so new data doesn't
-    // cause an extra render of the whole table.
-    setRowSelection((selection) =>
-      Object.keys(selection).length === 0 ? selection : {},
-    );
-  }, [participantsAccounts]);
+  // A selection belongs to the rows it was made on: new data (another page, a
+  // search, a refetch that changed something) starts with nothing selected.
+  const [selectionState, setSelectionState] = useState<{
+    rows: typeof participantsAccounts;
+    selection: MRT_RowSelectionState;
+  }>({ rows: participantsAccounts, selection: NO_SELECTION });
+  const rowSelection =
+    selectionState.rows === participantsAccounts
+      ? selectionState.selection
+      : NO_SELECTION;
+  const setRowSelection = (
+    update:
+      | MRT_RowSelectionState
+      | ((old: MRT_RowSelectionState) => MRT_RowSelectionState),
+  ) =>
+    setSelectionState({
+      rows: participantsAccounts,
+      selection: typeof update === 'function' ? update(rowSelection) : update,
+    });
 
   // Built during the first render (not in an effect), so the table doesn't
   // render once without columns and then again with them.

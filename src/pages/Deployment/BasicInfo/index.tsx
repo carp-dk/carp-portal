@@ -12,7 +12,7 @@ import {
 } from '@Utils/queries/participants';
 import { useCreateSummary } from '@Utils/queries/studies';
 import { formatDateTime, getDeploymentDisplayName } from '@Utils/utility';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -46,7 +46,6 @@ const BasicInfo = () => {
   const stopDeployment = useStopParticipantGroup(studyId);
   const updateDeployment = useUpdateParticipantGroup(studyId);
 
-  const [deployment, setDeployment] = useState<ParticipantGroup | null>(null);
   const [openStopConfirmationModal, setOpenStopConfirmationModal] =
     useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -70,15 +69,13 @@ const BasicInfo = () => {
 
   const generateExport = useCreateSummary();
 
-  useEffect(() => {
-    if (!participantDataLoading && participantData?.groups) {
-      setDeployment(
-        participantData.groups.find(
-          (g) => g.participantGroupId === deploymentId,
-        ),
-      );
-    }
-  }, [participantData, participantDataLoading, deploymentId]);
+  const deployment = useMemo<ParticipantGroup | null>(
+    () =>
+      participantData?.groups?.find(
+        (g) => g.participantGroupId === deploymentId,
+      ) ?? null,
+    [participantData, deploymentId],
+  );
 
   // carp.core 1.3 exposes an optional group representation name on the
   // untyped groupStatuses entries; look it up by deployment id (may be null).

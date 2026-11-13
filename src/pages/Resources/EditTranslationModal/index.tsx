@@ -62,28 +62,26 @@ const EditTranslationModal = ({ open, onClose, translation }: Props) => {
       const translationString = JSON.parse(
         await (values.file as File).text(),
       ) as { [key: string]: unknown };
-      updateTranslation.mutate({
-        studyId,
-        translationId: translation.id as string,
-        translation: {
-          ...translation,
-          ...translationString,
-        } as ResourceData,
-      });
+      updateTranslation.mutate(
+        {
+          studyId,
+          translationId: translation.id as string,
+          translation: {
+            ...translation,
+            ...translationString,
+          } as ResourceData,
+        },
+        { onSuccess: onClose },
+      );
     },
   });
 
-  useEffect(() => {
-    if (updateTranslation.isSuccess) {
-      onClose();
-    }
-  }, [updateTranslation.isSuccess]);
-
+  const { resetForm } = formik;
   useEffect(() => {
     return () => {
-      formik.resetForm();
+      resetForm();
     };
-  }, [open]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     // validate file with yup, and if it passes, set it to state

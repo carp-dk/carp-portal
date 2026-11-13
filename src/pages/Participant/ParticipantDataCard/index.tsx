@@ -18,7 +18,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
 import getInputElement from './InputElements/selector';
@@ -59,8 +59,14 @@ const ParticipantDataCard = () => {
     error: participantDataError,
   } = useGetParticipantData(deploymentId);
 
-  const [participant, setParticipant] = useState<ParticipantStatus | null>(
-    null,
+  const participant = useMemo<ParticipantStatus | null>(
+    () =>
+      participantGroupStatus?.groups
+        .find((g) => g.participantGroupId === deploymentId)
+        .deploymentStatus.participantStatusList.find(
+          (p) => p.participantId === participantId,
+        ) ?? null,
+    [participantGroupStatus, deploymentId, participantId],
   );
   const initalValues = useMemo(() => {
     const iv = [];
@@ -87,18 +93,6 @@ const ParticipantDataCard = () => {
     }
     return iv;
   }, [participantData, participant]);
-
-  useEffect(() => {
-    if (participantGroupStatus) {
-      setParticipant(
-        participantGroupStatus.groups
-          .find((g) => g.participantGroupId === deploymentId)
-          .deploymentStatus.participantStatusList.find(
-            (p) => p.participantId === participantId,
-          ),
-      );
-    }
-  }, [participantGroupStatus, deploymentId, participantId]);
 
   const participantDataFromik = useParticipantDataFormik(
     study?.protocolSnapshot.expectedParticipantData

@@ -69,7 +69,7 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: () => {
-      addParticipants.mutate(validEmails);
+      addParticipants.mutate(validEmails, { onSuccess: onClose });
       // const newEmails: string[] = [];
       // // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       // Papa.parse(values.file, {
@@ -115,19 +115,16 @@ const ImportParticipantsModal = ({ open, onClose }: Props) => {
     },
   });
 
+  // Clears the file, emails and form whenever the modal opens or closes
+  // (including the close after a successful import).
+  const { resetForm } = importEmailsFormik;
   useEffect(() => {
     return () => {
       setValidEmails([]);
       setInvalidEmails([]);
-      importEmailsFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    setValidEmails([]);
-    setInvalidEmails([]);
-    onClose();
-  }, [addParticipants.isSuccess]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     setInvalidEmails([]);

@@ -9,7 +9,7 @@ import { useStudyDetails } from '@Utils/queries/studies';
 import { getDeviceIcon } from '@Utils/utility';
 import { CarpServiceError } from '@carp-dk/client';
 import { Checkbox, Modal, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
@@ -52,13 +52,6 @@ const Devices = () => {
   const registerDevice = useRegisterDevice(studyId);
   const deviceDeployed = useDeviceDeployed(studyId);
 
-  const [devices, setDevices] = useState<
-    {
-      primaryDevice: { name: string; type: string; status: string };
-      connections: { name: string; type: string; status: string }[];
-    }[]
-  >([]);
-
   const [modalState, setModalState] = useState<{
     open: boolean;
     roleName: string;
@@ -89,44 +82,48 @@ const Devices = () => {
     setModalState({ open: false, roleName: '', deviceId: '' });
   };
 
-  useEffect(() => {
-    if (study && participantGroupsAndStatuses) {
-      const connectedDevices = study.protocolSnapshot.primaryDevices
-        .toArray()
-        .map((device) => {
-          const connections = study.protocolSnapshot.connections
-            .toArray()
-            .filter((connection) => {
-              return connection.connectedToRoleName === device.roleName;
-            })
-            .map((connection) => {
-              const deviceStatus = participantGroupsAndStatuses.groups
-                .find((s) => s.participantGroupId === deploymentId)
-                ?.deploymentStatus.deviceStatusList.find(
-                  (d) => d.device.roleName === connection.roleName,
-                );
-              return {
-                name: connection.roleName,
-                type: deviceStatus?.device.__type,
-                status: deviceStatus?.__type.split('.').pop(),
-              };
-            });
-          const deviceStatus = participantGroupsAndStatuses.groups
-            .find((s) => s.participantGroupId === deploymentId)
-            ?.deploymentStatus.deviceStatusList.find(
-              (d) => d.device.roleName === device.roleName,
-            );
-          return {
-            primaryDevice: {
-              name: device.roleName,
+  const devices = useMemo<
+    {
+      primaryDevice: { name: string; type: string; status: string };
+      connections: { name: string; type: string; status: string }[];
+    }[]
+  >(() => {
+    if (!(study && participantGroupsAndStatuses)) return [];
+    const connectedDevices = study.protocolSnapshot.primaryDevices
+      .toArray()
+      .map((device) => {
+        const connections = study.protocolSnapshot.connections
+          .toArray()
+          .filter((connection) => {
+            return connection.connectedToRoleName === device.roleName;
+          })
+          .map((connection) => {
+            const deviceStatus = participantGroupsAndStatuses.groups
+              .find((s) => s.participantGroupId === deploymentId)
+              ?.deploymentStatus.deviceStatusList.find(
+                (d) => d.device.roleName === connection.roleName,
+              );
+            return {
+              name: connection.roleName,
               type: deviceStatus?.device.__type,
               status: deviceStatus?.__type.split('.').pop(),
-            },
-            connections,
-          };
-        });
-      setDevices(connectedDevices);
-    }
+            };
+          });
+        const deviceStatus = participantGroupsAndStatuses.groups
+          .find((s) => s.participantGroupId === deploymentId)
+          ?.deploymentStatus.deviceStatusList.find(
+            (d) => d.device.roleName === device.roleName,
+          );
+        return {
+          primaryDevice: {
+            name: device.roleName,
+            type: deviceStatus?.device.__type,
+            status: deviceStatus?.__type.split('.').pop(),
+          },
+          connections,
+        };
+      });
+    return connectedDevices;
   }, [participantGroupsAndStatuses, deploymentId, study]);
 
   if (studyLoading || participantGroupsAndStatusesLoading)

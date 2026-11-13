@@ -105,20 +105,17 @@ ${researcherName}`,
         message: convertTextareaInputToHtml(values.message),
         cc: values.cc.split(/[\s,]+/).filter(Boolean),
       };
-      postEmailSendGeneric.mutate(genericEmailRequest);
+      postEmailSendGeneric.mutate(genericEmailRequest, { onSuccess: onClose });
     },
     validationSchema,
   });
 
+  const { resetForm } = reminderFormik;
   useEffect(() => {
     return () => {
-      reminderFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    onClose();
-  }, [postEmailSendGeneric.isSuccess]);
+  }, [open, resetForm]);
 
   return (
     <Modal

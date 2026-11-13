@@ -15,7 +15,7 @@ import {
   TableCell,
   TableHead,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   CancelButton,
@@ -58,13 +58,11 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
     }));
   };
 
-  useEffect(() => {
-    onClose();
-  }, [inviteParticipants.isSuccess]);
-
-  useEffect(() => {
+  // Clear the picked roles on every close, so the next open starts empty.
+  const handleClose = () => {
     setParticipantDeviceRoleNames({});
-  }, [open]);
+    onClose();
+  };
   const createNewGroupHandler = () => {
     // participantsToAdd already carries participantId (= the core Participant id) and the
     // account identity, so no separate full-participant fetch is needed to build the invite.
@@ -75,7 +73,9 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
           participantDeviceRoleNames[participant.accountIdentity.toLowerCase()],
       }),
     );
-    inviteParticipants.mutate(participantsWithRoles);
+    inviteParticipants.mutate(participantsWithRoles, {
+      onSuccess: handleClose,
+    });
   };
   if (isStudyDetailsLoading) return null;
 
@@ -84,7 +84,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
       open={open}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      onClose={onClose}
+      onClose={handleClose}
     >
       <ModalBox sx={{ boxShadow: 24 }}>
         <FormControl variant="outlined">
@@ -210,7 +210,7 @@ const AddNewDeploymentModal = ({ open, onClose, participantsToAdd }: Props) => {
             </StyledTableContainer>
           </ModalContent>
           <ModalActions>
-            <CancelButton variant="text" onClick={onClose}>
+            <CancelButton variant="text" onClick={handleClose}>
               Cancel
             </CancelButton>
             <DoneButton

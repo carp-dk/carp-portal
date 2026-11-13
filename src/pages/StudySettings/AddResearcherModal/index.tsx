@@ -33,19 +33,19 @@ const AddResearcherModal = ({ open, onClose }: Props) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      addResearcher.mutate({ email: values.email, role: 'RESEARCH_ASSISTANT' });
+      addResearcher.mutate(
+        { email: values.email, role: 'RESEARCH_ASSISTANT' },
+        { onSuccess: onClose },
+      );
     },
   });
 
+  const { resetForm } = addResearcherFormik;
   useEffect(() => {
     return () => {
-      addResearcherFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
-
-  useEffect(() => {
-    onClose();
-  }, [addResearcher.isSuccess]);
+  }, [open, resetForm]);
 
   return (
     <Modal

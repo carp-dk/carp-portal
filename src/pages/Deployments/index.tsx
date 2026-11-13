@@ -32,8 +32,15 @@ const Deployments = () => {
 
   const [searchText, setSearchText] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [openCardCount, setOpenCardCount] = useState(0);
+  // The page number belongs to the filter it was picked under, so changing the
+  // filter or (debounced) search goes back to the first page.
+  const filterKey = `${selectedStatus}|${debouncedSearch}`;
+  const [page, setPage] = useState({ filterKey, number: 1 });
+  const currentPage = page.filterKey === filterKey ? page.number : 1;
+  const setCurrentPage = (number: number) => setPage({ filterKey, number });
+  // Expanded cards, by deployment id. A new page shows other ids, so it starts
+  // collapsed.
+  const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set());
 
   // Debounce the search box so we don't fire a request on every keystroke.
   useEffect(() => {
@@ -86,21 +93,26 @@ const Deployments = () => {
     });
   };
 
+  const isAllCardsOpen =
+    deployments.length !== 0 &&
+    deployments.every((d) => openIds.has(d.participantGroupId));
+
   const toggleAllCards = () => {
-    setOpenCardCount((prevOpenCardCount) =>
-      prevOpenCardCount === deployments.length ? 0 : deployments.length,
+    setOpenIds(
+      isAllCardsOpen
+        ? new Set()
+        : new Set(deployments.map((d) => d.participantGroupId)),
     );
   };
 
-  // Reset to the first page whenever the filter or (debounced) search changes.
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch, selectedStatus]);
-
-  // Collapse any expanded cards when the visible page of deployments changes.
-  useEffect(() => {
-    setOpenCardCount(0);
-  }, [deploymentsData]);
+  const toggleCard = (id: string) => {
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const sectionName = {
     name: 'Deployments',
@@ -182,9 +194,7 @@ const Deployments = () => {
         filterDeploymentsByStatus={filterDeploymentsByStatus}
         selectedStatus={selectedStatus}
         toggleAllCards={toggleAllCards}
-        isAllCardsOpen={
-          openCardCount === deployments.length && deployments.length !== 0
-        }
+        isAllCardsOpen={isAllCardsOpen}
       />
       {deployments.map((deployment) => (
         <DeploymentCard
@@ -192,9 +202,8 @@ const Deployments = () => {
           representationName={representationNameById.get(
             deployment.participantGroupId,
           )}
-          openCardCount={openCardCount}
-          setOpenCardCount={setOpenCardCount}
-          allDeploymentCount={deployments.length}
+          isOpen={openIds.has(deployment.participantGroupId)}
+          onToggle={() => toggleCard(deployment.participantGroupId)}
           key={deployment.participantGroupId}
         />
       ))}

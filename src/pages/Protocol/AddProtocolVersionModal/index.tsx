@@ -115,11 +115,12 @@ const AddProtocolVersionModal = ({
     },
   });
 
+  const { resetForm } = addProtocolFormik;
   useEffect(() => {
     return () => {
-      addProtocolFormik.resetForm();
+      resetForm();
     };
-  }, [open]);
+  }, [open, resetForm]);
 
   const handleChange = (theFile: File) => {
     // validate file with yup, and if it passes, set it to state

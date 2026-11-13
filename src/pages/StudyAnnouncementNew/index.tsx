@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useCreateAnnouncement } from '@Utils/queries/studies';
 import { PageType, useGetUri } from '@Utils/utility';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import StudyAnnouncementPreview from '../../components/StudyAnnouncementPreview';
@@ -69,21 +69,29 @@ const StudyAnnouncementNew = () => {
       image: null,
     },
     validationSchema,
-    onSubmit: async (values) => {
-      createAnnouncement.mutate({
-        studyId,
-        announcement: {
-          id: UUID.Companion.randomUUID().toString(),
-          title: values.title.trim(),
-          sub_title: values.subTitle.trim(),
-          message: values.message.trim(),
-          type: values.type as 'announcement' | 'article' | 'news',
-          timestamp: new Date().toISOString(),
+    onSubmit: async (values, { resetForm }) => {
+      createAnnouncement.mutate(
+        {
+          studyId,
+          announcement: {
+            id: UUID.Companion.randomUUID().toString(),
+            title: values.title.trim(),
+            sub_title: values.subTitle.trim(),
+            message: values.message.trim(),
+            type: values.type as 'announcement' | 'article' | 'news',
+            timestamp: new Date().toISOString(),
+            image: values.image,
+            url: values.url.trim(),
+          } as MessageData,
           image: values.image,
-          url: values.url.trim(),
-        } as MessageData,
-        image: values.image,
-      });
+        },
+        {
+          onSuccess: () => {
+            resetForm();
+            navigate(`/studies/${studyId}/announcements`);
+          },
+        },
+      );
     },
   });
 
@@ -97,13 +105,6 @@ const StudyAnnouncementNew = () => {
     setFileName(theFile.name);
     setUploading(false);
   };
-
-  useEffect(() => {
-    if (createAnnouncement.isSuccess) {
-      formik.resetForm();
-      navigate(`/studies/${studyId}/announcements`);
-    }
-  }, [createAnnouncement.isSuccess]);
 
   return (
     <StudyPageLayout>

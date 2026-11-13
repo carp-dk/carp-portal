@@ -9,7 +9,7 @@ import { CarpFile, InformedConsentType } from '@carp-dk/client';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { Stack, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import LoadingSkeleton from '../LoadingSkeleton';
@@ -32,7 +32,6 @@ const InformedConsent = () => {
     isLoading,
     error,
   } = useGetParticipantData(deploymentId);
-  const [consent, setConsent] = useState(null);
   const {
     data: participantGroupStatus,
     isLoading: participantGroupStatusLoading,
@@ -47,7 +46,6 @@ const InformedConsent = () => {
     isLoading: filesLoading,
     error: filesError,
   } = useGetFiles(studyId);
-  const [consentFile, setConsentFile] = useState<CarpFile>(null);
   const downloadFileMutation = useDownloadFile(studyId);
 
   const [open, setOpen] = useState(false);
@@ -76,49 +74,47 @@ const InformedConsent = () => {
     await downloadFileMutation.mutateAsync(consentFile);
   };
 
-  useEffect(() => {
-    if (files) {
-      const c = files
-        .toSorted((a, b) => {
-          return (
-            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-          );
-        })
-        .find((f) => {
-          return (
+  // The newest uploaded informed-consent file for this participant.
+  const consentFile = useMemo<CarpFile | null>(
+    () =>
+      files
+        ?.toSorted(
+          (a, b) =>
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+        )
+        .find(
+          (f) =>
             f.metadata['document-type'] === 'informed_consent' &&
-            f.metadata['participant-id'] === participantId
-          );
-        });
-      if (c) {
-        setConsentFile(c);
-      }
+            f.metadata['participant-id'] === participantId,
+        ) ?? null,
+    [files, participantId],
+  );
+
+  // The role's consent when the participant has one, else the common one.
+  const consent = useMemo(() => {
+    if (isLoading || participantGroupStatusLoading) return null;
+    let result = null;
+    const participant = participantGroupStatus.groups
+      .find((g) => g.participantGroupId === deploymentId)
+      .deploymentStatus.participantStatusList.find(
+        (p) => p.participantId === participantId,
+      );
+
+    if (participantData.common.keys) {
+      const consentData =
+        participantData.common.values[InformedConsentType.type];
+      result = consentData;
     }
-  }, [files, participantId]);
 
-  useEffect(() => {
-    if (!isLoading && !participantGroupStatusLoading) {
-      const participant = participantGroupStatus.groups
-        .find((g) => g.participantGroupId === deploymentId)
-        .deploymentStatus.participantStatusList.find(
-          (p) => p.participantId === participantId,
-        );
-
-      if (participantData.common.keys) {
-        const consentData =
-          participantData.common.values[InformedConsentType.type];
-        setConsent(consentData);
-      }
-
-      const participantRoleData =
-        participantData.roles[
-          participant.assignedParticipantRoles?.roleNames?.[0]
-        ];
-      if (participantRoleData) {
-        const roleConsent = participantRoleData[InformedConsentType.type];
-        setConsent(roleConsent);
-      }
+    const participantRoleData =
+      participantData.roles[
+        participant.assignedParticipantRoles?.roleNames?.[0]
+      ];
+    if (participantRoleData) {
+      const roleConsent = participantRoleData[InformedConsentType.type];
+      result = roleConsent;
     }
+    return result;
   }, [
     participantGroupStatus,
     participantData,
