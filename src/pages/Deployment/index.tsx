@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BasicInfo from './BasicInfo';
+import DataStreamExplorer from './DataStreamExplorer';
 import DataVisualizationForDeployment from './DataVisualizationForDeployment';
 import Devices from './Devices';
 import InformedConsentCard from './InformedConsentCard';
@@ -55,6 +56,7 @@ const Deployment = () => {
       <Devices />
       <InformedConsentCard />
       <DataVisualizationForDeployment />
+      <DataStreamExplorer />
     </StudyPageLayout>
   );
 };

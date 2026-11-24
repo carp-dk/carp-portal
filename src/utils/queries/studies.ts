@@ -11,6 +11,7 @@ import {
   ResourceData,
   Role,
   SelfSignupConfig,
+  StudyDataUploads,
   StudyDetails,
   StudyOverview,
   StudyProtocolSnapshot,
@@ -28,6 +29,13 @@ export const useStudies = () => {
     queryFn: () => carpApi.studies.getOverview(),
     queryKey: ['studies'],
     enabled: currentUser !== undefined && !isCurrentUserLoading,
+  });
+};
+
+export const useStudyDataUploads = (studyId: string) => {
+  return useQuery<StudyDataUploads, CarpServiceError>({
+    queryFn: () => carpApi.studies.getDataUploads({ studyId }),
+    queryKey: ['studyDataUploads', studyId],
   });
 };
 

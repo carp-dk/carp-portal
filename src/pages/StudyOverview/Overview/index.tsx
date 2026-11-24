@@ -1,4 +1,5 @@
 import { Stack } from '@mui/material';
+import DataUploads from './DataUploads';
 import DataVisualizationForStudy from './DataVisualizationForStudy';
 import DeploymentsInProgress from './DeploymentsInProgress';
 import DeploymentStatus from './DeploymentStatus';
@@ -15,6 +16,9 @@ const Overview = () => {
       </Stack>
       <DeploymentsInProgress />
       <InactiveDeployments />
+      <div style={{ gridColumn: '1 / -1' }}>
+        <DataUploads />
+      </div>
       <div style={{ gridColumn: '1 / -1' }}>
         <DataVisualizationForStudy />
       </div>
